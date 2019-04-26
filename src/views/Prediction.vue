@@ -8,9 +8,9 @@
     app
   >
     <v-icon
-      @click="drawer=!drawer"
+      @click="leftDrawer=!leftDrawer"
       class="fa-rotate-180"
-      v-if="!drawer"
+      v-if="!leftDrawer"
       color="#ffffff"
       key="toolbar"
     >
@@ -96,7 +96,7 @@
       </div>
     </v-navigation-drawer>
   </div>
-  <PredictionWidget v-for="p in prediction" :key="p._id.siret" :prediction="p"/>
+   <!-- <PredictionWidget v-for="p in prediction" :key="p.id.siret" :prediction="p"/> -->
 
 </div>
 </template>
@@ -104,7 +104,7 @@
 <script>
 import PredictionWidget from '@/components/PredictionWidget'
 export default {
-  data () {
+  data() {
     return {
       effectifClass: [10, 20, 50, 100],
       prediction: [],
@@ -121,66 +121,66 @@ export default {
       subzones: [
         {
           text: 'Région entière',
-          value: ['21', '25', '39', '58', '70', '71', '89', '90']
+          value: ['21', '25', '39', '58', '70', '71', '89', '90'],
         },
         {
           text: 'Bourgogne',
-          value: ['21', '58', '71', '89']
+          value: ['21', '58', '71', '89'],
         },
         {
           text: 'Franche Comté',
-          value: ['25', '39', '70', '90']
+          value: ['25', '39', '70', '90'],
         },
         {
           text: 'Côte d\'or',
-          value: ['21']
+          value: ['21'],
         },
         {
           text: 'Doubs',
-          value: ['25']
+          value: ['25'],
         },
         {
           text: 'Jura',
-          value: ['39']
+          value: ['39'],
         },
         {
           text: 'Nièvre',
-          value: ['58']
+          value: ['58'],
         },
         {
           text: 'Haute-Saône',
-          value: ['70']
+          value: ['70'],
         },
         {
           text: 'Saône-et-Loire',
-          value: ['71']
+          value: ['71'],
         },
         {
           text: 'Yonne',
-          value: ['89']
+          value: ['89'],
         },
         {
           text: 'Territoire de Belfort',
-          value: ['90']
-        }
-      ]
+          value: ['90'],
+        },
+      ],
     }
   },
-  mounted () {
+  mounted() {
     // this.$store.dispatch('getNAF')
     // this.firstUpdatePrediction()
   },
   methods: {
-    firstUpdatePrediction () {
+    firstUpdatePrediction() {
       if (this.prediction.length < 1) {
         this.updatePrediction()
         setTimeout(this.firstUpdatePrediction, 5000)
       }
     },
-    updatePrediction () {
+    updatePrediction() {
       this.loading = true
-      var self = this
-      var params = {
+      const self = this
+      const params = {
         batch: this.currentBatchKey,
         naf1: this.naf,
         limit: this.detectionLength,
@@ -189,41 +189,49 @@ export default {
         ccsf: this.horsCCSF,
         procol: false,
         suivi: this.suiviQuery,
-        zone: this.zone
+        zone: this.zone,
       }
 
-      this.$axios.post('/api/data/prediction', params).then(response => {
-        var prediction = response.data
+      this.$axios.post('/api/data/prediction', params).then((response) => {
+        const prediction = response.data
         this.prediction = prediction
         this.predictionLength = this.prediction.length
         self.loading = false
       })
     },
-    getPrediction (limit, offset) {
+    getPrediction(limit, offset) {
       this.loading = true
-      var self = this
-      var params = {
+      const self = this
+      const params = {
         batch: this.currentBatchKey,
         naf1: this.naf,
-        limit: limit,
-        offset: offset,
+        limit,
+        offset,
         effectif: this.minEffectif,
         ccsf: this.horsCCSF,
         procol: false,
         suivi: this.suiviQuery,
-        zone: this.zone
+        zone: this.zone,
       }
       this.predictionLength = limit + offset
-      this.$axios.post('/api/data/prediction', params).then(response => {
-        var prediction = response.data
-        var newPrediction = this.prediction.concat(prediction)
+      this.$axios.post('/api/data/prediction', params).then((response) => {
+        const prediction = response.data
+        const newPrediction = this.prediction.concat(prediction)
         this.prediction = newPrediction
         self.loading = false
       })
-    }
+    },
   },
   computed: {
-    suiviQuery () {
+    leftDrawer: {
+      get() {
+        return this.$store.state.leftDrawer
+      },
+      set(drawer) {
+        this.$store.dispatch('setLeftDrawer', drawer)
+      },
+    },
+    suiviQuery() {
       if (this.suivi === 'false') {
         return false
       } else if (this.suivi === 'true') {
@@ -232,83 +240,83 @@ export default {
         return undefined
       }
     },
-    naf () {
+    naf() {
       return this.$store.state.reference.naf
     },
-    naf1 () {
-      return Object.keys(this.naf.n1 || {}).sort().map(n => {
+    naf1() {
+      return Object.keys(this.naf.n1 || {}).sort().map((n) => {
         return {
           text: this.naf.n1[n].substring(0, 60),
-          value: n
+          value: n,
         }
       })
     },
-    scrollTop () {
+    scrollTop() {
       return this.$store.state.scrollTop
     },
     height: {
-      get () {
+      get() {
         return this.$store.state.height
       },
-      set (height) {
+      set(height) {
         this.$store.dispatch('setHeight', height)
-      }
+      },
     },
     leftDrawer: {
-      get () {
+      get() {
         return this.$store.state.leftDrawer
       },
-      set (val) {
+      set(val) {
         this.$store.dispatch('setLeftDrawer', val)
-      }
+      },
     },
     rightDrawer: {
-      get () {
+      get() {
         return this.$store.state.rightDrawer
       },
-      set (val) {
+      set(val) {
         this.$store.dispatch('setRightDrawer', val)
-      }
+      },
     },
     currentBatchKey: {
-      get () {
+      get() {
         this.$store.dispatch('updateBatches')
         return this.$store.state.currentBatchKey
       },
-      set (value) {
+      set(value) {
         this.$store.commit('setCurrentBatchKey', value)
-      }
+      },
     },
-    batches () {
+    batches() {
       return [{
-        'value': '1810',
-        'text': 'Octobre 2018'
+        value: '1810',
+        text: 'Octobre 2018',
       }, {
-        'value': '1811',
-        'text': 'Novembre 2018'
+        value: '1811',
+        text: 'Novembre 2018',
       }, {
-        'value': '1812',
-        'text': 'Décembre 2018'
+        value: '1812',
+        text: 'Décembre 2018',
       }, {
-        'value': '1901',
-        'text': 'Janvier 2018'
+        value: '1901',
+        text: 'Janvier 2018',
       }, {
-        'value': '1802',
-        'text': 'Février 2019'
+        value: '1802',
+        text: 'Février 2019',
       }]
       // return (this.$store.state.batches || []).map(batch => batch.id.key)
     },
-    detectionLength () {
-      var length = Math.round((this.height + this.scrollTop) / 860 + 5) * 10
+    detectionLength() {
+      const length = Math.round((this.height + this.scrollTop) / 860 + 5) * 10
       if (length > this.predictionLength) {
-        var complement = length - this.predictionLength
+        const complement = length - this.predictionLength
         this.getPrediction(complement, this.predictionLength)
       }
       return length
-    }
+    },
   },
   components: { PredictionWidget },
-  name: 'Browse'
+  name: 'Browse',
 }
 </script>
 

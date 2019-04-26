@@ -24,7 +24,6 @@
               persistent
               height="400px"
               width="500"
-              v-model="passwordHelp"
             >
               <a slot="activator" style="font-size: 10px" href='#'>Mot de passe oublié ?</a>
                 <v-card >
@@ -68,10 +67,10 @@ export default {
         password: this.password,
         token: this.browserToken,
       }
-      this.$axios.post('/login', formData).then(response => {
+      this.$axios.post('/login', formData).then((response) => {
         this.$store.dispatch('setToken', response.data.token)
         this.$router.push('prediction')
-      }).catch(error => {console.log(error)})
+      })
     },
   },
 }

@@ -60,7 +60,7 @@
               <v-spacer/>
                 ETABLISSEMENT
               <v-spacer/>
-              <v-icon @click="dialog=false;log()" style="color: #fff">mdi-close</v-icon>
+              <v-icon @click="dialog=false;" style="color: #fff">mdi-close</v-icon>
             </v-toolbar>
             <Etablissement :siret="prediction._id.key"></Etablissement>
           </div>
@@ -78,41 +78,39 @@ export default {
   props: ['prediction'],
   components: {
     PredictionWidgetScore,
-    Etablissement
+    Etablissement,
   },
-  data () {
+  data() {
     return {
       dialog: false,
       expand: false,
       rowsPerPageItems: [4, 8, 12],
       pagination: {
-        rowsPerPage: 4
-      }
+        rowsPerPage: 4,
+      },
     }
   },
-  mounted () {
-  },
   computed: {
-    naf () {
+    naf() {
       return this.$store.state.naf
     },
-    apart () {
-      var apart = this.prediction.etablissement.apdemande.filter(d => {
-        var end = new Date(d.periode.end)
+    apart() {
+      const apart = this.prediction.etablissement.apdemande.filter((d) => {
+        const end = new Date(d.periode.end)
         return end.getTime() > new Date(new Date().setFullYear(new Date().getFullYear() - 1))
       })
       return (apart.length > 0) ? 'red' : 'gray'
     },
-    sirene () {
+    sirene() {
       return this.prediction.etablissement.sirene
     },
-    variationEffectif () {
-      var effectifArray = this.prediction.etablissement.effectif
-      var l = effectifArray.length
+    variationEffectif() {
+      const effectifArray = this.prediction.etablissement.effectif
+      const l = effectifArray.length
       if (l === 0) { return 'none' }
 
-      var effectif = effectifArray[l - 1].effectif
-      var effectifPrecedent = effectifArray[l - Math.min(12, l)].effectif
+      const effectif = effectifArray[l - 1].effectif
+      const effectifPrecedent = effectifArray[l - Math.min(12, l)].effectif
       if (effectif / effectifPrecedent > 1.10) {
         return 'mdi-arrow-bottom-right'
       }
@@ -121,24 +119,24 @@ export default {
       }
       return null
     },
-    urssaf () {
-      var urssaf = this.prediction.etablissement.debit.map(d => d.part_patronale + d.part_ouvriere)
-      var l = urssaf.length
-      for (var i = l - 3; i < l; i++) {
+    urssaf() {
+      const urssaf = this.prediction.etablissement.debit.map((d) => d.part_patronale + d.part_ouvriere)
+      const l = urssaf.length
+      for (let i = l - 3; i < l; i++) {
         if (urssaf[i] / urssaf[i - 1] > 1.01) {
           return true
         }
       }
       return false
     },
-    diane () {
-      var entreprise = this.prediction.entreprise || { diane: [] }
-      var diane = entreprise.diane.reduce((m, d) => {
+    diane() {
+      const entreprise = this.prediction.entreprise || { diane: [] }
+      const diane = entreprise.diane.reduce((m, d) => {
         if (d.ca && d.resultat_expl && d.exercice_diane && m.length < 2) {
           m.push({
             exercice: d.exercice_diane,
             ca: d.ca,
-            resultat_expl: d.resultat_expl
+            resultat_expl: d.resultat_expl,
           })
         }
         return m
@@ -148,20 +146,21 @@ export default {
         return {
           ca: diane[0].ca + ' k€',
           resultat_expl: diane[0].resultat_expl + ' k€',
-          ca_arrow: (diane[0].ca / diane[1].ca > 1.05) ? 'mdi-arrow-top-right' : (diane[0].ca / diane[1].ca < 0.95) ? 'mdi-arrow-bottom-right' : null,
-          resultat_expl_color: diane[0].resultat_expl <= 0 ? 'down' : null
+          ca_arrow: (diane[0].ca / diane[1].ca > 1.05) ? 'mdi-arrow-top-right' :
+            (diane[0].ca / diane[1].ca < 0.95) ? 'mdi-arrow-bottom-right' : null,
+          resultat_expl_color: diane[0].resultat_expl <= 0 ? 'down' : null,
         }
       }
       return {
         ca: 'n/c',
         resultat_expl: 'n/c',
         ca_color: 'unknown',
-        resultat_expl_color: 'unknown'
+        resultat_expl_color: 'unknown',
       }
-    }
+    },
   },
   methods: {
-    upOrDown (before, after, treshold) {
+    upOrDown(before, after, treshold) {
       if (before == null || after == null) {
         return 'mdi-help-circle'
       }
@@ -173,7 +172,7 @@ export default {
       }
       return 'mdi-tilde'
     },
-    upOrDownClass (before, after, treshold) {
+    upOrDownClass(before, after, treshold) {
       if (before == null || after == null) {
         return 'unknown'
       }
@@ -185,10 +184,10 @@ export default {
       }
       return 'none'
     },
-    showEtablissement () {
+    showEtablissement() {
       this.dialog = true
-    }
-  }
+    },
+  },
 }
 </script>
 

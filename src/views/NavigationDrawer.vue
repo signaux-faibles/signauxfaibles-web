@@ -91,7 +91,7 @@ export default {
   methods: {
     logout() {
       this.$store.commit('logout')
-    }
+    },
   },
   computed: {
     drawer: {

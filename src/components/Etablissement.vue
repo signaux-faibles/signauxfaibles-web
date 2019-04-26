@@ -72,11 +72,11 @@
           <v-flex
             xs12 md12 class="pa-3"
             v-for="(c, i) in comments"
-            :key="comment + i">
+            :key="c['comment'] + i">
             <v-textarea
               box
-              :label="c.author + ', le ' + c.date"
-              :value="c.comment"
+              :label="c['author'] + ', le ' + c['date']"
+              :value="c['comment']"
             ></v-textarea>
           </v-flex>
           <v-flex xs6 class="pr-1" style="height: 200px">
@@ -85,11 +85,11 @@
               color='indigo darken-5'>
               <v-toolbar-title class="localtoolbar">Effectifs</v-toolbar-title>
             </v-toolbar>
-            <!-- <IEcharts
+            <IEcharts
               :loading="chart"
               style="height: 350px"
               :option="effectifOptions"
-            /> -->
+            />
           </v-flex>
 
           <v-flex xs6 class="pr-1">
@@ -104,7 +104,6 @@
               :option="urssafOptions"
             />
           </v-flex>
-
           <v-flex xs6 class="pr-1" v-if="apdemande.length + apconso.length > 0">
             <v-toolbar
               dark
@@ -287,16 +286,16 @@
 </template>
 
 <script>
-// import IEcharts from 'vue-echarts-v3/src/lite.js'
-// import 'echarts/lib/chart/line'
-// import 'echarts/lib/component/title'
-// import 'echarts/lib/component/legend'
-// import 'echarts/lib/component/tooltip'
+import IEcharts from 'vue-echarts-v3/src/lite.js'
+import 'echarts/lib/chart/line'
+import 'echarts/lib/component/title'
+import 'echarts/lib/component/legend'
+import 'echarts/lib/component/tooltip'
 
 export default {
   props: ['siret', 'batch'],
   name: 'Etablissement',
-  data () {
+  data() {
     return {
       suivi: false,
       chart: false,
@@ -305,36 +304,38 @@ export default {
       apart: true,
       etablissement: { value: {} },
       pagination: null,
-      comments: []
+      comments: [],
     }
   },
   methods: {
-    computeFinance (f) {
-      var annee = f.annee
-      var ca = f.diane.ca ? f.diane.ca + ' k€' : 'n/c'
-      var caClass = (!f.diane.ca) ? 'gray' : ''
-      var resultatExpl = f.diane.resultat_expl ? f.diane.resultat_expl + ' k€' : 'n/c'
-      var margeOpe = f.diane.resultat_expl / f.diane.ca
-      var margeOpeClass = (!margeOpe) ? 'gray' : (margeOpe < 0) ? 'down' : ''
+    computeFinance(f) {
+      const annee = f.annee
+      const ca = f.diane.ca ? f.diane.ca + ' k€' : 'n/c'
+      const caClass = (!f.diane.ca) ? 'gray' : ''
+      const resultatExpl = f.diane.resultat_expl ? f.diane.resultat_expl + ' k€' : 'n/c'
+      let margeOpe = f.diane.resultat_expl / f.diane.ca
+      const margeOpeClass = (!margeOpe) ? 'gray' : (margeOpe < 0) ? 'down' : ''
       margeOpe = margeOpe ? (Math.floor(margeOpe * 1000) / 10) + ' %' : 'n/c'
 
-      var beneficeOuPerte = f.diane.benefice_ou_perte ? f.diane.benefice_ou_perte + ' k€' : 'n/c'
-      var margeNette = f.diane.benefice_ou_perte / f.diane.ca
-      var margeNetteClass = !(margeNette) ? 'gray' : (margeNette < 0) ? 'down' : ''
+      const beneficeOuPerte = f.diane.benefice_ou_perte ? f.diane.benefice_ou_perte + ' k€' : 'n/c'
+      let margeNette = f.diane.benefice_ou_perte / f.diane.ca
+      const margeNetteClass = !(margeNette) ? 'gray' : (margeNette < 0) ? 'down' : ''
       margeNette = margeNette ? (Math.floor(margeNette * 1000) / 10) + ' %' : 'n/c'
 
-      var delaiFournisseur = f.bdf.delai_fournisseur ? Math.round(f.bdf.delai_fournisseur) + ' jours' : 'n/c'
-      var delaiFournisseurClass = !(f.bdf.delai_fournisseur) ? 'gray' : ''
-      var delaiClient = Math.round(f.diane.credit_client / f.diane.ca * 360)
-      var delaiClientClass = !(delaiClient) ? 'gray' : ''
+      const delaiFournisseur = f.bdf.delai_fournisseur ? Math.round(f.bdf.delai_fournisseur) + ' jours' : 'n/c'
+      const delaiFournisseurClass = !(f.bdf.delai_fournisseur) ? 'gray' : ''
+      let delaiClient = Math.round(f.diane.credit_client / f.diane.ca * 360)
+      const delaiClientClass = !(delaiClient) ? 'gray' : ''
 
       delaiClient = delaiClient ? delaiClient + ' jours' : 'n/c'
 
-      var poidsFrng = f.bdf.poids_frng ? Math.round(f.bdf.poids_frng * 10) / 10 + ' %' : 'n/c'
-      var poidsFrngClass = !(f.bdf.poids_frng) ? 'gray' : ''
+      const poidsFrng = f.bdf.poids_frng ? Math.round(f.bdf.poids_frng * 10) / 10 + ' %' : 'n/c'
+      const poidsFrngClass = !(f.bdf.poids_frng) ? 'gray' : ''
 
-      var financierCourtTerme = f.bdf.financier_court_terme ? Math.round(f.bdf.financier_court_terme * 10) / 10 + ' %' : 'n/c'
-      var financierCourtTermeClass = !(f.bdf.financier_court_terme) ? 'gray' : ''
+      const financierCourtTerme = f.bdf.financier_court_terme ?
+        Math.round(f.bdf.financier_court_terme * 10) / 10 + ' %' : 'n/c'
+
+      const financierCourtTermeClass = !(f.bdf.financier_court_terme) ? 'gray' : ''
 
       return {
         annee,
@@ -353,207 +354,205 @@ export default {
         poidsFrng,
         poidsFrngClass,
         financierCourtTerme,
-        financierCourtTermeClass
+        financierCourtTermeClass,
       }
     },
-    addComment () {
+    addComment() {
       this.comments.push({
-        'comment': '',
-        'author': 'C.Ninucci',
-        'date': this.formattedDate(new Date())
+        comment: '',
+        author: 'C.Ninucci',
+        date: this.formattedDate(new Date()),
       })
     },
-    formattedDate (d) {
+    formattedDate(d) {
       let month = String(d.getMonth() + 1)
       let day = String(d.getDate())
       const year = String(d.getFullYear())
 
-      if (month.length < 2) month = '0' + month
-      if (day.length < 2) day = '0' + day
+      if (month.length < 2) {month = '0' + month}
+      if (day.length < 2) {day = '0' + day}
 
       return `${day}/${month}/${year}`
     },
-    close () {
+    close() {
       this.tabs = this.tabs.filter((tab, index) => index !== this.activeTab)
       this.activeTab = this.activeTab - 1
     },
-    getEtablissement (val) {
-      var params = {
+    getEtablissement(val) {
+      const params = {
         batch: '1802',
-        siret: val
+        siret: val,
       }
-      this.$axios.post('/api/data/etablissement', params).then(response => {
+      this.$axios.post('/api/data/etablissement', params).then((response) => {
         this.etablissement = response.data[0]
       })
     },
-    printDate (date) {
+    printDate(date) {
       return (date || '          ').substring(0, 10)
     },
-    round (value, size) {
-      return Math.round(value * (10 ^ size)) / (10 ^ size)
-    }
+    round(value, size) {
+      return Math.round(value * (Math.pow(10, size))) / (Math.pow(10, size))
+    },
   },
-  mounted () {
+  mounted() {
     this.getEtablissement(this.siret)
   },
-  components: {
-    // IEcharts
-  },
   watch: {
-    localSiret: function (val) {
+    localSiret(val) {
       this.getEtablissement(val)
-    }
+    },
   },
   computed: {
-    finance () {
-      console.log(this.zipDianeBDF)
-      return this.zipDianeBDF.filter(z => z.annee).map(z => this.computeFinance(z))
+    finance() {
+      return this.zipDianeBDF.filter((z) => z.annee).map((z) => this.computeFinance(z))
     },
-    naf () {
+    naf() {
       return this.$store.state.naf
     },
-    localSiret () {
+    localSiret() {
       return this.siret
     },
-    apconso () {
-      return ((this.etablissement.value || {}).apconso || []).sort((a, b) => a.periode <= b.periode).slice(0, 10)
+    apconso() {
+      return ((this.etablissement.value || {}).apconso || [])
+        .sort((a, b) => a.periode <= b.periode).slice(0, 10)
     },
-    apdemande () {
-      return ((this.etablissement.value || {}).apdemande || []).sort((a, b) => a.periode.start <= b.periode.start).slice(0, 10)
+    apdemande() {
+      return ((this.etablissement.value || {}).apdemande || [])
+        .sort((a, b) => a.periode.start <= b.periode.start).slice(0, 10)
     },
     activeTab: {
-      get () { return this.$store.getters.activeTab },
-      set (activeTab) { this.$store.dispatch('updateActiveTab', activeTab) }
+      get() { return this.$store.getters.activeTab },
+      set(activeTab) { this.$store.dispatch('updateActiveTab', activeTab) },
     },
     tabs: {
-      get () { return this.$store.getters.getTabs },
-      set (tabs) { this.$store.dispatch('updateTabs', tabs) }
+      get() { return this.$store.getters.getTabs },
+      set(tabs) { this.$store.dispatch('updateTabs', tabs) },
     },
-    sirene () {
+    sirene() {
       return this.etablissement.value.sirene || {}
     },
-    debit () {
+    debit() {
       return this.etablissement.value.debit || []
     },
-    cotisation () {
+    cotisation() {
       return this.etablissement.value.cotisation || []
     },
-    effectif () {
+    effectif() {
       return this.etablissement.value.effectif || []
     },
-    bdf () {
+    bdf() {
       if (this.etablissement.entreprise) {
         return this.etablissement.entreprise.value.bdf
       } else {
         return []
       }
     },
-    diane () {
+    diane() {
       if (this.etablissement.entreprise) {
         return this.etablissement.entreprise.value.diane
       } else {
         return []
       }
     },
-    currentBatchKey () {
+    currentBatchKey() {
       return this.$store.state.currentBatchKey
     },
-    zipDianeBDF () {
-      let annees = new Set(this.bdf.map(b => b.annee_bdf).concat(this.diane.map(d => d.exercice_diane)))
-      return Array.from(annees).sort((a, b) => a < b).map(a => {
+    zipDianeBDF() {
+      const annees = new Set(this.bdf.map((b) => b.annee_bdf).concat(this.diane.map((d) => d.exercice_diane)))
+      return Array.from(annees).sort((a, b) => a < b).map((a) => {
         return {
           annee: a,
-          bdf: this.bdf.filter(b => b.annee_bdf === a)[0] || {},
-          diane: this.diane.filter(d => d.exercice_diane === a)[0] || {}
+          bdf: this.bdf.filter((b) => b.annee_bdf === a)[0] || {},
+          diane: this.diane.filter((d) => d.exercice_diane === a)[0] || {},
         }
       })
     },
-    effectifOptions () {
+    effectifOptions() {
       return {
         title: {
-          text: null
+          text: null,
         },
         legend: {
           data: ['effectif'],
-          y: 'bottom'
+          y: 'bottom',
         },
         toolbox: {
-          show: true
+          show: true,
         },
         tooltip: {
           trigger: 'axis',
           axisPointer: {
             type: 'cross',
             label: {
-              backgroundColor: '#283b56'
-            }
-          }
+              backgroundColor: '#283b56',
+            },
+          },
         },
         xAxis: {
           show: true,
           type: 'category',
-          data: this.effectif.map(e => e.periode.slice(0, 10))
+          data: this.effectif.map((e) => e.periode.slice(0, 10)),
         },
         yAxis: {
           type: 'value',
-          show: true
+          show: true,
         },
         series: [{
           name: 'effectif',
           color: 'indigo',
           step: 'end',
           type: 'line',
-          data: this.effectif.map(e => e.effectif)
-        }]
+          data: this.effectif.map((e) => e.effectif),
+        }],
       }
     },
-    urssafOptions () {
+    urssafOptions() {
       return {
         title: {
-          text: null
+          text: null,
         },
         tooltip: {
           trigger: 'axis',
           axisPointer: {
             type: 'cross',
             label: {
-              backgroundColor: '#283b56'
-            }
-          }
+              backgroundColor: '#283b56',
+            },
+          },
         },
         legend: {
           data: ['Cotisation', 'Débit'],
-          y: 'bottom'
+          y: 'bottom',
         },
         toolbox: {
-          show: true
+          show: true,
         },
         xAxis: {
           show: true,
           type: 'category',
           axisTick: false,
-          data: this.debit.map(d => (d.periode || '').slice(0, 10))
+          data: this.debit.map((d) => (d.periode || '').slice(0, 10)),
         },
         yAxis: {
           type: 'value',
-          show: true
+          show: true,
         },
         series: [{
           color: 'indigo',
           smooth: true,
           name: 'Cotisation',
           type: 'line',
-          data: this.cotisation
+          data: this.cotisation,
         }, {
           color: 'red',
           smooth: true,
           name: 'Débit',
           type: 'line',
-          data: this.debit.map(d => d.part_ouvriere + d.part_patronale)
-        }]
+          data: this.debit.map((d) => d.part_ouvriere + d.part_patronale),
+        }],
       }
-    }
-  }
+    },
+  },
 }
 </script>
 

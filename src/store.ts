@@ -18,7 +18,7 @@ const axiosClient = axios.create(
 )
 
 axiosClient.interceptors.request.use(
-  (config) => {
+  (config: any) => {
     if (sessionStore.state.token != null) { config.headers.Authorization = 'Bearer ' + sessionStore.state.token }
     return config
   },

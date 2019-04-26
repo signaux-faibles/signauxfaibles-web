@@ -20,9 +20,9 @@ export default new Router({
       name: 'prediction',
       component: Prediction,
     },
-    { path: '*', 
+    { path: '*',
       name: 'collector',
       component: PageNotFound,
-    }
+    },
   ],
 })

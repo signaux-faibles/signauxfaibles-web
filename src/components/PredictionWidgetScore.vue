@@ -12,12 +12,12 @@
 export default {
   props: ['prob', 'diff'],
   computed: {
-    detection () {
+    detection() {
       return this.detectionClass(this.prob, this.diff)
-    }
+    },
   },
   methods: {
-    detectionClass (prob, diff) {
+    detectionClass(prob, diff) {
       let probClass = ''
       let diffClass = ''
 
@@ -38,18 +38,18 @@ export default {
       }
 
       return {
-        'prob': probClass,
-        'diff': diffClass
+        prob: probClass,
+        diff: diffClass,
       }
-    }
+    },
   },
-  data () {
+  data() {
     return {
       seuils: {
         low: 0.80,
-        high: 0.99
-      }
+        high: 0.99,
+      },
     }
-  }
+  },
 }
 </script>
