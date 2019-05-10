@@ -6,7 +6,7 @@ import createPersistedState from 'vuex-persistedstate'
 
 Vue.use(Vuex)
 
-const baseURL = 'http://localhost:3001/'
+const baseURL = 'http://localhost:3000/'
 
 const axiosClient = axios.create(
   {
@@ -43,15 +43,13 @@ const localStore = new Vuex.Store({
 const sessionStore = new Vuex.Store({
   plugins: [createPersistedState({ storage: window.sessionStorage })],
   state: {
-    leftDrawer: true,
-    rightDrawer: false,
+    currentBatchKey: null as unknown as string,
+    leftDrawer: false,
+    rightDrawer: true,
     token: null,
-    references: {
-      types: null,
-      features: null,
-      batches: [],
-      naf: null,
-    },
+    naf: [] as any[],
+    batches: [] as any[],
+    zone: {},
     height: 0,
     scrollTop: 0,
   },
@@ -69,24 +67,40 @@ const sessionStore = new Vuex.Store({
     },
     logout(state) {
       state.token = null
-      state.references.types = null
-      state.references.features = null
-      state.references.batches = []
+      state.naf = []
+      state.zone = {}
     },
     setToken(state, token) {
       state.token = token
     },
-    updateFeatures(state, features) {
-      state.references.features = features
-    },
-    updateNAF(state, naf) {
-      state.references.naf = naf
+    updateReference(state, reference) {
+      state.naf = reference.filter((r: any) => r.key.key === 'naf')
+      state.batches = reference.filter((r: any) => r.key.key === 'batch')
+      state.currentBatchKey = state.batches.reduce((m, b) => {
+        return b.key.batch > m ? b.key.batch : m
+      }, '')
     },
     setHeight(state, height) {
       state.height = height
     },
     setScrollTop(state, scrollTop) {
       state.scrollTop = scrollTop
+    },
+    setCurrentBatchKey(state, value) {
+      state.currentBatchKey = value
+    },
+  },
+  getters: {
+    naf: (state) => (batch: any) => {
+      return state.naf.filter((n: any) => n.key.batch === batch)[0] || {}
+    },
+    batches(state) {
+      return state.batches.map((b) => {
+        return {
+          value: b.key.batch,
+          text: b.value.name,
+        }
+      })
     },
   },
   actions: {
@@ -99,25 +113,14 @@ const sessionStore = new Vuex.Store({
     setScrollTop(context, scrollTop) {
       context.commit('setScrollTop', scrollTop)
     },
-    updateBatches(context) {
-      // axiosClient.get('/api/admin/batch').then(response => {
-      //   context.commit('updateBatches', response.data)
-      // })
+    setCurrentBatchKey(context, value) {
+      context.commit('setCurrentBatchKey', value)
     },
-    updateTypes(context) {
-      // axiosClient.get('/api/admin/types').then(response => {
-      //   context.commit('updateTypes', response.data)
-      // })
-    },
-    updateFeatures(context) {
-      // axiosClient.get('/api/admin/features').then(response => {
-      //   context.commit('updateFeatures', response.data)
-      // })
-    },
-    updateNAF(context) {
-      // axiosClient.get('/api/admin/features').then(response => {
-      //   context.commit('updateFeatures', response.data)
-      // })
+    updateReference(context) {
+      const params = {}
+      axiosClient.post('/data/get/reference', params).then((response) => {
+        context.commit('updateReference', response.data)
+      })
     },
     login(context, credentials) {
       const formData = {
@@ -125,7 +128,6 @@ const sessionStore = new Vuex.Store({
         email: credentials.email,
         password: credentials.password,
       }
-
       axiosClient.post('/login', formData).then((response) => {
         context.commit('setToken', response.data.token)
       }).catch((_) => {
@@ -140,24 +142,9 @@ const sessionStore = new Vuex.Store({
       context.commit('rightDrawer', val)
     },
   },
-  getters: {
-    batchesObject(state) {
-      return (state.references.batches || []).reduce((accu: any, batch: any) => {
-        accu[batch.id.key] = batch
-        return accu
-      }, {})
-    },
-    batchesArray(state) {
-      return (state.references.batches || [])
-    },
-    batchesKeys(state) {
-      return (state.references.batches || []).map((batch: any) => batch.id.key)
-    },
-    axiosConfig(state) {
-      return { headers: { Authorization: 'Bearer ' + state.token } }
-    },
-  },
 })
+
+
 
 const store = {
   sessionStore,

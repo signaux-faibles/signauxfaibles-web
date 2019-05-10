@@ -15,7 +15,7 @@
           style="font-size: 18px">
             <!-- {{ Object.keys(etablissement) }} -->
             SIRET <b>{{ siret }} – {{ sirene.nature_juridique }}</b> <br/>
-
+            {{ etablissement }}
             <v-btn :color="suivi?'error':'success'" @click="suivi=!suivi">
               {{ suivi?'Ne plus suivre cet établissement':'Suivre cet établissement' }}
             </v-btn>
@@ -378,12 +378,15 @@ export default {
       this.tabs = this.tabs.filter((tab, index) => index !== this.activeTab)
       this.activeTab = this.activeTab - 1
     },
-    getEtablissement(val) {
+    getEtablissement() {
       const params = {
-        batch: '1802',
-        siret: val,
+        key: { 
+          batch: this.batch,
+          key: this.siret,
+          type: 'detail',
+        },
       }
-      this.$axios.post('/api/data/etablissement', params).then((response) => {
+      this.$axios.post('/data/get/public', params).then((response) => {
         this.etablissement = response.data[0]
       })
     },
@@ -395,7 +398,7 @@ export default {
     },
   },
   mounted() {
-    this.getEtablissement(this.siret)
+    this.getEtablissement()
   },
   watch: {
     localSiret(val) {

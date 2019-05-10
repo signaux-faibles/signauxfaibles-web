@@ -69,7 +69,7 @@ export default {
       }
       this.$axios.post('/login', formData).then((response) => {
         this.$store.dispatch('setToken', response.data.token)
-        this.$router.push('prediction')
+        this.$router.push('detection')
       })
     },
   },

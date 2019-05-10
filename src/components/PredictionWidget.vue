@@ -7,41 +7,43 @@
     >
       <div style="height: 100%; width: 100%; overflow: hidden;">
         <div class="entete pointer">
-          <PredictionWidgetScore id="widget" :prob="prediction.prob" :diff="prediction.diff"/>
+          <PredictionWidgetScore id="widget" :prob="prediction.value.prob" :diff="prediction.value.diff"/>
         </div>
+        
         <div class="corps">
-          <div style="left: 250px; position: absolute;" :id="'marge_' + prediction._id.siret"></div>
+          <div style="left: 250px; position: absolute;" :id="'marge_' + prediction.key.siret"></div>
           <div style="white-space: nowrap; overflow: hidden; max-width: 400px; max-height:40px">
             <span style="font-size: 28px; color: #333; line-height: 40px; display: inline-block; font-family: 'Oswald'; max-width: '100px'">
-              {{ prediction.etablissement.sirene.raison_sociale }}
+              {{ prediction.value.raison_sociale }}
             </span>
           </div>
-          <span style="font-family: 'Abel'; font-size: 17px; font-weight: 400;">{{ (naf.n5 || {})[(sirene.ape || '')] }}</span>
-
+          <span style="font-family: 'Abel'; font-size: 17px; font-weight: 400;">
+            {{ (naf.n5 || {})[prediction.value.activite || ''] }}
+          </span>
           <v-img
             style="position: absolute; left: 550px; top: 10px;"
             width="70"
-            :src="'/static/' + (urssaf?'red':'gray') + '_urssaf.svg'"
+            :src="'/static/' + (prediction.value.urssaf?'red':'gray') + '_urssaf.svg'"
           ></v-img>
 
           <v-img
             style="position: absolute; left: 550px; bottom: 10px;"
             width="18"
             height="24"
-            :src="'/static/' + apart + '_apart.svg'"
+            :src="'/static/' + (prediction.value.apart?'red':'gray') + '_apart.svg'"
           ></v-img>
 
           <div style="position: absolute; left: 584px; bottom: 3px; color: #333">
             <span
               style="font-size: 24px"
-            >{{ prediction.etablissement.dernier_effectif.effectif || 'n/c' }}</span>
-            <v-icon style="position:relative; top:-4px" small v-if="variationEffectif">{{ variationEffectif }}</v-icon>
+            >{{ prediction.value.dernier_effectif || 'n/c' }}</span>
+            <!-- <v-icon style="position:relative; top:-4px" small v-if="variationEffectif">{{ variationEffectif }}</v-icon> -->
           </div>
 
           <div class="flex" style="position:absolute; left: 600px; top: 0px; bottom: 0px; right: 9px;">
             <div class='label'>
               Chiffre d'affaire<br/>
-              <span style="font-size: 25px" :class="diane.ca_arrow?'':'unknown'">{{ diane.ca }}</span>
+              <span style="font-size: 25px" :class="diane.ca_color">{{ diane.ca || "n/c" }}</span>
             </div>
           </div>
           <div style="position:absolute; left: 780px; top: 42px">
@@ -50,10 +52,10 @@
           <div class="flex" style="position:absolute; left: 750px; top: 0px; bottom: 0px; right: 9px;">
             <div class='label'>
               Résultat d'exploitation<br/>
-              <span style="font-size: 25px" :class='diane.resultat_expl_color'>{{ diane.resultat_expl }}</span>
+              <span style="font-size: 25px" :class="diane.resultat_expl_color">{{ diane.resultat_expl }}</span>
             </div>
           </div>
-        </div>
+        </div> 
         <v-dialog  lazy fullscreen v-model="dialog">
           <div style="height: 100%; width: 100%; font-weight: 800; font-family: 'Oswald', sans;">
             <v-toolbar fixed class="toolbar" height="35px" style="color: #fff; font-size: 22px;">
@@ -62,10 +64,10 @@
               <v-spacer/>
               <v-icon @click="dialog=false;" style="color: #fff">mdi-close</v-icon>
             </v-toolbar>
-            <Etablissement :siret="prediction._id.key"></Etablissement>
+            <Etablissement :siret="prediction.key.key"></Etablissement>
           </div>
         </v-dialog>
-      </div>
+      </div> 
     </v-card>
   </div>
 </template>
@@ -92,17 +94,18 @@ export default {
   },
   computed: {
     naf() {
-      return this.$store.state.naf
+      return this.$store.getters.naf('1802').value || ''
     },
-    apart() {
-      const apart = this.prediction.etablissement.apdemande.filter((d) => {
-        const end = new Date(d.periode.end)
-        return end.getTime() > new Date(new Date().setFullYear(new Date().getFullYear() - 1))
-      })
-      return (apart.length > 0) ? 'red' : 'gray'
-    },
-    sirene() {
-      return this.prediction.etablissement.sirene
+    diane() {
+      return {
+        ca: this.prediction.value.ca ? this.prediction.value.ca + ' k€' : 'n/c',
+        ca_arrow: (this.prediction.value.variation_ca || 1) > 1.05 ? 'mdi-arrow-top-right' :
+          (this.prediction.value.variation_ca || 1) < 0.95 ? 'mdi-arrow-bottom-right' : null,
+        ca_color: this.prediction.value.ca ? '' : 'unknown',
+        resultat_expl: this.prediction.value.resultat_expl ? this.prediction.value.resultat_expl + ' k€' : 'n/c',
+        resultat_expl_color: this.prediction.value.resultat_expl ?
+          (this.prediction.value.resultat_expl < 0 ? 'down' : null) : 'unknown',
+      }
     },
     variationEffectif() {
       const effectifArray = this.prediction.etablissement.effectif
@@ -118,45 +121,6 @@ export default {
         return 'mdi-arrow-top-right'
       }
       return null
-    },
-    urssaf() {
-      const urssaf = this.prediction.etablissement.debit.map((d) => d.part_patronale + d.part_ouvriere)
-      const l = urssaf.length
-      for (let i = l - 3; i < l; i++) {
-        if (urssaf[i] / urssaf[i - 1] > 1.01) {
-          return true
-        }
-      }
-      return false
-    },
-    diane() {
-      const entreprise = this.prediction.entreprise || { diane: [] }
-      const diane = entreprise.diane.reduce((m, d) => {
-        if (d.ca && d.resultat_expl && d.exercice_diane && m.length < 2) {
-          m.push({
-            exercice: d.exercice_diane,
-            ca: d.ca,
-            resultat_expl: d.resultat_expl,
-          })
-        }
-        return m
-      }, [])
-
-      if (diane.length === 2) {
-        return {
-          ca: diane[0].ca + ' k€',
-          resultat_expl: diane[0].resultat_expl + ' k€',
-          ca_arrow: (diane[0].ca / diane[1].ca > 1.05) ? 'mdi-arrow-top-right' :
-            (diane[0].ca / diane[1].ca < 0.95) ? 'mdi-arrow-bottom-right' : null,
-          resultat_expl_color: diane[0].resultat_expl <= 0 ? 'down' : null,
-        }
-      }
-      return {
-        ca: 'n/c',
-        resultat_expl: 'n/c',
-        ca_color: 'unknown',
-        resultat_expl_color: 'unknown',
-      }
     },
   },
   methods: {

@@ -35,7 +35,7 @@
           </v-list-tile-content>
         </v-list-tile>
 
-        <v-list-tile to="/">
+        <!-- <v-list-tile to="/">
           <v-list-tile-action>
             <v-icon>mdi-database-search</v-icon>
           </v-list-tile-action>
@@ -51,7 +51,7 @@
           <v-list-tile-content>
             <v-list-tile-title>Données</v-list-tile-title>
           </v-list-tile-content>
-        </v-list-tile>
+        </v-list-tile> -->
 
         <!-- <v-list-tile to="/admin">
           <v-list-tile-action>
@@ -91,15 +91,16 @@ export default {
   methods: {
     logout() {
       this.$store.commit('logout')
+      this.$router.push('/')
     },
   },
   computed: {
     drawer: {
       get() {
-        return this.$store.state.appDrawer
+        return this.$store.state.leftDrawer
       },
       set(val) {
-        this.$store.dispatch('setDrawer', val)
+        this.$store.dispatch('setLeftDrawer', val)
       },
     },
   },

@@ -18,7 +18,7 @@
     </v-icon>
 
     <div style="width: 100%; text-align: center;" class="toolbar_titre">
-      Détection - Bourgogne Franche Comté - Février 2019
+      Détection - {{ currentBatch }}
     </div>
     <v-spacer></v-spacer>
     <v-icon
@@ -35,8 +35,8 @@
           <v-select
             :items="batches"
             v-model="currentBatchKey"
+            @change="getPrediction"
             label="Liste de détection"
-            @change="updatePrediction()"
           ></v-select>
       </div>
       <p style="height: 1px; border: 1px solid #eee"/>
@@ -44,9 +44,8 @@
         <v-icon style="margin-right: 10px;">fa-industry</v-icon>
         <v-select
           :items="naf1"
-          v-model="naf"
+          v-model="currentNaf"
           label="Secteur d'activité"
-          @change="updatePrediction()"
         ></v-select>
       </div>
       <p style="height: 1px; border: 1px solid #eee"/>
@@ -66,37 +65,37 @@
           :items="effectifClass"
           v-model="minEffectif"
           label="Effectif minimum"
-          @change="updatePrediction()"
         ></v-select>
       </div>
       <p style="height: 1px; border: 1px solid #eee"/>
       <v-radio-group
-        style="padding: 0 15px"
-        v-model="suivi"
-        @change="updatePrediction()"
-        :mandatory="false">
-        <v-radio label="Non suivies" value="false"></v-radio>
-        <v-radio label="Suivies" value="true"></v-radio>
-        <v-radio label="Toutes" value="null"></v-radio>
+      style="padding: 0 15px"
+      v-model="connu"
+      >
+        <v-radio label="Non suivies" :value="false"></v-radio>
+        <v-radio label="Suivies" :value="true"></v-radio>
+        <v-radio label="Toutes" :value="null"></v-radio>
       </v-radio-group>
       <p style="height: 1px; border: 1px solid #eee"/>
       <div style="display: flex; flex-direction: row; vertical-align: middle; padding: 0 15px;" >
         <v-checkbox
           label="Activité partielle"
-          @change="updatePrediction()"
           v-model="activitePartielle">
         </v-checkbox>
       </div>
       <div style="display: flex; flex-direction: row; vertical-align: middle; padding: 0 15px;" >
         <v-checkbox
-        label="Sans dette Urssaf"
-        @change="updatePrediction()"
+          label="Sans dette Urssaf"
           v-model="interetUrssaf">
         </v-checkbox>
       </div>
+      <!-- <div style="display: flex; flex-direction: row; vertical-align: middle; padding: 0 15px;">
+        
+      </div> -->
     </v-navigation-drawer>
   </div>
-   <!-- <PredictionWidget v-for="p in prediction" :key="p.id.siret" :prediction="p"/> -->
+
+  <PredictionWidget v-for="p in predictionCrop" :key="p.key.siret" :batch="currentBatchKey" :prediction="p"/> 
 
 </div>
 </template>
@@ -108,10 +107,10 @@ export default {
     return {
       effectifClass: [10, 20, 50, 100],
       prediction: [],
-      predictionLength: 0,
-      naf: 'C',
+      predictionLength: 100,
+      currentNaf: 'C',
       minEffectif: 20,
-      suivi: 'false',
+      connu: false,
       horsCCSF: true,
       horsProcol: true,
       loading: false,
@@ -167,62 +166,44 @@ export default {
     }
   },
   mounted() {
-    // this.$store.dispatch('getNAF')
-    // this.firstUpdatePrediction()
+    this.$store.dispatch('updateReference')
+    this.getPrediction()
   },
   methods: {
-    firstUpdatePrediction() {
-      if (this.prediction.length < 1) {
-        this.updatePrediction()
-        setTimeout(this.firstUpdatePrediction, 5000)
+    getPrediction() {
+      if (this.$store.state.currentBatchKey !== '') {
+        const params = {
+          key: {
+            type: 'detection',
+            batch: this.$store.state.currentBatchKey,
+          },
+        }
+        this.loading = true
+        const self = this
+        this.$axios.post('/data/get/public', params).then((response) => {
+          self.prediction = response.data.sort((p1, p2) => p1.value.prob < p2.value.prob)
+          self.loading = false
+        }).catch((error) => {
+          self.prediction = []
+        }).finally(() => {
+          self.loading = false
+        })
+      } else {
+        window.setTimeout(getPrediction, 100)
       }
-    },
-    updatePrediction() {
-      this.loading = true
-      const self = this
-      const params = {
-        batch: this.currentBatchKey,
-        naf1: this.naf,
-        limit: this.detectionLength,
-        offset: 0,
-        effectif: this.minEffectif,
-        ccsf: this.horsCCSF,
-        procol: false,
-        suivi: this.suiviQuery,
-        zone: this.zone,
-      }
-
-      this.$axios.post('/api/data/prediction', params).then((response) => {
-        const prediction = response.data
-        this.prediction = prediction
-        this.predictionLength = this.prediction.length
-        self.loading = false
-      })
-    },
-    getPrediction(limit, offset) {
-      this.loading = true
-      const self = this
-      const params = {
-        batch: this.currentBatchKey,
-        naf1: this.naf,
-        limit,
-        offset,
-        effectif: this.minEffectif,
-        ccsf: this.horsCCSF,
-        procol: false,
-        suivi: this.suiviQuery,
-        zone: this.zone,
-      }
-      this.predictionLength = limit + offset
-      this.$axios.post('/api/data/prediction', params).then((response) => {
-        const prediction = response.data
-        const newPrediction = this.prediction.concat(prediction)
-        this.prediction = newPrediction
-        self.loading = false
-      })
     },
   },
   computed: {
+    predictionCrop() {
+      if (this.naf) {
+        return this.prediction.filter((p) => {
+          return this.currentNaf === this.naf.n5to1[p.value.activite] &&
+          (this.connu === p.value.connu || this.connu === null)
+        }).slice(0, this.predictionLength)
+      } else {
+        return []
+      }
+    },
     leftDrawer: {
       get() {
         return this.$store.state.leftDrawer
@@ -241,15 +222,18 @@ export default {
       }
     },
     naf() {
-      return this.$store.state.reference.naf
+      return (this.$store.getters.naf(this.$store.state.currentBatchKey) || { value: [] }).value
     },
     naf1() {
-      return Object.keys(this.naf.n1 || {}).sort().map((n) => {
+      return Object.keys((this.naf || {n1: {}}).n1).map((n) => {
         return {
-          text: this.naf.n1[n].substring(0, 60),
-          value: n,
+            text: this.naf.n1[n].substring(0, 60),
+            value: n,
         }
       })
+    },
+    batches() {
+      return this.$store.getters.batches
     },
     scrollTop() {
       return this.$store.state.scrollTop
@@ -280,37 +264,20 @@ export default {
     },
     currentBatchKey: {
       get() {
-        this.$store.dispatch('updateBatches')
         return this.$store.state.currentBatchKey
       },
       set(value) {
         this.$store.commit('setCurrentBatchKey', value)
       },
     },
-    batches() {
-      return [{
-        value: '1810',
-        text: 'Octobre 2018',
-      }, {
-        value: '1811',
-        text: 'Novembre 2018',
-      }, {
-        value: '1812',
-        text: 'Décembre 2018',
-      }, {
-        value: '1901',
-        text: 'Janvier 2018',
-      }, {
-        value: '1802',
-        text: 'Février 2019',
-      }]
-      // return (this.$store.state.batches || []).map(batch => batch.id.key)
+    currentBatch() {
+      return (this.batches.filter((b) => b.value === this.currentBatchKey)[0] || {text: 'chargement'}).text
     },
     detectionLength() {
       const length = Math.round((this.height + this.scrollTop) / 860 + 5) * 10
       if (length > this.predictionLength) {
-        const complement = length - this.predictionLength
-        this.getPrediction(complement, this.predictionLength)
+        // const complement = length - this.predictionLength
+        // this.getPrediction(complement, this.predictionLength)
       }
       return length
     },

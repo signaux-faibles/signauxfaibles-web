@@ -16,7 +16,7 @@ export default new Router({
       component: Login,
     },
     {
-      path: '/prediction',
+      path: '/detection',
       name: 'prediction',
       component: Prediction,
     },
