@@ -27,6 +27,10 @@
   </v-toolbar>
   <span style="visibility: hidden; position:absolute;">{{ detectionLength }} {{ predictionLength }} {{ prediction.length }}</span>
   <div style="width:100%">
+    <Spinner v-if="loading"/>
+    <div id="nodata">
+      <img v-if="!loading && prediction.length == 0" src="@/assets/nodata.png">
+    </div>
     <v-navigation-drawer :class="(rightDrawer?'elevation-6':'') + 'rightDrawer'" v-model="rightDrawer" right app>
       <v-toolbar flat class="transparent" height="40">
         <v-icon :class="loading?'rotate':''" @click="rightDrawer=!rightDrawer">mdi-target</v-icon>
@@ -94,20 +98,20 @@
       </div> -->
     </v-navigation-drawer>
   </div>
-
-  <PredictionWidget v-for="p in predictionCrop" :key="p.key.siret" :batch="currentBatchKey" :prediction="p"/> 
+  <PredictionWidget v-for="p in predictionCrop" :key="p.key.siret" :prediction="p"/> 
 
 </div>
 </template>
 
 <script>
+import Spinner from '@/components/Spinner'
 import PredictionWidget from '@/components/PredictionWidget'
 export default {
   data() {
     return {
       effectifClass: [10, 20, 50, 100],
       prediction: [],
-      predictionLength: 100,
+      predictionLength: 30,
       currentNaf: 'C',
       minEffectif: 20,
       connu: false,
@@ -166,12 +170,13 @@ export default {
     }
   },
   mounted() {
+    this.$store.dispatch('refreshSession')
     this.$store.dispatch('updateReference')
     this.getPrediction()
   },
   methods: {
     getPrediction() {
-      if (this.$store.state.currentBatchKey !== '') {
+      if (this.$store.state.currentBatchKey) {
         const params = {
           key: {
             type: 'detection',
@@ -197,8 +202,9 @@ export default {
     predictionCrop() {
       if (this.naf) {
         return this.prediction.filter((p) => {
-          return this.currentNaf === this.naf.n5to1[p.value.activite] &&
-          (this.connu === p.value.connu || this.connu === null)
+          return this.currentNaf === this.naf.n5to1[p.value.activite]
+          // && p.value.effectif >= this.effectifClass
+          // this.acteurs === 'connu' || this.acteurs === null
         }).slice(0, this.predictionLength)
       } else {
         return []
@@ -282,13 +288,18 @@ export default {
       return length
     },
   },
-  components: { PredictionWidget },
-  name: 'Browse',
+  components: { PredictionWidget, Spinner },
+  name: 'Prediction',
 }
 </script>
 
 <style scoped>
-
+#nodata {
+  width: 100%;
+  position: absolute;
+  vertical-align: middle;
+  text-align: center;
+}
 .rotate {
     -webkit-animation:spin 4s linear infinite;
     -moz-animation:spin 4s linear infinite;

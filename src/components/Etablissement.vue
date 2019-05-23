@@ -3,7 +3,9 @@
     <div>
       <v-container>
         <v-layout wrap>
+
           <v-flex
+
           style="vertical-align: middle; text-align: center; margin-top: 30px; font-size: 24px"
           xs12>
             {{ sirene.raison_sociale }}
@@ -13,14 +15,13 @@
           md6
           class="pa-3"
           style="font-size: 18px">
-            <!-- {{ Object.keys(etablissement) }} -->
-            SIRET <b>{{ siret }} – {{ sirene.nature_juridique }}</b> <br/>
-            {{ etablissement }}
+
+            SIRET <b>{{ siret }} – {{ sirene.NatureJuridique }}</b> <br/>
             <v-btn :color="suivi?'error':'success'" @click="suivi=!suivi">
               {{ suivi?'Ne plus suivre cet établissement':'Suivre cet établissement' }}
             </v-btn>
 
-            <!-- Création: {{ printDate(sirene.debutactivite) }} -->
+
             <br/><br/>
             <b>{{ (sirene.adresse || [])[0] }} </b>
             <br
@@ -54,7 +55,7 @@
             <br/>
             <b>{{ (naf.n1 || {})[((naf.n5to1 || {})[(sirene.ape || '')] || '')] }}</b><br/>
             {{ (naf.n5 || {})[(sirene.ape || '')] }}<br/>
-            Code APE: {{ (sirene.ape || '') }}<br/>
+            Code APE: {{ (sirene.ape || '') }}<br/> 
           </v-flex>
           <v-flex xs12 md6 class="text-xs-right pa-3">
             <iframe
@@ -69,7 +70,7 @@
             <small><a href="https://www.openstreetmap.org/#map=19/47.31581/5.05088">Afficher une carte plus grande</a></small>
           </v-flex>
 
-          <v-flex
+          <!-- <v-flex
             xs12 md12 class="pa-3"
             v-for="(c, i) in comments"
             :key="c['comment'] + i">
@@ -78,8 +79,8 @@
               :label="c['author'] + ', le ' + c['date']"
               :value="c['comment']"
             ></v-textarea>
-          </v-flex>
-          <v-flex xs6 class="pr-1" style="height: 200px">
+          </v-flex> -->
+          <v-flex xs6 class="pr-1" style="min-height: 200px">
             <v-toolbar
               dark
               color='indigo darken-5'>
@@ -99,57 +100,92 @@
               <v-toolbar-title class="localtoolbar">Débits Urssaf</v-toolbar-title>
             </v-toolbar>
             <IEcharts
+              v-if="roles.includes('urssaf')"
               :loading="chart"
               style="height: 350px"
               :option="urssafOptions"
             />
+            <div 
+              style=" height: 350px; width: 100%; text-align: center;"
+              v-if="!roles.includes('urssaf')"
+            >
+              <img
+              style="vertical-align: middle; margin: 125px 0; opacity: 0.2;"
+              height="100px"
+              src="@/assets/noaccess.svg"/>
+            </div>
           </v-flex>
-          <v-flex xs6 class="pr-1" v-if="apdemande.length + apconso.length > 0">
+          <v-flex xs6 class="pr-1">
             <v-toolbar
               dark
               color='indigo darken-5'>
               <v-toolbar-title class="localtoolbar">Demandes d'activité partielle</v-toolbar-title>
             </v-toolbar>
-            <table style="width: 100%; padding: 5px; text-align: center">
-              <tr>
-                <th>
-                  Date
-                </th>
-                <th>
-                  Effectif Autorisé
-                </th>
-                <th>
-                  Début
-                </th>
-                <th>
-                  Fin
-                </th>
-              </tr>
-              <tr v-for="d in apdemande" :key="d.date_statut" style="font-weight: 400">
-                <td>
-                  {{ d.date_statut.substring(0,10) }}
-                </td>
-                <td>
-                  {{ d.effectif_autorise }}
-                </td>
-                <td>
-                  {{ d.periode.start.substring(0,10) }}
-                </td>
-                <td>
-                  {{ d.periode.end.substring(0,10) }}
-                </td>
-              </tr>
-            </table>
-
+            <div 
+              style=" height: 350px; width: 100%; text-align: center;"
+              v-if="!roles.includes('dgefp')"
+            >
+              <img
+              style="vertical-align: middle; margin: 125px 0; opacity: 0.2;"
+              height="100px"
+              src="@/assets/noaccess.svg"/>
+            </div>
+            <div style="min-height: 350px;">
+              <table 
+                style="width: 100%; padding: 5px; text-align: center"
+                v-if="roles.includes('dgefp')"
+              >
+                <tr>
+                  <th>
+                    Date
+                  </th>
+                  <th>
+                    Effectif Autorisé
+                  </th>
+                  <th>
+                    Début
+                  </th>
+                  <th>
+                    Fin
+                  </th>
+                </tr>
+                <tr v-for="d in apdemande" :key="d.date_statut" style="font-weight: 400">
+                  <td>
+                    {{ d.date_statut.substring(0,10) }}
+                  </td>
+                  <td>
+                    {{ d.effectif_autorise }}
+                  </td>
+                  <td>
+                    {{ d.periode.start.substring(0,10) }}
+                  </td>
+                  <td>
+                    {{ d.periode.end.substring(0,10) }}
+                  </td>
+                </tr>
+              </table>
+            </div>
           </v-flex>
 
-          <v-flex xs6 class="pr-1" v-if="apdemande.length + apconso.length > 0">
+          <v-flex xs6 class="pr-1">
             <v-toolbar
             dark
             color='indigo darken-5'>
               <v-toolbar-title class="localtoolbar">Consommations d'activité partielle</v-toolbar-title>
             </v-toolbar>
-            <table style="width: 100%; padding: 5px; text-align: center">
+            <div 
+              style=" height: 350px; width: 100%; text-align: center;"
+              v-if="!roles.includes('dgefp')"
+            >
+              <img
+              style="vertical-align: middle; margin: 125px 0; opacity: 0.2;"
+              height="100px"
+              src="@/assets/noaccess.svg"/>
+            </div>
+            <table 
+              style="min-height: 350px; width: 100%; padding: 5px; text-align: center"
+              v-if="roles.includes('dgefp')"
+            >
               <tr>
                 <th>
                   Date
@@ -276,9 +312,9 @@
                   </v-list-tile-content>
                 </v-list-tile>
               </v-list>
-
+              
             </v-card>
-          </v-flex>
+          </v-flex> 
         </v-layout>
       </v-container>
     </div>
@@ -295,6 +331,7 @@ import 'echarts/lib/component/tooltip'
 export default {
   props: ['siret', 'batch'],
   name: 'Etablissement',
+  components: { IEcharts },
   data() {
     return {
       suivi: false,
@@ -380,14 +417,14 @@ export default {
     },
     getEtablissement() {
       const params = {
-        key: { 
+        key: {
           batch: this.batch,
-          key: this.siret,
+          siret: this.siret,
           type: 'detail',
         },
       }
       this.$axios.post('/data/get/public', params).then((response) => {
-        this.etablissement = response.data[0]
+        this.etablissement = response.data[0] || []
       })
     },
     printDate(date) {
@@ -416,12 +453,14 @@ export default {
       return this.siret
     },
     apconso() {
-      return ((this.etablissement.value || {}).apconso || [])
+      return this.etablissement.value ? (this.etablissement.value.apconso || [])
         .sort((a, b) => a.periode <= b.periode).slice(0, 10)
+        : []
     },
     apdemande() {
-      return ((this.etablissement.value || {}).apdemande || [])
+      return this.etablissement.value ? (this.etablissement.value.apdemande || [])
         .sort((a, b) => a.periode.start <= b.periode.start).slice(0, 10)
+        : []
     },
     activeTab: {
       get() { return this.$store.getters.activeTab },
@@ -444,15 +483,21 @@ export default {
       return this.etablissement.value.effectif || []
     },
     bdf() {
-      if (this.etablissement.entreprise) {
-        return this.etablissement.entreprise.value.bdf
+      if (this.etablissement.value) {
+        return this.etablissement.value.bdf || []
       } else {
         return []
       }
     },
+    jwt() {
+      return this.$store.getters.jwt || {resource_access: { signauxfaibles: {roles: []}}}
+    },
+    roles() {
+      return this.jwt.resource_access.signauxfaibles.roles
+    },
     diane() {
-      if (this.etablissement.entreprise) {
-        return this.etablissement.entreprise.value.diane
+      if (this.etablissement.value) {
+        return this.etablissement.value.diane || []
       } else {
         return []
       }

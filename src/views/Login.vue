@@ -44,7 +44,6 @@
 </template>
 
 <script>
-// import zxcvbn from 'zxcvbn'
 export default {
   data() {
     return {
@@ -68,7 +67,11 @@ export default {
         token: this.browserToken,
       }
       this.$axios.post('/login', formData).then((response) => {
-        this.$store.dispatch('setToken', response.data.token)
+        const tokens = {
+          token: response.data.access_token,
+          refreshToken: response.data.refresh_token,
+        }
+        this.$store.dispatch('setTokens', tokens)
         this.$router.push('detection')
       })
     },

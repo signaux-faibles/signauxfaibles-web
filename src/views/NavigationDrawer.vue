@@ -78,7 +78,7 @@
         flat
         icon
         color="blue"
-        href="https://github.com/entrepreneur-interet-general/opensignauxfaibles">
+        href="https://github.com/signaux-faibles/">
         <v-icon>fab fa-github</v-icon>
       </v-btn>
     </v-footer>

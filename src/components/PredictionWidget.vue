@@ -56,7 +56,7 @@
             </div>
           </div>
         </div> 
-        <v-dialog  lazy fullscreen v-model="dialog">
+         <v-dialog  lazy fullscreen v-model="dialog">
           <div style="height: 100%; width: 100%; font-weight: 800; font-family: 'Oswald', sans;">
             <v-toolbar fixed class="toolbar" height="35px" style="color: #fff; font-size: 22px;">
               <v-spacer/>
@@ -64,10 +64,10 @@
               <v-spacer/>
               <v-icon @click="dialog=false;" style="color: #fff">mdi-close</v-icon>
             </v-toolbar>
-            <Etablissement :siret="prediction.key.key"></Etablissement>
+            <Etablissement :siret="prediction.key.siret" :batch="currentBatchKey"></Etablissement>
           </div>
         </v-dialog>
-      </div> 
+      </div>  
     </v-card>
   </div>
 </template>
@@ -96,6 +96,9 @@ export default {
     naf() {
       return this.$store.getters.naf('1802').value || ''
     },
+    currentBatchKey() {
+      return this.$store.state.currentBatchKey
+    },
     diane() {
       return {
         ca: this.prediction.value.ca ? this.prediction.value.ca + ' k€' : 'n/c',
@@ -106,21 +109,6 @@ export default {
         resultat_expl_color: this.prediction.value.resultat_expl ?
           (this.prediction.value.resultat_expl < 0 ? 'down' : null) : 'unknown',
       }
-    },
-    variationEffectif() {
-      const effectifArray = this.prediction.etablissement.effectif
-      const l = effectifArray.length
-      if (l === 0) { return 'none' }
-
-      const effectif = effectifArray[l - 1].effectif
-      const effectifPrecedent = effectifArray[l - Math.min(12, l)].effectif
-      if (effectif / effectifPrecedent > 1.10) {
-        return 'mdi-arrow-bottom-right'
-      }
-      if (effectif / effectifPrecedent < 0.90) {
-        return 'mdi-arrow-top-right'
-      }
-      return null
     },
   },
   methods: {

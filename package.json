@@ -11,10 +11,12 @@
   },
   "dependencies": {
     "@babel/core": "^7.4.3",
+    "@types/jwt-decode": "^2.2.1",
     "axios": "^0.18.0",
     "core-js": "^2.6.5",
     "echarts": "^4.2.1",
     "jest": ">=22 <24",
+    "jwt-decode": "^2.2.0",
     "vue": "^2.6.10",
     "vue-class-component": "^7.0.2",
     "vue-echarts-v3": "^2.0.1",

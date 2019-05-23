@@ -2,7 +2,10 @@ import Vue from 'vue'
 import Vuex, { ActionContext } from 'vuex'
 import axios from 'axios'
 import createPersistedState from 'vuex-persistedstate'
+import jwt from 'jwt-decode'
 // import VueNativeSock from 'vue-native-websocket'
+
+const refreshRate = 60000
 
 Vue.use(Vuex)
 
@@ -46,7 +49,8 @@ const sessionStore = new Vuex.Store({
     currentBatchKey: null as unknown as string,
     leftDrawer: false,
     rightDrawer: true,
-    token: null,
+    token: null as unknown as string,
+    refreshToken: null as unknown as string,
     naf: [] as any[],
     batches: [] as any[],
     zone: {},
@@ -66,17 +70,18 @@ const sessionStore = new Vuex.Store({
       })
     },
     logout(state) {
-      state.token = null
+      state.token = null as unknown as string
       state.naf = []
       state.zone = {}
     },
-    setToken(state, token) {
-      state.token = token
+    setTokens(state, tokens) {
+      state.token = tokens.token
+      state.refreshToken = tokens.refreshToken
     },
     updateReference(state, reference) {
       state.naf = reference.filter((r: any) => r.key.key === 'naf')
       state.batches = reference.filter((r: any) => r.key.key === 'batch')
-      state.currentBatchKey = state.batches.reduce((m, b) => {
+      state.currentBatchKey = state.currentBatchKey ? state.currentBatchKey : state.batches.reduce((m, b) => {
         return b.key.batch > m ? b.key.batch : m
       }, '')
     },
@@ -102,10 +107,16 @@ const sessionStore = new Vuex.Store({
         }
       })
     },
+    jwt(state)  {
+      return jwt(state.token)
+    },
   },
   actions: {
-    setToken(context, token) {
-      context.commit('setToken', token)
+    refreshSession() {
+      setTimeout(refreshFunction, refreshRate)
+    },
+    setTokens(context, tokens) {
+      context.commit('setTokens', tokens)
     },
     setHeight(context, height) {
       context.commit('setHeight', height)
@@ -122,19 +133,6 @@ const sessionStore = new Vuex.Store({
         context.commit('updateReference', response.data)
       })
     },
-    login(context, credentials) {
-      const formData = {
-        browserToken: localStore.state.browserToken,
-        email: credentials.email,
-        password: credentials.password,
-      }
-      axiosClient.post('/login', formData).then((response) => {
-        context.commit('setToken', response.data.token)
-      }).catch((_) => {
-        context.commit('setLoginError', true)
-        setTimeout(() => { context.commit('setLoginError', false) }, 5000)
-      })
-    },
     setLeftDrawer(context, val) {
       context.commit('leftDrawer', val)
     },
@@ -144,7 +142,21 @@ const sessionStore = new Vuex.Store({
   },
 })
 
-
+function refreshFunction() {
+  if (sessionStore.state.token != null) {
+    const params = {
+      refresh_token: sessionStore.state.refreshToken,
+    }
+    axiosClient.post('refreshToken', params).then((response) => {
+      const tokens = {
+        token: response.data.access_token,
+        refreshToken: response.data.refresh_token,
+      }
+      sessionStore.commit('setTokens', tokens)
+    })
+    setTimeout(refreshFunction, refreshRate)
+  }
+}
 
 const store = {
   sessionStore,
