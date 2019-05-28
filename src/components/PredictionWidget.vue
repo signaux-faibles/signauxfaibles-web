@@ -94,7 +94,7 @@ export default {
   },
   computed: {
     naf() {
-      return this.$store.getters.naf('1802').value || ''
+      return this.$store.state.naf[0] ? this.$store.state.naf[0].value : {}
     },
     currentBatchKey() {
       return this.$store.state.currentBatchKey

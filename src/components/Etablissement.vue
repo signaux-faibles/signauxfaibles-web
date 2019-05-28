@@ -16,10 +16,11 @@
           class="pa-3"
           style="font-size: 18px">
 
-            SIRET <b>{{ siret }} – {{ sirene.NatureJuridique }}</b> <br/>
-            <v-btn :color="suivi?'error':'success'" @click="suivi=!suivi">
+            <h4>SIRET {{ siret }} </h4><br/>
+            {{ sirene.nature_juridique }} <br/>
+            <!-- <v-btn :color="suivi?'error':'success'" @click="suivi=!suivi">
               {{ suivi?'Ne plus suivre cet établissement':'Suivre cet établissement' }}
-            </v-btn>
+            </v-btn> -->
 
 
             <br/><br/>
@@ -53,6 +54,7 @@
             <br/>
             <v-divider/>
             <br/>
+            
             <b>{{ (naf.n1 || {})[((naf.n5to1 || {})[(sirene.ape || '')] || '')] }}</b><br/>
             {{ (naf.n5 || {})[(sirene.ape || '')] }}<br/>
             Code APE: {{ (sirene.ape || '') }}<br/> 
@@ -312,7 +314,7 @@
                   </v-list-tile-content>
                 </v-list-tile>
               </v-list>
-              
+ 
             </v-card>
           </v-flex> 
         </v-layout>
@@ -447,7 +449,7 @@ export default {
       return this.zipDianeBDF.filter((z) => z.annee).map((z) => this.computeFinance(z))
     },
     naf() {
-      return this.$store.state.naf
+      return this.$store.state.naf[0] ? this.$store.state.naf[0].value : {}
     },
     localSiret() {
       return this.siret
