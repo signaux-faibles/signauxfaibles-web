@@ -9,8 +9,8 @@ const refreshRate = 60000
 
 Vue.use(Vuex)
 
-// const baseURL = 'https://signaux-faibles.beta.gouv.fr/'
-const baseURL = 'http://localhost:3000/'
+const baseURL = 'https://signaux-faibles.beta.gouv.fr/'
+// const baseURL = 'http://localhost:3000/'
 
 const axiosClient = axios.create(
   {
@@ -54,6 +54,8 @@ const sessionStore = new Vuex.Store({
     refreshToken: null as unknown as string,
     naf: [] as any[],
     batches: [] as any[],
+    departements: [] as any[],
+    region: [] as any[],
     zone: {},
     height: 0,
     scrollTop: 0,
@@ -82,6 +84,8 @@ const sessionStore = new Vuex.Store({
     updateReference(state, reference) {
       state.naf = reference.filter((r: any) => r.key.key === 'naf')
       state.batches = reference.filter((r: any) => r.key.key === 'batch')
+      state.region = reference.filter((r: any) => r.key.type === 'region')
+      state.departements = reference.filter((r: any) => r.key.type === 'departements')
       state.currentBatchKey = state.currentBatchKey ? state.currentBatchKey : state.batches.reduce((m, b) => {
         return b.key.batch > m ? b.key.batch : m
       }, '')

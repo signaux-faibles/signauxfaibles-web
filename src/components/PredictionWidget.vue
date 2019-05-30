@@ -11,14 +11,14 @@
         </div>
         
         <div class="corps">
-          <div style="left: 250px; position: absolute;" :id="'marge_' + prediction.key.siret"></div>
+          <div style="left: 250px; position: absolute; overflow: hidden;" :id="'marge_' + prediction.key.siret"></div>
           <div style="white-space: nowrap; overflow: hidden; max-width: 400px; max-height:40px">
             <span style="font-size: 28px; color: #333; line-height: 40px; display: inline-block; font-family: 'Oswald'; max-width: '100px'">
-              {{ prediction.value.raison_sociale }}
+              {{ prediction.value.raison_sociale }} 
             </span>
           </div>
-          <span style="font-family: 'Abel'; font-size: 17px; font-weight: 400;">
-            {{ (naf.n5 || {})[prediction.value.activite || ''] }}
+          <span style="font-family: 'Abel'; font-size: 17px; overflow: hidden; font-weight: 400;">
+            {{ prediction.value.departement }} - {{ (naf.n5 || {})[prediction.value.activite || ''] }}
           </span>
           <v-img
             style="position: absolute; left: 550px; top: 10px;"
@@ -33,23 +33,22 @@
             :src="'/static/' + (prediction.value.apart?'red':'gray') + '_apart.svg'"
           ></v-img>
 
-          <div style="position: absolute; left: 584px; bottom: 3px; color: #333">
+          <div style="position: absolute; overflow: hidden; left: 584px; bottom: 3px; color: #333">
             <span
               style="font-size: 24px"
             >{{ prediction.value.dernier_effectif || 'n/c' }}</span>
-            <!-- <v-icon style="position:relative; top:-4px" small v-if="variationEffectif">{{ variationEffectif }}</v-icon> -->
           </div>
 
-          <div class="flex" style="position:absolute; left: 600px; top: 0px; bottom: 0px; right: 9px;">
+          <div class="flex" style="position:absolute; overflow: hidden; left: 600px; top: 0px; bottom: 0px; right: 9px;">
             <div class='label'>
               Chiffre d'affaire<br/>
               <span style="font-size: 25px" :class="diane.ca_color">{{ diane.ca || "n/c" }}</span>
             </div>
           </div>
-          <div style="position:absolute; left: 780px; top: 42px">
+          <div style="position:absolute; overflow: hidden; left: 780px; top: 42px">
             <v-icon small v-if="diane.ca_arrow">{{ diane.ca_arrow }}</v-icon>
           </div>
-          <div class="flex" style="position:absolute; left: 750px; top: 0px; bottom: 0px; right: 9px;">
+          <div class="flex" style="position:absolute; overflow: hidden; left: 750px; top: 0px; bottom: 0px; right: 9px;">
             <div class='label'>
               Résultat d'exploitation<br/>
               <span style="font-size: 25px" :class="diane.resultat_expl_color">{{ diane.resultat_expl }}</span>

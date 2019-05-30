@@ -66,6 +66,7 @@
       <div style="display: flex; flex-direction: row; vertical-align: middle; padding: 0 15px;" >
         <v-icon style="margin-right: 10px;">fa-users</v-icon>
         <v-select
+          disabled
           :items="effectifClass"
           v-model="minEffectif"
           label="Effectif minimum"
@@ -75,6 +76,7 @@
       <v-radio-group
       style="padding: 0 15px"
       v-model="connu"
+      disabled
       >
         <v-radio label="Non suivies" :value="false"></v-radio>
         <v-radio label="Suivies" :value="true"></v-radio>
@@ -83,12 +85,14 @@
       <p style="height: 1px; border: 1px solid #eee"/>
       <div style="display: flex; flex-direction: row; vertical-align: middle; padding: 0 15px;" >
         <v-checkbox
+          disabled
           label="Activité partielle"
           v-model="activitePartielle">
         </v-checkbox>
       </div>
       <div style="display: flex; flex-direction: row; vertical-align: middle; padding: 0 15px;" >
         <v-checkbox
+          disabled
           label="Sans dette Urssaf"
           v-model="interetUrssaf">
         </v-checkbox>
@@ -120,53 +124,7 @@ export default {
       loading: false,
       activitePartielle: false,
       interetUrssaf: false,
-      zone: ['21', '25', '39', '58', '70', '71', '89', '90'],
-      subzones: [
-        {
-          text: 'Région entière',
-          value: ['21', '25', '39', '58', '70', '71', '89', '90'],
-        },
-        {
-          text: 'Bourgogne',
-          value: ['21', '58', '71', '89'],
-        },
-        {
-          text: 'Franche Comté',
-          value: ['25', '39', '70', '90'],
-        },
-        {
-          text: 'Côte d\'or',
-          value: ['21'],
-        },
-        {
-          text: 'Doubs',
-          value: ['25'],
-        },
-        {
-          text: 'Jura',
-          value: ['39'],
-        },
-        {
-          text: 'Nièvre',
-          value: ['58'],
-        },
-        {
-          text: 'Haute-Saône',
-          value: ['70'],
-        },
-        {
-          text: 'Saône-et-Loire',
-          value: ['71'],
-        },
-        {
-          text: 'Yonne',
-          value: ['89'],
-        },
-        {
-          text: 'Territoire de Belfort',
-          value: ['90'],
-        },
-      ],
+      zone: [],
     }
   },
   mounted() {
@@ -203,7 +161,7 @@ export default {
       if (this.naf) {
         return this.prediction.filter((p) => {
           return this.currentNaf === this.naf.n5to1[p.value.activite]
-          // && p.value.effectif >= this.effectifClass
+          && (this.zone.includes(p.value.departement) || this.zone.length==0)
           // this.acteurs === 'connu' || this.acteurs === null
         }).slice(0, this.predictionLength)
       } else {
@@ -275,6 +233,29 @@ export default {
       set(value) {
         this.$store.commit('setCurrentBatchKey', value)
       },
+    },
+    subzones() {
+      let all = [
+        {
+          text: 'Toute zone',
+          value: [],
+        },
+      ]
+      let region = this.$store.state.region.map((r) => {
+        return {
+          text: r.key.region,
+          value: r.value.departements,
+        }
+      })
+
+      let departement = Object.keys(this.$store.state.departements[0].value).map((d) => {
+        return {
+          text: this.$store.state.departements[0].value[d],
+          value: [d],
+        }
+      })
+
+      return all.concat(region).concat(departement)
     },
     currentBatch() {
       return (this.batches.filter((b) => b.value === this.currentBatchKey)[0] || {text: 'chargement'}).text
