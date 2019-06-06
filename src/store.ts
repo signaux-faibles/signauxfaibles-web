@@ -9,8 +9,8 @@ const refreshRate = 60000
 
 Vue.use(Vuex)
 
-const baseURL = 'https://signaux-faibles.beta.gouv.fr/'
-// const baseURL = 'http://localhost:3000/'
+// const baseURL = 'https://signaux-faibles.beta.gouv.fr/'
+const baseURL = 'http://localhost:3000/'
 
 const axiosClient = axios.create(
   {

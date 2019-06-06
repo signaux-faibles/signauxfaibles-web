@@ -31,7 +31,7 @@
     <div id="nodata">
       <img v-if="!loading && prediction.length == 0" src="@/assets/nodata.png">
     </div>
-    <v-navigation-drawer :class="(rightDrawer?'elevation-6':'') + 'rightDrawer'" v-model="rightDrawer" right app>
+    <v-navigation-drawer :class="(rightDrawer?'elevation-6':'') + ' rightDrawer'" transition="no-transition" v-model="rightDrawer" right app>
       <v-toolbar flat class="transparent" height="40">
         <v-icon :class="loading?'rotate':''" @click="rightDrawer=!rightDrawer">mdi-target</v-icon>
       </v-toolbar>
@@ -66,22 +66,39 @@
       <div style="display: flex; flex-direction: row; vertical-align: middle; padding: 0 15px;" >
         <v-icon style="margin-right: 10px;">fa-users</v-icon>
         <v-select
-          disabled
           :items="effectifClass"
           v-model="minEffectif"
           label="Effectif minimum"
         ></v-select>
       </div>
       <p style="height: 1px; border: 1px solid #eee"/>
-      <v-radio-group
+      <!-- <v-radio-group
+      multiple
       style="padding: 0 15px"
       v-model="connu"
-      disabled
       >
         <v-radio label="Non suivies" :value="false"></v-radio>
         <v-radio label="Suivies" :value="true"></v-radio>
         <v-radio label="Toutes" :value="null"></v-radio>
-      </v-radio-group>
+      </v-radio-group> -->
+
+      <div style="display: flex; flex-direction: row; vertical-align: middle; padding: 0 15px;" >
+        <v-select
+          v-model="filters"
+          :items="filtersItems"
+          item-text="text"
+          item-value="value"
+          label="Visibilité"
+          multiple
+        >
+          <template v-slot:selection="{ item, index }">
+            <v-chip>
+              <span>{{ item.value }}</span>
+            </v-chip>
+          </template>
+        </v-select>
+      </div>
+
       <p style="height: 1px; border: 1px solid #eee"/>
       <div style="display: flex; flex-direction: row; vertical-align: middle; padding: 0 15px;" >
         <v-checkbox
@@ -104,6 +121,13 @@
   </div>
   <PredictionWidget v-for="p in predictionCrop" :key="p.key.siret" :prediction="p"/> 
 
+
+  <div style="height: 30px, width: 50px, ">
+    
+      +
+    
+  </div>
+
 </div>
 </template>
 
@@ -125,6 +149,13 @@ export default {
       activitePartielle: false,
       interetUrssaf: false,
       zone: [],
+      filters: ['cvap', 'sf', 'procol', 'continuation'],
+      filtersItems: [
+        {text: "CVAP/Codefi/CRP", value:"cvap"},
+        {text: "Suivi Signaux Faibles", value:"sf"},
+        {text: "RJ/LJ", value:"procol"},
+        {text: "Plan de Continuation", value:"continuation"},
+      ],
     }
   },
   mounted() {
@@ -144,7 +175,7 @@ export default {
         this.loading = true
         const self = this
         this.$axios.post('/data/get/public', params).then((response) => {
-          self.prediction = response.data.sort((p1, p2) => p1.value.prob < p2.value.prob)
+          self.prediction = response.data.sort((p1, p2) => p1.value.score < p2.value.score)
           self.loading = false
         }).catch((error) => {
           self.prediction = []
@@ -162,7 +193,9 @@ export default {
         return this.prediction.filter((p) => {
           return this.currentNaf === this.naf.n5to1[p.value.activite]
           && (this.zone.includes(p.value.departement) || this.zone.length==0)
-          // this.acteurs === 'connu' || this.acteurs === null
+          && (p.value.connu == true || this.filters.includes(''))
+          && (['in_bonis', 'continuation'].includes(p.value.etatProcol) || this.filters.includes('procol'))
+          && (p.value.dernier_effectif > this.minEffectif)
         }).slice(0, this.predictionLength)
       } else {
         return []
@@ -241,11 +274,13 @@ export default {
           value: [],
         },
       ]
-      let region = this.$store.state.region.map((r) => {
-        return {
-          text: r.key.region,
-          value: r.value.departements,
-        }
+      let region = this.$store.state.region
+        .filter((r) => r.key.batch == this.currentBatchKey)
+        .map((r) => {
+          return {
+            text: r.key.region,
+            value: r.value.departements,
+          }
       })
 
       let departement = Object.keys(this.$store.state.departements[0].value).map((d) => {

@@ -7,7 +7,7 @@
     >
       <div style="height: 100%; width: 100%; overflow: hidden;">
         <div class="entete pointer">
-          <PredictionWidgetScore id="widget" :prob="prediction.value.prob" :diff="prediction.value.diff"/>
+          <PredictionWidgetScore id="widget" :alert="prediction.value.alert" :diff="prediction.value.diff"/>
         </div>
         
         <div class="corps">
@@ -15,6 +15,7 @@
           <div style="white-space: nowrap; overflow: hidden; max-width: 400px; max-height:40px">
             <span style="font-size: 28px; color: #333; line-height: 40px; display: inline-block; font-family: 'Oswald'; max-width: '100px'">
               {{ prediction.value.raison_sociale }} 
+
             </span>
           </div>
           <span style="font-family: 'Abel'; font-size: 17px; overflow: hidden; font-weight: 400;">

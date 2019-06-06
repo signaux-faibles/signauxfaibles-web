@@ -10,20 +10,19 @@
 
 <script>
 export default {
-  props: ['prob', 'diff'],
+  props: ['alert', 'diff'],
   computed: {
     detection() {
-      return this.detectionClass(this.prob, this.diff)
+      return this.detectionClass(this.alert, this.diff)
     },
   },
   methods: {
-    detectionClass(prob, diff) {
+    detectionClass(alert, diff) {
       let probClass = ''
       let diffClass = ''
-
-      if (prob < this.seuils.low) {
+      if (alert == 'Pas d\'alerte') {
         probClass = 'none'
-      } else if (prob < this.seuils.high) {
+      } else if (alert == 'Alerte seuil F2') {
         probClass = 'low'
       } else {
         probClass = 'high'
