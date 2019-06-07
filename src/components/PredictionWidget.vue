@@ -12,15 +12,17 @@
         
         <div class="corps">
           <div style="left: 250px; position: absolute; overflow: hidden;" :id="'marge_' + prediction.key.siret"></div>
-          <div style="white-space: nowrap; overflow: hidden; max-width: 400px; max-height:40px">
-            <span style="font-size: 28px; color: #333; line-height: 40px; display: inline-block; font-family: 'Oswald'; max-width: '100px'">
+          <div style=" white-space: nowrap; overflow: hidden; max-width: 400px; max-height:40px">
+            <span style="font-size: 24px; color: #333; line-height: 31px; display: inline-block; font-family: 'Oswald';">
               {{ prediction.value.raison_sociale }} 
-
             </span>
           </div>
-          <span style="font-family: 'Abel'; font-size: 17px; overflow: hidden; font-weight: 400;">
-            {{ prediction.value.departement }} - {{ (naf.n5 || {})[prediction.value.activite || ''] }}
-          </span>
+          <div style="font-family: 'Abel'; white-space: nowrap; max-width: 400px; font-size: 14px; overflow: hidden; font-weight: 400;">
+            {{ prediction.key.siret }} - <span :class="prediction.value.etat_procol == 'in_bonis'?'up':'down'">{{ prediction.value.etat_procol }}</span>
+          </div>
+          <span style="font-family: 'Abel'; white-space: nowrap; max-width: 400px; font-size: 14px; overflow: hidden; font-weight: 400;">
+            Dép.: {{ prediction.value.departement }} ({{ (naf.n5 || {})[prediction.value.activite || ''] }})
+    </span>
           <v-img
             style="position: absolute; left: 550px; top: 10px;"
             width="70"
@@ -53,6 +55,11 @@
             <div class='label'>
               Résultat d'exploitation<br/>
               <span style="font-size: 25px" :class="diane.resultat_expl_color">{{ diane.resultat_expl }}</span>
+            </div>
+          </div>
+          <div class="flex" style="position:absolute; overflow: hidden; left: 830px; top: 0px; bottom: 0px; right: 9px;">
+            <div class='label' v-if="!prediction.value.connu">
+              <img style="height: 55px; margin-top: 12px"  src="../assets/crp.svg"/>
             </div>
           </div>
         </div> 
@@ -95,6 +102,9 @@ export default {
   computed: {
     naf() {
       return this.$store.state.naf[0] ? this.$store.state.naf[0].value : {}
+    },
+    procol() {
+      return this.$store.state.procol
     },
     currentBatchKey() {
       return this.$store.state.currentBatchKey
@@ -171,7 +181,7 @@ div.entete {
 }
 div.corps {
   flex: 1;
-  padding: 5px;
+  padding: 2px 5px;
   margin-left: 80px;
   height: 80px;
   background: linear-gradient(45deg, rgba(50, 51, 121, 0.212), #0000);

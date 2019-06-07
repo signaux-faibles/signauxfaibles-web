@@ -90,17 +90,19 @@
           item-value="value"
           label="Visibilité"
           multiple
+          chips
+          deletable-chips
         >
-          <template v-slot:selection="{ item, index }">
-            <v-chip>
+          <!-- <template v-slot:selection="{ item, index }">
+            <v-chip close>
               <span>{{ item.value }}</span>
             </v-chip>
-          </template>
+          </template> -->
         </v-select>
       </div>
 
       <p style="height: 1px; border: 1px solid #eee"/>
-      <div style="display: flex; flex-direction: row; vertical-align: middle; padding: 0 15px;" >
+      <!-- <div style="display: flex; flex-direction: row; vertical-align: middle; padding: 0 15px;" >
         <v-checkbox
           disabled
           label="Activité partielle"
@@ -113,7 +115,7 @@
           label="Sans dette Urssaf"
           v-model="interetUrssaf">
         </v-checkbox>
-      </div>
+      </div> -->
       <!-- <div style="display: flex; flex-direction: row; vertical-align: middle; padding: 0 15px;">
         
       </div> -->
@@ -122,9 +124,9 @@
   <PredictionWidget v-for="p in predictionCrop" :key="p.key.siret" :prediction="p"/> 
 
 
-  <div style="height: 30px, width: 50px, ">
+  <div style="width: 100%; text-align: center" v-if="predictionCrop.length > 0">
     
-      +
+      <v-btn @click="predictionLength += 100">suite</v-btn>
     
   </div>
 
@@ -149,12 +151,12 @@ export default {
       activitePartielle: false,
       interetUrssaf: false,
       zone: [],
-      filters: ['cvap', 'sf', 'procol', 'continuation'],
+      filters: [],
       filtersItems: [
-        {text: "CVAP/Codefi/CRP", value:"cvap"},
-        {text: "Suivi Signaux Faibles", value:"sf"},
-        {text: "RJ/LJ", value:"procol"},
-        {text: "Plan de Continuation", value:"continuation"},
+        {text: 'CVAP/Codefi/CRP', value: 'crp'},
+        // {text: 'Suivi Signaux Faibles', value: 'sf'},
+        {text: 'RJ/LJ', value: 'procol'},
+        {text: 'Plan de Continuation', value: 'continuation'},
       ],
     }
   },
@@ -165,7 +167,7 @@ export default {
   },
   methods: {
     getPrediction() {
-      if (this.$store.state.currentBatchKey) {
+      if (this.$store.state.currentBatchKey != null) {
         const params = {
           key: {
             type: 'detection',
@@ -183,7 +185,7 @@ export default {
           self.loading = false
         })
       } else {
-        window.setTimeout(getPrediction, 100)
+        window.setTimeout(this.getPrediction, 100)
       }
     },
   },
@@ -192,9 +194,10 @@ export default {
       if (this.naf) {
         return this.prediction.filter((p) => {
           return this.currentNaf === this.naf.n5to1[p.value.activite]
-          && (this.zone.includes(p.value.departement) || this.zone.length==0)
-          && (p.value.connu == true || this.filters.includes(''))
-          && (['in_bonis', 'continuation'].includes(p.value.etatProcol) || this.filters.includes('procol'))
+          && (this.zone.includes(p.value.departement) || this.zone.length === 0)
+          && (p.value.connu === true || this.filters.includes('crp'))
+          && (['in_bonis', 'continuation'].includes(p.value.etat_procol) || this.filters.includes('procol'))
+          && (!['continuation'].includes(p.value.etat_procol) || this.filters.includes('continuation'))
           && (p.value.dernier_effectif > this.minEffectif)
         }).slice(0, this.predictionLength)
       } else {
@@ -274,8 +277,8 @@ export default {
           value: [],
         },
       ]
-      let region = this.$store.state.region
-        .filter((r) => r.key.batch == this.currentBatchKey)
+      const region = this.$store.state.region
+        .filter((r) => r.key.batch === this.currentBatchKey)
         .map((r) => {
           return {
             text: r.key.region,
@@ -283,14 +286,18 @@ export default {
           }
       })
 
-      let departement = Object.keys(this.$store.state.departements[0].value).map((d) => {
-        return {
-          text: this.$store.state.departements[0].value[d],
-          value: [d],
-        }
-      })
+      all = all.concat(region)
+      if (this.$store.state.departements.length > 0) {
+        const departement = Object.keys(this.$store.state.departements[0].value).map((d) => {
+          return {
+            text: this.$store.state.departements[0].value[d],
+            value: [d],
+          }
+        })
+        all = all.concat(departement)
+      }
 
-      return all.concat(region).concat(departement)
+      return all
     },
     currentBatch() {
       return (this.batches.filter((b) => b.value === this.currentBatchKey)[0] || {text: 'chargement'}).text

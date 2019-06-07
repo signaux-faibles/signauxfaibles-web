@@ -20,9 +20,9 @@ export default {
     detectionClass(alert, diff) {
       let probClass = ''
       let diffClass = ''
-      if (alert == 'Pas d\'alerte') {
+      if (alert === 'Pas d\'alerte') {
         probClass = 'none'
-      } else if (alert == 'Alerte seuil F2') {
+      } else if (alert === 'Alerte seuil F2') {
         probClass = 'low'
       } else {
         probClass = 'high'

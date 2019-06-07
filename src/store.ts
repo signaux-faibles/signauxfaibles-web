@@ -7,10 +7,9 @@ import jwt from 'jwt-decode'
 
 const refreshRate = 60000
 
-Vue.use(Vuex)
+Vue.use(Vuex) 
 
-// const baseURL = 'https://signaux-faibles.beta.gouv.fr/'
-const baseURL = 'http://localhost:3000/'
+const baseURL = '/'
 
 const axiosClient = axios.create(
   {
@@ -56,6 +55,7 @@ const sessionStore = new Vuex.Store({
     batches: [] as any[],
     departements: [] as any[],
     region: [] as any[],
+    procol: [] as any[],
     zone: {},
     height: 0,
     scrollTop: 0,
@@ -86,6 +86,7 @@ const sessionStore = new Vuex.Store({
       state.batches = reference.filter((r: any) => r.key.key === 'batch')
       state.region = reference.filter((r: any) => r.key.type === 'region')
       state.departements = reference.filter((r: any) => r.key.type === 'departements')
+      state.procol = reference.filter((r: any) => r.key.type === 'procol')
       state.currentBatchKey = state.currentBatchKey ? state.currentBatchKey : state.batches.reduce((m, b) => {
         return b.key.batch > m ? b.key.batch : m
       }, '')
