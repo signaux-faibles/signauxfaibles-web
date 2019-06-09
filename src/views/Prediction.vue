@@ -195,8 +195,8 @@ export default {
         return this.prediction.filter((p) => {
           return this.currentNaf === this.naf.n5to1[p.value.activite]
           && (this.zone.includes(p.value.departement) || this.zone.length === 0)
-          && (p.value.connu === true || this.filters.includes('crp'))
-          && (['in_bonis', 'continuation'].includes(p.value.etat_procol) || this.filters.includes('procol'))
+          && (p.value.connu === false || this.filters.includes('crp'))
+          && (['in_bonis', 'sauvegarde', 'plan_sauvegarde'].includes(p.value.etat_procol) || this.filters.includes('procol'))
           && (!['continuation'].includes(p.value.etat_procol) || this.filters.includes('continuation'))
           && (p.value.dernier_effectif > this.minEffectif)
         }).slice(0, this.predictionLength)

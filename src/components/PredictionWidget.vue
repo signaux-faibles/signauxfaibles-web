@@ -58,11 +58,11 @@
             </div>
           </div>
           <div class="flex" style="position:absolute; overflow: hidden; left: 830px; top: 0px; bottom: 0px; right: 9px;">
-            <div class='label' v-if="!prediction.value.connu">
-              <img style="height: 55px; margin-top: 12px"  src="../assets/crp.svg"/>
+            <div class='label' v-if="prediction.value.connu === true">
+               <img style="height: 55px; margin-top: 12px"  src="../assets/crp.svg"/> 
             </div>
           </div>
-        </div> 
+        </div>
          <v-dialog  lazy fullscreen v-model="dialog">
           <div style="height: 100%; width: 100%; font-weight: 800; font-family: 'Oswald', sans;">
             <v-toolbar fixed class="toolbar" height="35px" style="color: #fff; font-size: 22px;">
