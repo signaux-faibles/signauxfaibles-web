@@ -177,7 +177,7 @@ export default {
         this.loading = true
         const self = this
         this.$axios.post('/data/get/public', params).then((response) => {
-          self.prediction = response.data.sort((p1, p2) => p1.value.score < p2.value.score)
+          self.prediction = response.data.sort((p1, p2) => {return (p1.value.score < p2.value.score)?1:-1})
           self.loading = false
         }).catch((error) => {
           self.prediction = []
@@ -196,7 +196,8 @@ export default {
           return this.currentNaf === this.naf.n5to1[p.value.activite]
           && (this.zone.includes(p.value.departement) || this.zone.length === 0)
           && (p.value.connu === false || this.filters.includes('crp'))
-          && (['in_bonis', 'sauvegarde', 'plan_sauvegarde'].includes(p.value.etat_procol) || this.filters.includes('procol'))
+          && (['in_bonis', 'sauvegarde', 'plan_sauvegarde']
+            .includes(p.value.etat_procol) || this.filters.includes('procol'))
           && (!['continuation'].includes(p.value.etat_procol) || this.filters.includes('continuation'))
           && (p.value.dernier_effectif > this.minEffectif)
         }).slice(0, this.predictionLength)

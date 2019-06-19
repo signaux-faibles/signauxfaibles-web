@@ -20,21 +20,39 @@
           <div style="font-family: 'Abel'; white-space: nowrap; max-width: 400px; font-size: 14px; overflow: hidden; font-weight: 400;">
             {{ prediction.key.siret }} - <span :class="prediction.value.etat_procol == 'in_bonis'?'up':'down'">{{ prediction.value.etat_procol }}</span>
           </div>
+
           <span style="font-family: 'Abel'; white-space: nowrap; max-width: 400px; font-size: 14px; overflow: hidden; font-weight: 400;">
             Dép.: {{ prediction.value.departement }} ({{ (naf.n5 || {})[prediction.value.activite || ''] }})
-    </span>
-          <v-img
+          </span>
+          
+          <img
             style="position: absolute; left: 550px; top: 10px;"
             width="70"
-            :src="'/static/' + (prediction.value.urssaf?'red':'gray') + '_urssaf.svg'"
-          ></v-img>
+            v-if="!prediction.value.urssaf"
+            src="../assets/gray_urssaf.svg"
+          />
 
-          <v-img
+          <img
+            style="position: absolute; left: 550px; top: 10px;"
+            width="70"
+            v-if="prediction.value.urssaf"
+            src="../assets/red_urssaf.svg"
+          />
+
+          <img
             style="position: absolute; left: 550px; bottom: 10px;"
             width="18"
             height="24"
-            :src="'/static/' + (prediction.value.apart?'red':'gray') + '_apart.svg'"
-          ></v-img>
+            v-if="prediction.value.apart"
+            src="../assets/red_apart.svg"
+          />
+          <img
+            style="position: absolute; left: 550px; bottom: 10px;"
+            width="18"
+            height="24"
+            v-if="!prediction.value.apart"
+            src="../assets/gray_apart.svg"
+          />
 
           <div style="position: absolute; overflow: hidden; left: 584px; bottom: 3px; color: #333">
             <span
@@ -59,7 +77,7 @@
           </div>
           <div class="flex" style="position:absolute; overflow: hidden; left: 830px; top: 0px; bottom: 0px; right: 9px;">
             <div class='label' v-if="prediction.value.connu === true">
-               <img style="height: 55px; margin-top: 12px"  src="../assets/crp.svg"/> 
+               <img style="height: 55px; margin-top: 12px"  src="../assets/crp.png"/> 
             </div>
           </div>
         </div>

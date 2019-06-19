@@ -64,6 +64,15 @@
 
         <v-divider></v-divider>
 
+        <!-- <v-list-tile @click="changePassword()">
+          <v-list-tile-action>
+            <v-icon>vpn_key</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Changer mon mot de passe</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile> -->
+
         <v-list-tile @click="logout()">
           <v-list-tile-action>
             <v-icon>logout</v-icon>

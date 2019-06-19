@@ -9,8 +9,8 @@ const refreshRate = 60000
 
 Vue.use(Vuex) 
 
-// const baseURL = '/'
-const baseURL = 'http://localhost:3000/'
+const baseURL = '/'
+// const baseURL = 'http://localhost:3000/'
 
 const axiosClient = axios.create(
   {
