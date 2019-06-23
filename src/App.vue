@@ -112,28 +112,30 @@ body {
     );
 }
 .toolbar {
-  text-shadow: 0px 0px 2px rgb(0, 0, 0), 0px 0px 1px rgb(255, 255, 255);
+  background-color: #222;
+  text-shadow: 0px 0px 2px rgb(0, 0, 0), 0px 0px 1px rgb(255, 255, 255); 
   background: linear-gradient(0deg, #272629, #ffffff00 7%, transparent),
     radial-gradient(
       ellipse at top,
-      #a49bbd,
-      #716a81 35%,
+      rgb(164, 155, 189),
+      #70658a 35%,
       #3a3b4b 75%,
       #21213b 100%,
       transparent
     );
 }
 .toolbar_titre {
-  color: #ffffff;
+  color: #fff;
   font-family: 'Abel', sans-serif;
   font-weight: 800;
   font-size: 22px;
 }
 .toolbar-widget {
-  color: 'black';
+  color: #FFF;
   font-family: 'Quicksand', sans-serif;
   text-shadow: 0px 0px 2px rgb(146, 146, 146), 0px 0px 1px rgb(255, 255, 255);
-  background: linear-gradient(0deg, #b6b6b6, #6e6e6e00 7%, transparent),
+  background-color: #222;
+  /* background: linear-gradient(0deg, #b6b6b6, #6e6e6e00 7%, transparent),
     radial-gradient(
       ellipse at top,
       #ffffff,
@@ -141,7 +143,7 @@ body {
       #c9c9cc 80%,
       #afafcc 100%,
       transparent,
-    );
+    ); */
 
 }
 #app {

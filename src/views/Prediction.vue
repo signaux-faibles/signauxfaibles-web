@@ -29,7 +29,7 @@
   <div style="width:100%">
     <Spinner v-if="loading"/>
     <div id="nodata">
-      <img v-if="!loading && prediction.length == 0" src="@/assets/nodata.png">
+      <img v-if="!loading && predictionCrop.length == 0 && init==false" src="@/assets/nodata.png">
     </div>
     <v-navigation-drawer :class="(rightDrawer?'elevation-6':'') + ' rightDrawer'" transition="no-transition" v-model="rightDrawer" right app>
       <v-toolbar flat class="transparent" height="40">
@@ -88,7 +88,7 @@
           :items="filtersItems"
           item-text="text"
           item-value="value"
-          label="Visibilité"
+          label="Masquer"
           multiple
           chips
           deletable-chips
@@ -151,12 +151,15 @@ export default {
       activitePartielle: false,
       interetUrssaf: false,
       zone: [],
-      filters: [],
+      init: true,
+      filters: ['crp', 'procol', 'continuation'],
       filtersItems: [
         {text: 'CVAP/Codefi/CRP', value: 'crp'},
         // {text: 'Suivi Signaux Faibles', value: 'sf'},
         {text: 'RJ/LJ', value: 'procol'},
         {text: 'Plan de Continuation', value: 'continuation'},
+        {text: 'In Bonis', value: 'in_bonis'},
+        {text: 'Sauvegarde', value: 'sauvegarde'},
       ],
     }
   },
@@ -182,6 +185,7 @@ export default {
         }).catch((error) => {
           self.prediction = []
         }).finally(() => {
+          self.init = false
           self.loading = false
         })
       } else {
@@ -195,10 +199,11 @@ export default {
         return this.prediction.filter((p) => {
           return this.currentNaf === this.naf.n5to1[p.value.activite]
           && (this.zone.includes(p.value.departement) || this.zone.length === 0)
-          && (p.value.connu === false || this.filters.includes('crp'))
-          && (['in_bonis', 'sauvegarde', 'plan_sauvegarde']
-            .includes(p.value.etat_procol) || this.filters.includes('procol'))
-          && (!['continuation'].includes(p.value.etat_procol) || this.filters.includes('continuation'))
+          && (p.value.connu === false || !this.filters.includes('crp'))
+          && (!['sauvegarde', 'plan_sauvegarde'].includes(p.value.etat_procol) || !this.filters.includes('sauvegarde'))
+          && (!['redressement', 'plan_redressement', 'liquidation'].includes(p.value.etat_procol) || !this.filters.includes('procol'))
+          && (!['continuation'].includes(p.value.etat_procol) || !this.filters.includes('continuation'))
+          && (!['in_bonis'].includes(p.value.etat_procol) || !this.filters.includes('in_bonis'))
           && (p.value.dernier_effectif > this.minEffectif)
         }).slice(0, this.predictionLength)
       } else {

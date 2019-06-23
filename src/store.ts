@@ -32,10 +32,19 @@ const localStore = new Vuex.Store({
   plugins: [createPersistedState({ storage: window.localStorage })],
   state: {
     browserToken: null,
+    loginTab: 1,
   },
   mutations: {
     setBrowserToken(state, browserToken) {
       state.browserToken = browserToken
+    },
+    setLoginTab(state, value) {
+      state.loginTab = value
+    },
+  },
+  actions: {
+    setLoginTab(context, value) {
+      context.commit('setLoginTab', value)
     },
   },
   getters: {

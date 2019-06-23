@@ -4,7 +4,7 @@
       <v-list class="pa-0">
         <v-list-tile avatar>
           <v-list-tile-avatar>
-            <img src="/static/logo_signaux_faibles_cercle.svg">
+            <img src="../assets/logo_signaux_faibles_cercle.svg">
           </v-list-tile-avatar>
           <v-list-tile-content>
             <v-list-tile-title><span class="fblue">Signaux</span>·<span class="fred">Faibles</span></v-list-tile-title>

@@ -1,5 +1,5 @@
 <template>
-  <div style="background: #fffe">
+  <div style="background: #fff">
     <div>
       <v-container>
         <v-layout wrap>
@@ -99,7 +99,30 @@
             <v-toolbar
               dark
               color='indigo darken-5'>
-              <v-toolbar-title class="localtoolbar">Débits Urssaf</v-toolbar-title>
+              <v-toolbar-title
+              class="localtoolbar">
+                  Débits Urssaf
+              </v-toolbar-title>
+              <v-spacer/>
+              <v-menu max-width="400px" offset-y>                 
+                <v-btn slot="activator" icon><v-icon>help</v-icon></v-btn>
+                <v-card>
+                  <v-card-title class="headline">
+                    Cotisations et Débits URSSAF
+                  </v-card-title>
+                  <v-card-text>
+                    Ce graphique représente les données URSSAF:<br/>
+                    <ul>
+                      <li> Cotisations: Montant des cotisations appelées</li>
+                      <li> Débits: Cumul des dettes restantes à payer</li>
+                    </ul>
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-spacer/>
+                    <v-btn flat color="success">OK</v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-menu>
             </v-toolbar>
             <IEcharts
               v-if="roles.includes('urssaf')"
