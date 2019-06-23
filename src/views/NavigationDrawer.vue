@@ -35,23 +35,23 @@
           </v-list-tile-content>
         </v-list-tile>
 
-        <!-- <v-list-tile to="/">
+        <v-list-tile to="/goup" v-if="jwt.goup_path">
           <v-list-tile-action>
-            <v-icon>mdi-database-search</v-icon>
+            <v-icon>cloud_upload</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <v-list-tile-title>Consultation</v-list-tile-title>
+            <v-list-tile-title>Envoi de données manuel</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
 
-        <v-list-tile to="/data">
+         <!-- <v-list-tile to="/data">
           <v-list-tile-action>
             <v-icon>mdi-database</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
             <v-list-tile-title>Données</v-list-tile-title>
           </v-list-tile-content>
-        </v-list-tile> -->
+        </v-list-tile>  -->
 
         <!-- <v-list-tile to="/admin">
           <v-list-tile-action>
@@ -104,6 +104,9 @@ export default {
     },
   },
   computed: {
+    jwt() {
+      return this.$store.getters.jwt
+    },
     drawer: {
       get() {
         return this.$store.state.leftDrawer

@@ -7,7 +7,7 @@ import jwt from 'jwt-decode'
 
 const refreshRate = 60000
 
-Vue.use(Vuex) 
+Vue.use(Vuex)
 
 const baseURL = '/'
 // const baseURL = 'http://localhost:3000/'
@@ -169,6 +169,8 @@ function refreshFunction() {
         refreshToken: response.data.refresh_token,
       }
       sessionStore.commit('setTokens', tokens)
+    }).catch((error) => {
+      const toto = 'muh'
     })
     setTimeout(refreshFunction, refreshRate)
   }

@@ -101,11 +101,10 @@ export default {
       connectionEmail: '',
       email: '',
       password: '',
-      loginError: false,
       help: false,
       connectionEmailError: false,
       connectionEmailSuccess: false,
-      emailRules: [ (v => /.+@.+/.test(v) || 'Invalid Email address') ],
+      emailRules: [ ((v) => /.+@.+/.test(v) || 'Invalid Email address') ],
     }
   },
   computed: {
@@ -123,6 +122,11 @@ export default {
         this.$localStore.dispatch('setLoginTab', value)
       },
     },
+  },
+  mounted() {
+    if (this.$store.state.token != null) {
+      this.$router.push('detection')
+    }
   },
   methods: {
     getConnectionEmail() {
