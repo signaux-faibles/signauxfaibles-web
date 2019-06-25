@@ -21,7 +21,7 @@
     </div>
     <v-spacer></v-spacer>
     <v-icon
-      :class="loading?'rotate':''"
+      
       color="#ffffff" v-if="!rightDrawer && drawer" @click="rightDrawer=!rightDrawer">{{ icon }}</v-icon>
   </v-toolbar>
 </template>
