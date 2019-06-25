@@ -132,7 +132,7 @@ const sessionStore = new Vuex.Store({
   },
   actions: {
     refreshSession() {
-      if (refresh == false) {
+      if (refresh === false) {
         refresh = true
         setTimeout(refreshFunction, refreshRate)
       }
@@ -180,7 +180,6 @@ function refreshFunction() {
         const toto = 'muh'
       })
       setTimeout(refreshFunction, refreshRate)
-    
   }
 }
 

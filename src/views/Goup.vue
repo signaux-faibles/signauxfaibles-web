@@ -56,7 +56,6 @@
       jwt() {return this.$store.getters.jwt},
       token() {return this.$store.state.token},
     },
-    upload() {},
     mounted() {
       this.$store.dispatch('refreshSession')
 
@@ -76,7 +75,7 @@
         }).bind(this))
 
         this.$refs.uploadForm.addEventListener('change', ((e) => {
-          for (const f of e.target.files){
+          for (const f of e.target.files) {
             this.files.push(this.uploadObject(f))
           }
         }).bind(this))
@@ -91,15 +90,15 @@
       uploadObject(file) {
         const self = this
 
-        let object = {
+        const object = {
           file,
           private: false,
           progress: 0,
           completed: false,
-          uploading: false
+          uploading: false,
         }
 
-        let upload = new tus.Upload(file, {
+        const upload = new tus.Upload(file, {
           endpoint: '/files/',
           metadata: {
             filename: file.name,
@@ -127,23 +126,25 @@
           },
         })
 
-        object['upload'] = upload
+        object.upload = upload
         return object
       },
 
       runUpload() {
         for (const i in this.files) {
-          if (this.files[i].completed == false) {
+          if (this.files[i].completed === false) {
             this.files[i].uploading = true
             this.files[i].upload.start()
-            
+
             break
           }
         }
       },
 
       handleFileSelect(e) {
-        if(!e.target.files) return;      
+        if (!e.target.files) {
+          return
+        }
         e.target.files.forEach((f) => {
           this.files.push(f)
         })
@@ -151,48 +152,6 @@
       triggerForm() {
         this.$refs.uploadForm.click()
       },
-      print() {
-        console.log(this.$localStore.state.files)
-      },
-      // date() {
-      //   let today = new Date()
-      //   let dd = today.getDate()
-      //   let mm = today.getMonth() + 1
-      //   const yyyy = today.getFullYear()
-      //   let hh = today.getHours()
-      //   let mn = today.getMinutes()
-      //   const ss = today.getSeconds()
-      //   let ms = today.getMilliseconds()
-
-      //   if (dd < 10) {
-      //     dd = '0' + dd
-      //   }
-
-      //   if (mm < 10) {
-      //     mm = '0' + mm
-      //   }
-
-      //   if (hh < 10) {
-      //     hh = '0' + hh
-      //   }
-      //   if (mn < 10) {
-      //     mn = '0' + mn
-      //   }
-
-      //   if (ss < 10) {
-      //     mn = '0' + mn
-      //   }
-
-      //   if (ms < 100) {
-      //     ms = '0' + ms
-      //   }
-      //   if (ms < 10) {
-      //     ms = '0' + ms
-      //   }
-      //   today =
-      //     yyyy + '-' + mm + '-' + dd + ' ' + hh + ':' + mn + ':' + ss + '.' + ms
-      //   return today
-      // },
       determineDragAndDropCapable() {
         const div = document.createElement('div')
 

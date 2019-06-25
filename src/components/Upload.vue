@@ -23,7 +23,9 @@ export default {
   props: ['files', 'fileId'],
   name: 'Upload',
   computed: {
-    file() {return this.files[this.fileId]}
+    file() {
+      return this.files[this.fileId]
+    },
   },
   methods: {
     filesize() {
