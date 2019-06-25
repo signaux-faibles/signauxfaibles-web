@@ -5,7 +5,6 @@
       <v-layout wrap>
         <v-flex xs5>
           <form id="fileform" ref="fileform" class="card elevation-2">
-
             <div id="dropfiles">
               <v-icon color="indigo darken-4" style="font-size: 200px; text-shadow: 0px 2px 3px grey;">cloud_upload</v-icon><br/>
               <span>Déposez vos fichiers ici ou</span><br/>
@@ -16,10 +15,8 @@
                 id="uploadForm" 
                 class="browse" 
                 multiple>
-
             </div>
           </form>
-
         </v-flex>
         <v-flex xs7>
           <v-card class="card">
@@ -32,7 +29,7 @@
             <v-card-actions>
               <v-spacer/>
               <v-btn flat color="red darken-2" @click="files=[]" :disabled="files.length == 0">vider la liste</v-btn>
-              <v-btn flat color="green darken-2" :disabled="files.length == 0" @click="upload">Procéder à l'envoi</v-btn>
+              <v-btn flat color="green darken-2" :disabled="files.length == 0" @click="runUpload">Procéder à l'envoi</v-btn>
             </v-card-actions>
           </v-card>
         </v-flex>
@@ -61,6 +58,8 @@
     },
     upload() {},
     mounted() {
+      this.$store.dispatch('refreshSession')
+
       this.dragAndDropCapable = this.determineDragAndDropCapable()
       if (this.dragAndDropCapable) {
         ['drag', 'dragstart', 'dragend', 'dragover', 'dragenter', 'dragleave', 'drop'].forEach( ((evt) => {
@@ -72,77 +71,77 @@
 
         this.$refs.fileform.addEventListener('drop', ((e) => {
           for (const f of e.dataTransfer.files) {
-            this.files.push({file: f})
+            this.files.push(this.uploadObject(f))
           }
         }).bind(this))
 
         this.$refs.uploadForm.addEventListener('change', ((e) => {
           for (const f of e.target.files){
-            this.files.push({file: f})
+            this.files.push(this.uploadObject(f))
           }
         }).bind(this))
       }
     },
     methods: {
-      uploadFiles() {
-        for (fileID in this.files) {
-          if (!this.files[fileID].completed) {
-
+      header() {
+        return {
+            Authorization: 'Bearer ' + this.token,
           }
-        }
       },
       uploadObject(file) {
-        Object.assign(metadata, {
-          filename: this.file.name,
-          filetype: this.file.type,
-          private: self.privateFile ? 'true' : 'false',
-        })
+        const self = this
 
-        const upload = new tus.Upload(this.file, {
+        let object = {
+          file,
+          private: false,
+          progress: 0,
+          completed: false,
+          uploading: false
+        }
+
+        let upload = new tus.Upload(file, {
           endpoint: '/files/',
-          retryDelays: [0, 3000, 5000, 10000, 20000],
-          metadata,
-          headers: {
-            Authorization: 'Bearer ' + this.token,
+          metadata: {
+            filename: file.name,
+            filetype: file.type,
+            private: true,
           },
-          chunkSize: 4000000,
+          headers: self.header(),
+          chunkSize: 1048576,
 
           onError(error) {
-            self.journal =
-              self.date() + ': Echec -> ' + error + '\n' + self.journal
-            self.Progress = 0
-            self.uploading = false
+            object.uploading = false
+            self.runUpload()
           },
 
           onProgress(bytesUploaded, bytesTotal) {
-            const percentage = ((bytesUploaded / bytesTotal) * 100).toFixed(2)
-            self.progress = parseInt(percentage, 10)
-            self.journal =
-              self.date() +
-              ': Envoi en cours -> ' +
-              BytesUploaded +
-              ' sur ' +
-              bytesTotal +
-              ', soit ' +
-              percentage +
-              '%\n' +
-              self.journal
+            object.upload.options.headers = self.header()
+            object.progress = parseInt(((bytesUploaded / bytesTotal) * 100).toFixed(0), 10)
           },
+
           onSuccess() {
-            self.journal =
-              self.date() +
-              ': Envoi effectué -> ' +
-              upload.file.name +
-              '\n' +
-              self.journal
-            self.Progress = 0
-            self.uploading = false
+            object.progress = 100
+            object.uploading = false
+            object.completed = true
+            self.runUpload()
           },
         })
 
-        this.uploading = true
-        upload.start()
+        object['upload'] = upload
+        return object
       },
+
+      runUpload() {
+        for (const i in this.files) {
+          if (this.files[i].completed == false) {
+            this.files[i].uploading = true
+            this.files[i].upload.start()
+            
+            break
+          }
+        }
+      },
+
       handleFileSelect(e) {
         if(!e.target.files) return;      
         e.target.files.forEach((f) => {
@@ -155,45 +154,45 @@
       print() {
         console.log(this.$localStore.state.files)
       },
-      date() {
-        let today = new Date()
-        let dd = today.getDate()
-        let mm = today.getMonth() + 1
-        const yyyy = today.getFullYear()
-        let hh = today.getHours()
-        let mn = today.getMinutes()
-        const ss = today.getSeconds()
-        let ms = today.getMilliseconds()
+      // date() {
+      //   let today = new Date()
+      //   let dd = today.getDate()
+      //   let mm = today.getMonth() + 1
+      //   const yyyy = today.getFullYear()
+      //   let hh = today.getHours()
+      //   let mn = today.getMinutes()
+      //   const ss = today.getSeconds()
+      //   let ms = today.getMilliseconds()
 
-        if (dd < 10) {
-          dd = '0' + dd
-        }
+      //   if (dd < 10) {
+      //     dd = '0' + dd
+      //   }
 
-        if (mm < 10) {
-          mm = '0' + mm
-        }
+      //   if (mm < 10) {
+      //     mm = '0' + mm
+      //   }
 
-        if (hh < 10) {
-          hh = '0' + hh
-        }
-        if (mn < 10) {
-          mn = '0' + mn
-        }
+      //   if (hh < 10) {
+      //     hh = '0' + hh
+      //   }
+      //   if (mn < 10) {
+      //     mn = '0' + mn
+      //   }
 
-        if (ss < 10) {
-          mn = '0' + mn
-        }
+      //   if (ss < 10) {
+      //     mn = '0' + mn
+      //   }
 
-        if (ms < 100) {
-          ms = '0' + ms
-        }
-        if (ms < 10) {
-          ms = '0' + ms
-        }
-        today =
-          yyyy + '-' + mm + '-' + dd + ' ' + hh + ':' + mn + ':' + ss + '.' + ms
-        return today
-      },
+      //   if (ms < 100) {
+      //     ms = '0' + ms
+      //   }
+      //   if (ms < 10) {
+      //     ms = '0' + ms
+      //   }
+      //   today =
+      //     yyyy + '-' + mm + '-' + dd + ' ' + hh + ':' + mn + ':' + ss + '.' + ms
+      //   return today
+      // },
       determineDragAndDropCapable() {
         const div = document.createElement('div')
 

@@ -164,8 +164,8 @@ export default {
     }
   },
   mounted() {
-    this.$store.dispatch('refreshSession')
     this.$store.dispatch('updateReference')
+    this.$store.dispatch('refreshSession')
     this.getPrediction()
   },
   methods: {

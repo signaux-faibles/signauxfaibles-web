@@ -53,6 +53,9 @@ const localStore = new Vuex.Store({
 })
 
 
+let refresh = false
+
+
 const sessionStore = new Vuex.Store({
   plugins: [createPersistedState({ storage: window.sessionStorage })],
   state: {
@@ -129,7 +132,10 @@ const sessionStore = new Vuex.Store({
   },
   actions: {
     refreshSession() {
-      setTimeout(refreshFunction, refreshRate)
+      if (refresh == false) {
+        refresh = true
+        setTimeout(refreshFunction, refreshRate)
+      }
     },
     setTokens(context, tokens) {
       context.commit('setTokens', tokens)
@@ -158,21 +164,23 @@ const sessionStore = new Vuex.Store({
   },
 })
 
+
 function refreshFunction() {
-  if (sessionStore.state.token != null) {
-    const params = {
-      refresh_token: sessionStore.state.refreshToken,
-    }
-    axiosClient.post('refreshToken', params).then((response) => {
-      const tokens = {
-        token: response.data.access_token,
-        refreshToken: response.data.refresh_token,
+    if (sessionStore.state.token != null) {
+      const params = {
+        refresh_token: sessionStore.state.refreshToken,
       }
-      sessionStore.commit('setTokens', tokens)
-    }).catch((error) => {
-      const toto = 'muh'
-    })
-    setTimeout(refreshFunction, refreshRate)
+      axiosClient.post('refreshToken', params).then((response) => {
+        const tokens = {
+          token: response.data.access_token,
+          refreshToken: response.data.refresh_token,
+        }
+        sessionStore.commit('setTokens', tokens)
+      }).catch((error) => {
+        const toto = 'muh'
+      })
+      setTimeout(refreshFunction, refreshRate)
+    
   }
 }
 
