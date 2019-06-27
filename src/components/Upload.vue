@@ -3,7 +3,7 @@
     <v-progress-linear v-if="file.uploading" style="position: absolute;top: 25px;" height=2 :value="file.progress"/>
 
     <v-list-tile-action>
-      <v-icon>{{ file.completed ? 'check_circle' : file.uploading ? 'play_arrow' : 'timer' }}</v-icon>
+      <v-icon>{{ file.completed ? 'check_circle' : file.uploading ? 'play_arrow' : 'stop' }}</v-icon>
     </v-list-tile-action>
     
     <v-list-tile-content>

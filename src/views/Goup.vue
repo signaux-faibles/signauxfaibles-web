@@ -29,7 +29,10 @@
             <v-card-actions>
               <v-spacer/>
               <v-btn flat color="red darken-2" @click="files=[]" :disabled="files.length == 0">vider la liste</v-btn>
-              <v-btn flat color="green darken-2" :disabled="files.length == 0" @click="runUpload">Procéder à l'envoi</v-btn>
+              <v-btn flat color="green darken-2" :disabled="files.length == 0" @click="runUpload">
+                <v-icon>play_arrow</v-icon>
+                Procéder à l'envoi
+              </v-btn>
             </v-card-actions>
           </v-card>
         </v-flex>
@@ -55,6 +58,11 @@
     computed: {
       jwt() {return this.$store.getters.jwt},
       token() {return this.$store.state.token},
+      header() {
+        return {
+            Authorization: 'Bearer ' + this.token,
+          }
+      },
     },
     mounted() {
       this.$store.dispatch('refreshSession')
@@ -82,11 +90,7 @@
       }
     },
     methods: {
-      header() {
-        return {
-            Authorization: 'Bearer ' + this.token,
-          }
-      },
+
       uploadObject(file) {
         const self = this
 
@@ -96,26 +100,39 @@
           progress: 0,
           completed: false,
           uploading: false,
+          retries: 10,
         }
 
         const upload = new tus.Upload(file, {
           endpoint: '/files/',
+          resume: true,
           metadata: {
             filename: file.name,
             filetype: file.type,
             private: true,
           },
-          headers: self.header(),
+          headers: self.header,
           chunkSize: 1048576,
-
           onError(error) {
-            object.uploading = false
-            self.runUpload()
+            self.updateToken()
+            // object.upload.options.uploadUrl = object.upload.url
+
+            if (object.retries > 0) {
+              object.retries += -1
+              window.setTimeout(self.runUpload, 1000)
+            } else {
+              object.uploading = false
+            }
           },
 
           onProgress(bytesUploaded, bytesTotal) {
-            object.upload.options.headers = self.header()
+            self.updateToken()
             object.progress = parseInt(((bytesUploaded / bytesTotal) * 100).toFixed(0), 10)
+          },
+
+          onChunkComplete() {
+            object.retries = 10
+            self.updateToken()
           },
 
           onSuccess() {
@@ -125,17 +142,23 @@
             self.runUpload()
           },
         })
-
         object.upload = upload
         return object
       },
 
+      updateToken() {
+        for (const object of this.files) {
+          object.upload.options.headers = {
+              Authorization: 'Bearer ' + this.token,
+            }
+        }
+      },
       runUpload() {
+        this.updateToken()
         for (const i in this.files) {
           if (this.files[i].completed === false) {
             this.files[i].uploading = true
             this.files[i].upload.start()
-
             break
           }
         }
