@@ -26,7 +26,7 @@
           </v-list-tile-content>
         </v-list-tile> -->
 
-        <v-list-tile to="/detection">
+        <v-list-tile to="/">
           <v-list-tile-action>
             <v-icon>mdi-target</v-icon>
           </v-list-tile-action>
@@ -99,13 +99,13 @@
 export default {
   methods: {
     logout() {
-      this.$store.commit('logout')
+      this.$keycloak.logoutFn()
       this.$router.push('/')
     },
   },
   computed: {
     jwt() {
-      return this.$store.getters.jwt
+      return this.$keycloak.tokenParsed
     },
     drawer: {
       get() {

@@ -41,7 +41,7 @@ export default {
       },
     },
     login() {
-      return this.$store.state.token != null
+      return this.$keycloak.authenticated
     },
     leftDrawer: {
       get() {

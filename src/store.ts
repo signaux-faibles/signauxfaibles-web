@@ -21,12 +21,12 @@ const axiosClient = axios.create(
   },
 )
 
-axiosClient.interceptors.request.use(
-  (config: any) => {
-    if (sessionStore.state.token != null) { config.headers.Authorization = 'Bearer ' + sessionStore.state.token }
-    return config
-  },
-)
+// axiosClient.interceptors.request.use(
+//   (config: any) => {
+//     if (sessionStore.state.token != null) { config.headers.Authorization = 'Bearer ' + sessionStore.state.token }
+//     return config
+//   },
+// )
 
 const localStore = new Vuex.Store({
   plugins: [createPersistedState({ storage: window.localStorage })],
@@ -62,7 +62,6 @@ const sessionStore = new Vuex.Store({
     currentBatchKey: null as unknown as string,
     leftDrawer: false,
     rightDrawer: true,
-    token: null as unknown as string,
     refreshToken: null as unknown as string,
     naf: [] as any[],
     batches: [] as any[],
@@ -79,20 +78,6 @@ const sessionStore = new Vuex.Store({
     },
     rightDrawer(state, val) {
       state.rightDrawer = val
-    },
-    refreshToken(state) {
-      axiosClient.get('/api/refreshToken').then((response) => {
-        state.token = response.data.token
-      })
-    },
-    logout(state) {
-      state.token = null as unknown as string
-      state.naf = []
-      state.zone = {}
-    },
-    setTokens(state, tokens) {
-      state.token = tokens.token
-      state.refreshToken = tokens.refreshToken
     },
     updateReference(state, reference) {
       state.naf = reference.filter((r: any) => r.key.key === 'naf')
@@ -126,17 +111,8 @@ const sessionStore = new Vuex.Store({
         }
       })
     },
-    jwt(state)  {
-      return jwt(state.token)
-    },
   },
   actions: {
-    refreshSession() {
-      if (refresh === false) {
-        refresh = true
-        setTimeout(refreshFunction, refreshRate)
-      }
-    },
     setTokens(context, tokens) {
       context.commit('setTokens', tokens)
     },
@@ -163,25 +139,6 @@ const sessionStore = new Vuex.Store({
     },
   },
 })
-
-
-function refreshFunction() {
-    if (sessionStore.state.token != null) {
-      const params = {
-        refresh_token: sessionStore.state.refreshToken,
-      }
-      axiosClient.post('refreshToken', params).then((response) => {
-        const tokens = {
-          token: response.data.access_token,
-          refreshToken: response.data.refresh_token,
-        }
-        sessionStore.commit('setTokens', tokens)
-      }).catch((error) => {
-        const toto = 'muh'
-      })
-      setTimeout(refreshFunction, refreshRate)
-  }
-}
 
 const store = {
   sessionStore,

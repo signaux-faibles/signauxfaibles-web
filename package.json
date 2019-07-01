@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@babel/core": "^7.4.3",
+    "@dsb-norge/vue-keycloak-js": "^1.1.1",
     "@types/jwt-decode": "^2.2.1",
     "axios": "^0.18.0",
     "core-js": "^2.6.5",

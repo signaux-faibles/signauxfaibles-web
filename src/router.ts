@@ -10,13 +10,13 @@ Vue.use(Router)
 export default new Router({
   base: process.env.BASE_URL,
   routes: [
+    // {
+    //   path: '/',
+    //   name: 'login',
+    //   component: Login,
+    // },
     {
       path: '/',
-      name: 'login',
-      component: Login,
-    },
-    {
-      path: '/detection',
       name: 'prediction',
       component: Prediction,
     },

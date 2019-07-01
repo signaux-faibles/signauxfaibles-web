@@ -28,11 +28,15 @@
             </v-card-text>
             <v-card-actions>
               <v-spacer/>
-              <v-btn flat color="red darken-2" @click="files=[]" :disabled="files.length == 0">vider la liste</v-btn>
-              <v-btn flat color="green darken-2" :disabled="files.length == 0" @click="runUpload">
+              <v-btn flat color="red darken-2" @click="files=[]" :disabled="files.length == 0 || uploading || error">vider la liste</v-btn>
+              <v-btn v-if="!uploading" style="width: 250px" flat :color="paused ? 'indigo darken-2' : 'green darken-2'" :disabled="files.length == 0 || error" @click="runUpload">
                 <v-icon>play_arrow</v-icon>
-                Procéder à l'envoi
+                {{ paused ? 'Reprendre' : 'Procéder à' }} l'envoi
               </v-btn>
+              <v-btn v-if="uploading" style="width: 250px" flat color="indigo darken-2" :disabled="files.length == 0 || error" @click="stopUpload">
+                <v-icon>pause</v-icon>
+                Interrompre l'envoi
+              </v-btn> 
             </v-card-actions>
           </v-card>
         </v-flex>
@@ -62,6 +66,15 @@
         return {
             Authorization: 'Bearer ' + this.token,
           }
+      },
+      uploading() {
+        return this.files.some((f) => f.uploading)
+      },
+      error () {
+        return this.files.some((f) => f.error)
+      },
+      paused () {
+        return this.files.some((f) => f.paused)
       },
     },
     mounted() {
@@ -97,10 +110,12 @@
         const object = {
           file,
           private: false,
+          error: false,
           progress: 0,
           completed: false,
           uploading: false,
           retries: 10,
+          paused: false,
         }
 
         const upload = new tus.Upload(file, {
@@ -111,28 +126,31 @@
             filetype: file.type,
             private: true,
           },
-          headers: self.header,
-          chunkSize: 1048576,
+          headers: this.header,
+          overridePatchMethod: true,
+          chunkSize: 262144,
           onError(error) {
+            object.error = true
+            object.uploading = false
             self.updateToken()
-            // object.upload.options.uploadUrl = object.upload.url
 
             if (object.retries > 0) {
               object.retries += -1
               window.setTimeout(self.runUpload, 1000)
             } else {
-              object.uploading = false
+
             }
           },
 
           onProgress(bytesUploaded, bytesTotal) {
-            self.updateToken()
+            
             object.progress = parseInt(((bytesUploaded / bytesTotal) * 100).toFixed(0), 10)
           },
 
           onChunkComplete() {
             object.retries = 10
-            self.updateToken()
+            object.error = false
+            
           },
 
           onSuccess() {
@@ -157,13 +175,23 @@
         this.updateToken()
         for (const i in this.files) {
           if (this.files[i].completed === false) {
+            // this.files[i].error = false
+            this.files[i].paused = false
             this.files[i].uploading = true
             this.files[i].upload.start()
             break
           }
         }
       },
-
+      stopUpload() {
+        this.updateToken()
+        for (const i in this.files) {
+          this.files[i].upload.abort()
+          this.files[i].uploading = false
+          this.files[i].paused = true
+          this.files[i].error = false
+        }
+      },
       handleFileSelect(e) {
         if (!e.target.files) {
           return
@@ -223,10 +251,9 @@
     display: block;
     height: 350px;
     width: 350px;
-
+    line-height: 35px;
     margin: auto;
     text-align: center;
-
   }
 
   #dropfiles {
