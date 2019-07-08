@@ -65,22 +65,13 @@
       <p style="height: 1px; border: 1px solid #eee"/>
       <div style="display: flex; flex-direction: row; vertical-align: middle; padding: 0 15px;" >
         <v-icon style="margin-right: 10px;">fa-users</v-icon>
-        <v-select
-          :items="effectifClass"
+        <v-combobox
           v-model="minEffectif"
+          :items="effectifClass"
           label="Effectif minimum"
-        ></v-select>
+        ></v-combobox>
       </div>
       <p style="height: 1px; border: 1px solid #eee"/>
-      <!-- <v-radio-group
-      multiple
-      style="padding: 0 15px"
-      v-model="connu"
-      >
-        <v-radio label="Non suivies" :value="false"></v-radio>
-        <v-radio label="Suivies" :value="true"></v-radio>
-        <v-radio label="Toutes" :value="null"></v-radio>
-      </v-radio-group> -->
 
       <div style="display: flex; flex-direction: row; vertical-align: middle; padding: 0 15px;" >
         <v-select
@@ -93,11 +84,6 @@
           chips
           deletable-chips
         >
-          <!-- <template v-slot:selection="{ item, index }">
-            <v-chip close>
-              <span>{{ item.value }}</span>
-            </v-chip>
-          </template> -->
         </v-select>
       </div>
 
@@ -121,9 +107,19 @@
       </div> -->
     </v-navigation-drawer>
   </div>
+  <v-card
+    style="height: 50px; text-align: center; background-color: #FFF0; padding: 7px;"
+    class="elevation-0 ma-2 pointer"
+  >
+    <v-icon color="red">fa-exclamation-triangle</v-icon> 
+    <span style="font-size: 25px">{{ predictionAlerts }}</span>
+    <span style="width: 100px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+    <v-icon color="amber">fa-question</v-icon> 
+    <span style="font-size: 25px;">{{ predictionWarnings }}</span>
+  </v-card>
   <PredictionWidget v-for="p in predictionCrop" :key="p.key.siret" :prediction="p"/> 
 
-
+ 
   <div style="width: 100%; text-align: center" v-if="predictionCrop.length > 0">
     
       <v-btn @click="predictionLength += 100">suite</v-btn>
@@ -194,7 +190,16 @@ export default {
     },
   },
   computed: {
+    predictionAlerts() {
+      return this.predictionFilter.filter((p) => (p.value.alert === 'Alerte seuil F1')).length
+    },
+    predictionWarnings() {
+      return this.predictionFilter.filter((p) => (p.value.alert === 'Alerte seuil F2')).length
+    },
     predictionCrop() {
+      return this.predictionFilter.slice(0, this.predictionLength)
+    },
+    predictionFilter() {
       if (this.naf) {
         return this.prediction.filter((p) => {
           return this.currentNaf === this.naf.n5to1[p.value.activite]
@@ -206,7 +211,7 @@ export default {
           && (!['continuation'].includes(p.value.etat_procol) || !this.filters.includes('continuation'))
           && (!['in_bonis'].includes(p.value.etat_procol) || !this.filters.includes('in_bonis'))
           && (p.value.dernier_effectif > this.minEffectif)
-        }).slice(0, this.predictionLength)
+        })
       } else {
         return []
       }

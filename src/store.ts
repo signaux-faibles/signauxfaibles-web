@@ -52,15 +52,11 @@ const localStore = new Vuex.Store({
   },
 })
 
-
-let refresh = false
-
-
 const sessionStore = new Vuex.Store({
   plugins: [createPersistedState({ storage: window.sessionStorage })],
   state: {
     currentBatchKey: null as unknown as string,
-    leftDrawer: false,
+    leftDrawer: true,
     rightDrawer: true,
     refreshToken: null as unknown as string,
     naf: [] as any[],

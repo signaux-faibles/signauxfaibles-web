@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Login from '@/views/Login.vue'
 import Prediction from '@/views/Prediction.vue'
 import Goup from '@/views/Goup.vue'
+import Browse from '@/views/Browse.vue'
 import PageNotFound from '@/views/PageNotFound.vue'
 
 Vue.use(Router)
@@ -10,15 +11,15 @@ Vue.use(Router)
 export default new Router({
   base: process.env.BASE_URL,
   routes: [
-    // {
-    //   path: '/',
-    //   name: 'login',
-    //   component: Login,
-    // },
     {
-      path: '/',
+      path: '/prediction',
       name: 'prediction',
       component: Prediction,
+    },
+    {
+      path: '/',
+      name: 'browse',
+      component: Browse,
     },
     {
       path: '/goup',

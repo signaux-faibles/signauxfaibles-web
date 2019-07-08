@@ -60,20 +60,20 @@
       }
     },
     computed: {
-      jwt() {return this.$store.getters.jwt},
-      token() {return this.$store.state.token},
+      jwt() {return this.$keycloak.tokenParsed},
+      token() {return this.$keycloak.token},
       header() {
         return {
-            Authorization: 'Bearer ' + this.token,
+            Authorization: 'Bearer ' + this.$keycloak.token,
           }
       },
       uploading() {
         return this.files.some((f) => f.uploading)
       },
-      error () {
+      error() {
         return this.files.some((f) => f.error)
       },
-      paused () {
+      paused() {
         return this.files.some((f) => f.paused)
       },
     },
@@ -128,29 +128,24 @@
           },
           headers: this.header,
           overridePatchMethod: true,
-          chunkSize: 262144,
+          chunkSize: 1048576,
           onError(error) {
             object.error = true
             object.uploading = false
-            self.updateToken()
 
             if (object.retries > 0) {
               object.retries += -1
-              window.setTimeout(self.runUpload, 1000)
-            } else {
-
+              window.setTimeout(self.runUpload, 200)
             }
           },
 
           onProgress(bytesUploaded, bytesTotal) {
-            
             object.progress = parseInt(((bytesUploaded / bytesTotal) * 100).toFixed(0), 10)
           },
 
           onChunkComplete() {
             object.retries = 10
             object.error = false
-            
           },
 
           onSuccess() {
@@ -185,12 +180,12 @@
       },
       stopUpload() {
         this.updateToken()
-        for (const i in this.files) {
-          this.files[i].upload.abort()
-          this.files[i].uploading = false
-          this.files[i].paused = true
-          this.files[i].error = false
-        }
+        this.files.forEach((file) => {
+          files.upload.abort()
+          files.uploading = false
+          files.paused = true
+          files.error = false
+        })
       },
       handleFileSelect(e) {
         if (!e.target.files) {

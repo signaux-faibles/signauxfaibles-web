@@ -1,6 +1,6 @@
 <template>
   <v-list-tile >
-    <v-progress-linear v-if="file.progress % 100 != 0" style="position: absolute;top: 25px; width: 600px" height=2 :value="file.progress"/>
+    <v-progress-linear v-if="file.progress % 100 != 0 || file.uploading" style="position: absolute;top: 25px; width: 600px" height=2 :value="file.progress"/>
 
     <v-list-tile-action>
       <v-icon :color="activity_color">{{ activity }}</v-icon>
@@ -44,22 +44,22 @@ export default {
       }
     },
     activity_color() {
-      if (this.activity == 'error' || this.activity == 'replay') {
+      if (this.activity === 'error' || this.activity === 'replay') {
         return 'red'
       }
-      if (this.activity == 'stop') {
+      if (this.activity === 'stop') {
         return 'grey'
       }
-      if (this.activity == 'play_arrow') {
+      if (this.activity === 'play_arrow') {
         return 'indigo darken-2'
       }
-      if (this.activity == 'check') {
+      if (this.activity === 'check') {
         return 'green'
       }
-      if (this.activity == 'pause') {
+      if (this.activity === 'pause') {
         return 'indigo darken-2'
       }
-    }
+    },
   },
   methods: {
     filesize() {

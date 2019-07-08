@@ -359,17 +359,26 @@ export default {
   components: { IEcharts },
   data() {
     return {
+      axios: axios.create(),
       suivi: false,
       chart: false,
       bilan: true,
       urssaf: true,
       apart: true,
+      sirene: {},
       etablissement: { value: {} },
       pagination: null,
       comments: [],
     }
   },
   methods: {
+    getSirene() {
+      this.axios.get('https://entreprise.data.gouv.fr/api/sirene/v1/siret/${this.siret}').then((r) => {
+        this.sirene = r.etablissement
+      }).catch((error) => {
+        alert('yapa')
+      })
+    },
     computeFinance(f) {
       const annee = f.annee
       const ca = f.diane.ca ? f.diane.ca + ' k€' : 'n/c'
@@ -417,6 +426,7 @@ export default {
         poidsFrngClass,
         financierCourtTerme,
         financierCourtTermeClass,
+        axios: axios.create(),
       }
     },
     addComment() {
@@ -451,6 +461,12 @@ export default {
       this.$axios.post('/data/get/public', params).then((response) => {
         this.etablissement = response.data[0] || []
       })
+
+      this.axios.get(`https://entreprise.data.gouv.fr/api/sirene/v1/siret/${this.siret}`)
+      .then((r) => {
+          this.etablissement = r.data.etablissement
+      })
+
     },
     printDate(date) {
       return (date || '          ').substring(0, 10)
@@ -464,6 +480,7 @@ export default {
   },
   watch: {
     localSiret(val) {
+      this.getSirene()
       this.getEtablissement(val)
     },
   },
@@ -487,17 +504,6 @@ export default {
         .sort((a, b) => a.periode.start <= b.periode.start).slice(0, 10)
         : []
     },
-    activeTab: {
-      get() { return this.$store.getters.activeTab },
-      set(activeTab) { this.$store.dispatch('updateActiveTab', activeTab) },
-    },
-    tabs: {
-      get() { return this.$store.getters.getTabs },
-      set(tabs) { this.$store.dispatch('updateTabs', tabs) },
-    },
-    sirene() {
-      return this.etablissement.value.sirene || {}
-    },
     debit() {
       return this.etablissement.value.debit || []
     },
@@ -515,7 +521,7 @@ export default {
       }
     },
     jwt() {
-      return this.$store.getters.jwt || {resource_access: { signauxfaibles: {roles: []}}}
+      return this.$keycloak.tokenParsed || {resource_access: { signauxfaibles: {roles: []}}}
     },
     roles() {
       return this.jwt.resource_access.signauxfaibles.roles
@@ -627,6 +633,7 @@ export default {
     },
   },
 }
+
 </script>
 
 <style scoped>

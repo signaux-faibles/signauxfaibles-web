@@ -12,7 +12,7 @@ Vue.prototype.$axios = store.axiosClient
 Vue.prototype.$store = store.sessionStore
 Vue.prototype.$localStore = store.localStore
 
-function tokenInterceptor () {
+function tokenInterceptor() {
   Vue.prototype.$axios.interceptors.request.use((config: any) => {
     config.headers.Authorization = `Bearer ${Vue.prototype.$keycloak.token}`
     return config
@@ -20,6 +20,7 @@ function tokenInterceptor () {
     return Promise.reject(error)
   })
 }
+
 
 Vue.use(VueKeyCloak, {
   init: {
@@ -33,17 +34,12 @@ Vue.use(VueKeyCloak, {
   },
   onReady: (keycloak: any) => {
     tokenInterceptor()
-    /* eslint-disable no-new */
-    new Vue({
+    const tslintCantBeDisabledSorryForThis = new Vue({
       el: '#app',
       router,
       template: '<App/>',
-      render: h => h(App),
+      render: (h) => h(App),
     })
-  }
+  },
 })
 
-// new Vue({
-//   router,
-//   render: (h) => h(App),
-// }).$mount('#app')

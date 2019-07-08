@@ -17,21 +17,22 @@
     </v-toolbar>
      <v-list class="pt-0" dense>
         <v-divider></v-divider>
-        <!-- <v-list-tile to="/">
+
+        <v-list-tile to="/" v-if="jwt.goup_path">
           <v-list-tile-action>
-            <v-icon>mdi-view-dashboard</v-icon>
+            <v-icon>search</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <v-list-tile-title>Tableau de Bord</v-list-tile-title>
+            <v-list-tile-title>Consultation</v-list-tile-title>
           </v-list-tile-content>
-        </v-list-tile> -->
+        </v-list-tile>
 
-        <v-list-tile to="/">
+        <v-list-tile to="/prediction">
           <v-list-tile-action>
             <v-icon>mdi-target</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <v-list-tile-title>Détection</v-list-tile-title>
+            <v-list-tile-title>Listes de détection</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
 
@@ -44,34 +45,16 @@
           </v-list-tile-content>
         </v-list-tile>
 
-         <!-- <v-list-tile to="/data">
-          <v-list-tile-action>
-            <v-icon>mdi-database</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title>Données</v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>  -->
-
-        <!-- <v-list-tile to="/admin">
-          <v-list-tile-action>
-            <v-icon>fa-cog</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title>Administration</v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile> -->
-
         <v-divider></v-divider>
 
-        <!-- <v-list-tile @click="changePassword()">
+        <v-list-tile href="/auth/realms/master/account">
           <v-list-tile-action>
             <v-icon>vpn_key</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <v-list-tile-title>Changer mon mot de passe</v-list-tile-title>
+            <v-list-tile-title>Profil utilisateur</v-list-tile-title>
           </v-list-tile-content>
-        </v-list-tile> -->
+        </v-list-tile> 
 
         <v-list-tile @click="logout()">
           <v-list-tile-action>
