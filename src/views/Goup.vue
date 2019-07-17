@@ -78,8 +78,6 @@
       },
     },
     mounted() {
-      this.$store.dispatch('refreshSession')
-
       this.dragAndDropCapable = this.determineDragAndDropCapable()
       if (this.dragAndDropCapable) {
         ['drag', 'dragstart', 'dragend', 'dragover', 'dragenter', 'dragleave', 'drop'].forEach( ((evt) => {

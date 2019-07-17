@@ -29,7 +29,7 @@
   <div style="width:100%">
     <Spinner v-if="loading"/>
     <div id="nodata">
-      <img v-if="!loading && predictionCrop.length == 0 && init==false" src="@/assets/nodata.png">
+      <img v-if="!loading && prediction.length == 0 && init==false" src="@/assets/nodata.png">
     </div>
     <v-navigation-drawer :class="(rightDrawer?'elevation-6':'') + ' rightDrawer'" transition="no-transition" v-model="rightDrawer" right app>
       <v-toolbar flat class="transparent" height="40">
@@ -50,6 +50,7 @@
           :items="naf1"
           v-model="currentNaf"
           label="Secteur d'activité"
+          @change="getPrediction()"
         ></v-select>
       </div>
       <p style="height: 1px; border: 1px solid #eee"/>
@@ -59,7 +60,7 @@
           :items="subzones"
           v-model="zone"
           label="Zone Géographique"
-          @change="updatePrediction()"
+          @change="getPrediction()"
         ></v-select>
       </div>
       <p style="height: 1px; border: 1px solid #eee"/>
@@ -69,6 +70,7 @@
           v-model="minEffectif"
           :items="effectifClass"
           label="Effectif minimum"
+          @change="getPrediction()"
         ></v-combobox>
       </div>
       <p style="height: 1px; border: 1px solid #eee"/>
@@ -83,28 +85,12 @@
           multiple
           chips
           deletable-chips
+          @change="getPrediction()"
         >
         </v-select>
       </div>
 
       <p style="height: 1px; border: 1px solid #eee"/>
-      <!-- <div style="display: flex; flex-direction: row; vertical-align: middle; padding: 0 15px;" >
-        <v-checkbox
-          disabled
-          label="Activité partielle"
-          v-model="activitePartielle">
-        </v-checkbox>
-      </div>
-      <div style="display: flex; flex-direction: row; vertical-align: middle; padding: 0 15px;" >
-        <v-checkbox
-          disabled
-          label="Sans dette Urssaf"
-          v-model="interetUrssaf">
-        </v-checkbox>
-      </div> -->
-      <!-- <div style="display: flex; flex-direction: row; vertical-align: middle; padding: 0 15px;">
-        
-      </div> -->
     </v-navigation-drawer>
   </div>
   <v-card
@@ -117,10 +103,10 @@
     <v-icon color="amber">fa-question</v-icon> 
     <span style="font-size: 25px;">{{ predictionWarnings }}</span>
   </v-card>
-  <PredictionWidget v-for="p in predictionCrop" :key="p.key.siret" :prediction="p"/> 
+  <PredictionWidget v-for="p in prediction" :key="p.key.siret" :prediction="p"/> 
 
  
-  <div style="width: 100%; text-align: center" v-if="predictionCrop.length > 0">
+  <div style="width: 100%; text-align: center" v-if="prediction.length > 0">
     
       <v-btn @click="predictionLength += 100">suite</v-btn>
     
@@ -137,7 +123,7 @@ export default {
     return {
       effectifClass: [10, 20, 50, 100],
       prediction: [],
-      predictionLength: 30,
+      predictionLength: 100,
       currentNaf: 'C',
       minEffectif: 20,
       connu: false,
@@ -161,18 +147,81 @@ export default {
   },
   mounted() {
     this.$store.dispatch('updateReference')
-    this.$store.dispatch('refreshSession')
     this.getPrediction()
   },
   methods: {
     getPrediction() {
+      this.prediction = []
       if (this.$store.state.currentBatchKey != null) {
-        const params = {
+        let params = {
           key: {
             type: 'detection',
             batch: this.$store.state.currentBatchKey,
           },
+          limit: this.predictionLength,
+          filter: [{
+            field: 'effectif',
+            operator: '>=',
+            value: parseInt(this.minEffectif),
+          }],
+          sort: [{
+            field: 'score',
+            order: -1,
+          }],
         }
+        if (this.currentNaf != 'NON') {
+          params.filter = params.filter.concat([{
+            field: 'naf1',
+            operator: '=',
+            value: this.currentNaf,
+          }])
+        }
+        if (this.zone.length > 0) {
+          params.filter = params.filter.concat([{
+            field: 'zone',
+            operator: 'in',
+            value: this.zone,
+          }])
+        }
+        if (this.filters.includes('crp')) {
+          params.filter = params.filter.concat([{
+            field: 'crp',
+            operator: '=',
+            value: false,
+          }])
+        }
+        if (this.filters.includes('procol')) {
+          params.filter = params.filter.concat([{
+            field: 'procol',
+            operator: 'not in',
+            value: ['redressement', 'plan_redressement', 'liquidation'],
+          }])        
+        }
+                
+        if (this.filters.includes('sauvegarde')) {
+          params.filter = params.filter.concat([{
+            field: 'procol',
+            operator: 'not in',
+            value: ['sauvegarde', 'plan_sauvegarde'],
+          }])        
+        }
+
+        if (this.filters.includes('continuation')) {
+          params.filter = params.filter.concat([{
+            field: 'procol',
+            operator: 'not in',
+            value: ['continuation'],
+          }])        
+        }
+
+        if (this.filters.includes('in_bonis')) {
+          params.filter = params.filter.concat([{
+            field: 'procol',
+            operator: 'not in',
+            value: ['in_bonis'],
+          }])        
+        }
+
         this.loading = true
         const self = this
         this.$axios.post('/data/get/public', params).then((response) => {
@@ -191,31 +240,30 @@ export default {
   },
   computed: {
     predictionAlerts() {
-      return this.predictionFilter.filter((p) => (p.value.alert === 'Alerte seuil F1')).length
+      return this.prediction.filter((p) => (p.value.alert === 'Alerte seuil F1')).length
     },
     predictionWarnings() {
-      return this.predictionFilter.filter((p) => (p.value.alert === 'Alerte seuil F2')).length
+      return this.prediction.filter((p) => (p.value.alert === 'Alerte seuil F2')).length
     },
-    predictionCrop() {
-      return this.predictionFilter.slice(0, this.predictionLength)
-    },
-    predictionFilter() {
-      if (this.naf) {
-        return this.prediction.filter((p) => {
-          return this.currentNaf === this.naf.n5to1[p.value.activite]
-          && (this.zone.includes(p.value.departement) || this.zone.length === 0)
-          && (p.value.connu === false || !this.filters.includes('crp'))
-          && (!['sauvegarde', 'plan_sauvegarde'].includes(p.value.etat_procol) || !this.filters.includes('sauvegarde'))
-          && (!['redressement', 'plan_redressement', 'liquidation']
-              .includes(p.value.etat_procol) || !this.filters.includes('procol'))
-          && (!['continuation'].includes(p.value.etat_procol) || !this.filters.includes('continuation'))
-          && (!['in_bonis'].includes(p.value.etat_procol) || !this.filters.includes('in_bonis'))
-          && (p.value.dernier_effectif > this.minEffectif)
-        })
-      } else {
-        return []
-      }
-    },
+    // predictionCrop() {
+    //   return this.predictionFilter.slice(0, this.predictionLength)
+    // },
+    // predictionFilter() {
+    //   if (this.naf) {
+    //     return this.prediction.filter((p) => {
+    //       return (this.zone.includes(p.value.departement) || this.zone.length === 0)
+    //       && (p.value.connu === false || !this.filters.includes('crp'))
+    //       && (!['sauvegarde', 'plan_sauvegarde'].includes(p.value.etat_procol) || !this.filters.includes('sauvegarde'))
+    //       && (!['redressement', 'plan_redressement', 'liquidation']
+    //           .includes(p.value.etat_procol) || !this.filters.includes('procol'))
+    //       && (!['continuation'].includes(p.value.etat_procol) || !this.filters.includes('continuation'))
+    //       && (!['in_bonis'].includes(p.value.etat_procol) || !this.filters.includes('in_bonis'))
+    //       && (p.value.dernier_effectif > this.minEffectif)
+    //     })
+    //   } else {
+    //     return []
+    //   }
+    // },
     leftDrawer: {
       get() {
         return this.$store.state.leftDrawer
@@ -237,12 +285,13 @@ export default {
       return (this.$store.getters.naf(this.$store.state.currentBatchKey) || { value: [] }).value
     },
     naf1() {
-      return Object.keys((this.naf || {n1: {}}).n1).map((n) => {
+      return [{text: 'Tout secteur confondu', value: 'NON'}]
+        .concat(Object.keys((this.naf || {n1: {}}).n1).map((n) => {
         return {
             text: this.naf.n1[n].substring(0, 60),
             value: n,
         }
-      })
+      }))
     },
     batches() {
       return this.$store.getters.batches
@@ -302,10 +351,10 @@ export default {
       if (this.$store.state.departements.length > 0) {
         const departement = Object.keys(this.$store.state.departements[0].value).map((d) => {
           return {
-            text: this.$store.state.departements[0].value[d],
+            text: d + ' ' + this.$store.state.departements[0].value[d],
             value: [d],
           }
-        })
+        }).sort((a,b) => {return a.value[0] > b.value[0]})
         all = all.concat(departement)
       }
 

@@ -29,7 +29,7 @@ Vue.use(VueKeyCloak, {
   },
   config: {
     realm: 'master',
-    url: 'http://localhost/auth/',
+    url: 'https://signaux-faibles.beta.gouv.fr/auth/',
     clientId: 'signauxfaibles',
   },
   onReady: (keycloak: any) => {

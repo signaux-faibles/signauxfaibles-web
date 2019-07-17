@@ -23,41 +23,24 @@
             </v-btn> -->
 
 
-            <br/><br/>
-            <b>{{ (sirene.adresse || [])[0] }} </b>
-            <br
-            v-if="(sirene.adresse || [])[0] != ''"
-            />
-            {{ (sirene.adresse || [])[1] }}
-            <br
-            v-if="(sirene.adresse || [])[1] != ''"
-            />
-            {{ (sirene.adresse || [])[2] }}
-            <br
-            v-if="(sirene.adresse || [])[2] != ''"
-            />
-            {{ (sirene.adresse || [])[3] }}
-            <br
-            v-if="(sirene.adresse || [])[3] != ''"
-            />
-            {{ (sirene.adresse || [])[4] }}
-            <br
-            v-if="(sirene.adresse || [])[4] != ''"
-            />
-            {{ (sirene.adresse || [])[5] }}
-            <br
-            v-if="(sirene.adresse || [])[5] != ''"
-            />
-            {{ (sirene.adresse || [])[6] }}
+            <br/>
+            <b>{{ sirene.l1_normalisee }} </b><br/>
+            <b>{{ sirene.l2_normalisee }} </b><br/>
+            <b>{{ sirene.l3_normalisee }} </b><br/>
+            <b>{{ sirene.l4_normalisee }} </b><br/>
+            <b>{{ sirene.l5_normalisee }} </b><br/>
+            <b>{{ sirene.l6_normalisee }} </b><br/>
+            <b>{{ sirene.l7_normalisee }} </b><br/>
+
             <br/><br/>
             <v-divider/>
             <br/>
             <v-divider/>
             <br/>
             
-            <b>{{ (naf.n1 || {})[((naf.n5to1 || {})[(sirene.ape || '')] || '')] }}</b><br/>
-            {{ (naf.n5 || {})[(sirene.ape || '')] }}<br/>
-            Code APE: {{ (sirene.ape || '') }}<br/> 
+            <b>{{ (naf.n1 || {})[((naf.n5to1 || {})[(sirene.activite_principale || '')] || '')] }}</b><br/>
+            {{ (naf.n5 || {})[(sirene.activite_principale || '')] }}<br/>
+            Code APE: {{ (sirene.activite_principale || '') }}<br/> 
           </v-flex>
           <v-flex xs12 md6 class="text-xs-right pa-3">
             <iframe
@@ -68,8 +51,8 @@
             scrolling="no"
             marginheight="0"
             marginwidth="0"
-            :src="'https://www.openstreetmap.org/export/embed.html?bbox=' + (sirene.longitude - 0.03) + '%2C' + (sirene.lattitude  - 0.03) + '%2C' + (sirene.longitude + 0.03) + '%2C' + (sirene.lattitude + 0.03) + '&amp;layer=mapnik&amp;marker=' + sirene.lattitude + '%2C' + sirene.longitude" style="border: 1px solid black"></iframe><br/>
-            <small><a href="https://www.openstreetmap.org/#map=19/47.31581/5.05088">Afficher une carte plus grande</a></small>
+            :src="'https://www.openstreetmap.org/export/embed.html?bbox=' + (parseFloat(sirene.longitude) - 0.03) + '%2C' + (parseFloat(sirene.latitude)  - 0.03) + '%2C' + (parseFloat(sirene.longitude) + 0.03) + '%2C' + (parseFloat(sirene.latitude) + 0.03) + '&amp;layer=mapnik&amp;marker=' + sirene.latitude + '%2C' + sirene.longitude" style="border: 1px solid black"></iframe><br/>
+            <small><a :href="'https://www.openstreetmap.org/#map=17/' + sirene.latitude + '/' + sirene.longitude">Afficher une carte plus grande</a></small>
           </v-flex>
 
           <!-- <v-flex
@@ -352,6 +335,7 @@ import 'echarts/lib/chart/line'
 import 'echarts/lib/component/title'
 import 'echarts/lib/component/legend'
 import 'echarts/lib/component/tooltip'
+import axios from 'axios'
 
 export default {
   props: ['siret', 'batch'],
@@ -372,13 +356,6 @@ export default {
     }
   },
   methods: {
-    getSirene() {
-      this.axios.get('https://entreprise.data.gouv.fr/api/sirene/v1/siret/${this.siret}').then((r) => {
-        this.sirene = r.etablissement
-      }).catch((error) => {
-        alert('yapa')
-      })
-    },
     computeFinance(f) {
       const annee = f.annee
       const ca = f.diane.ca ? f.diane.ca + ' k€' : 'n/c'
@@ -460,11 +437,15 @@ export default {
       }
       this.$axios.post('/data/get/public', params).then((response) => {
         this.etablissement = response.data[0] || []
+      }).catch((error) => {
+        this.etablissement = { value: {} }
       })
 
       this.axios.get(`https://entreprise.data.gouv.fr/api/sirene/v1/siret/${this.siret}`)
       .then((r) => {
-          this.etablissement = r.data.etablissement
+          this.sirene = r.data.etablissement
+      }).catch((error) => {
+        this.etablissement = { value: {} }
       })
 
     },
@@ -480,7 +461,6 @@ export default {
   },
   watch: {
     localSiret(val) {
-      this.getSirene()
       this.getEtablissement(val)
     },
   },

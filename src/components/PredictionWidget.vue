@@ -22,7 +22,7 @@
           </div>
 
           <span style="font-family: 'Abel'; white-space: nowrap; max-width: 400px; font-size: 14px; overflow: hidden; font-weight: 400;">
-            Dép.: {{ prediction.value.departement }} ({{ (naf.n5 || {})[prediction.value.activite || ''] }})
+            Dép.: {{ prediction.value.departement }} - Act: {{ (naf.n5|| {})[prediction.value.activite || ''].slice(0,65) }}
           </span>
           
           <img
