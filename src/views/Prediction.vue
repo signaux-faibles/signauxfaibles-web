@@ -38,6 +38,7 @@
       <div style="width: 100%; padding: 0 15px;">
           <v-select
             :items="batches"
+            :disabled="loading"
             v-model="currentBatchKey"
             @change="getPrediction"
             label="Liste de détection"
@@ -48,6 +49,7 @@
         <v-icon style="margin-right: 10px;">fa-industry</v-icon>
         <v-select
           :items="naf1"
+          :disabled="loading"
           v-model="currentNaf"
           label="Secteur d'activité"
           @change="getPrediction()"
@@ -58,6 +60,7 @@
         <v-icon style="margin-right: 10px;">fa-map</v-icon>
         <v-select
           :items="subzones"
+          :disabled="loading"
           v-model="zone"
           label="Zone Géographique"
           @change="getPrediction()"
@@ -68,6 +71,7 @@
         <v-icon style="margin-right: 10px;">fa-users</v-icon>
         <v-combobox
           v-model="minEffectif"
+          :disabled="loading"
           :items="effectifClass"
           label="Effectif minimum"
           @change="getPrediction()"
@@ -79,6 +83,7 @@
         <v-select
           v-model="filters"
           :items="filtersItems"
+          :disabled="loading"
           item-text="text"
           item-value="value"
           label="Masquer"
@@ -105,13 +110,6 @@
   </v-card>
   <PredictionWidget v-for="p in prediction" :key="p.key.siret" :prediction="p"/> 
 
- 
-  <div style="width: 100%; text-align: center" v-if="prediction.length > 0">
-    
-      <v-btn @click="predictionLength += 100">suite</v-btn>
-    
-  </div>
-
 </div>
 </template>
 
@@ -122,14 +120,12 @@ export default {
   data() {
     return {
       effectifClass: [10, 20, 50, 100],
-      prediction: [],
-      predictionLength: 100,
+      predictionLength: 20,
       currentNaf: 'C',
       minEffectif: 20,
       connu: false,
       horsCCSF: true,
       horsProcol: true,
-      loading: false,
       activitePartielle: false,
       interetUrssaf: false,
       zone: [],
@@ -151,94 +147,104 @@ export default {
   },
   methods: {
     getPrediction() {
-      this.prediction = []
-      if (this.$store.state.currentBatchKey != null) {
-        let params = {
-          key: {
-            type: 'detection',
-            batch: this.$store.state.currentBatchKey,
-          },
-          limit: this.predictionLength,
-          filter: [{
-            field: 'effectif',
-            operator: '>=',
-            value: parseInt(this.minEffectif),
-          }],
-          sort: [{
-            field: 'score',
-            order: -1,
-          }],
-        }
-        if (this.currentNaf != 'NON') {
-          params.filter = params.filter.concat([{
-            field: 'naf1',
-            operator: '=',
-            value: this.currentNaf,
-          }])
-        }
-        if (this.zone.length > 0) {
-          params.filter = params.filter.concat([{
-            field: 'zone',
-            operator: 'in',
-            value: this.zone,
-          }])
-        }
-        if (this.filters.includes('crp')) {
-          params.filter = params.filter.concat([{
-            field: 'crp',
-            operator: '=',
-            value: false,
-          }])
-        }
-        if (this.filters.includes('procol')) {
-          params.filter = params.filter.concat([{
-            field: 'procol',
-            operator: 'not in',
-            value: ['redressement', 'plan_redressement', 'liquidation'],
-          }])        
-        }
-                
-        if (this.filters.includes('sauvegarde')) {
-          params.filter = params.filter.concat([{
-            field: 'procol',
-            operator: 'not in',
-            value: ['sauvegarde', 'plan_sauvegarde'],
-          }])        
-        }
+      if (!this.loading) {
+        this.prediction = []
+        if (this.$store.state.currentBatchKey != null) {
+          let params = {
+            key: {
+              type: 'detection',
+              batch: this.$store.state.currentBatchKey,
+            },
+            limit: this.predictionLength,
+            filter: [{
+              field: 'effectif',
+              operator: '>=',
+              value: parseInt(this.minEffectif),
+            }],
+            sort: [{
+              field: 'score',
+              order: -1,
+            }],
+          }
+          if (this.currentNaf != 'NON') {
+            params.filter = params.filter.concat([{
+              field: 'naf1',
+              operator: '=',
+              value: this.currentNaf,
+            }])
+          }
+          if (this.zone.length > 0) {
+            params.filter = params.filter.concat([{
+              field: 'zone',
+              operator: 'in',
+              value: this.zone,
+            }])
+          }
+          if (this.filters.includes('crp')) {
+            params.filter = params.filter.concat([{
+              field: 'crp',
+              operator: '=',
+              value: false,
+            }])
+          }
+          if (this.filters.includes('procol')) {
+            params.filter = params.filter.concat([{
+              field: 'procol',
+              operator: 'not in',
+              value: ['redressement', 'plan_redressement', 'liquidation'],
+            }])        
+          }
+                  
+          if (this.filters.includes('sauvegarde')) {
+            params.filter = params.filter.concat([{
+              field: 'procol',
+              operator: 'not in',
+              value: ['sauvegarde', 'plan_sauvegarde'],
+            }])        
+          }
 
-        if (this.filters.includes('continuation')) {
-          params.filter = params.filter.concat([{
-            field: 'procol',
-            operator: 'not in',
-            value: ['continuation'],
-          }])        
-        }
+          if (this.filters.includes('continuation')) {
+            params.filter = params.filter.concat([{
+              field: 'procol',
+              operator: 'not in',
+              value: ['continuation'],
+            }])        
+          }
 
-        if (this.filters.includes('in_bonis')) {
-          params.filter = params.filter.concat([{
-            field: 'procol',
-            operator: 'not in',
-            value: ['in_bonis'],
-          }])        
-        }
+          if (this.filters.includes('in_bonis')) {
+            params.filter = params.filter.concat([{
+              field: 'procol',
+              operator: 'not in',
+              value: ['in_bonis'],
+            }])        
+          }
 
-        this.loading = true
-        const self = this
-        this.$axios.post('/data/get/public', params).then((response) => {
-          self.prediction = response.data.sort((p1, p2) => (p1.value.score < p2.value.score) ? 1 : -1)
-          self.loading = false
-        }).catch((error) => {
-          self.prediction = []
-        }).finally(() => {
-          self.init = false
-          self.loading = false
-        })
-      } else {
-        window.setTimeout(this.getPrediction, 100)
+          this.loading = true
+          const self = this
+          this.$axios.post('/data/cache/public', params).then((response) => {
+            self.prediction = response.data.sort((p1, p2) => (p1.value.score < p2.value.score) ? 1 : -1)
+            self.loading = false
+          }).catch((error) => {
+            self.prediction = []
+          }).finally(() => {
+            self.init = false
+            self.loading = false
+          })
+        } else {
+          window.setTimeout(this.getPrediction, 100)
+        }
       }
     },
   },
   computed: {
+    prediction: {
+      get() {return this.$store.state.prediction},
+      set(value) {this.$store.commit('setPrediction', value)},
+    },
+    loading: {
+      get() {return this.$store.state.loading},
+      set(value) {this.$store.commit('setLoading', value)},
+    },
     predictionAlerts() {
       return this.prediction.filter((p) => (p.value.alert === 'Alerte seuil F1')).length
     },

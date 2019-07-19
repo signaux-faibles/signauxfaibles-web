@@ -33,6 +33,7 @@ const localStore = new Vuex.Store({
   state: {
     browserToken: null,
     loginTab: 1,
+    prediction: [],
   },
   mutations: {
     setBrowserToken(state, browserToken) {
@@ -67,8 +68,16 @@ const sessionStore = new Vuex.Store({
     zone: {},
     height: 0,
     scrollTop: 0,
+    prediction: [],
+    loading: false,
   },
   mutations: {
+    setPrediction(state, value) {
+      state.prediction = value
+    },
+    setLoading(state, value) {
+      state.loading = value
+    },
     leftDrawer(state, val) {
       state.leftDrawer = val
     },

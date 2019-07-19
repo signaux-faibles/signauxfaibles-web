@@ -21,6 +21,8 @@ function tokenInterceptor() {
   })
 }
 
+const prod = 'https://signaux-faibles.beta.gouv.fr/auth/'
+const local = 'http://localhost/auth/'
 
 Vue.use(VueKeyCloak, {
   init: {
@@ -29,7 +31,7 @@ Vue.use(VueKeyCloak, {
   },
   config: {
     realm: 'master',
-    url: 'https://signaux-faibles.beta.gouv.fr/auth/',
+    url: prod,
     clientId: 'signauxfaibles',
   },
   onReady: (keycloak: any) => {
