@@ -142,7 +142,6 @@ export default {
     }
   },
   mounted() {
-    this.$store.dispatch('updateReference')
     this.getPrediction()
   },
   methods: {
@@ -251,25 +250,6 @@ export default {
     predictionWarnings() {
       return this.prediction.filter((p) => (p.value.alert === 'Alerte seuil F2')).length
     },
-    // predictionCrop() {
-    //   return this.predictionFilter.slice(0, this.predictionLength)
-    // },
-    // predictionFilter() {
-    //   if (this.naf) {
-    //     return this.prediction.filter((p) => {
-    //       return (this.zone.includes(p.value.departement) || this.zone.length === 0)
-    //       && (p.value.connu === false || !this.filters.includes('crp'))
-    //       && (!['sauvegarde', 'plan_sauvegarde'].includes(p.value.etat_procol) || !this.filters.includes('sauvegarde'))
-    //       && (!['redressement', 'plan_redressement', 'liquidation']
-    //           .includes(p.value.etat_procol) || !this.filters.includes('procol'))
-    //       && (!['continuation'].includes(p.value.etat_procol) || !this.filters.includes('continuation'))
-    //       && (!['in_bonis'].includes(p.value.etat_procol) || !this.filters.includes('in_bonis'))
-    //       && (p.value.dernier_effectif > this.minEffectif)
-    //     })
-    //   } else {
-    //     return []
-    //   }
-    // },
     leftDrawer: {
       get() {
         return this.$store.state.leftDrawer

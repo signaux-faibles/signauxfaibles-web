@@ -70,6 +70,9 @@
         etablissement: null,
       }
     },
+    mounted() {
+      this.$store.dispatch('updateReference')
+    },
     methods: {
       load() {
         this.page = 1

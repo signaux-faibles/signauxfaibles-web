@@ -72,8 +72,9 @@
               <v-toolbar-title class="localtoolbar">Effectifs</v-toolbar-title>
             </v-toolbar>
             <IEcharts
+              auto-resize
               :loading="chart"
-              style="height: 350px"
+              style="width: 100%; height: 350px"
               :option="effectifOptions"
             />
           </v-flex>
@@ -96,8 +97,8 @@
                   <v-card-text>
                     Ce graphique représente les données URSSAF:<br/>
                     <ul>
-                      <li> Cotisations: Montant des cotisations appelées</li>
-                      <li> Débits: Cumul des dettes restantes à payer</li>
+                      <li> Cotisations: Montant des cotisations appelées. La date désigne la fin de la période appelée.</li>
+                      <li> Débits: Cumul des dettes restantes à payer. La date désigne la fin de la période de constatation du débit</li>
                     </ul>
                   </v-card-text>
                   <v-card-actions>
@@ -108,9 +109,10 @@
               </v-menu>
             </v-toolbar>
             <IEcharts
+              auto-resize
               v-if="roles.includes('urssaf')"
               :loading="chart"
-              style="height: 350px"
+              style="width: 100%; height: 350px"
               :option="urssafOptions"
             />
             <div 
@@ -228,8 +230,9 @@
               <v-toolbar-title class="localtoolbar">Informations Financières</v-toolbar-title>
             </v-toolbar>
           </v-flex>
+          <Financier data:="finance"/>
           <v-flex
-            v-for="f in finance.slice(0,3)"
+            v-for="f in finance.slice(0,6)"
             :key="f.annee"
             pa-1
             xs12
@@ -240,7 +243,7 @@
             <v-card
             outline
             class="elevation-2">
-              <v-card-title class="subheading font-weight-bold">{{ f.annee }}</v-card-title>
+              <v-card-title style="background-color: #dde;" class="subheading font-weight-bold">{{ f.annee }}</v-card-title>
 
               <v-divider></v-divider>
 
@@ -331,11 +334,13 @@
 
 <script>
 import IEcharts from 'vue-echarts-v3/src/lite.js'
+import Finance from '@/components/Finance.vue'
 import 'echarts/lib/chart/line'
 import 'echarts/lib/component/title'
 import 'echarts/lib/component/legend'
 import 'echarts/lib/component/tooltip'
 import axios from 'axios'
+
 
 export default {
   props: ['siret', 'batch'],
@@ -435,6 +440,7 @@ export default {
           type: 'detail',
         },
       }
+
       this.$axios.post('/data/get/public', params).then((response) => {
         this.etablissement = response.data[0] || []
       }).catch((error) => {
@@ -488,7 +494,7 @@ export default {
       return this.etablissement.value.debit || []
     },
     cotisation() {
-      return this.etablissement.value.cotisation || []
+      return (this.etablissement.value.cotisation || []).slice(0, 23) 
     },
     effectif() {
       return this.etablissement.value.effectif || []
@@ -517,12 +523,12 @@ export default {
       return this.$store.state.currentBatchKey
     },
     zipDianeBDF() {
-      const annees = new Set(this.bdf.map((b) => b.annee_bdf).concat(this.diane.map((d) => d.exercice_diane)))
+      const annees = new Set(this.bdf.map((b) => b.arrete_bilan_bdf).concat(this.diane.map((d) => d.arrete_bilan_diane)))
       return Array.from(annees).sort((a, b) => a < b).map((a) => {
         return {
-          annee: a,
-          bdf: this.bdf.filter((b) => b.annee_bdf === a)[0] || {},
-          diane: this.diane.filter((d) => d.exercice_diane === a)[0] || {},
+          annee: a.slice(0,10),
+          bdf: this.bdf.filter((b) => b.arrete_bilan_bdf === a)[0] || {},
+          diane: this.diane.filter((d) => d.arrete_bilan_diane === a)[0] || {},
         }
       })
     },

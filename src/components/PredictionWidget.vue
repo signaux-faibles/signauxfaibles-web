@@ -62,7 +62,7 @@
 
           <div class="flex" style="position:absolute; overflow: hidden; left: 600px; top: 0px; bottom: 0px; right: 9px;">
             <div class='label'>
-              Chiffre d'affaire<br/>
+              CA {{prediction.value.annee_ca}}<br/>
               <span style="font-size: 25px" :class="diane.ca_color">{{ diane.ca || "n/c" }}</span>
             </div>
           </div>
