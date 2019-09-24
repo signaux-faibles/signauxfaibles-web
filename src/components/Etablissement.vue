@@ -494,7 +494,7 @@ export default {
       return this.etablissement.value.debit || []
     },
     cotisation() {
-      return (this.etablissement.value.cotisation || []).slice(0, 23) 
+      return (this.etablissement.value.cotisation || []).slice(0, 23)
     },
     effectif() {
       return this.etablissement.value.effectif || []
@@ -523,10 +523,11 @@ export default {
       return this.$store.state.currentBatchKey
     },
     zipDianeBDF() {
-      const annees = new Set(this.bdf.map((b) => b.arrete_bilan_bdf).concat(this.diane.map((d) => d.arrete_bilan_diane)))
+      const annees = new Set(this.bdf.map((b) => b.arrete_bilan_bdf)
+        .concat(this.diane.map((d) => d.arrete_bilan_diane)))
       return Array.from(annees).sort((a, b) => a < b).map((a) => {
         return {
-          annee: a.slice(0,10),
+          annee: a.slice(0, 10),
           bdf: this.bdf.filter((b) => b.arrete_bilan_bdf === a)[0] || {},
           diane: this.diane.filter((d) => d.arrete_bilan_diane === a)[0] || {},
         }

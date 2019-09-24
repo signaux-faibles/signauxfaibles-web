@@ -154,6 +154,6 @@ export default {
         financierCourtTermeClass,
       }
     },
-  }
+  },
 }
 </script>

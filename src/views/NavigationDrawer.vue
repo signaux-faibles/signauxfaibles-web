@@ -18,7 +18,7 @@
      <v-list class="pt-0" dense>
         <v-divider></v-divider>
 
-        <v-list-tile to="/" v-if="jwt.goup_path">
+        <v-list-tile to="/">
           <v-list-tile-action>
             <v-icon>search</v-icon>
           </v-list-tile-action>

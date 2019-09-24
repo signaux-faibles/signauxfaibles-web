@@ -149,7 +149,7 @@ export default {
       if (!this.loading) {
         this.prediction = []
         if (this.$store.state.currentBatchKey != null) {
-          let params = {
+          const params = {
             key: {
               type: 'detection',
               batch: this.$store.state.currentBatchKey,
@@ -158,14 +158,14 @@ export default {
             filter: [{
               field: 'effectif',
               operator: '>=',
-              value: parseInt(this.minEffectif),
+              value: parseInt(this.minEffectif, 10),
             }],
             sort: [{
               field: 'score',
               order: -1,
             }],
           }
-          if (this.currentNaf != 'NON') {
+          if (this.currentNaf !== 'NON') {
             params.filter = params.filter.concat([{
               field: 'naf1',
               operator: '=',
@@ -191,15 +191,15 @@ export default {
               field: 'procol',
               operator: 'not in',
               value: ['redressement', 'plan_redressement', 'liquidation'],
-            }])        
+            }])
           }
-                  
+
           if (this.filters.includes('sauvegarde')) {
             params.filter = params.filter.concat([{
               field: 'procol',
               operator: 'not in',
               value: ['sauvegarde', 'plan_sauvegarde'],
-            }])        
+            }])
           }
 
           if (this.filters.includes('continuation')) {
@@ -207,7 +207,7 @@ export default {
               field: 'procol',
               operator: 'not in',
               value: ['continuation'],
-            }])        
+            }])
           }
 
           if (this.filters.includes('in_bonis')) {
@@ -215,7 +215,7 @@ export default {
               field: 'procol',
               operator: 'not in',
               value: ['in_bonis'],
-            }])        
+            }])
           }
 
           this.loading = true
@@ -340,7 +340,7 @@ export default {
             text: d + ' ' + this.$store.state.departements[0].value[d],
             value: [d],
           }
-        }).sort((a,b) => {return a.value[0] > b.value[0]})
+        }).sort((a, b) => a.value[0] > b.value[0])
         all = all.concat(departement)
       }
 
