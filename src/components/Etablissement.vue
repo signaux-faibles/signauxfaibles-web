@@ -55,75 +55,12 @@
             <small><a :href="'https://www.openstreetmap.org/#map=17/' + sirene.latitude + '/' + sirene.longitude">Afficher une carte plus grande</a></small>
           </v-flex>
 
-          <!-- <v-flex
-            xs12 md12 class="pa-3"
-            v-for="(c, i) in comments"
-            :key="c['comment'] + i">
-            <v-textarea
-              box
-              :label="c['author'] + ', le ' + c['date']"
-              :value="c['comment']"
-            ></v-textarea>
-          </v-flex> -->
           <v-flex xs6 class="pr-1" style="min-height: 200px">
-            <v-toolbar
-              dark
-              color='indigo darken-5'>
-              <v-toolbar-title class="localtoolbar">Effectifs</v-toolbar-title>
-            </v-toolbar>
-            <IEcharts
-              auto-resize
-              :loading="chart"
-              style="width: 100%; height: 350px"
-              :option="effectifOptions"
-            />
+            <Effectif :effectif="effectif" :chart="chart"/>
           </v-flex>
 
           <v-flex xs6 class="pr-1">
-            <v-toolbar
-              dark
-              color='indigo darken-5'>
-              <v-toolbar-title
-              class="localtoolbar">
-                  Débits Urssaf
-              </v-toolbar-title>
-              <v-spacer/>
-              <v-menu max-width="400px" offset-y>                 
-                <v-btn slot="activator" icon><v-icon>help</v-icon></v-btn>
-                <v-card>
-                  <v-card-title class="headline">
-                    Cotisations et Débits URSSAF
-                  </v-card-title>
-                  <v-card-text>
-                    Ce graphique représente les données URSSAF:<br/>
-                    <ul>
-                      <li> Cotisations: Montant des cotisations appelées. La date désigne la fin de la période appelée.</li>
-                      <li> Débits: Cumul des dettes restantes à payer. La date désigne la fin de la période de constatation du débit</li>
-                    </ul>
-                  </v-card-text>
-                  <v-card-actions>
-                    <v-spacer/>
-                    <v-btn flat color="success">OK</v-btn>
-                  </v-card-actions>
-                </v-card>
-              </v-menu>
-            </v-toolbar>
-            <IEcharts
-              auto-resize
-              v-if="roles.includes('urssaf')"
-              :loading="chart"
-              style="width: 100%; height: 350px"
-              :option="urssafOptions"
-            />
-            <div 
-              style=" height: 350px; width: 100%; text-align: center;"
-              v-if="!roles.includes('urssaf')"
-            >
-              <img
-              style="vertical-align: middle; margin: 125px 0; opacity: 0.2;"
-              height="100px"
-              src="@/assets/noaccess.svg"/>
-            </div>
+            <Urssaf :debit="debit" :roles="roles" :cotisation="cotisation" :chart="chart"/>
           </v-flex>
           <v-flex xs6 class="pr-1">
             <v-toolbar
@@ -230,7 +167,6 @@
               <v-toolbar-title class="localtoolbar">Informations Financières</v-toolbar-title>
             </v-toolbar>
           </v-flex>
-          <Financier data:="finance"/>
           <v-flex
             v-for="f in finance.slice(0,6)"
             :key="f.annee"
@@ -333,8 +269,10 @@
 </template>
 
 <script>
+import Effectif from '@/components/Etablissement/Effectif.vue'
+import Urssaf from '@/components/Etablissement/Urssaf.vue'
+
 import IEcharts from 'vue-echarts-v3/src/lite.js'
-import Finance from '@/components/Finance.vue'
 import 'echarts/lib/chart/line'
 import 'echarts/lib/component/title'
 import 'echarts/lib/component/legend'
@@ -345,7 +283,7 @@ import axios from 'axios'
 export default {
   props: ['siret', 'batch'],
   name: 'Etablissement',
-  components: { IEcharts },
+  components: { IEcharts, Effectif, Urssaf },
   data() {
     return {
       axios: axios.create(),
@@ -533,92 +471,7 @@ export default {
         }
       })
     },
-    effectifOptions() {
-      return {
-        title: {
-          text: null,
-        },
-        legend: {
-          data: ['effectif'],
-          y: 'bottom',
-        },
-        toolbox: {
-          show: true,
-        },
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            type: 'cross',
-            label: {
-              backgroundColor: '#283b56',
-            },
-          },
-        },
-        xAxis: {
-          show: true,
-          type: 'category',
-          data: this.effectif.map((e) => e.periode.slice(0, 10)),
-        },
-        yAxis: {
-          type: 'value',
-          show: true,
-        },
-        series: [{
-          name: 'effectif',
-          color: 'indigo',
-          step: 'end',
-          type: 'line',
-          data: this.effectif.map((e) => e.effectif),
-        }],
-      }
-    },
-    urssafOptions() {
-      return {
-        title: {
-          text: null,
-        },
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            type: 'cross',
-            label: {
-              backgroundColor: '#283b56',
-            },
-          },
-        },
-        legend: {
-          data: ['Cotisation', 'Débit'],
-          y: 'bottom',
-        },
-        toolbox: {
-          show: true,
-        },
-        xAxis: {
-          show: true,
-          type: 'category',
-          axisTick: false,
-          data: this.debit.map((d) => (d.periode || '').slice(0, 10)),
-        },
-        yAxis: {
-          type: 'value',
-          show: true,
-        },
-        series: [{
-          color: 'indigo',
-          smooth: true,
-          name: 'Cotisation',
-          type: 'line',
-          data: this.cotisation,
-        }, {
-          color: 'red',
-          smooth: true,
-          name: 'Débit',
-          type: 'line',
-          data: this.debit.map((d) => d.part_ouvriere + d.part_patronale),
-        }],
-      }
-    },
-  },
+  }
 }
 
 </script>
