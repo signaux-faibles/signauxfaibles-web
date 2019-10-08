@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Toolbar title="Consultation" icon="help" drawer/>
+    <Toolbar title="Consultation" drawer/>
     <div :class="((result.etablissement || []).length > 0 || searched) ? 'loaded' : 'empty'">
       <form v-on:submit.prevent="load">
         <div :class="((result.etablissement || []).length > 0 || searched) ? 'loaded_picto' : 'empty_picto'">
@@ -108,6 +108,9 @@
       },
     },
     computed: {
+      jwt() {
+        return this.$keycloak.tokenParsed
+      },
       searchUrl() {
         const root = 'https://entreprise.data.gouv.fr/api/sirene/v1/'
         return root + `${this.searchType}/${encodeURIComponent(this.search)}?page=${this.page}`

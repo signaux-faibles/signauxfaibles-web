@@ -27,7 +27,7 @@
           </v-list-tile-content>
         </v-list-tile>
 
-        <v-list-tile to="/prediction">
+        <v-list-tile to="/prediction" v-if="roles.includes('detection')">
           <v-list-tile-action>
             <v-icon>mdi-target</v-icon>
           </v-list-tile-action>
@@ -65,6 +65,9 @@
           </v-list-tile-content>
         </v-list-tile>
       </v-list>
+    
+    
+      
     <v-footer class="elevation-6" style="color: blue; width:100%; position: fixed; bottom: 0px;">
       <v-btn
         flat
@@ -73,13 +76,18 @@
         href="https://github.com/signaux-faibles/">
         <v-icon>fab fa-github</v-icon>
       </v-btn>
+      <v-spacer/>
+      <News/>
     </v-footer>
   </v-navigation-drawer>
 
 </template>
 
 <script>
+import News from '@/views/News.vue'
+
 export default {
+  components: { News },
   methods: {
     logout() {
       this.$keycloak.logoutFn()
@@ -89,6 +97,9 @@ export default {
   computed: {
     jwt() {
       return this.$keycloak.tokenParsed
+    },
+    roles() {
+      return this.jwt.resource_access.signauxfaibles.roles
     },
     drawer: {
       get() {

@@ -21,7 +21,7 @@ function tokenInterceptor() {
   })
 }
 
-const prod = 'https://signaux.faibles.fr/auth/'
+const prod = 'https://signaux-faibles.beta.gouv.fr/auth/'
 const local = 'http://localhost/auth/'
 
 Vue.use(VueKeyCloak, {

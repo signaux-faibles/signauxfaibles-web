@@ -28,8 +28,9 @@
   <span style="visibility: hidden; position:absolute;">{{ detectionLength }} {{ predictionLength }} {{ prediction.length }}</span>
   <div style="width:100%">
     <Spinner v-if="loading"/>
-    <div id="nodata">
-      <img v-if="!loading && prediction.length == 0 && init==false" src="@/assets/nodata.png">
+    <div id="nodata" v-if="!loading && prediction.length == 0 && init==false">
+      <!-- <img v-if="!loading && prediction.length == 0 && init==false" src="@/assets/nodata.png"><br> -->
+      Les paramètres de filtrage ne font ressortir aucune des entreprises pour lesquelles vous êtes habilité.
     </div>
     <v-navigation-drawer :class="(rightDrawer?'elevation-6':'') + ' rightDrawer'" transition="no-transition" v-model="rightDrawer" right app>
       <v-toolbar flat class="transparent" height="40">
@@ -79,20 +80,14 @@
       </div>
       <p style="height: 1px; border: 1px solid #eee"/>
 
-      <div style="display: flex; flex-direction: row; vertical-align: middle; padding: 0 15px;" >
-        <v-select
-          v-model="filters"
-          :items="filtersItems"
-          :disabled="loading"
-          item-text="text"
-          item-value="value"
-          label="Masquer"
-          multiple
-          chips
-          deletable-chips
-          @change="getPrediction()"
-        >
-        </v-select>
+      <div style="display: flex; flex-direction: column; vertical-align: middle; padding: 0 15px;" >
+        <span style="font-size: 15px;" @change="getPrediction()">Établissements visibles</span>
+        <v-switch v-model="crp" class="mx-2 thin" label="CVAP/Codefi/CRP" @change="getPrediction()"></v-switch>
+        <v-switch v-model="procol" class="mx-2 thin" label="RJ/LJ" @change="getPrediction()"></v-switch>
+        <v-switch v-model="plan_continuation" class="mx-2 thin" label="Plan de continuation" @change="getPrediction()"></v-switch>
+        <v-switch v-model="sauvegarde" class="mx-2 thin" label="Sauvegarde" @change="getPrediction()"></v-switch>
+        <v-switch v-model="plan_sauvegarde" class="mx-2 thin" label="Plan de sauvegarde" @change="getPrediction()"></v-switch>
+        <v-switch v-model="in_bonis" class="mx-2 thin" label="In bonis" @change="getPrediction()"></v-switch>
       </div>
 
       <p style="height: 1px; border: 1px solid #eee"/>
@@ -121,24 +116,12 @@ export default {
     return {
       effectifClass: [10, 20, 50, 100],
       predictionLength: 20,
-      currentNaf: 'C',
-      minEffectif: 20,
       connu: false,
       horsCCSF: true,
       horsProcol: true,
       activitePartielle: false,
       interetUrssaf: false,
-      zone: [],
       init: true,
-      filters: ['crp', 'procol', 'continuation'],
-      filtersItems: [
-        {text: 'CVAP/Codefi/CRP', value: 'crp'},
-        // {text: 'Suivi Signaux Faibles', value: 'sf'},
-        {text: 'RJ/LJ', value: 'procol'},
-        {text: 'Plan de Continuation', value: 'continuation'},
-        {text: 'In Bonis', value: 'in_bonis'},
-        {text: 'Sauvegarde', value: 'sauvegarde'},
-      ],
     }
   },
   mounted() {
@@ -179,14 +162,14 @@ export default {
               value: this.zone,
             }])
           }
-          if (this.filters.includes('crp')) {
+          if (!this.crp) {
             params.filter = params.filter.concat([{
               field: 'crp',
               operator: '=',
               value: false,
             }])
           }
-          if (this.filters.includes('procol')) {
+          if (!this.procol) {
             params.filter = params.filter.concat([{
               field: 'procol',
               operator: 'not in',
@@ -194,15 +177,23 @@ export default {
             }])
           }
 
-          if (this.filters.includes('sauvegarde')) {
+          if (!this.sauvegarde) {
             params.filter = params.filter.concat([{
               field: 'procol',
               operator: 'not in',
-              value: ['sauvegarde', 'plan_sauvegarde'],
+              value: ['sauvegarde'],
             }])
           }
 
-          if (this.filters.includes('continuation')) {
+          if (!this.plan_sauvegarde) {
+            params.filter = params.filter.concat([{
+              field: 'procol',
+              operator: 'not in',
+              value: ['plan_sauvegarde'],
+            }])
+          }
+
+          if (!this.continuation) {
             params.filter = params.filter.concat([{
               field: 'procol',
               operator: 'not in',
@@ -210,7 +201,7 @@ export default {
             }])
           }
 
-          if (this.filters.includes('in_bonis')) {
+          if (!this.in_bonis) {
             params.filter = params.filter.concat([{
               field: 'procol',
               operator: 'not in',
@@ -236,6 +227,42 @@ export default {
     },
   },
   computed: {
+    crp: {
+      get() {return this.$localStore.state.crp},
+      set(value) {this.$localStore.commit('setcrp', value)},
+    },
+    procol:{
+      get() {return this.$localStore.state.procol},
+      set(value) {this.$localStore.commit('setprocol', value)},
+    },
+    plan_continuation:{
+      get() {return this.$localStore.state.plan_continuation},
+      set(value) {this.$localStore.commit('setplan_continuation', value)},
+    },
+    sauvegarde:{
+      get() {return this.$localStore.state.sauvegarde},
+      set(value) {this.$localStore.commit('setsauvegarde', value)},
+    },
+    plan_sauvegarde:{
+      get() {return this.$localStore.state.plan_sauvegarde},
+      set(value) {this.$localStore.commit('setplan_sauvegarde', value)},
+    },
+    in_bonis:{
+      get() {return this.$localStore.state.in_bonis},
+      set(value) {this.$localStore.commit('setin_bonis', value)},
+    },
+    currentNaf:{
+      get() {return this.$localStore.state.currentNaf},
+      set(value) {this.$localStore.commit('setcurrentNaf', value)},
+    },
+    zone: {
+      get() {return this.$localStore.state.zone},
+      set(value) {this.$localStore.commit('setzone', value)},
+    },
+    minEffectif: {
+      get() {return this.$localStore.state.minEffectif},
+      set(value) {this.$localStore.commit('setminEffectif', value)},
+    },
     prediction: {
       get() {return this.$store.state.prediction},
       set(value) {this.$store.commit('setPrediction', value)},
@@ -365,10 +392,17 @@ export default {
 
 <style scoped>
 #nodata {
-  width: 100%;
+  width: 80%;
+  max-width: 100%;
+  height: 400px;
+  margin: 200px 10%;
   position: absolute;
   vertical-align: middle;
   text-align: center;
+  font-size: 40px;
+}
+.thin {
+  height: 25px;
 }
 .rotate {
     -webkit-animation:spin 4s linear infinite;

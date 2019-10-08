@@ -31,25 +31,28 @@ const axiosClient = axios.create(
 const localStore = new Vuex.Store({
   plugins: [createPersistedState({ storage: window.localStorage })],
   state: {
-    browserToken: null,
-    loginTab: 1,
-    prediction: [],
+    crp: false,
+    procol: false,
+    plan_continuation: true,
+    sauvegarde: true,
+    plan_sauvegarde: true,
+    in_bonis: true,
+    currentNaf: 'C',
+    zone: [],
+    minEffectif: 20,
+    newsRead: new Date('1970-01-01'),
   },
   mutations: {
-    setBrowserToken(state, browserToken) {
-      state.browserToken = browserToken
-    },
-    setLoginTab(state, value) {
-      state.loginTab = value
-    },
-  },
-  actions: {
-    setLoginTab(context, value) {
-      context.commit('setLoginTab', value)
-    },
-  },
-  getters: {
-    browserToken(state) { return state.browserToken },
+    setcrp(state, val: boolean) { state.crp = val },
+    setprocol(state, val: boolean) { state.procol = val },
+    setplan_continuation(state, val: boolean) { state.plan_continuation = val },
+    setsauvegarde(state, val: boolean) { state.sauvegarde = val },
+    setplan_sauvegarde(state, val: boolean) { state.plan_sauvegarde = val },
+    setin_bonis(state, val: boolean) { state.in_bonis = val },
+    setcurrentNaf(state, val: string) { state.currentNaf = val },
+    setzone(state, val) { state.zone = val },
+    setminEffectif(state, val) { state.minEffectif = val },
+    setNewsRead(state, val) { state.newsRead = val },
   },
 })
 

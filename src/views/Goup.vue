@@ -6,24 +6,43 @@
         <v-flex xs5>
           <form id="fileform" ref="fileform" class="card elevation-2">
             <div id="dropfiles">
-              <v-icon color="indigo darken-4" style="font-size: 200px; text-shadow: 0px 2px 3px grey;">cloud_upload</v-icon><br/>
+              <v-icon
+                color="indigo darken-4"
+                style="font-size: 200px; text-shadow: 0px 2px 3px grey;">
+                cloud_upload
+              </v-icon><br/>
               <span>Déposez vos fichiers ici ou</span><br/>
               <v-btn round dark color="indigo darken-4" @click="triggerForm">sélectionnez les fichiers</v-btn>
-              <input 
-                ref="uploadForm" 
-                type="file" 
-                id="uploadForm" 
-                class="browse" 
+              <input
+                ref="uploadForm"
+                type="file"
+                id="uploadForm"
+                class="browse"
                 multiple>
             </div>
           </form>
         </v-flex>
         <v-flex xs7>
           <v-card class="card">
-            <v-card-title class="headline">Fichiers sélectionnés</v-card-title>
+            <v-card-title class="headline">
+              Fichiers sélectionnés<v-spacer/>
+              <v-checkbox 
+                v-model="shared"
+                style="position: relative; top: -5px; left: 10px; width: 10px; margin: 0 0; height: 20px" 
+                label="espace partagé"
+              />
+              <Help
+                titre="Espace partagé"
+              >
+                <template>
+                  Les fichiers transmis dans l'espace partagé seront disponibles à tous les partenaires signaux-faibles.<br/>
+                  En décochant cette case, vos fichiers seront transmis dans le dépôt privé {{ jwt.goup_path }}.
+                </template>
+              </Help>
+            </v-card-title>
             <v-card-text >
               <v-list style="background:#fff0;">
-               <Upload v-for="(file, key) in files" :files="files" :fileId="key" :key="key"/>
+                <Upload v-for="(file, key) in files" :files="files" :fileId="key" :key="key"/>
               </v-list>
             </v-card-text>
             <v-card-actions>
@@ -50,6 +69,7 @@
 <script>
   import Toolbar from '@/components/Toolbar.vue'
   import Upload from '@/components/Upload.vue'
+  import Help from '@/components/Help.vue'
   import tus from 'tus-js-client'
 
   export default {
@@ -57,6 +77,7 @@
       return {
         dragAndDropCapable: false,
         files: [],
+        shared: true,
       }
     },
     computed: {
@@ -107,7 +128,7 @@
 
         const object = {
           file,
-          private: false,
+          private: !this.shared,
           error: false,
           progress: 0,
           completed: false,
@@ -122,7 +143,7 @@
           metadata: {
             filename: file.name,
             filetype: file.type,
-            private: true,
+            private: !this.shared,
           },
           headers: this.header,
           overridePatchMethod: true,
@@ -208,7 +229,7 @@
         this.files.splice( key, 1 )
       },
     },
-    components: { Toolbar, Upload },
+    components: { Toolbar, Upload, Help },
   }
 </script>
 
