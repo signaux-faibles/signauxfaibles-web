@@ -358,7 +358,7 @@ export default {
             text: r.key.region,
             value: r.value.departements,
           }
-      })
+      }).sort((r1, r2) => r1.text > r2.text)
 
       all = all.concat(region)
       if (this.$store.state.departements.length > 0) {

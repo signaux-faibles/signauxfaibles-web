@@ -5,6 +5,8 @@ import './plugins/vuetify'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+import VueApexCharts from 'vue-apexcharts'
+
 
 Vue.config.productionTip = true
 
@@ -24,6 +26,8 @@ function tokenInterceptor() {
 const prod = 'https://signaux-faibles.beta.gouv.fr/auth/'
 const local = 'http://localhost/auth/'
 
+Vue.component('apexchart', VueApexCharts)
+
 Vue.use(VueKeyCloak, {
   init: {
     onLoad: 'login-required',
@@ -31,7 +35,7 @@ Vue.use(VueKeyCloak, {
   },
   config: {
     realm: 'master',
-    url: local,
+    url: prod,
     clientId: 'signauxfaibles',
   },
   onReady: (keycloak: any) => {

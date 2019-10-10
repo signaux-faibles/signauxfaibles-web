@@ -3,89 +3,129 @@
     <v-toolbar
       dark
       color='indigo darken-5'>
-      <v-toolbar-title class="localtoolbar">Effectifs</v-toolbar-title>
+      <v-toolbar-title class="localtoolbar">
+        Effectifs
+        <span v-if="jwt.resource_access.signauxfaibles.roles.includes('dgefp')">
+          / Activité partielle
+        </span>
+      </v-toolbar-title>
+      <v-spacer/>
+      <Help titre="Effectifs de l'établissement">
+        <template>
+          Ce graphique illustre les données d'emploi.<br/><br/>
+          <b>effectifs</b>: Évolution des effectifs en nombre de salariés. (donnée fournie par l'ACOSS)<br/>
+          <div v-if="jwt.resource_access.signauxfaibles.roles.includes('dgefp')">
+          <b>autorisation d'activité partielle</b>: Nombre de salariés concernés par une autorisation d'activité partielle pour la période représentée. (donnée fournie par la DGEFP)<br/> 
+          <b>consommation d'activité partielle</b>: Nombre de salariés concernés par une consommation d'activité partielle. (donnée fournie par la DGEFP)
+          </div>
+        </template>
+      </Help>
     </v-toolbar>
-    <IEcharts
-      :resizable="true"
-      auto-resize
-      :loading="chart"
-      style="width: 100%; height: 350px"
-      :option="effectifOptions"
-    />
+    <apexchart width="100%" heigth="100%" type="line" :options="options" :series="series"></apexchart>
+    
   </div>
 </template>
 
 <script>
-import IEcharts from 'vue-echarts-v3/src/full.js'
-
-import 'echarts/lib/chart/line'
-import 'echarts/lib/component/title'
-import 'echarts/lib/component/legend'
-import 'echarts/lib/component/tooltip'
+import Help from '@/components/Help.vue'
 
 export default {
   name: 'Effectif',
-  props: ['effectif', 'chart'],
-  components: { IEcharts },
+  props: ['effectif', 'chart', 'apdemande', 'apconso'],
+  components: { Help },
   computed: {
-    effectifOptions() {
-
+    apdemandeSeries() {
       return {
-        title: {
-          text: null,
-        },
+        demande: this.apdemande
+        .sort((d1, d2) => d1.periode.start > d2.periode.start)
+        .filter((d) => d.periode.end > this.min)
+        .flatMap(c => {
+          return [
+            [ new Date(c.periode.start),
+              Math.max(c.effectif_autorise,0)],
+            [ new Date(c.periode.end),
+              0],
+          ]
+        }),
+        conso: this.apdemande
+        .sort((d1, d2) => d1.periode.start > d2.periode.start)
+        .filter((d) => d.periode.end > this.min)
+        .flatMap(c => {
+          return [
+            [ new Date(c.periode.start),
+              c.effectif_consomme],
+            [ new Date(c.periode.end),
+              0],
+          ]
+        })
+      }
+    },
+    min() {
+      return (this.effectif || []).reduce((m, e) => (m<e.periode)?m:e.periode, '2018-01-01')
+    },
+    jwt() {
+      return this.$keycloak.tokenParsed || {resource_access: { signauxfaibles: {roles: []}}}
+    },
+    series() {
+      return [{
+        name: 'effectifs',
+        data: this.effectif.map(e => {
+          return [
+            new Date(e.periode),          
+            e.effectif, 
+          ]})
+      },{
+        name: 'consommation activité partielle',
+        data: this.apdemandeSeries.conso,
+        type: 'area',
+      },{
+        name: 'autorisation activité partielle',
+        data: this.apdemandeSeries.demande,
+        type: 'area',
+      }]    
+    },
+    options() {
+      return {
         legend: {
-          data: ['effectif'],
-          y: 'bottom',
-        },
-        toolbox: {
           show: true,
+          showForSingleSeries: true,
+          showForNullSeries: false,
+          showForZeroSeries: false,
         },
         tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            type: 'cross',
-            label: {
-              backgroundColor: '#283b56',
-            },
-          },
+          enabled: false,
         },
-        xAxis: {
-          show: true,
-          splitLine: {
-            show: false
-          },
-          axisLabel: {
-            rotate: 45,
-            formatter(value) {
-              return value.getFullYear() + 't' + Math.round(value.getUTCMonth()/3)
-            }
-          },
-          // min: new Date(this.effectif[0].periode),
-          // max: new Date(this.effectif[22].periode),
-          
-          type: 'category',
-          // data: this.effectif.map((e) => {return new Date(e.periode)}),
+        
+        theme: {
+          mode: 'light', 
+          palette: 'palette7',
         },
-        yAxis: {
-          type: 'value',
-          show: true,
+        chart: {
+          toolbar: {
+            show: false,
+          },
+          id: 'effectifs'
         },
-        series: [{
-          name: 'effectif',
-          color: 'indigo',
-          step: 'end',
-          type: 'line',
-          data: this.effectif.map((e) => {
-            let periode = new Date(e.periode)
-            return [
-              periode,
-              e.effectif
-            ]
-          }),
-        }],
+        zoom: {
+            enabled: false,
+          },
+        xaxis: {
+          type: 'datetime',
+        },
+        colors: ['#4f8a83', '#e76278', '#fac699'],
+        fill: {
+          type: [ 'solid', 'solid', 'solid'],
+          colors: ['#4f8a83', '#e76278', '#fac699'],
+        },
+        stroke: {
+          curve: ['smooth', 'stepline', 'stepline'],
+          width: [5,0,0],
+        },
+        yaxis: {
+          min: 0,
+        },
       }
-    }
+    },
   },
 }
 </script>

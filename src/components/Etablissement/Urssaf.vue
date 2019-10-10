@@ -5,34 +5,21 @@
           Débits Urssaf
       </v-toolbar-title>
       <v-spacer/>
-      <v-menu max-width="400px" offset-y>                 
-        <v-btn slot="activator" icon><v-icon>help</v-icon></v-btn>
-        <v-card>
-          <v-card-title class="headline">
-            Cotisations et Débits URSSAF
-          </v-card-title>
-          <v-card-text>
-            Ce graphique représente les données URSSAF:<br/>
-            <ul>
-              <li> Cotisations: Montant des cotisations appelées. La date désigne la fin de la période appelée.</li>
-              <li> Débits: Cumul des dettes restantes à payer. La date désigne la fin de la période de constatation du débit</li>
-            </ul>
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer/>
-            <v-btn flat color="success">OK</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-menu>
+      <Help titre="Cotisations et Débits URSSAF">
+        <template>
+          Ce graphique représente les données de l'URSSAF.<br/>
+          Les dates représentées sont les dates de fin des périodes appelées<br/>
+          <ul>
+            <li> Cotisations: Montant des cotisations appelées.</li>
+            <li> Dette (part patronale): Cumul des dettes restantes à payer sur la part patronale.</li>
+            <li> Dette (part salariale): Cumul des dettes restantes à payer sur la part salariale (ou ouvrière).</li>
+          </ul>
+          Fournisseur: <b>ACOSS</b>
+        </template>
+      </Help>
     </v-toolbar>
-    <IEcharts
-      auto-resize
-      :resizable="true"
-      v-if="roles.includes('urssaf')"
-      :loading="chart"
-      style="width: 100%; height: 350px"
-      :option="urssafOptions"
-    />
+    <apexchart width="100%" heigth="100%" type="line" :options="options" :series="series"></apexchart>
+
     <div 
       style=" height: 350px; width: 100%; text-align: center;"
       v-if="!roles.includes('urssaf')"
@@ -46,64 +33,100 @@
 </template>
 
 <script>
-import IEcharts from 'vue-echarts-v3/src/lite.js'
-import 'echarts/lib/chart/line'
-import 'echarts/lib/component/title'
-import 'echarts/lib/component/legend'
-import 'echarts/lib/component/tooltip'
-
+  import Help from '@/components/Help.vue'
 export default {
   name: 'Urssaf',
-  components: { IEcharts },
+  components: { Help },
   props: ['debit', 'cotisation', 'chart', 'roles'],
   computed: {
-    urssafOptions() {
+    series() {
+      return [{
+        name: 'cotisations dues',
+        type: 'line',
+        data: this.cotisation.map((c, i) => {
+          return [
+            new Date(this.debit[i].periode),
+            Math.round(c),
+          ]}).filter(d => d[0].getTime() > 0)
+      },{
+        name: 'dette (part patronale)',
+        type: 'area',
+        data: this.debit.map(d => {
+          return [
+            new Date(d.periode),
+            Math.round(d.part_patronale),
+          ]}).filter(d => d[0].getTime() > 0)
+      },{
+        name: 'dette (part salariale)',
+        type: 'area',
+        data: this.debit.map(d => {
+          return [
+            new Date(d.periode),
+            Math.round(d.part_ouvriere),
+          ]}).filter(d => d[0].getTime() > 0)
+      }]
+    },
+    options() {
       return {
-        title: {
-          text: null,
-        },
         tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            type: 'cross',
-            label: {
-              backgroundColor: '#283b56',
-            },
-          },
+          enabled: false,
         },
         legend: {
-          data: ['Cotisation', 'Débit'],
-          y: 'bottom',
-        },
-        toolbox: {
           show: true,
+              showForSingleSeries: true,
+                  onItemHover: {
+        highlightDataSeries: false,
+    },
         },
-        xAxis: {
-          show: true,
-          type: 'category',
-          axisTick: false,
-          data: this.debit.map((d) => (d.periode || '').slice(0, 10)),
+        theme: {
+          mode: 'light', 
+          palette: 'palette6',
         },
-        yAxis: {
-          type: 'value',
-          show: true,
+        stroke: {
+          curve: "smooth",
+          width: [5, 0, 0],
         },
-        series: [{
-          color: 'indigo',
-          smooth: true,
-          name: 'Cotisation',
-          type: 'line',
-          data: this.cotisation,
-        }, {
-          color: 'red',
-          smooth: true,
-          name: 'Débit',
-          type: 'line',
-          data: this.debit.map((d) => d.part_ouvriere + d.part_patronale),
-        }],
+        colors: ['#4f8a83', '#fac699', '#e76278'],
+        fill: {
+          type: ['solid', 'solid', 'solid'],
+          colors: ['#4f8a83', '#fac699', '#e76278'],
+          gradient: {
+            
+            type: "vertical",
+            shadeIntensity: 0,
+            gradientToColors: undefined, // optional, if not defined - uses the shades of same color in series
+            inverseColors: true,
+            opacityFrom: 0.8,
+            opacityTo: 0.8,
+            stops: [0, 80, 100],
+            colorStops: []
+          }
+        },
+        chart: {
+          stacked: true,
+          toolbar: {
+            show: false,
+          },
+          zoom: {
+            enabled: false,
+          },
+          id: 'urssaf'
+        },
+        xaxis: {
+          type: 'datetime',
+        },
+        yaxis: {
+          
+        },
+        states: {
+    hover: {
+        filter: {
+            type: 'none',
+        }
+    },
+}
       }
     },
-  },
-  
+  }, 
 }
 </script>

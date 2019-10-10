@@ -58,6 +58,14 @@ export default {
     return {
       dialog: false,
       news: [
+          {date: new Date("2019-10-09"), news: [
+              "Amélioration de l'aide contextuelle effectif et identité de l'établissement",
+              "Amélioration du composant identité de la fiche établissement",
+              "Correction de l'ordre d'affichage des régions de le selecteur du filtre géographique",
+              "Ajoût de la part ouvrière des débits dans le graphique urssaf", 
+              "Intégration de l'activité partielle dans le graphique des effectifs", 
+              "Migration de Echarts vers ApexCharts pour la fiche établissement", 
+          ]},
           {date: new Date("2019-10-07"), news: [
               "Ajoût de l'information sur les nouveautés", 
               "L'application se souvient des paramètres de filtrage",
@@ -87,6 +95,6 @@ export default {
   .purse:hover {
     background-color: rgb(255, 0, 0);
   }
-  @-webkit-keyframes blink { 10% { background-color: rgba(255, 0, 43, 0.158); }}
-          @keyframes blink { 10% { background-color: rgba(255, 0, 43, 0.158); }}
+  @-webkit-keyframes blink { 10% { background-color: rgba(255, 0, 43, 0.349); }}
+          @keyframes blink { 10% { background-color: rgba(255, 0, 43, 0.349); }}
 </style>

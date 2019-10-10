@@ -16,31 +16,26 @@
           class="pa-3"
           style="font-size: 18px">
 
-            <h4>SIRET {{ siret }} </h4><br/>
-            {{ sirene.nature_juridique }} <br/>
-            <!-- <v-btn :color="suivi?'error':'success'" @click="suivi=!suivi">
-              {{ suivi?'Ne plus suivre cet établissement':'Suivre cet établissement' }}
-            </v-btn> -->
-
-
+          <h2>{{ sirene.l1_normalisee }} <Help style="position: relative; top: -3px" titre="Identité de l'entreprise">
+              <b>Raison Sociale, Coordonnées:</b>
+              Ces données sont issues du service API entreprises fourni par la DINSIC qui redistribue les données de l'INSEE.<br/>
+              <b>Activité de l'entreprise:</b>
+              Le code activité est issu de la base Sirène produite par l'INSEE et correspond aux données déclaratives fournies par l'entreprise. Il peut être constaté un décalage entre le code déclaré et l'activité réelle de l'entreprise.
+            </Help> </h2>
+          <h4>SIREN {{ siret.slice(0,9) }} <span style="color: #999">{{ siret.slice(9,14) }} SIRET</span></h4>
             <br/>
-            <b>{{ sirene.l1_normalisee }} </b><br/>
+            <div style="font-size: 16px">{{ (naf.n1 || {})[((naf.n5to1 || {})[(sirene.activite_principale || '')] || '')] }}<br/>
+            {{ (naf.n5 || {})[(sirene.activite_principale || '')] }}<br/>
+            Code APE: {{ (sirene.activite_principale || '') }}</div>
+            
+            
             <b>{{ sirene.l2_normalisee }} </b><br/>
             <b>{{ sirene.l3_normalisee }} </b><br/>
             <b>{{ sirene.l4_normalisee }} </b><br/>
             <b>{{ sirene.l5_normalisee }} </b><br/>
             <b>{{ sirene.l6_normalisee }} </b><br/>
             <b>{{ sirene.l7_normalisee }} </b><br/>
-
-            <br/><br/>
-            <v-divider/>
-            <br/>
-            <v-divider/>
-            <br/>
             
-            <b>{{ (naf.n1 || {})[((naf.n5to1 || {})[(sirene.activite_principale || '')] || '')] }}</b><br/>
-            {{ (naf.n5 || {})[(sirene.activite_principale || '')] }}<br/>
-            Code APE: {{ (sirene.activite_principale || '') }}<br/> 
           </v-flex>
           <v-flex xs12 md6 class="text-xs-right pa-3">
             <iframe
@@ -55,107 +50,12 @@
             <small><a :href="'https://www.openstreetmap.org/#map=17/' + sirene.latitude + '/' + sirene.longitude">Afficher une carte plus grande</a></small>
           </v-flex>
 
-          <v-flex xs6 class="pr-1" style="min-height: 200px">
-            <Effectif :effectif="effectif" :chart="chart"/>
+          <v-flex md6 xs12 class="pr-1" style="min-height: 200px">
+            <Effectif :effectif="effectif" :apconso="apconso" :apdemande="apdemande" :chart="chart"/>
           </v-flex>
 
-          <v-flex xs6 class="pr-1">
+          <v-flex md6 xs12 class="pr-1">
             <Urssaf :debit="debit" :roles="roles" :cotisation="cotisation" :chart="chart"/>
-          </v-flex>
-          <v-flex xs6 class="pr-1">
-            <v-toolbar
-              dark
-              color='indigo darken-5'>
-              <v-toolbar-title class="localtoolbar">Demandes d'activité partielle</v-toolbar-title>
-            </v-toolbar>
-            <div 
-              style=" height: 350px; width: 100%; text-align: center;"
-              v-if="!roles.includes('dgefp')"
-            >
-              <img
-              style="vertical-align: middle; margin: 125px 0; opacity: 0.2;"
-              height="100px"
-              src="@/assets/noaccess.svg"/>
-            </div>
-            <div style="min-height: 350px;">
-              <table 
-                style="width: 100%; padding: 5px; text-align: center"
-                v-if="roles.includes('dgefp')"
-              >
-                <tr>
-                  <th>
-                    Date
-                  </th>
-                  <th>
-                    Effectif Autorisé
-                  </th>
-                  <th>
-                    Début
-                  </th>
-                  <th>
-                    Fin
-                  </th>
-                </tr>
-                <tr v-for="d in apdemande" :key="d.date_statut" style="font-weight: 400">
-                  <td>
-                    {{ d.date_statut.substring(0,10) }}
-                  </td>
-                  <td>
-                    {{ d.effectif_autorise }}
-                  </td>
-                  <td>
-                    {{ d.periode.start.substring(0,10) }}
-                  </td>
-                  <td>
-                    {{ d.periode.end.substring(0,10) }}
-                  </td>
-                </tr>
-              </table>
-            </div>
-          </v-flex>
-
-          <v-flex xs6 class="pr-1">
-            <v-toolbar
-            dark
-            color='indigo darken-5'>
-              <v-toolbar-title class="localtoolbar">Consommations d'activité partielle</v-toolbar-title>
-            </v-toolbar>
-            <div 
-              style=" height: 350px; width: 100%; text-align: center;"
-              v-if="!roles.includes('dgefp')"
-            >
-              <img
-              style="vertical-align: middle; margin: 125px 0; opacity: 0.2;"
-              height="100px"
-              src="@/assets/noaccess.svg"/>
-            </div>
-            <table 
-              style="min-height: 350px; width: 100%; padding: 5px; text-align: center"
-              v-if="roles.includes('dgefp')"
-            >
-              <tr>
-                <th>
-                  Date
-                </th>
-                <th>
-                  Effectifs
-                </th>
-                <th>
-                  Heures
-                </th>
-              </tr>
-              <tr v-for="d in apconso" :key="d.periode" style="font-weight: 400">
-                <td>
-                  {{ d.periode.substring(0, 10) }}
-                </td>
-                <td>
-                  {{ d.effectif }}
-                </td>
-                <td>
-                  {{ d.heure_consomme }}
-                </td>
-              </tr>
-            </table>
           </v-flex>
 
           <v-flex xs12 class="pr-1">
@@ -271,19 +171,14 @@
 <script>
 import Effectif from '@/components/Etablissement/Effectif.vue'
 import Urssaf from '@/components/Etablissement/Urssaf.vue'
-
-import IEcharts from 'vue-echarts-v3/src/lite.js'
-import 'echarts/lib/chart/line'
-import 'echarts/lib/component/title'
-import 'echarts/lib/component/legend'
-import 'echarts/lib/component/tooltip'
+import Help from '@/components/Help.vue'
 import axios from 'axios'
 
 
 export default {
   props: ['siret', 'batch'],
   name: 'Etablissement',
-  components: { IEcharts, Effectif, Urssaf },
+  components: { Effectif, Urssaf, Help },
   data() {
     return {
       axios: axios.create(),
