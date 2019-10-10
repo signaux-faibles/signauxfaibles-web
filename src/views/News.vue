@@ -32,11 +32,11 @@
 
 <script>
 export default {
-  name: "News",
+  name: 'News',
   methods: {
     newsread() {
       this.dialog = false
-      let today = new Date()
+      const today = new Date()
       this.newsRead = today
     },
   },
@@ -58,23 +58,23 @@ export default {
     return {
       dialog: false,
       news: [
-          {date: new Date("2019-10-09"), news: [
-              "Amélioration de l'aide contextuelle effectif et identité de l'établissement",
-              "Amélioration du composant identité de la fiche établissement",
-              "Correction de l'ordre d'affichage des régions de le selecteur du filtre géographique",
-              "Ajoût de la part ouvrière des débits dans le graphique urssaf", 
-              "Intégration de l'activité partielle dans le graphique des effectifs", 
-              "Migration de Echarts vers ApexCharts pour la fiche établissement", 
+          {date: new Date('2019-10-09'), news: [
+              'Amélioration de l\'aide contextuelle effectif et identité de l\'établissement',
+              'Amélioration du composant identité de la fiche établissement',
+              'Correction de l\'ordre d\'affichage des régions de le selecteur du filtre géographique',
+              'Ajoût de la part ouvrière des débits dans le graphique urssaf',
+              'Intégration de l\'activité partielle dans le graphique des effectifs',
+              'Migration de Echarts vers ApexCharts pour la fiche établissement',
           ]},
-          {date: new Date("2019-10-07"), news: [
-              "Ajoût de l'information sur les nouveautés", 
-              "L'application se souvient des paramètres de filtrage",
-              "Refonte des contrôles de filtrage des listes de détection",
-              "Gestion des envois manuels partagés/privés",
+          {date: new Date('2019-10-07'), news: [
+              'Ajoût de l\'information sur les nouveautés',
+              'L\'application se souvient des paramètres de filtrage',
+              'Refonte des contrôles de filtrage des listes de détection',
+              'Gestion des envois manuels partagés/privés',
           ]},
-          {date: new Date("2019-10-04"), news: [
-              "L'écran des listes de détection n'est plus accessible aux agents habilités B",
-              "Les données d'activité partielle ne sont plus disponibles en visualisation pour les entreprises absentes des listes de détection."
+          {date: new Date('2019-10-04'), news: [
+              'L\'écran des listes de détection n\'est plus accessible aux agents habilités B',
+              'Les données d\'activité partielle ne sont plus disponibles en visualisation pour les entreprises absentes des listes de détection.',
           ]},
       ],
     }

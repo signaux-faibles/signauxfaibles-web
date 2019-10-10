@@ -22,7 +22,6 @@
       </Help>
     </v-toolbar>
     <apexchart width="100%" heigth="100%" type="line" :options="options" :series="series"></apexchart>
-    
   </div>
 </template>
 
@@ -36,32 +35,32 @@ export default {
   computed: {
     apdemandeSeries() {
       return {
-        demande: this.apdemande
+        demande: (this.apdemande || [])
         .sort((d1, d2) => d1.periode.start > d2.periode.start)
         .filter((d) => d.periode.end > this.min)
-        .flatMap(c => {
+        .flatMap((c) => {
           return [
             [ new Date(c.periode.start),
-              Math.max(c.effectif_autorise,0)],
+              Math.max(c.effectif_autorise, 0)],
             [ new Date(c.periode.end),
               0],
           ]
         }),
-        conso: this.apdemande
+        conso: (this.apdemande || [])
         .sort((d1, d2) => d1.periode.start > d2.periode.start)
         .filter((d) => d.periode.end > this.min)
-        .flatMap(c => {
+        .flatMap((c) => {
           return [
             [ new Date(c.periode.start),
-              c.effectif_consomme],
+              Math.min(c.effectif_consomme, c.effectif_autorise)],
             [ new Date(c.periode.end),
               0],
           ]
-        })
+        }),
       }
     },
     min() {
-      return (this.effectif || []).reduce((m, e) => (m<e.periode)?m:e.periode, '2018-01-01')
+      return (this.effectif || []).reduce((m, e) => (m < e.periode) ? m : e.periode, '2018-01-01')
     },
     jwt() {
       return this.$keycloak.tokenParsed || {resource_access: { signauxfaibles: {roles: []}}}
@@ -69,20 +68,20 @@ export default {
     series() {
       return [{
         name: 'effectifs',
-        data: this.effectif.map(e => {
+        data: (this.effectif || []).map((e) => {
           return [
-            new Date(e.periode),          
-            e.effectif, 
-          ]})
-      },{
+            new Date(e.periode),
+            e.effectif,
+          ]}),
+      }, {
         name: 'consommation activité partielle',
         data: this.apdemandeSeries.conso,
         type: 'area',
-      },{
+      }, {
         name: 'autorisation activité partielle',
         data: this.apdemandeSeries.demande,
         type: 'area',
-      }]    
+      }]
     },
     options() {
       return {
@@ -95,16 +94,15 @@ export default {
         tooltip: {
           enabled: false,
         },
-        
         theme: {
-          mode: 'light', 
+          mode: 'light',
           palette: 'palette7',
         },
         chart: {
           toolbar: {
             show: false,
           },
-          id: 'effectifs'
+          id: 'effectifs',
         },
         zoom: {
             enabled: false,
@@ -119,7 +117,7 @@ export default {
         },
         stroke: {
           curve: ['smooth', 'stepline', 'stepline'],
-          width: [5,0,0],
+          width: [5, 0, 0],
         },
         yaxis: {
           min: 0,

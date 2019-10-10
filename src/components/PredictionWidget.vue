@@ -43,14 +43,14 @@
             style="position: absolute; left: 550px; bottom: 10px;"
             width="18"
             height="24"
-            v-if="prediction.value.apart"
+            v-if="prediction.value.activite_partielle"
             src="../assets/red_apart.svg"
           />
           <img
             style="position: absolute; left: 550px; bottom: 10px;"
             width="18"
             height="24"
-            v-if="!prediction.value.apart"
+            v-if="!prediction.value.activite_partielle"
             src="../assets/gray_apart.svg"
           />
 

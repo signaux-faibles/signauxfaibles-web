@@ -33,7 +33,7 @@
 </template>
 
 <script>
-  import Help from '@/components/Help.vue'
+import Help from '@/components/Help.vue'
 export default {
   name: 'Urssaf',
   components: { Help },
@@ -47,23 +47,23 @@ export default {
           return [
             new Date(this.debit[i].periode),
             Math.round(c),
-          ]}).filter(d => d[0].getTime() > 0)
-      },{
+          ]}).filter((d) => d[0].getTime() > 0),
+      }, {
         name: 'dette (part patronale)',
         type: 'area',
-        data: this.debit.map(d => {
+        data: this.debit.map((d) => {
           return [
             new Date(d.periode),
             Math.round(d.part_patronale),
-          ]}).filter(d => d[0].getTime() > 0)
-      },{
+          ]}).filter((d) => d[0].getTime() > 0),
+      }, {
         name: 'dette (part salariale)',
         type: 'area',
-        data: this.debit.map(d => {
+        data: this.debit.map((d) => {
           return [
             new Date(d.periode),
             Math.round(d.part_ouvriere),
-          ]}).filter(d => d[0].getTime() > 0)
+          ]}).filter((d) => d[0].getTime() > 0),
       }]
     },
     options() {
@@ -79,11 +79,11 @@ export default {
     },
         },
         theme: {
-          mode: 'light', 
+          mode: 'light',
           palette: 'palette6',
         },
         stroke: {
-          curve: "smooth",
+          curve: 'smooth',
           width: [5, 0, 0],
         },
         colors: ['#4f8a83', '#fac699', '#e76278'],
@@ -91,16 +91,15 @@ export default {
           type: ['solid', 'solid', 'solid'],
           colors: ['#4f8a83', '#fac699', '#e76278'],
           gradient: {
-            
-            type: "vertical",
+            type: 'vertical',
             shadeIntensity: 0,
             gradientToColors: undefined, // optional, if not defined - uses the shades of same color in series
             inverseColors: true,
             opacityFrom: 0.8,
             opacityTo: 0.8,
             stops: [0, 80, 100],
-            colorStops: []
-          }
+            colorStops: [],
+          },
         },
         chart: {
           stacked: true,
@@ -110,23 +109,23 @@ export default {
           zoom: {
             enabled: false,
           },
-          id: 'urssaf'
+          id: 'urssaf',
         },
         xaxis: {
           type: 'datetime',
         },
         yaxis: {
-          
+
         },
         states: {
-    hover: {
-        filter: {
-            type: 'none',
-        }
-    },
-}
+        hover: {
+          filter: {
+              type: 'none',
+            },
+          },
+        },
       }
     },
-  }, 
+  },
 }
 </script>

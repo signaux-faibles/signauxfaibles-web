@@ -82,7 +82,7 @@
 
       <div style="display: flex; flex-direction: column; vertical-align: middle; padding: 0 15px;" >
         <span style="font-size: 15px;" @change="getPrediction()">Établissements visibles</span>
-        <v-switch v-model="crp" class="mx-2 thin" label="CVAP/Codefi/CRP" @change="getPrediction()"></v-switch>
+        <v-switch v-model="crp" class="mx-2 thin" label="Suivi CVAP/Codefi/CRP" @change="getPrediction()"></v-switch>
         <v-switch v-model="procol" class="mx-2 thin" label="RJ/LJ" @change="getPrediction()"></v-switch>
         <v-switch v-model="plan_continuation" class="mx-2 thin" label="Plan de continuation" @change="getPrediction()"></v-switch>
         <v-switch v-model="sauvegarde" class="mx-2 thin" label="Sauvegarde" @change="getPrediction()"></v-switch>
@@ -231,27 +231,27 @@ export default {
       get() {return this.$localStore.state.crp},
       set(value) {this.$localStore.commit('setcrp', value)},
     },
-    procol:{
+    procol: {
       get() {return this.$localStore.state.procol},
       set(value) {this.$localStore.commit('setprocol', value)},
     },
-    plan_continuation:{
+    plan_continuation: {
       get() {return this.$localStore.state.plan_continuation},
       set(value) {this.$localStore.commit('setplan_continuation', value)},
     },
-    sauvegarde:{
+    sauvegarde: {
       get() {return this.$localStore.state.sauvegarde},
       set(value) {this.$localStore.commit('setsauvegarde', value)},
     },
-    plan_sauvegarde:{
+    plan_sauvegarde: {
       get() {return this.$localStore.state.plan_sauvegarde},
       set(value) {this.$localStore.commit('setplan_sauvegarde', value)},
     },
-    in_bonis:{
+    in_bonis: {
       get() {return this.$localStore.state.in_bonis},
       set(value) {this.$localStore.commit('setin_bonis', value)},
     },
-    currentNaf:{
+    currentNaf: {
       get() {return this.$localStore.state.currentNaf},
       set(value) {this.$localStore.commit('setcurrentNaf', value)},
     },
