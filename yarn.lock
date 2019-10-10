@@ -1801,11 +1801,6 @@ base@^0.11.1:
     mixin-deep "^1.2.0"
     pascalcase "^0.1.1"
 
-batch-processor@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/batch-processor/-/batch-processor-1.0.0.tgz#75c95c32b748e0850d10c2b168f6bdbe9891ace8"
-  integrity sha1-dclcMrdI4IUNEMKxaPa9vpiRrOg=
-
 batch@0.6.1:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/batch/-/batch-0.6.1.tgz#dc34314f4e679318093fc760272525f94bf25c16"
@@ -3369,13 +3364,6 @@ ecc-jsbn@~0.1.1:
     jsbn "~0.1.0"
     safer-buffer "^2.1.0"
 
-echarts@^4.2.1:
-  version "4.3.0"
-  resolved "https://registry.yarnpkg.com/echarts/-/echarts-4.3.0.tgz#3728c2b5e8f277898f7299b4fe1cfc537170abd5"
-  integrity sha512-tX2dAyhI9D78eVrlKhqJGdrM7Ku599HHvPxT2Pu6tgb/dBP8tYmkWjn8r1Ea9oABQxAKXr0p2/tG1OzKdzULbw==
-  dependencies:
-    zrender "4.1.0"
-
 editorconfig@^0.15.3:
   version "0.15.3"
   resolved "https://registry.yarnpkg.com/editorconfig/-/editorconfig-0.15.3.tgz#bef84c4e75fb8dcb0ce5cee8efd51c15999befc5"
@@ -3405,13 +3393,6 @@ electron-to-chromium@^1.3.247:
   version "1.3.265"
   resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.265.tgz#d69afa05a33e551b913a9798f072a6442f46b348"
   integrity sha512-ypHt5Nv1Abr27QvJqk3VC4YDNqsrrWYMCmpmR7BNfCpcgYEwmCDoi3uJpp6kvj/MIjpScQoZMCQzLqfMQGmOsg==
-
-element-resize-detector@latest:
-  version "1.1.15"
-  resolved "https://registry.yarnpkg.com/element-resize-detector/-/element-resize-detector-1.1.15.tgz#48eba1a2eaa26969a4c998d972171128c971d8d2"
-  integrity sha512-16/5avDegXlUxytGgaumhjyQoM6hpp5j3+L79sYq5hlXfTNRy5WMMuTVWkZU3egp/CokCmTmvf18P3KeB57Iog==
-  dependencies:
-    batch-processor "^1.0.0"
 
 elliptic@^6.0.0:
   version "6.5.1"
@@ -6165,7 +6146,7 @@ lodash.sortby@^4.7.0:
   resolved "https://registry.yarnpkg.com/lodash.sortby/-/lodash.sortby-4.7.0.tgz#edd14c824e2cc9c1e0b0a1b42bb5210516a42438"
   integrity sha1-7dFMgk4sycHgsKG0K7UhBRakJDg=
 
-lodash.throttle@^4.1.1, lodash.throttle@latest:
+lodash.throttle@^4.1.1:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/lodash.throttle/-/lodash.throttle-4.1.1.tgz#c23e91b710242ac70c37f1e1cda9274cc39bf2f4"
   integrity sha1-wj6RtxAkKscMN/HhzaknTMOb8vQ=
@@ -9860,14 +9841,6 @@ vue-cli-plugin-vuetify@^0.5.0:
   resolved "https://registry.yarnpkg.com/vue-cli-plugin-vuetify/-/vue-cli-plugin-vuetify-0.5.0.tgz#14c9a61884da58cf6aaf8ff3309044931907f184"
   integrity sha512-TigfiZUs7SN3Z6uxKilqJUtYxte8vp0F4QxabCli6hkKPqU97JzAZc3P7AL6omkRAd2DMI26fOrIGjuALTvXww==
 
-vue-echarts-v3@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/vue-echarts-v3/-/vue-echarts-v3-2.0.1.tgz#35c97040aed968ebc508c9450e95caf913beaafa"
-  integrity sha512-y8pYNUyX2i/0J76kCNC83KtMYeBlgkCcTS54ETCVsxKqxwtxpH2xnyfSPHktzucbCBR+JSMZGRpjFjBC9B79eg==
-  dependencies:
-    element-resize-detector latest
-    lodash.throttle latest
-
 vue-hot-reload-api@^2.3.0:
   version "2.3.4"
   resolved "https://registry.yarnpkg.com/vue-hot-reload-api/-/vue-hot-reload-api-2.3.4.tgz#532955cc1eb208a3d990b3a9f9a70574657e08f2"
@@ -10410,8 +10383,3 @@ yorkie@^2.0.0:
     is-ci "^1.0.10"
     normalize-path "^1.0.0"
     strip-indent "^2.0.0"
-
-zrender@4.1.0:
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/zrender/-/zrender-4.1.0.tgz#866ab97d0744c473d9b314ac5a89e7207c140608"
-  integrity sha512-PkWDpBSRIZAKyBBSkizWCP5/bIL5s/+W+FM/AwkivN4m4QCVH04PS0nJmBB/E6CnUNQv9ZPfIV4tthg1qEP1gg==
