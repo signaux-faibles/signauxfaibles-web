@@ -58,6 +58,12 @@ export default {
     return {
       dialog: false,
       news: [
+          {date: new Date('2019-10-11'), news: [
+            'Intégration de l\'historique de détection dans la fiche établissement',
+            'Les adresses sont mieux formatées dans la fiche établissement',
+            'Correction: la liste des départements apparaissait incomplète',
+            'Correction: le graphique effectif échoue lorsque le rendu est ralenti',
+          ]},
           {date: new Date('2019-10-09'), news: [
               'Amélioration de l\'aide contextuelle effectif et identité de l\'établissement',
               'Amélioration du composant identité de la fiche établissement',

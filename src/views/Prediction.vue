@@ -341,7 +341,7 @@ export default {
         return this.$store.state.currentBatchKey
       },
       set(value) {
-        this.$store.commit('setCurrentBatchKey', value)
+        this.$store.dispatch('setCurrentBatchKey', value)
       },
     },
     subzones() {

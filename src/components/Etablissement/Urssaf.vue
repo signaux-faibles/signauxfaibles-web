@@ -2,10 +2,10 @@
   <div>
     <v-toolbar dark color='indigo darken-5'>
       <v-toolbar-title class="localtoolbar">
-          Débits Urssaf
+          Cotisations et impayés Urssaf
       </v-toolbar-title>
       <v-spacer/>
-      <Help titre="Cotisations et Débits URSSAF">
+      <Help titre="Cotisations et impayés URSSAF">
         <template>
           Ce graphique représente les données de l'URSSAF.<br/>
           Les dates représentées sont les dates de fin des périodes appelées<br/>
@@ -19,7 +19,6 @@
       </Help>
     </v-toolbar>
     <apexchart width="100%" heigth="100%" type="line" :options="options" :series="series"></apexchart>
-
     <div 
       style=" height: 350px; width: 100%; text-align: center;"
       v-if="!roles.includes('urssaf')"
@@ -93,7 +92,7 @@ export default {
           gradient: {
             type: 'vertical',
             shadeIntensity: 0,
-            gradientToColors: undefined, // optional, if not defined - uses the shades of same color in series
+            gradientToColors: undefined,
             inverseColors: true,
             opacityFrom: 0.8,
             opacityTo: 0.8,

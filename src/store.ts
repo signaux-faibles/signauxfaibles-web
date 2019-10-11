@@ -62,7 +62,7 @@ const sessionStore = new Vuex.Store({
     currentBatchKey: null as unknown as string,
     leftDrawer: true,
     rightDrawer: true,
-    refreshToken: null as unknown as string,
+    rawReference: [] as any[],
     naf: [] as any[],
     batches: [] as any[],
     departements: [] as any[],
@@ -87,15 +87,22 @@ const sessionStore = new Vuex.Store({
     rightDrawer(state, val) {
       state.rightDrawer = val
     },
+    storeReference(state, reference) {
+      state.rawReference = reference
+    },
     updateReference(state, reference) {
-      state.naf = reference.filter((r: any) => r.key.key === 'naf')
-      state.batches = reference.filter((r: any) => r.key.key === 'batch')
-      state.region = reference.filter((r: any) => r.key.type === 'region')
-      state.departements = reference.filter((r: any) => r.key.type === 'departements')
-      state.procol = reference.filter((r: any) => r.key.type === 'procol')
-      state.currentBatchKey = state.currentBatchKey ? state.currentBatchKey : state.batches.reduce((m, b) => {
-        return b.key.batch > m ? b.key.batch : m
-      }, '')
+      state.batches = reference
+        .filter((r: any) => r.key.key === 'batch')
+        .sort((b1: any, b2: any) => b1.key.batch < b2.key.batch)
+      state.currentBatchKey = state.currentBatchKey || (state.batches[0] || {key: {batch: ''}}).key.batch
+      state.naf = reference
+        .filter((r: any) => r.key.key === 'naf')
+      state.region = reference
+        .filter((r: any) => r.key.type === 'region' && r.key.batch === state.currentBatchKey)
+      state.departements = reference
+        .filter((r: any) => r.key.type === 'departements' && r.key.batch === state.currentBatchKey)
+      state.procol = reference
+        .filter((r: any) => r.key.type === 'procol')
     },
     setHeight(state, height) {
       state.height = height
@@ -104,6 +111,7 @@ const sessionStore = new Vuex.Store({
       state.scrollTop = scrollTop
     },
     setCurrentBatchKey(state, value) {
+      console.log(value)
       state.currentBatchKey = value
     },
   },
@@ -121,6 +129,10 @@ const sessionStore = new Vuex.Store({
     },
   },
   actions: {
+    setCurrentBatchKey(context, batchKey) {
+      context.commit('setCurrentBatchKey', batchKey)
+      context.commit('updateReference', context.state.rawReference)
+    },
     setTokens(context, tokens) {
       context.commit('setTokens', tokens)
     },
@@ -130,12 +142,10 @@ const sessionStore = new Vuex.Store({
     setScrollTop(context, scrollTop) {
       context.commit('setScrollTop', scrollTop)
     },
-    setCurrentBatchKey(context, value) {
-      context.commit('setCurrentBatchKey', value)
-    },
     updateReference(context) {
       const params = {}
       axiosClient.post('/data/get/reference', params).then((response) => {
+        context.commit('storeReference', response.data)
         context.commit('updateReference', response.data)
       })
     },

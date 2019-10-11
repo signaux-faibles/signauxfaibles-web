@@ -7,7 +7,8 @@
     >
       <div style="height: 100%; width: 100%; overflow: hidden;">
         <div class="entete pointer">
-          <PredictionWidgetScore id="widget" :alert="prediction.value.alert" :diff="prediction.value.diff"/>
+          <!-- <PredictionWidgetScore id="widget" :alert="prediction.value.alert" :diff="prediction.value.diff"/> -->
+          <ScoreWidget :prediction="prediction"/>
         </div>
         
         <div class="corps">
@@ -85,7 +86,7 @@
           <div style="height: 100%; width: 100%; font-weight: 800; font-family: 'Oswald', sans;">
             <v-toolbar fixed class="toolbar" height="35px" style="color: #fff; font-size: 22px; z-index: 50;">
               <v-spacer/>
-                ETABLISSEMENT
+                FICHE ETABLISSEMENT
               <v-spacer/>
               <v-icon @click="dialog=false;" style="color: #fff">mdi-close</v-icon>
             </v-toolbar>
@@ -99,12 +100,12 @@
 
 <script>
 import Etablissement from '@/components/Etablissement'
-import PredictionWidgetScore from '@/components/PredictionWidgetScore'
-
+// import PredictionWidgetScore from '@/components/PredictionWidgetScore'
+import ScoreWidget from '@/components/ScoreWidget'
 export default {
   props: ['prediction'],
   components: {
-    PredictionWidgetScore,
+    ScoreWidget,
     Etablissement,
   },
   data() {

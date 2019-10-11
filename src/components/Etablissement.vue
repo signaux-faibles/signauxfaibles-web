@@ -3,41 +3,14 @@
     <div>
       <v-container>
         <v-layout wrap>
-
-          <v-flex
-
-          style="vertical-align: middle; text-align: center; margin-top: 30px; font-size: 24px"
-          xs12>
-            {{ sirene.raison_sociale }}
-          </v-flex>
           <v-flex
           xs12
           md6
           class="pa-3"
-          style="font-size: 18px">
-
-          <h2>{{ sirene.l1_normalisee }} <Help style="position: relative; top: -3px" titre="Identité de l'entreprise">
-              <b>Raison Sociale, Coordonnées:</b>
-              Ces données sont issues du service API entreprises fourni par la DINSIC qui redistribue les données de l'INSEE.<br/>
-              <b>Activité de l'entreprise:</b>
-              Le code activité est issu de la base Sirène produite par l'INSEE et correspond aux données déclaratives fournies par l'entreprise. Il peut être constaté un décalage entre le code déclaré et l'activité réelle de l'entreprise.
-            </Help> </h2>
-          <h4>SIREN {{ siret.slice(0,9) }} <span style="color: #999">{{ siret.slice(9,14) }} SIRET</span></h4>
-            <br/>
-            <div style="font-size: 16px">{{ (naf.n1 || {})[((naf.n5to1 || {})[(sirene.activite_principale || '')] || '')] }}<br/>
-            {{ (naf.n5 || {})[(sirene.activite_principale || '')] }}<br/>
-            Code APE: {{ (sirene.activite_principale || '') }}</div>
-            
-            
-            <b>{{ sirene.l2_normalisee }} </b><br/>
-            <b>{{ sirene.l3_normalisee }} </b><br/>
-            <b>{{ sirene.l4_normalisee }} </b><br/>
-            <b>{{ sirene.l5_normalisee }} </b><br/>
-            <b>{{ sirene.l6_normalisee }} </b><br/>
-            <b>{{ sirene.l7_normalisee }} </b><br/>
-            
+          style="font-size: 18px; margin-top: 3em;">
+            <Identite :historique="historique" :sirene="sirene" :siret="siret" :naf="naf"/>
           </v-flex>
-          <v-flex xs12 md6 class="text-xs-right pa-3">
+          <v-flex xs12 md6 class="text-xs-right pa-3" style="margin-top: 3em">
             <iframe
             :v-if="sirene.longitude"
             width="100%"
@@ -51,11 +24,11 @@
           </v-flex>
 
           <v-flex md6 xs12 class="pr-1" style="min-height: 200px">
-            <Effectif :effectif="effectif" :apconso="apconso" :apdemande="apdemande" :chart="chart"/>
+            <Effectif :effectif="effectif" :apconso="apconso" :apdemande="apdemande"/>
           </v-flex>
 
           <v-flex md6 xs12 class="pr-1">
-            <Urssaf :debit="debit" :roles="roles" :cotisation="cotisation" :chart="chart"/>
+            <Urssaf :debit="debit" :roles="roles" :cotisation="cotisation"/>
           </v-flex>
 
           <v-flex xs12 class="pr-1">
@@ -76,92 +49,11 @@
             md4
             lg4
           >
-            <v-card
-            outline
-            class="elevation-2">
-              <v-card-title style="background-color: #dde;" class="subheading font-weight-bold">{{ f.annee }}</v-card-title>
-
-              <v-divider></v-divider>
-
-              <v-list dense>
-                <v-list-tile>
-                  <v-list-tile-content>Chiffre d'Affaire:</v-list-tile-content>
-                  <v-list-tile-content class="text-xs-right">
-                    <div style="width: 100%;" :class="f.caClass">
-                    {{ f.ca }}
-                    </div>
-                  </v-list-tile-content>
-                </v-list-tile>
-              </v-list>
-
-              <v-list dense>
-                <v-list-tile>
-                  <v-list-tile-content>Résultat d'exploitation:</v-list-tile-content>
-                  <v-list-tile-content class="text-xs-right">
-                    <div style="width: 100%;" :class="f.margeOpeClass">
-                      {{ f.resultatExpl }} ({{ (f.margeOpe) }})
-                    </div>
-                  </v-list-tile-content>
-                </v-list-tile>
-              </v-list>
-
-              <v-list dense>
-                <v-list-tile>
-                  <v-list-tile-content>Résultat net:</v-list-tile-content>
-                  <v-list-tile-content class="text-xs-right">
-                    <div style="width: 100%;" :class="f.margeNetteClass">
-                      {{ f.beneficeOuPerte }} ({{ (f.margeNette) }})
-                    </div>
-                  </v-list-tile-content>
-                </v-list-tile>
-              </v-list>
-
-              <v-list dense>
-                <v-list-tile>
-                  <v-list-tile-content>Délai Fournisseur:</v-list-tile-content>
-                  <v-list-tile-content class="text-xs-right">
-                    <div style="width: 100%;" :class="f.delaiFournisseurClass">
-                      {{ f.delaiFournisseur }}
-                    </div>
-                  </v-list-tile-content>
-                </v-list-tile>
-              </v-list>
-
-              <v-list dense>
-                <v-list-tile>
-                  <v-list-tile-content>Délai Client:</v-list-tile-content>
-                  <v-list-tile-content class="text-xs-right">
-                    <div style="width: 100%;" :class="f.delaiClientClass">
-                      {{ f.delaiClient }}
-                    </div>
-                  </v-list-tile-content>
-                </v-list-tile>
-              </v-list>
-
-              <v-list dense>
-                <v-list-tile>
-                  <v-list-tile-content>Poids FRNG:</v-list-tile-content>
-                  <v-list-tile-content class="text-xs-right">
-                    <div style="width: 100%;" :class="f.poidsFrngClass">
-                      {{ f.poidsFrng }}
-                    </div>
-                  </v-list-tile-content>
-                </v-list-tile>
-              </v-list>
-
-              <v-list dense>
-                <v-list-tile>
-                  <v-list-tile-content>Financement court terme:</v-list-tile-content>
-                  <v-list-tile-content class="text-xs-right">
-                    <div style="width: 100%;" :class="f.financierCourtTermeClass">
-                      {{ f.financierCourtTerme }}
-                    </div>
-                  </v-list-tile-content>
-                </v-list-tile>
-              </v-list>
- 
-            </v-card>
+         <OldFinance :f="f"/>
           </v-flex> 
+          <!-- <v-flex xs12 class="pr-1">
+            <Finance :siren="siret.slice(0,9)"/> 
+          </v-flex> -->
         </v-layout>
       </v-container>
     </div>
@@ -172,25 +64,26 @@
 import Effectif from '@/components/Etablissement/Effectif.vue'
 import Urssaf from '@/components/Etablissement/Urssaf.vue'
 import Help from '@/components/Help.vue'
+import Identite from '@/components/Etablissement/Identite.vue'
+import OldFinance from '@/components/Etablissement/OldFinance.vue'
+// import Finance from '@/components/Etablissement/Finance.vue'
 import axios from 'axios'
 
 
 export default {
   props: ['siret', 'batch'],
   name: 'Etablissement',
-  components: { Effectif, Urssaf, Help },
+  components: { Effectif, Urssaf, Help, OldFinance, Identite },
   data() {
     return {
       axios: axios.create(),
-      suivi: false,
-      chart: false,
-      bilan: true,
-      urssaf: true,
-      apart: true,
       sirene: {},
       etablissement: { value: {} },
+      historique: [],
       pagination: null,
       comments: [],
+      error: false,
+      loading: true,
     }
   },
   methods: {
@@ -244,13 +137,6 @@ export default {
         axios: axios.create(),
       }
     },
-    addComment() {
-      this.comments.push({
-        comment: '',
-        author: 'C.Ninucci',
-        date: this.formattedDate(new Date()),
-      })
-    },
     formattedDate(d) {
       let month = String(d.getMonth() + 1)
       let day = String(d.getDate())
@@ -264,6 +150,22 @@ export default {
     close() {
       this.tabs = this.tabs.filter((tab, index) => index !== this.activeTab)
       this.activeTab = this.activeTab - 1
+    },
+    getHistorique() {
+      const params = {
+        key: {
+          siret: this.siret,
+          type: 'detection',
+        },
+      }
+
+      this.loading = true
+      this.$axios.post('/data/get/public', params).then((response) => {
+        this.error = false
+        this.historique = response.data.sort((d1, d2) => d1.key.batch < d2.key.batch) || []
+      }).catch((error) => {
+        this.error = true
+      })
     },
     getEtablissement() {
       const params = {
@@ -296,6 +198,7 @@ export default {
     },
   },
   mounted() {
+    this.getHistorique()
     this.getEtablissement()
   },
   watch: {
@@ -305,7 +208,7 @@ export default {
   },
   computed: {
     finance() {
-      return this.zipDianeBDF.filter((z) => z.annee).map((z) => this.computeFinance(z))
+      return this.zipDianeBDF.filter((z) => z.annee != '0001-01-01').map((z) => this.computeFinance(z))
     },
     naf() {
       return this.$store.state.naf[0] ? this.$store.state.naf[0].value : {}
@@ -357,8 +260,8 @@ export default {
     },
     zipDianeBDF() {
       const annees = new Set(this.bdf.map((b) => b.arrete_bilan_bdf)
-        .concat(this.diane.map((d) => d.arrete_bilan_diane)))
-      return Array.from(annees).sort((a, b) => a < b).map((a) => {
+        .concat(this.diane.map((d) => d.arrete_bilan_diane))) 
+      return (Array.from(annees) || []).sort((a, b) => a < b).map((a) => {
         return {
           annee: a.slice(0, 10),
           bdf: this.bdf.filter((b) => b.arrete_bilan_bdf === a)[0] || {},
