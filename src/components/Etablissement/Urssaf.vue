@@ -40,7 +40,7 @@ export default {
   computed: {
     series() {
       return [{
-        name: 'cotisations dues',
+        name: 'cotisations appelées',
         type: 'line',
         data: this.cotisation.map((c, i) => {
           return [

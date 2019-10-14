@@ -59,15 +59,16 @@ export default {
       dialog: false,
       news: [
           {date: new Date('2019-10-11'), news: [
-            'Intégration de l\'historique de détection dans la fiche établissement',
+            'Un nouveau composant cartes pour des cartes plus jolies et fonctionnelles',
+            'Informations sur la précédente liste de détection dans la fiche établissement',
             'Les adresses sont mieux formatées dans la fiche établissement',
-            'Correction: la liste des départements apparaissait incomplète',
+            'Correction: la liste des départements est maintenant complète',
             'Correction: le graphique effectif échoue lorsque le rendu est ralenti',
           ]},
           {date: new Date('2019-10-09'), news: [
               'Amélioration de l\'aide contextuelle effectif et identité de l\'établissement',
               'Amélioration du composant identité de la fiche établissement',
-              'Correction de l\'ordre d\'affichage des régions de le selecteur du filtre géographique',
+              'Correction de l\'ordre d\'affichage des régions dans le sélecteur du filtre géographique',
               'Ajoût de la part ouvrière des débits dans le graphique urssaf',
               'Intégration de l\'activité partielle dans le graphique des effectifs',
               'Migration de Echarts vers ApexCharts pour la fiche établissement',

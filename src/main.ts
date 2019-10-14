@@ -7,7 +7,6 @@ import router from './router'
 import store from './store'
 import VueApexCharts from 'vue-apexcharts'
 
-
 Vue.config.productionTip = true
 
 Vue.prototype.$axios = store.axiosClient
@@ -35,7 +34,7 @@ Vue.use(VueKeyCloak, {
   },
   config: {
     realm: 'master',
-    url: local,
+    url: prod,
     clientId: 'signauxfaibles',
   },
   onReady: (keycloak: any) => {

@@ -111,7 +111,6 @@ const sessionStore = new Vuex.Store({
       state.scrollTop = scrollTop
     },
     setCurrentBatchKey(state, value) {
-      console.log(value)
       state.currentBatchKey = value
     },
   },
