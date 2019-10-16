@@ -210,7 +210,7 @@ export default {
   },
   computed: {
     finance() {
-      return this.zipDianeBDF.filter((z) => z.annee != '0001-01-01').map((z) => this.computeFinance(z))
+      return this.zipDianeBDF.filter((z) => z.annee !== '0001-01-01').map((z) => this.computeFinance(z))
     },
     naf() {
       return this.$store.state.naf[0] ? this.$store.state.naf[0].value : {}
@@ -262,7 +262,7 @@ export default {
     },
     zipDianeBDF() {
       const annees = new Set(this.bdf.map((b) => b.arrete_bilan_bdf)
-        .concat(this.diane.map((d) => d.arrete_bilan_diane))) 
+        .concat(this.diane.map((d) => d.arrete_bilan_diane)))
       return (Array.from(annees) || []).sort((a, b) => a < b).map((a) => {
         return {
           annee: a.slice(0, 10),

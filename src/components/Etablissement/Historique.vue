@@ -17,13 +17,13 @@ export default {
     alert() {
       return this.historique[0] || {value: {score: 0, diff: 0, alert: 'Pas d\'alerte'}}
     },
-    batchKeys () {
+    batchKeys() {
       return this.$store.state.batches.map((b) => b.key.batch)
     },
-    lastEvent () {
+    lastEvent() {
       return this.historiqueObject[(this.batchKeys[1] || '')]
     },
-    historiqueObject () {
+    historiqueObject() {
       return this.historique.reduce((m, h) => {
         m[h.key.batch] = h
         return m

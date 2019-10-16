@@ -15,9 +15,9 @@ export default {
   name: 'Finance',
   props: ['siren'],
   computed: {
-    clotures() {return Object.keys(this.bilans).map(b => this.bilans[b].date_cloture_exercice)},
-    cleanFichiers() {return Object.keys(this.bilans).map(b => this.bilans[b].nom_fichier)},
-    fichiers() {return this.rawBilans.map(b => b.nom_fichier)},
+    clotures() {return Object.keys(this.bilans).map((b) => this.bilans[b].date_cloture_exercice)},
+    cleanFichiers() {return Object.keys(this.bilans).map((b) => this.bilans[b].nom_fichier)},
+    fichiers() {return this.rawBilans.map((b) => b.nom_fichier)},
   },
   data() {
     return {
@@ -26,7 +26,7 @@ export default {
     }
   },
   mounted() {
-    this.getBilans(this.siren) 
+    this.getBilans(this.siren)
   },
   methods: {
     getBilans(siren) {
@@ -42,7 +42,7 @@ export default {
         m[b.date_cloture_exercice] = b
         return m
       }, {})
-    }
-  }
+    },
+  },
 }
 </script>

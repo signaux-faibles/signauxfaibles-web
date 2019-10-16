@@ -27,7 +27,7 @@ export default {
 
       return {
         alert: alerts[this.detection.prob],
-        diff: this.detection.diff !== 'none' || this.detection.prob !== 'green' ? alerts[this.detection.diff] : ''
+        diff: this.detection.diff !== 'none' || this.detection.prob !== 'green' ? alerts[this.detection.diff] : '',
       }
     },
     detection() {
@@ -56,6 +56,6 @@ export default {
         diff: diffClass,
       }
     },
-  }
+  },
 }
 </script>
