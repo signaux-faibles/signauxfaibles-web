@@ -58,6 +58,20 @@ export default {
     return {
       dialog: false,
       news: [
+          {date: new Date('2019-10-23'), news: [
+            'Ajoût de la méthode de login délégué dans le composant keycloak',
+            'Les utilisateurs de niveau B peuvent voir les listes de détection',
+            'Bugfix: suppression de l\'affichage d\' un graphique urssaf vide pour les utilisateurs non habilités',
+            'Ajout de l\'écran d\'avertissement sécurité à l\'accès de l\'application',
+          ]},
+          {date: new Date('2019-10-22'), news: [
+            'Bugfix: Firefox ESR 52.0.7 est de nouveau compatible avec l\'application',
+            'Bugfix: affichage des effectifs dans Firefox ESR (sans Array.prototype.flatMap)',
+            'Bugfix: filtrage des plans de continuation dans la liste',
+          ]},
+          {date: new Date('2019-10-17'), news: [
+            'Optimisation de l\'affichage des longues listes',
+          ]},
           {date: new Date('2019-10-11'), news: [
             'Un nouveau composant cartes pour des cartes plus jolies et fonctionnelles',
             'Informations sur la précédente liste de détection dans la fiche établissement',

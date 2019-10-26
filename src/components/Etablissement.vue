@@ -12,16 +12,6 @@
           </v-flex>
           <v-flex xs12 md6 class="text-xs-right pa-3" style="margin-top: 3em">
             <Map :longitude="sirene.longitude" :latitude="sirene.latitude"/>
-            <!-- <iframe
-            :v-if="sirene.longitude"
-            width="100%"
-            height="360"
-            frameborder="0"
-            scrolling="no"
-            marginheight="0"
-            marginwidth="0"
-            :src="'https://www.openstreetmap.org/export/embed.html?bbox=' + (parseFloat(sirene.longitude) - 0.03) + '%2C' + (parseFloat(sirene.latitude)  - 0.03) + '%2C' + (parseFloat(sirene.longitude) + 0.03) + '%2C' + (parseFloat(sirene.latitude) + 0.03) + '&amp;layer=mapnik&amp;marker=' + sirene.latitude + '%2C' + sirene.longitude" style="border: 1px solid black"></iframe><br/>
-            <small><a :href="'https://www.openstreetmap.org/#map=17/' + sirene.latitude + '/' + sirene.longitude">Afficher une carte plus grande</a></small> -->
           </v-flex>
 
           <v-flex md6 xs12 class="pr-1" style="min-height: 200px">

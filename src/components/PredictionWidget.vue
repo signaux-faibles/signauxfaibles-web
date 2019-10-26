@@ -29,14 +29,14 @@
           <img
             style="position: absolute; left: 550px; top: 10px;"
             width="70"
-            v-if="!prediction.value.urssaf"
+            v-if="!prediction.value.urssaf || !roles.includes('urssaf')"
             src="../assets/gray_urssaf.svg"
           />
 
           <img
             style="position: absolute; left: 550px; top: 10px;"
             width="70"
-            v-if="prediction.value.urssaf"
+            v-if="prediction.value.urssaf && roles.includes('urssaf')"
             src="../assets/red_urssaf.svg"
           />
 
@@ -119,6 +119,12 @@ export default {
     }
   },
   computed: {
+    jwt() {
+      return this.$keycloak.tokenParsed || {resource_access: { signauxfaibles: {roles: []}}}
+    },
+    roles() {
+      return this.jwt.resource_access.signauxfaibles.roles
+    },
     naf() {
       return this.$store.state.naf[0] ? this.$store.state.naf[0].value : {}
     },

@@ -33,7 +33,7 @@ const localStore = new Vuex.Store({
   state: {
     crp: false,
     procol: false,
-    plan_continuation: true,
+    continuation: true,
     sauvegarde: true,
     plan_sauvegarde: true,
     in_bonis: true,
@@ -41,11 +41,12 @@ const localStore = new Vuex.Store({
     zone: [],
     minEffectif: 20,
     newsRead: new Date('1970-01-01'),
+    securityConsent: new Date('1970-01-01'),
   },
   mutations: {
     setcrp(state, val: boolean) { state.crp = val },
     setprocol(state, val: boolean) { state.procol = val },
-    setplan_continuation(state, val: boolean) { state.plan_continuation = val },
+    setcontinuation(state, val: boolean) { state.continuation = val },
     setsauvegarde(state, val: boolean) { state.sauvegarde = val },
     setplan_sauvegarde(state, val: boolean) { state.plan_sauvegarde = val },
     setin_bonis(state, val: boolean) { state.in_bonis = val },
@@ -53,6 +54,7 @@ const localStore = new Vuex.Store({
     setzone(state, val) { state.zone = val },
     setminEffectif(state, val) { state.minEffectif = val },
     setNewsRead(state, val) { state.newsRead = val },
+    setSecurityConsent(state, value) { state.securityConsent = value },
   },
 })
 

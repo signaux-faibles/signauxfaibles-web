@@ -18,9 +18,9 @@
         </template>
       </Help>
     </v-toolbar>
-    <apexchart width="100%" heigth="100%" type="line" :options="options" :series="series"></apexchart>
+    <apexchart v-if="roles.includes('urssaf')" width="100%" heigth="100%" type="line" :options="options" :series="series"></apexchart>
     <div 
-      style=" height: 350px; width: 100%; text-align: center;"
+      style=" height: 250px; width: 100%; text-align: center;"
       v-if="!roles.includes('urssaf')"
     >
       <img

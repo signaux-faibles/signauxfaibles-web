@@ -25,7 +25,7 @@
     :class="loading?'rotate':''"
     color="#ffffff" v-if="!rightDrawer" @click="rightDrawer=!rightDrawer">mdi-target</v-icon>
   </v-toolbar>
-  <span style="visibility: hidden; position:absolute;">{{ detectionLength }} {{ predictionLength }} {{ prediction.length }}</span>
+  <!-- <span style="visibility: visible; position:absolute;">{{ detectionLength }} {{ predictionLength }} {{ prediction.length }}</span> -->
   <div style="width:100%">
     <Spinner v-if="loading"/>
     <div id="nodata" v-if="!loading && prediction.length == 0 && init==false">
@@ -84,7 +84,7 @@
         <span style="font-size: 15px;" @change="getPrediction()">Établissements visibles</span>
         <v-switch v-model="crp" class="mx-2 thin" label="Suivi CVAP/Codefi/CRP" @change="getPrediction()"></v-switch>
         <v-switch v-model="procol" class="mx-2 thin" label="RJ/LJ" @change="getPrediction()"></v-switch>
-        <v-switch v-model="plan_continuation" class="mx-2 thin" label="Plan de continuation" @change="getPrediction()"></v-switch>
+        <v-switch v-model="continuation" class="mx-2 thin" label="Plan de continuation" @change="getPrediction()"></v-switch>
         <v-switch v-model="sauvegarde" class="mx-2 thin" label="Sauvegarde" @change="getPrediction()"></v-switch>
         <v-switch v-model="plan_sauvegarde" class="mx-2 thin" label="Plan de sauvegarde" @change="getPrediction()"></v-switch>
         <v-switch v-model="in_bonis" class="mx-2 thin" label="In bonis" @change="getPrediction()"></v-switch>
@@ -103,7 +103,7 @@
     <v-icon color="amber">fa-question</v-icon> 
     <span style="font-size: 25px;">{{ predictionWarnings }}</span>
   </v-card>
-  <PredictionWidget v-for="p in prediction" :key="p.key.siret" :prediction="p"/> 
+  <PredictionWidget v-for="p in prediction.slice(0, detectionLength)" :key="p.key.siret" :prediction="p"/> 
 
 </div>
 </template>
@@ -235,9 +235,9 @@ export default {
       get() {return this.$localStore.state.procol},
       set(value) {this.$localStore.commit('setprocol', value)},
     },
-    plan_continuation: {
-      get() {return this.$localStore.state.plan_continuation},
-      set(value) {this.$localStore.commit('setplan_continuation', value)},
+    continuation: {
+      get() {return this.$localStore.state.continuation},
+      set(value) {this.$localStore.commit('setcontinuation', value)},
     },
     sauvegarde: {
       get() {return this.$localStore.state.sauvegarde},

@@ -13,6 +13,7 @@ Vue.prototype.$axios = store.axiosClient
 Vue.prototype.$store = store.sessionStore
 Vue.prototype.$localStore = store.localStore
 
+
 function tokenInterceptor() {
   Vue.prototype.$axios.interceptors.request.use((config: any) => {
     config.headers.Authorization = `Bearer ${Vue.prototype.$keycloak.token}`
@@ -22,29 +23,45 @@ function tokenInterceptor() {
   })
 }
 
-const prod = 'https://signaux-faibles.beta.gouv.fr/auth/'
+let prod = 'https://signaux-faibles.beta.gouv.fr/auth/'
 const local = 'http://localhost/auth/'
 
 Vue.component('apexchart', VueApexCharts)
 
+const redirectURI = window.location.pathname
+
+
+const bdf = (redirectURI.slice(-3) === 'bdf')
+
 Vue.use(VueKeyCloak, {
   init: {
-    onLoad: 'login-required',
-    checkLoginIframe: false,
+    onLoad: 'check-sso',
+    checkLoginIframe: true,
   },
   config: {
     realm: 'master',
-    url: local,
+    url: prod,
     clientId: 'signauxfaibles',
   },
   onReady: (keycloak: any) => {
-    tokenInterceptor()
-    const tslintCantBeDisabledSorryForThis = new Vue({
-      el: '#app',
-      router,
-      template: '<App/>',
-      render: (h) => h(App),
-    })
+    if (!keycloak.authenticated) {
+      keycloak.login({
+        idpHint: (bdf) ? 'bdfidp' : undefined,
+      })
+    } else {
+      // console.log('############### TOKEN')
+      // console.log(keycloak.token)
+      // console.log(keycloak.tokenParsed)
+      // console.log('############### TOKEN')
+      tokenInterceptor()
+      const tslintCantBeDisabledSorryForThis = new Vue({
+        el: '#app',
+        router,
+        template: '<App/>',
+        render: (h) => h(App),
+      })
+    }
   },
 })
+
 

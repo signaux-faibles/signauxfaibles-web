@@ -1,6 +1,7 @@
 <template>
   <v-app id='app'>
-    <v-content>
+    <Security v-if="!securityConsent"/>
+    <v-content v-if="securityConsent">
       <NavigationDrawer v-if="login && leftDrawer"/>
       <router-view/>
     </v-content>
@@ -9,9 +10,10 @@
 
 <script>
 import NavigationDrawer from '@/views/NavigationDrawer'
+import Security from '@/views/Security'
 
 export default {
-  components: { NavigationDrawer },
+  components: { NavigationDrawer, Security },
   methods: {
     handleResize() {
       this.height = Math.max(
@@ -24,6 +26,11 @@ export default {
     },
   },
   computed: {
+    securityConsent() {
+      const refDate = new Date('2019-10-22')
+      const securityConsent = new Date(this.$localStore.state.securityConsent)
+      return securityConsent.getTime() >= refDate.getTime()
+    },
     height: {
       get() {
         return this.$store.state.height

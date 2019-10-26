@@ -38,25 +38,27 @@ export default {
         demande: (this.apdemande || [])
         .sort((d1, d2) => d1.periode.start > d2.periode.start)
         .filter((d) => d.periode.end > this.min)
-        .flatMap((c) => {
-          return [
+        .reduce((m, c) => {
+          m = m.concat([
             [ new Date(c.periode.start),
               Math.max(c.effectif_autorise, 0)],
             [ new Date(c.periode.end),
               0],
-          ]
-        }),
+          ])
+          return m
+        }, []),
         conso: (this.apdemande || [])
         .sort((d1, d2) => d1.periode.start > d2.periode.start)
         .filter((d) => d.periode.end > this.min)
-        .flatMap((c) => {
-          return [
+        .reduce((m, c) => {
+          m = m.concat([
             [ new Date(c.periode.start),
               Math.min(c.effectif_consomme, c.effectif_autorise)],
             [ new Date(c.periode.end),
               0],
-          ]
-        }),
+          ])
+          return m
+        }, []),
       }
     },
     min() {
