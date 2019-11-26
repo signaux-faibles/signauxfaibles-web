@@ -10,8 +10,13 @@
           style="font-size: 18px; margin-top: 3em;">
             <Identite :historique="historique" :sirene="sirene" :siret="siret" :naf="naf"/>
           </v-flex>
+
           <v-flex xs12 md6 class="text-xs-right pa-3" style="margin-top: 3em">
             <Map :longitude="sirene.longitude" :latitude="sirene.latitude"/>
+          </v-flex>
+
+          <v-flex xs12 md12 class="text-xs-right pa-3" style="margin-top: 3em">
+            <Commentaire :siren="siren"/>
           </v-flex>
 
           <v-flex md6 xs12 class="pr-1" style="min-height: 200px">
@@ -40,11 +45,9 @@
             md4
             lg4
           >
-         <OldFinance :f="f"/>
-          </v-flex> 
-          <!-- <v-flex xs12 class="pr-1">
-            <Finance :siren="siret.slice(0,9)"/> 
-          </v-flex> -->
+          <OldFinance :f="f"/>
+         </v-flex> 
+
         </v-layout>
       </v-container>
     </div>
@@ -59,13 +62,14 @@ import Identite from '@/components/Etablissement/Identite.vue'
 import Map from '@/components/Etablissement/Map.vue'
 import OldFinance from '@/components/Etablissement/OldFinance.vue'
 // import Finance from '@/components/Etablissement/Finance.vue'
+import Commentaire from '@/components/Etablissement/Commentaire.vue'
 import axios from 'axios'
 
 
 export default {
   props: ['siret', 'batch'],
   name: 'Etablissement',
-  components: { Effectif, Urssaf, Help, OldFinance, Identite, Map },
+  components: { Effectif, Urssaf, Help, OldFinance, Identite, Map, Commentaire },
   data() {
     return {
       axios: axios.create(),

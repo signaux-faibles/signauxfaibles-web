@@ -18,11 +18,6 @@
         marker: new mapboxgl.Marker(),
       }
     },
-    methods: {
-      test() {
-        console.log(this.map)
-      }
-    },
     mounted() {
       mapboxgl.accessToken = this.accessToken
       this.map = new mapboxgl.Map({
@@ -30,16 +25,16 @@
         style: this.mapStyle,
         center: this.coordinates,
         zoom: 8,
-      });
-      this.map.resize();
+      })
+      this.map.resize()
     },
     watch: {
-      coordinates(val) { 
+      coordinates(val) {
         this.marker.setLngLat(this.coordinates)
         this.marker.addTo(this.map)
         this.map.resize()
         this.map.flyTo({center: this.coordinates})
-      }
+      },
     },
     computed: {
       ready() {return (this.longitude || '') !== ''},

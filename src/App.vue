@@ -1,5 +1,6 @@
 <template>
   <v-app id='app'>
+    <img v-if="alpha" style="z-index:1000; position: fixed; right: 0px; top: 0px; pointer-events:none;" src="@/assets/alpha.png"/>'
     <Security v-if="!securityConsent"/>
     <v-content v-if="securityConsent">
       <NavigationDrawer v-if="login && leftDrawer"/>
@@ -26,6 +27,15 @@ export default {
     },
   },
   computed: {
+    jwt() {
+      return this.$keycloak.tokenParsed || {resource_access: { signauxfaibles: {roles: []}}}
+    },
+    roles() {
+      return this.jwt.resource_access.signauxfaibles.roles
+    },
+    alpha() {
+      return this.roles.includes('experiment')
+    },
     securityConsent() {
       const refDate = new Date('2019-10-22')
       const securityConsent = new Date(this.$localStore.state.securityConsent)

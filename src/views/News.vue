@@ -58,6 +58,15 @@ export default {
     return {
       dialog: false,
       news: [
+        {date: new Date('2019-11-20'), news: [
+            'Historique des scores de détection complété dans la fiche établissement',
+        ]},
+        {date: new Date('2019-11-05'), news: [
+            'Correction de l\'ordre d\'affichage des batches',
+          ]},
+          {date: new Date('2019-10-31'), news: [
+            'Publication de la liste d\'Octobre 2019',
+          ]},
           {date: new Date('2019-10-23'), news: [
             'Ajoût de la méthode de login délégué dans le composant keycloak',
             'Les utilisateurs de niveau B peuvent voir les listes de détection',
@@ -80,22 +89,22 @@ export default {
             'Correction: le graphique effectif échoue lorsque le rendu est ralenti',
           ]},
           {date: new Date('2019-10-09'), news: [
-              'Amélioration de l\'aide contextuelle effectif et identité de l\'établissement',
-              'Amélioration du composant identité de la fiche établissement',
-              'Correction de l\'ordre d\'affichage des régions dans le sélecteur du filtre géographique',
-              'Ajoût de la part ouvrière des débits dans le graphique urssaf',
-              'Intégration de l\'activité partielle dans le graphique des effectifs',
-              'Migration de Echarts vers ApexCharts pour la fiche établissement',
+            'Amélioration de l\'aide contextuelle effectif et identité de l\'établissement',
+            'Amélioration du composant identité de la fiche établissement',
+            'Correction de l\'ordre d\'affichage des régions dans le sélecteur du filtre géographique',
+            'Ajoût de la part ouvrière des débits dans le graphique urssaf',
+            'Intégration de l\'activité partielle dans le graphique des effectifs',
+            'Migration de Echarts vers ApexCharts pour la fiche établissement',
           ]},
           {date: new Date('2019-10-07'), news: [
-              'Ajoût de l\'information sur les nouveautés',
-              'L\'application se souvient des paramètres de filtrage',
-              'Refonte des contrôles de filtrage des listes de détection',
-              'Gestion des envois manuels partagés/privés',
+            'Ajoût de l\'information sur les nouveautés',
+            'L\'application se souvient des paramètres de filtrage',
+            'Refonte des contrôles de filtrage des listes de détection',
+            'Gestion des envois manuels partagés/privés',
           ]},
           {date: new Date('2019-10-04'), news: [
-              'L\'écran des listes de détection n\'est plus accessible aux agents habilités B',
-              'Les données d\'activité partielle ne sont plus disponibles en visualisation pour les entreprises absentes des listes de détection.',
+            'L\'écran des listes de détection n\'est plus accessible aux agents habilités B',
+            'Les données d\'activité partielle ne sont plus disponibles en visualisation pour les entreprises absentes des listes de détection.',
           ]},
       ],
     }

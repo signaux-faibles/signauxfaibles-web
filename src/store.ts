@@ -95,7 +95,7 @@ const sessionStore = new Vuex.Store({
     updateReference(state, reference) {
       state.batches = reference
         .filter((r: any) => r.key.key === 'batch')
-        .sort((b1: any, b2: any) => b1.key.batch < b2.key.batch)
+        .sort((b1: any, b2: any) => b1.key.batch > b2.key.batch  ? -1 : 1 )
       state.currentBatchKey = state.currentBatchKey || (state.batches[0] || {key: {batch: ''}}).key.batch
       state.naf = reference
         .filter((r: any) => r.key.key === 'naf')

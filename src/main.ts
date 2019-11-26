@@ -23,7 +23,7 @@ function tokenInterceptor() {
   })
 }
 
-let prod = 'https://signaux-faibles.beta.gouv.fr/auth/'
+const prod = 'https://signaux-faibles.beta.gouv.fr/auth/'
 const local = 'http://localhost/auth/'
 
 Vue.component('apexchart', VueApexCharts)
@@ -40,7 +40,7 @@ Vue.use(VueKeyCloak, {
   },
   config: {
     realm: 'master',
-    url: prod,
+    url: local,
     clientId: 'signauxfaibles',
   },
   onReady: (keycloak: any) => {
@@ -49,10 +49,6 @@ Vue.use(VueKeyCloak, {
         idpHint: (bdf) ? 'bdfidp' : undefined,
       })
     } else {
-      // console.log('############### TOKEN')
-      // console.log(keycloak.token)
-      // console.log(keycloak.tokenParsed)
-      // console.log('############### TOKEN')
       tokenInterceptor()
       const tslintCantBeDisabledSorryForThis = new Vue({
         el: '#app',

@@ -102,6 +102,13 @@
     <span style="width: 100px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
     <v-icon color="amber">fa-question</v-icon> 
     <span style="font-size: 25px;">{{ predictionWarnings }}</span>
+    <v-icon 
+    v-if="roles.includes('experiment')"
+    style="margin-left: 25px" 
+    @click="download">
+      fa-file-download
+    </v-icon>
+
   </v-card>
   <PredictionWidget v-for="p in prediction.slice(0, detectionLength)" :key="p.key.siret" :prediction="p"/> 
 
@@ -128,6 +135,35 @@ export default {
     this.getPrediction()
   },
   methods: {
+    format(v) {
+      let data = '"'
+      data += v.key.batch + '";"'
+      data += v.key.siren + '";"' + v.key.siret + '";"'
+      data += v.value.departement + '";"'
+      data += v.value.raison_sociale.replace('"', '\"') + '";"'
+      data += v.value.dernier_effectif + '";"'
+      data += v.value.score + '";"'
+      data += v.value.alert + '"'
+      return data
+    },
+    download() {
+      const element = document.createElement('a')
+      const header = '"batch";"siren";"siret";"departement";"raison_sociale";"dernier_effectif";"score";"alert"\n'
+
+      element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(
+        header + this.prediction.map((p) => {
+          return this.format(p)
+        }).join('\n'),
+      ))
+      element.setAttribute('download', 'liste.csv')
+
+      element.style.display = 'none'
+      document.body.appendChild(element)
+
+      element.click()
+
+      document.body.removeChild(element)
+    },
     getPrediction() {
       if (!this.loading) {
         this.prediction = []
@@ -227,6 +263,12 @@ export default {
     },
   },
   computed: {
+    jwt() {
+      return this.$keycloak.tokenParsed || {resource_access: { signauxfaibles: {roles: []}}}
+    },
+    roles() {
+      return this.jwt.resource_access.signauxfaibles.roles
+    },
     crp: {
       get() {return this.$localStore.state.crp},
       set(value) {this.$localStore.commit('setcrp', value)},
