@@ -10,7 +10,6 @@ const refreshRate = 60000
 Vue.use(Vuex)
 
 const baseURL = '/'
-// const baseURL = 'http://localhost:3000/'
 
 const axiosClient = axios.create(
   {
@@ -20,6 +19,7 @@ const axiosClient = axios.create(
     baseURL,
   },
 )
+
 
 // axiosClient.interceptors.request.use(
 //   (config: any) => {
@@ -32,7 +32,8 @@ const localStore = new Vuex.Store({
   plugins: [createPersistedState({ storage: window.localStorage })],
   state: {
     crp: false,
-    procol: false,
+    rj: false,
+    lj: false,
     continuation: true,
     sauvegarde: true,
     plan_sauvegarde: true,
@@ -45,7 +46,8 @@ const localStore = new Vuex.Store({
   },
   mutations: {
     setcrp(state, val: boolean) { state.crp = val },
-    setprocol(state, val: boolean) { state.procol = val },
+    setrj(state, val: boolean) { state.rj = val },
+    setlj(state, val: boolean) { state.lj = val },
     setcontinuation(state, val: boolean) { state.continuation = val },
     setsauvegarde(state, val: boolean) { state.sauvegarde = val },
     setplan_sauvegarde(state, val: boolean) { state.plan_sauvegarde = val },

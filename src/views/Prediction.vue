@@ -82,12 +82,13 @@
 
       <div style="display: flex; flex-direction: column; vertical-align: middle; padding: 0 15px;" >
         <span style="font-size: 15px;" @change="getPrediction()">Établissements visibles</span>
-        <v-switch v-model="crp" class="mx-2 thin" label="Suivi CVAP/Codefi/CRP" @change="getPrediction()"></v-switch>
-        <v-switch v-model="procol" class="mx-2 thin" label="RJ/LJ" @change="getPrediction()"></v-switch>
-        <v-switch v-model="continuation" class="mx-2 thin" label="Plan de continuation" @change="getPrediction()"></v-switch>
-        <v-switch v-model="sauvegarde" class="mx-2 thin" label="Sauvegarde" @change="getPrediction()"></v-switch>
-        <v-switch v-model="plan_sauvegarde" class="mx-2 thin" label="Plan de sauvegarde" @change="getPrediction()"></v-switch>
-        <v-switch v-model="in_bonis" class="mx-2 thin" label="In bonis" @change="getPrediction()"></v-switch>
+        <v-switch :disabled="loading" v-model="crp" class="mx-2 thin" label="Suivi CVAP/Codefi/CRP" @change="getPrediction()"></v-switch>
+        <v-switch :disabled="loading" v-model="rj" class="mx-2 thin" label="RJ" @change="getPrediction()"></v-switch>
+        <v-switch :disabled="loading" v-model="lj" class="mx-2 thin" label="LJ" @change="getPrediction()"></v-switch>
+        <v-switch :disabled="loading" v-model="continuation" class="mx-2 thin" label="Plan de continuation" @change="getPrediction()"></v-switch>
+        <v-switch :disabled="loading" v-model="sauvegarde" class="mx-2 thin" label="Sauvegarde" @change="getPrediction()"></v-switch>
+        <v-switch :disabled="loading" v-model="plan_sauvegarde" class="mx-2 thin" label="Plan de sauvegarde" @change="getPrediction()"></v-switch>
+        <v-switch :disabled="loading" v-model="in_bonis" class="mx-2 thin" label="In bonis" @change="getPrediction()"></v-switch>
       </div>
 
       <p style="height: 1px; border: 1px solid #eee"/>
@@ -205,11 +206,19 @@ export default {
               value: false,
             }])
           }
-          if (!this.procol) {
+          if (!this.rj) {
             params.filter = params.filter.concat([{
               field: 'procol',
               operator: 'not in',
-              value: ['redressement', 'plan_redressement', 'liquidation'],
+              value: ['redressement', 'plan_redressement'],
+            }])
+          }
+
+          if (!this.lj) {
+            params.filter = params.filter.concat([{
+              field: 'procol',
+              operator: 'not in',
+              value: ['liquidation'],
             }])
           }
 
@@ -273,9 +282,13 @@ export default {
       get() {return this.$localStore.state.crp},
       set(value) {this.$localStore.commit('setcrp', value)},
     },
-    procol: {
-      get() {return this.$localStore.state.procol},
-      set(value) {this.$localStore.commit('setprocol', value)},
+    rj: {
+      get() {return this.$localStore.state.rj},
+      set(value) {this.$localStore.commit('setrj', value)},
+    },
+    lj: {
+      get() {return this.$localStore.state.lj},
+      set(value) {this.$localStore.commit('setlj', value)},
     },
     continuation: {
       get() {return this.$localStore.state.continuation},

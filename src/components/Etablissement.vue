@@ -16,7 +16,7 @@
           </v-flex>
 
           <v-flex xs12 md12 class="text-xs-right pa-3" style="margin-top: 3em">
-            <Commentaire :siren="siren"/>
+            <Commentaire :siret="siret"/>
           </v-flex>
 
           <v-flex md6 xs12 class="pr-1" style="min-height: 200px">

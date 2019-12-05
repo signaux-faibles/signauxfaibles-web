@@ -58,6 +58,17 @@ export default {
     return {
       dialog: false,
       news: [
+        {date: new Date('2019-12-04'), news: [
+            'Design écran de chargement',
+            'Espace commentaire sur la fiche établissement',
+            'Ajustement de l\'affichage de l\'historique des détections',
+        ]},
+        {date: new Date('2019-11-26'), news: [
+            'Correction de l\'ordre de l\'historique des détections dans la fiche établissement',
+            'Ajoût d\'un bandeau alpha pour les utilisateurs du groupe experimental',
+            'Extraction de liste csv pour les utilisateurs du groupe expérimental',
+            'Listes de détection sans données urssaf dans les variables explicatives pour le groupe expérimental',
+        ]},
         {date: new Date('2019-11-20'), news: [
             'Historique des scores de détection complété dans la fiche établissement',
         ]},

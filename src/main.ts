@@ -30,7 +30,6 @@ Vue.component('apexchart', VueApexCharts)
 
 const redirectURI = window.location.pathname
 
-
 const bdf = (redirectURI.slice(-3) === 'bdf')
 
 Vue.use(VueKeyCloak, {

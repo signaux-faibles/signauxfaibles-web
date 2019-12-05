@@ -1,11 +1,11 @@
 <template>
   <span>
     <h2>Historique des alertes</h2>
-    <div v-for="(b, v) in historiqueObject" :key="v">
+    <div v-for="v in batchKeys" :key="v">
       <ScoreWidget 
         style="position: relative; bottom: 4px" 
         size="25px" 
-      :prediction="b"/>
+      :prediction="historiqueObject[v]"/>
       {{ batches[v] }}
     </div> 
     
@@ -30,7 +30,7 @@ export default {
       }, {})
     },
     batchKeys() {
-      return this.$store.state.batches.map((b) => b.key.batch)
+      return this.$store.state.batches.map((b) => b.key.batch).sort((b1, b2) => b1 < b2)
     },
     lastEvent() {
       return this.historiqueObject[(this.batchKeys[1] || '')]
