@@ -14,15 +14,12 @@
     </v-toolbar>
     <v-card>
       <v-card-text>
-        <Thread :thread="comments"/>
+        <div v-for="t in thread" :key="JSON.stringify(t.key)" style="text-align: left; border-left: 1px solid #bbb; padding: 0px">
+          <Thread :thread="t" :load="load"/>
+        </div>
       </v-card-text>
       <v-card-actions>
-        <v-text-field
-        rounded
-        outline
-        v-model="text"
-        label="Votre commentaire…"/>
-        <v-btn @click="send">Envoyer</v-btn>
+        <NewComment :siret="this.siret" :load="load"/>
       </v-card-actions>
     </v-card>  
   </div>
@@ -31,14 +28,15 @@
 <script>
 import Help from '@/components/Help.vue'
 import Thread from '@/components/Etablissement/Thread.vue'
+import NewComment from '@/components/Etablissement/NewComment.vue'
 
 export default {
-  components: { Help, Thread },
+  components: { Help, Thread, NewComment },
   props: [ 'siret' ],
   data() {
     return {
       text: '',
-      comments: [],
+      thread: [],
     }
   },
   mounted() {
@@ -59,26 +57,19 @@ export default {
           siret: this.siret,
         },
       }
-      this.$axios.post("/data/get/comment", params).then((d) => {
-        this.comments = d.data.sort((c1, c2) => c1.key.date > c2.key.date)
+      this.$axios.post('/data/get/comment', params).then((d) => {
+        const comments = d.data.sort((c1, c2) => c1.value.date > c2.value.date)
+        this.thread = this.tree(comments, null)
       })
     },
-    send() {
-      const params = [{
-        key: {
-          siret: this.siret,
-          siren: this.siret.substring(0, 9),
-          author: this.jwt.email,
-          date: new Date(),
-        },
-        value: {
-          name: this.jwt.name,
-          text: this.text,
-        },
-      }]
-      this.$axios.post('/data/put/comment', params).then((r) => {
-        this.load()
-      })
+    tree(comments, id) {
+      return comments.reduce((m, c) => {
+        if ((c.key.follows || '') == (id || '')) {
+          c.thread = this.tree(comments, c.key.uuid)
+          m.push(c)
+        }
+        return m
+      }, [])
     },
   },
 }

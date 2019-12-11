@@ -21,6 +21,7 @@
     "jwt-decode": "^2.2.0",
     "mapbox-gl": "^1.4.1",
     "tus-js-client": "^1.8.0-1",
+    "uuid": "^3.3.3",
     "vue": "^2.6.10",
     "vue-apexcharts": "^1.5.0",
     "vue-class-component": "^7.0.2",
