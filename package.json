@@ -20,6 +20,8 @@
     "jest": ">=22 <24",
     "jwt-decode": "^2.2.0",
     "mapbox-gl": "^1.4.1",
+    "tiptap": "^1.26.5",
+    "tiptap-extensions": "^1.28.5",
     "tus-js-client": "^1.8.0-1",
     "uuid": "^3.3.3",
     "vue": "^2.6.10",

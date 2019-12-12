@@ -14,7 +14,7 @@
     </v-toolbar>
     <v-card>
       <v-card-text>
-        <div v-for="t in thread" :key="JSON.stringify(t.key)" style="text-align: left; border-left: 1px solid #bbb; padding: 0px">
+        <div v-for="t in thread" :key="JSON.stringify(t.key)" style="text-align: left;border-bottom: 1px dotted #bbb;  border-left: 1px solid #bbb; padding: 0px">
           <Thread :thread="t" :load="load"/>
         </div>
       </v-card-text>
@@ -64,7 +64,7 @@ export default {
     },
     tree(comments, id) {
       return comments.reduce((m, c) => {
-        if ((c.key.follows || '') == (id || '')) {
+        if ((c.key.follows || '') === (id || '')) {
           c.thread = this.tree(comments, c.key.uuid)
           m.push(c)
         }
