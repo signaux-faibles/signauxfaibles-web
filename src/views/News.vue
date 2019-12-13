@@ -58,7 +58,7 @@ export default {
     return {
       dialog: false,
       news: [
-        {date: new Date('2019-12-04'), news: [
+        {date: new Date('2019-12-13'), news: [
             'Design écran de chargement',
             'Espace commentaire sur la fiche établissement',
             'Ajustement de l\'affichage de l\'historique des détections',

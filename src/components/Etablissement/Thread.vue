@@ -1,39 +1,38 @@
 <template>
   <div>
-    <div style="padding: 8px">
-      
+    <div style="padding: 18px">
+      <div style="border-bottom: 1px dashed #eee">
       <a :href="'mailto:' + thread.key.author.trim()">
-        <v-avatar color="indigo" size="24">
-          <span class="white--text">{{ avatar }}</span>
-        </v-avatar>
-      </a>       
-
-      
+        <img :src="`data:image/png;base64,${iconData}`"/>
+      </a> <span style="font-weight: 100; font-family: 'Roboto Mono'"> {{ thread.value.name }}, le {{ displayDate(thread.value.date) }}</span>
+      </div>
       <div class="editor">
         <editor-content class="editor__content" :editor="editor" />
       </div>
 
-      <editor-content class="editor__content" :editor="editor" />
       <div
       v-if="thread.thread.length > 0">
-        {{ thread.thread.length }} réponse{{ thread.thread.length > 1 ? 's' : ''}} à ce message
+        {{ thread.thread.length }} réponse{{ thread.thread.length > 1 ? 's distinctes' : ''}}
         <v-btn 
           fab
           flat
           small
-          @click="viewChild=!viewChild"
+          @click="viewChild=!viewChild; viewComment=false;"
           >
           <v-icon>mdi-{{ viewChild ? 'minus' : 'plus' }}</v-icon>
-        </v-btn>
+        </v-btn> <a @click="viewComment=!viewComment" v-if="viewChild && !viewComment">Apporter une réponse différente</a>
       </div>
-      <a @click="viewComment=!viewComment">répondre</a>
+      
+      <a @click="viewComment=!viewComment" v-if="thread.thread.length == 0">Répondre</a>
+      <div v-if="viewComment" style="background-color: rgba(150, 150, 200, .2);text-align: left; border-bottom: 1px dotted #bbb; border-left: 1px solid #bbb; padding: 18px">
+        <h2 style="left-margin: 10px">Écrivez ici votre réponse</h2>
+        <NewComment :follows="thread.key.uuid" :siret="thread.key.siret" :load="load"/>
+      </div>
       <div v-if="viewChild">
-        <div v-for="t in thread.thread" :key="JSON.stringify(t.key)" style="text-align: left; border-bottom: 1px dotted #bbb; border-left: 1px solid #bbb; padding: 0px">
+        <div v-for="t in thread.thread" :key="JSON.stringify(t.key)" style="background-color: rgba(150, 150, 200, .2);text-align: left; border-bottom: 1px dotted #bbb; border-left: 1px solid #bbb; padding: 0px; margin-top: 20px">
           <Thread :thread="t" :follows="thread.key.uuid" :load="load"/>
         </div>
       </div>
-      <NewComment :follows="thread.key.uuid" :siret="thread.key.siret" :load="load" :class="commentClass"/>
-
     </div>
   </div>
 </template>
@@ -41,6 +40,8 @@
 <script>
   import Thread from '@/components/Etablissement/Thread.vue'
   import NewComment from '@/components/Etablissement/NewComment.vue'
+  import Identicon from 'identicon.js'
+  import md5 from 'js-md5'
 
   import { Editor, EditorContent } from 'tiptap'
   import {
@@ -67,6 +68,7 @@
     components: { NewComment, Thread, EditorContent },
     data() {
       return {
+        iconData: '',
         viewChild: false,
         viewComment: false,
         editor: new Editor({
@@ -84,6 +86,11 @@
         }),
       editable: false,
       }
+    },
+    mounted() {
+      const h = md5(this.thread.value.name)
+      const data = new Identicon(h, 20).toString();
+      this.iconData = data
     },
     computed: {
       commentClass() {

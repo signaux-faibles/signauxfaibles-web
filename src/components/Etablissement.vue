@@ -15,7 +15,7 @@
             <Map :longitude="sirene.longitude" :latitude="sirene.latitude"/>
           </v-flex>
 
-          <v-flex xs12 md12 class="text-xs-right pa-3" style="margin-top: 3em">
+          <v-flex xs12 md12 class="text-xs-right pa-3">
             <Commentaire :siret="siret"/>
           </v-flex>
 
