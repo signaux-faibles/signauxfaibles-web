@@ -59,7 +59,7 @@ export default {
   },
   methods: {
     load() {
-      let loading = true
+      const loading = true
       const params = {
         key: {
           siret: this.siret,
@@ -76,7 +76,7 @@ export default {
         if ((c.key.follows || '') === (id || '')) {
           c.thread = this.tree(comments, c.key.uuid)
           c.count = c.thread.reduce((m, h) => {
-            return m+1
+            return m + 1
           }, 0)
           m.push(c)
         }

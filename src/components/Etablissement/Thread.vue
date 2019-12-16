@@ -89,7 +89,7 @@
     },
     mounted() {
       const h = md5(this.thread.value.name)
-      const data = new Identicon(h, 20).toString();
+      const data = new Identicon(h, 20).toString()
       this.iconData = data
     },
     computed: {

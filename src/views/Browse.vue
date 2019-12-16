@@ -6,8 +6,9 @@
         <div :class="((result.etablissement || []).length > 0 || searched) ? 'loaded_picto' : 'empty_picto'">
           <span class="fblue">Signaux</span>·<span class="fred">Faibles</span>
         </div>
-        <v-text-field solo placeholder="Raison sociale, SIREN, SIRET, adresse ..." v-model="search"></v-text-field>
-        <v-btn type="submit" style="width: 150px"><v-icon>search</v-icon>
+        <v-text-field solo placeholder="Raison sociale ou SIRET" v-model="search"></v-text-field>
+        <v-btn type="submit" style="width: 150px">
+          <v-icon>search</v-icon>
         </v-btn>
       </form>
     </div>
@@ -26,15 +27,16 @@
       <v-btn 
         :disabled="page <= 1"
         @click="page -= 1; lookup()" 
-        icon
-      ><v-icon>arrow_back</v-icon></v-btn> 
-        page {{ page }}/{{ result.total_pages || 1 }} 
+        icon>
+        <v-icon>arrow_back</v-icon>
+      </v-btn> 
+      page {{ page }}/{{ result.total_pages || 1 }} 
       <v-btn 
         :disabled="page >= (result.total_pages || 1)"
         @click="page +=1; lookup()" 
-        icon
-      >
-        <v-icon>arrow_forward</v-icon></v-btn>
+        icon>
+        <v-icon>arrow_forward</v-icon>
+      </v-btn>
     </div>
     <div class="empty_text" v-if="(result.etablissement || []).length == 0 && searched">
       Aucun résultat pour cette recherche.
