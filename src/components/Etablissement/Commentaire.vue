@@ -2,7 +2,7 @@
   <div style="text-align: left">
     <div style="">
       <h2>
-        <span v-if="thread.length > 0">commentaires 
+        <span v-if="thread.length > 0">commentaires ({{ count(thread) }})
           <a
             fab
             flat
@@ -71,13 +71,18 @@ export default {
         this.loading = false
       })
     },
+    count(tree) {
+      return tree.reduce((m, t) => {
+        return m + t.count
+      }, 0)
+    },
     tree(comments, id) {
       return comments.reduce((m, c) => {
         if ((c.key.follows || '') === (id || '')) {
           c.thread = this.tree(comments, c.key.uuid)
-          c.count = c.thread.reduce((m, h) => {
-            return m + 1
-          }, 0)
+          c.count = c.thread.reduce((n, h) => {
+            return n + h.count
+          }, 1)
           m.push(c)
         }
         return m

@@ -8,7 +8,7 @@
 
     <v-list dense>
       <v-list-tile>
-        <v-list-tile-content>Chiffre d'Affaire:</v-list-tile-content>
+        <v-list-tile-content>Chiffre d'Affaires:</v-list-tile-content>
         <v-list-tile-content class="text-xs-right">
           <div style="width: 100%;" :class="f.caClass">
           {{ f.ca }}

@@ -199,7 +199,8 @@ export default {
   },
   watch: {
     localSiret(val) {
-      this.getEtablissement(val)
+      this.getHistorique()
+      this.getEtablissement()
     },
   },
   computed: {

@@ -59,6 +59,10 @@ export default {
       dialog: false,
       news: [
         {date: new Date('2019-12-13'), news: [
+            'Correction coquille chiffre d\'affaire(s)',
+            'Correction bug rafraichissement de l\'historique des détections',
+        ]},
+        {date: new Date('2019-12-13'), news: [
             'Design écran de chargement',
             'Espace commentaire sur la fiche établissement',
             'Ajustement de l\'affichage de l\'historique des détections',
