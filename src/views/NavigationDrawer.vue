@@ -36,6 +36,15 @@
           </v-list-tile-content>
         </v-list-tile>
 
+        <v-list-tile href="https://fider.signaux-faibles.beta.gouv.fr/oauth/_jm4ec6dfm9?redirect=https://fider.signaux-faibles.beta.gouv.fr/">
+          <v-list-tile-action>
+            <v-icon>mdi-puzzle</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Contribuer</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile> 
+
         <v-list-tile to="/goup" v-if="jwt.goup_path">
           <v-list-tile-action>
             <v-icon>cloud_upload</v-icon>

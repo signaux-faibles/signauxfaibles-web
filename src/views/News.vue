@@ -58,7 +58,11 @@ export default {
     return {
       dialog: false,
       news: [
-        {date: new Date('2019-12-13'), news: [
+        {date: new Date('2019-01-16'), news: [
+            'Nouveau filtre rapide pour rechercher une raison sociale ou un siret dans la liste',
+            'Ajout de l\' outil fider pour traiter les retours utilisateurs',
+        ]},
+        {date: new Date('2019-12-20'), news: [
             'Correction coquille chiffre d\'affaire(s)',
             'Correction bug rafraichissement de l\'historique des détections',
         ]},

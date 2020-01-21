@@ -39,7 +39,7 @@ Vue.use(VueKeyCloak, {
   },
   config: {
     realm: 'master',
-    url: local,
+    url: prod,
     clientId: 'signauxfaibles',
   },
   onReady: (keycloak: any) => {

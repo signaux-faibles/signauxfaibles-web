@@ -25,36 +25,122 @@
     :class="loading?'rotate':''"
     color="#ffffff" v-if="!rightDrawer" @click="rightDrawer=!rightDrawer">mdi-target</v-icon>
   </v-toolbar>
-  <!-- <span style="visibility: visible; position:absolute;">{{ detectionLength }} {{ predictionLength }} {{ prediction.length }}</span> -->
   <div style="width:100%">
     <Spinner v-if="loading"/>
     <div id="nodata" v-if="!loading && prediction.length == 0 && init==false">
-      <!-- <img v-if="!loading && prediction.length == 0 && init==false" src="@/assets/nodata.png"><br> -->
-      Les paramètres de filtrage ne font ressortir aucune des entreprises pour lesquelles vous êtes habilité.
+      Les paramètres de filtrage ne font ressortir aucune des entreprises pour lesquelles vous êtes habilité(e).
     </div>
     <v-navigation-drawer :class="(rightDrawer?'elevation-6':'') + ' rightDrawer'" transition="no-transition" v-model="rightDrawer" right app>
       <v-toolbar flat class="transparent" height="40">
         <v-icon :class="loading?'rotate':''" @click="rightDrawer=!rightDrawer">mdi-target</v-icon>
       </v-toolbar>
       <div style="width: 100%; padding: 0 15px;">
-          <v-select
-            :items="batches"
-            :disabled="loading"
-            v-model="currentBatchKey"
-            @change="getPrediction"
-            label="Liste de détection"
-          ></v-select>
+        <v-select
+          :items="batches"
+          :disabled="loading"
+          v-model="currentBatchKey"
+          @change="getPrediction"
+          label="Liste de détection"
+        ></v-select>
       </div>
       <p style="height: 1px; border: 1px solid #eee"/>
-      <div style="display: flex; flex-direction: row; vertical-align: middle; padding: 0 15px;" >
+      <div style="vertical-align: middle; padding: 0 15px;" >
         <v-icon style="margin-right: 10px;">fa-industry</v-icon>
-        <v-select
-          :items="naf1"
-          :disabled="loading"
-          v-model="currentNaf"
-          label="Secteur d'activité"
-          @change="getPrediction()"
-        ></v-select>
+        <span style="color: rgba(0,0,0,0.54); font-size: 13px;">
+          Secteur d'activité
+        </span><p/>
+        <span style="color: #f00; font-weight: 600;" v-if="currentNaf.length == 0">Aucun secteur sélectionné</span>
+        <ul style="font-size: 11px" v-if="!allNaf">
+          <li v-for="l in currentNafLibelle.slice(0,4)" :key=l>{{ l }} </li>
+        </ul>
+        <span style="margin-left: 15px; font-size: 11px; color: #444" v-if="currentNaf.length > 4 && !allNaf">+ {{ currentNaf.length - 4 }} autre{{ (currentNaf.length > 5)?'s':'' }}</span>
+        <span style="margin-left: 15px; font-size: 11px; color: #444" v-if="allNaf">Tout secteur confondu</span>
+        <v-dialog
+          v-model="nafDialog"
+          persistent
+          scrollable
+          width="700"
+        >
+          <template v-slot:activator="{ on }">
+            <v-btn
+              light
+              color="rgba(0,0,0,0.74)"
+              :disabled="loading"
+              v-on="on"
+              @click="copyNaf()"
+              outline
+            >
+              <v-icon>mdi-filter</v-icon>selection des secteurs
+            </v-btn>
+          </template>
+          <v-card>
+            <v-toolbar
+              dark
+              dense
+              color="indigo"              
+            >
+              <v-toolbar-title >
+                Sélectionner les secteurs d'activité
+              </v-toolbar-title>
+              
+            </v-toolbar>
+            <v-card-text>
+              <v-list>
+                <v-list-tile>
+                  <v-list-tile-action>
+                    <v-icon
+                      style="cursor: pointer"
+                      @click="selectAllNaf()"
+                    >
+                      {{ allNextNaf ? 'mdi-close-box' : someNextNaf ? 'mdi-minus-box' : 'mdi-checkbox-blank-outline' }}
+                    </v-icon>
+                  </v-list-tile-action>
+                    Tout sélectionner
+                  <v-list-tile-content>
+                  </v-list-tile-content>
+                </v-list-tile>
+                <v-divider/>
+                <v-list-tile 
+                  v-for="n in naf1" 
+                  :key="n.value"
+                >
+                  <v-list-tile-action
+                  @click="toggleNaf(n.value)">
+                    <v-icon
+                      style="cursor: pointer;"
+                    >
+                      {{ nextNaf.includes(n.value) ?
+                        'mdi-checkbox-marked' :
+                        'mdi-checkbox-blank-outline' 
+                      }}
+                    </v-icon>
+                  </v-list-tile-action>
+                  <v-list-tile-content>
+                    {{ n.text }}
+                  </v-list-tile-content>
+                </v-list-tile>
+              </v-list>
+            </v-card-text>
+            <v-card-actions style>
+              <v-spacer/>
+              <v-btn
+                light
+                color="error"
+                @click="nafDialog=false"
+              >
+                annuler
+              </v-btn>
+              <v-btn
+                light
+                color="success"
+                @click="applyNaf(); nafDialog=false"
+              >
+                appliquer
+              </v-btn>
+
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
       </div>
       <p style="height: 1px; border: 1px solid #eee"/>
       <div style="display: flex; flex-direction: row; vertical-align: middle; padding: 0 15px;" >
@@ -95,23 +181,34 @@
     </v-navigation-drawer>
   </div>
   <v-card
-    style="height: 50px; text-align: center; background-color: #FFF0; padding: 7px;"
+    style="height: 80px; text-align: center; vertical-align: top; background-color: #FFF0; position:"
     class="elevation-0 ma-2 pointer"
   >
-    <v-icon color="red">fa-exclamation-triangle</v-icon> 
-    <span style="font-size: 25px">{{ predictionAlerts }}</span>
-    <span style="width: 100px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-    <v-icon color="amber">fa-question</v-icon> 
-    <span style="font-size: 25px;">{{ predictionWarnings }}</span>
-    <v-icon 
-    v-if="roles.includes('experiment')"
-    style="margin-left: 25px" 
-    @click="download">
-      fa-file-download
-    </v-icon>
-
+    <v-container style="position: relative; top: -10px">
+      <v-layout row>
+        <v-flex xs12 md6>
+          <v-text-field 
+            v-model="filter"
+            solo
+            label="filtre rapide"
+          />
+        </v-flex>
+        <v-flex xs12 md6 style="line-height: 53px;">  
+          <v-icon color="red">fa-exclamation-triangle</v-icon> 
+          <span style="font-size: 25px">{{ predictionAlerts }}</span>
+          <span style="width: 100px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+          <v-icon color="amber">fa-question</v-icon> 
+          <span style="font-size: 25px;">{{ predictionWarnings }}</span>
+          <v-icon 
+            style="margin-left: 25px" 
+            @click="download">
+            fa-file-download
+          </v-icon>
+        </v-flex>
+      </v-layout>
+    </v-container>
   </v-card>
-  <PredictionWidget v-for="p in prediction.slice(0, detectionLength)" :key="p.key.siret" :prediction="p"/> 
+  <PredictionWidget v-for="p in predictionView" :key="p.key.siret" :prediction="p"/> 
 
 </div>
 </template>
@@ -129,13 +226,42 @@ export default {
       horsProcol: true,
       activitePartielle: false,
       interetUrssaf: false,
+      activite: [],
       init: true,
+      filter: '',
+      prediction: [],
+      nafDialog: false,
+      nextNaf: [],
     }
   },
   mounted() {
     this.getPrediction()
   },
   methods: {
+    applyNaf() {
+      this.currentNaf = this.nextNaf
+      this.getPrediction()
+    },
+    copyNaf() {
+      this.nextNaf = this.currentNaf.map((n) => n)
+    },
+    toggleNaf(value) {
+      if (this.nextNaf.includes(value)) {
+        this.nextNaf = this.nextNaf.filter((n) => (n !== value))
+      } else {
+        this.nextNaf.push(value)
+      }
+    },
+    selectAllNaf() {
+      if (!this.allNextNaf) {
+        this.nextNaf = this.naf1.map((n) => n.value)
+      } else {
+        this.nextNaf = []
+      }
+    },
+    selectedNaf(value) {
+      return this.currentNaf.includes(value)
+    },
     format(v) {
       let data = '"'
       data += v.key.batch + '";"'
@@ -152,7 +278,7 @@ export default {
       const header = '"batch";"siren";"siret";"departement";"raison_sociale";"dernier_effectif";"score";"alert"\n'
 
       element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(
-        header + this.prediction.map((p) => {
+        header + this.predictionFilter.map((p) => {
           return this.format(p)
         }).join('\n'),
       ))
@@ -185,10 +311,10 @@ export default {
               order: -1,
             }],
           }
-          if (this.currentNaf !== 'NON') {
+          if (!this.currentNaf.includes('NON')) {
             params.filter = params.filter.concat([{
               field: 'naf1',
-              operator: '=',
+              operator: 'in',
               value: this.currentNaf,
             }])
           }
@@ -307,8 +433,19 @@ export default {
       set(value) {this.$localStore.commit('setin_bonis', value)},
     },
     currentNaf: {
-      get() {return this.$localStore.state.currentNaf},
+      get() {
+        const naf = this.$localStore.state.currentNaf
+        if ((typeof naf) === 'string') {
+          return [naf]
+        }
+        return naf
+      },
       set(value) {this.$localStore.commit('setcurrentNaf', value)},
+    },
+    currentNafLibelle() {
+      return this.currentNaf.map((n) => {
+        return this.naf1.filter((n1) => (n1.value === n))[0].text
+      })
     },
     zone: {
       get() {return this.$localStore.state.zone},
@@ -318,19 +455,26 @@ export default {
       get() {return this.$localStore.state.minEffectif},
       set(value) {this.$localStore.commit('setminEffectif', value)},
     },
-    prediction: {
-      get() {return this.$store.state.prediction},
-      set(value) {this.$store.commit('setPrediction', value)},
-    },
     loading: {
       get() {return this.$store.state.loading},
       set(value) {this.$store.commit('setLoading', value)},
     },
     predictionAlerts() {
-      return this.prediction.filter((p) => (p.value.alert === 'Alerte seuil F1')).length
+      return this.prediction.filter((p) => (p.value.raison_sociale.includes(this.filter.toUpperCase()) ||
+        p.key.siret.includes(this.filter.toUpperCase())) && (p.value.alert === 'Alerte seuil F1')).length
     },
     predictionWarnings() {
-      return this.prediction.filter((p) => (p.value.alert === 'Alerte seuil F2')).length
+      return this.prediction.filter((p) => (p.value.raison_sociale.includes(this.filter.toUpperCase()) ||
+        p.key.siret.includes(this.filter.toUpperCase())) && (p.value.alert === 'Alerte seuil F2')).length
+    },
+    predictionFilter() {
+      return this.prediction.filter((p) => {
+        return p.value.raison_sociale.includes(this.filter.toUpperCase()) ||
+          p.key.siret.includes(this.filter.toUpperCase())
+      })
+    },
+    predictionView() {
+      return this.predictionFilter.slice(0, this.detectionLength)
     },
     leftDrawer: {
       get() {
@@ -353,13 +497,24 @@ export default {
       return (this.$store.getters.naf(this.$store.state.currentBatchKey) || { value: [] }).value
     },
     naf1() {
-      return [{text: 'Tout secteur confondu', value: 'NON'}]
-        .concat(Object.keys((this.naf || {n1: {}}).n1).map((n) => {
+      return Object.keys((this.naf || {n1: {}}).n1).map((n) => {
         return {
-            text: this.naf.n1[n].substring(0, 60),
+            text: this.naf.n1[n],
             value: n,
         }
-      }))
+      })
+    },
+    allNaf() {
+      return this.currentNaf.length === this.naf1.length
+    },
+    allNextNaf() {
+      return this.nextNaf.length === this.naf1.length
+    },
+    someNaf() {
+      return this.currentNaf.length > 0 && !this.allNaf
+    },
+    someNextNaf() {
+      return this.nextNaf.length > 0 && !this.allNextNaf
     },
     batches() {
       return this.$store.getters.batches
