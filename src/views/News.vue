@@ -1,9 +1,9 @@
 <template>
   <v-dialog v-model="dialog" width="800px">
     <template v-slot:activator="{ on }">
-      <v-btn 
-        :class="(newsToRead>0)?'pulse':'inerte'" 
-        flat 
+      <v-btn
+        :class="(newsToRead>0)?'pulse':'inerte'"
+        flat
         round
         v-on="on">
         Nouveautés ({{ newsToRead }})
@@ -23,7 +23,6 @@
               <li v-for="l in n.news" :key="l">{{ l }}</li>
             </ul>
           </li>
-
         </ul>
       </v-card-text>
     </v-card>
@@ -58,7 +57,12 @@ export default {
     return {
       dialog: false,
       news: [
-        {date: new Date('2019-01-16'), news: [
+        {date: new Date('2020-01-21'), news: [
+            'Relooking mineur des filtres de la liste de détection',
+            'Export excel de la liste affichée',
+            'Sélection multiple des secteurs d\'activité dans l\'affichage des listes',
+        ]},
+        {date: new Date('2020-01-16'), news: [
             'Nouveau filtre rapide pour rechercher une raison sociale ou un siret dans la liste',
             'Ajout de l\' outil fider pour traiter les retours utilisateurs',
         ]},

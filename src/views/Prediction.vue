@@ -165,19 +165,33 @@
         ></v-combobox>
       </div>
       <p style="height: 1px; border: 1px solid #eee"/>
-
+      <div style="display: flex; flex-direction: column; vertical-align: middle; padding: 0 15px; position: relative; top: -26px" >
+        <v-checkbox :disabled="loading" v-model="crp" class="mx-2 thin" label="Exclure les entreprises faisant l'objet d'un suivi" @change="getPrediction()"></v-checkbox>
+      </div>
+      <p style="height: 1px; border: 1px solid #eee"/>
       <div style="display: flex; flex-direction: column; vertical-align: middle; padding: 0 15px;" >
-        <span style="font-size: 15px;" @change="getPrediction()">Établissements visibles</span>
-        <v-switch :disabled="loading" v-model="crp" class="mx-2 thin" label="Suivi CVAP/Codefi/CRP" @change="getPrediction()"></v-switch>
-        <v-switch :disabled="loading" v-model="rj" class="mx-2 thin" label="RJ" @change="getPrediction()"></v-switch>
-        <v-switch :disabled="loading" v-model="lj" class="mx-2 thin" label="LJ" @change="getPrediction()"></v-switch>
-        <v-switch :disabled="loading" v-model="continuation" class="mx-2 thin" label="Plan de continuation" @change="getPrediction()"></v-switch>
-        <v-switch :disabled="loading" v-model="sauvegarde" class="mx-2 thin" label="Sauvegarde" @change="getPrediction()"></v-switch>
-        <v-switch :disabled="loading" v-model="plan_sauvegarde" class="mx-2 thin" label="Plan de sauvegarde" @change="getPrediction()"></v-switch>
-        <v-switch :disabled="loading" v-model="in_bonis" class="mx-2 thin" label="In bonis" @change="getPrediction()"></v-switch>
+        <span style="font-size: 15px;" @change="getPrediction()">Visibilité selon statut des procédures</span>
+        <v-switch :disabled="loading" v-model="in_bonis" class="mx-2 thin" @change="getPrediction()">
+          <span slot="label" style="font-size: 14px">In bonis</span>
+        </v-switch>
+        <v-switch :disabled="loading" v-model="continuation" class="mx-2 thin" @change="getPrediction()">
+          <span slot="label" style="font-size: 14px">In bonis (plan de continuation)</span>
+        </v-switch>
+        <v-switch :disabled="loading" v-model="sauvegarde" class="mx-2 thin" @change="getPrediction()">
+          <span slot="label" style="font-size: 14px">Sauvegarde</span>          
+        </v-switch>
+        <v-switch :disabled="loading" v-model="plan_sauvegarde" class="mx-2 thin" @change="getPrediction()">
+          <span slot="label" style="font-size: 14px">Plan de sauvegarde</span>
+        </v-switch>
+        <v-switch :disabled="loading" v-model="rj" class="mx-2 thin" @change="getPrediction()">
+          <span slot="label" style="font-size: 14px">Redressement judiciaire</span>
+        </v-switch>
+        <v-switch :disabled="loading" v-model="lj" class="mx-2 thin" @change="getPrediction()">
+          <span slot="label" style="font-size: 14px">Liquidation judiciaire</span>
+        </v-switch>
       </div>
 
-      <p style="height: 1px; border: 1px solid #eee"/>
+      <p style="height: 1px; border: 1px solid #eee; margin-top: 20px"/>
     </v-navigation-drawer>
   </div>
   <v-card
@@ -325,7 +339,7 @@ export default {
               value: this.zone,
             }])
           }
-          if (!this.crp) {
+          if (this.crp) {
             params.filter = params.filter.concat([{
               field: 'crp',
               operator: '=',
