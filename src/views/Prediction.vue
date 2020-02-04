@@ -452,7 +452,12 @@ export default {
       get() {
         const naf = this.$localStore.state.currentNaf
         if ((typeof naf) === 'string') {
-          return [naf]
+          if (naf === 'NON') {
+            return ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
+                    'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U']
+          } else {
+            return [naf]
+          }
         }
         return naf
       },
