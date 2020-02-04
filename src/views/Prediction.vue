@@ -283,13 +283,15 @@ export default {
       data += v.value.departement + '";"'
       data += v.value.raison_sociale.replace('"', '\"') + '";"'
       data += v.value.dernier_effectif + '";"'
+      data += v.value.activite + '";"'
+      data += (this.naf.n5 || {})[v.value.activite || ''] + '";"'
       data += v.value.score + '";"'
       data += v.value.alert + '"'
       return data
     },
     download() {
       const element = document.createElement('a')
-      const header = '"batch";"siren";"siret";"departement";"raison_sociale";"dernier_effectif";"score";"alert"\n'
+      const header = '"batch";"siren";"siret";"departement";"raison_sociale";"dernier_effectif";"code_activite";"libelle_activite";"score";"alert"\n'
 
       element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(
         header + this.predictionFilter.map((p) => {
