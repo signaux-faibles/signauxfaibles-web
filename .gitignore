@@ -25,3 +25,4 @@ yarn-error.log*
 dist.tar.gz
 src/config.json
 config.json
+src/config.ts

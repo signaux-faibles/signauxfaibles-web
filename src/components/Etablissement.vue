@@ -178,7 +178,7 @@ export default {
         this.etablissement = { value: {} }
       })
 
-      this.axios.get(`https://entreprise.data.gouv.fr/api/sirene/v1/siret/${this.siret}`)
+      this.axios.get(process.env.VUE_APP_SIRENE_BASE_URL + `/v1/siret/${this.siret}`)
       .then((r) => {
           this.sirene = r.data.etablissement
       }).catch((error) => {
