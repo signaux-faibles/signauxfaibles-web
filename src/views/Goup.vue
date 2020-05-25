@@ -138,7 +138,7 @@
         }
 
         const upload = new tus.Upload(file, {
-          endpoint: process.env.VUE_APP_GOUP_BASE_URL,
+          endpoint: process.env.VUE_APP_GOUP_UPLOAD_URL,
           resume: true,
           metadata: {
             filename: file.name,
