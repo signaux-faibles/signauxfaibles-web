@@ -37,4 +37,4 @@ docker build -t sfweb --build-arg app="./workspace/signauxfaibles-web-$1/dist" .
 docker save sfweb | gzip > sfweb.tar.gz
 
 # Cleanup
-rm workspace -rf
+rm -rf workspace
