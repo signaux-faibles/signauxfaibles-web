@@ -12,7 +12,7 @@
     props: ['latitude', 'longitude'],
     data() {
       return {
-        accessToken: 'pk.eyJ1IjoiY2hyaXN0b3BoZS1uaW51Y2NpIiwiYSI6ImNrMWx6dXlkODBhYTIzY3RjZXpyZXR2cmkifQ.GudXMNNibnhHq6xGiHrC1w',
+        accessToken: process.env.VUE_APP_MAPBOX_TOKEN,
         mapStyle: 'mapbox://styles/mapbox/navigation-guidance-day-v4',
         map: null,
         marker: new mapboxgl.Marker(),

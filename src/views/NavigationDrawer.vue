@@ -36,7 +36,7 @@
           </v-list-tile-content>
         </v-list-tile>
 
-        <v-list-tile href="https://fider.signaux-faibles.beta.gouv.fr/oauth/_jm4ec6dfm9?redirect=https://fider.signaux-faibles.beta.gouv.fr/">
+        <v-list-tile :href="fider_url">
           <v-list-tile-action>
             <v-icon>mdi-puzzle</v-icon>
           </v-list-tile-action>
@@ -73,7 +73,7 @@
         flat
         icon
         color="blue"
-        href="https://github.com/signaux-faibles/">
+        :href="github_url">
         <v-icon>fab fa-github</v-icon>
       </v-btn>
       <v-spacer/>
@@ -95,6 +95,12 @@ export default {
     },
   },
   computed: {
+    fider_url() {
+      return process.env.VUE_APP_FIDER_URL
+    },
+    github_url() {
+      return process.env.VUE_APP_GITHUB_ORGANIZATION
+    },
     jwt() {
       return this.$keycloak.tokenParsed
     },

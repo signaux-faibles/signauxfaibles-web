@@ -9,24 +9,14 @@ const refreshRate = 60000
 
 Vue.use(Vuex)
 
-const baseURL = '/'
-
 const axiosClient = axios.create(
   {
     headers: {
       'Content-Type': 'application/json',
     },
-    baseURL,
+    baseURL: process.env.VUE_APP_DATAPI_BASE_URL,
   },
 )
-
-
-// axiosClient.interceptors.request.use(
-//   (config: any) => {
-//     if (sessionStore.state.token != null) { config.headers.Authorization = 'Bearer ' + sessionStore.state.token }
-//     return config
-//   },
-// )
 
 const localStore = new Vuex.Store({
   plugins: [createPersistedState({ storage: window.localStorage })],

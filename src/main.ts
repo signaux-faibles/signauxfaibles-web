@@ -23,9 +23,6 @@ function tokenInterceptor() {
   })
 }
 
-const prod = 'https://signaux-faibles.beta.gouv.fr/auth/'
-const local = 'http://localhost/auth/'
-
 Vue.component('apexchart', VueApexCharts)
 
 const redirectURI = window.location.pathname
@@ -38,9 +35,9 @@ Vue.use(VueKeyCloak, {
     checkLoginIframe: true,
   },
   config: {
-    realm: 'master',
-    url: local,
-    clientId: 'signauxfaibles',
+    realm: process.env.VUE_APP_KEYCLOAK_REALM,
+    url: process.env.VUE_APP_KEYCLOAK_URL,
+    clientId: process.env.VUE_APP_KEYCLOAK_CLIENT,
   },
   onReady: (keycloak: any) => {
     if (!keycloak.authenticated) {

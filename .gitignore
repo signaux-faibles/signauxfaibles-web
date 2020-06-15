@@ -23,5 +23,4 @@ yarn-error.log*
 *.sln
 *.sw?
 dist.tar.gz
-src/config.json
-config.json
+

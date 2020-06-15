@@ -114,7 +114,7 @@
         return this.$keycloak.tokenParsed
       },
       searchUrl() {
-        const root = 'https://entreprise.data.gouv.fr/api/sirene/v1/'
+        const root = process.env.VUE_APP_SIRENE_BASE_URL + '/v1/'
         return root + `${this.searchType}/${encodeURIComponent(this.search)}?page=${this.page}`
       },
       searchType() {
