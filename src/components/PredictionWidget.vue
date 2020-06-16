@@ -2,87 +2,57 @@
   <div>
     <v-card
       @click="showEtablissement()"
-      style="height: 80px; background: linear-gradient(#fff, #eee 45%, #ccc);"
-      class="elevation-2 ma-2 pointer"
+      class="etablissement-card elevation-2 ma-2 pointer"
     >
-      <div style="height: 100%; width: 100%; overflow: hidden;">
-        <div class="entete pointer">
-          <!-- <PredictionWidgetScore id="widget" :alert="prediction.value.alert" :diff="prediction.value.diff"/> -->
-          <ScoreWidget :prediction="prediction"/>
-        </div>
-        
-        <div class="corps">
-          <div style="left: 250px; position: absolute; overflow: hidden;" :id="'marge_' + prediction.key.siret"></div>
-          <div style=" white-space: nowrap; overflow: hidden; max-width: 400px; max-height:40px">
-            <span style="font-size: 24px; color: #333; line-height: 31px; display: inline-block; font-family: 'Oswald';">
-              {{ prediction.value.raison_sociale }} 
-            </span>
-          </div>
-          <div style="font-family: 'Abel'; white-space: nowrap; max-width: 400px; font-size: 14px; overflow: hidden; font-weight: 400;">
-            {{ prediction.key.siret }} - <span :class="prediction.value.etat_procol == 'in_bonis'?'up':'down'">{{ prediction.value.etat_procol }}</span>
-          </div>
-
-          <span style="font-family: 'Abel'; white-space: nowrap; max-width: 400px; font-size: 14px; overflow: hidden; font-weight: 400;">
+      <div class="entete">
+        <ScoreWidget :prediction="prediction"/>
+      </div>
+      <div class="corps">
+        <div class="mr-2 ml-2">
+          <span class="raison-sociale">{{ prediction.value.raison_sociale }}</span>
+          <img class="ml-2" v-if="prediction.value.connu === true" height="20" src="../assets/crp.png"/>
+          <div class="identite">
+            {{ prediction.key.siret }} - <span :class="prediction.value.etat_procol == 'in_bonis'?'up':'down'">{{ prediction.value.etat_procol }}</span><br>
             Dép.: {{ prediction.value.departement }} - Act: {{ (naf.n5|| {})[prediction.value.activite || ''].slice(0,65) }}
-          </span>
-          
+          </div>
+        </div>
+        <div class="mr-2 text-xs-right">
           <img
-            style="position: absolute; left: 550px; top: 10px;"
+            class="d-block mt-2 mb-2"
             width="70"
             v-if="!prediction.value.urssaf || !roles.includes('urssaf')"
             src="../assets/gray_urssaf.svg"
           />
-
           <img
-            style="position: absolute; left: 550px; top: 10px;"
+            class="d-block mt-2 mb-2"
             width="70"
             v-if="prediction.value.urssaf && roles.includes('urssaf')"
             src="../assets/red_urssaf.svg"
           />
-
           <img
-            style="position: absolute; left: 550px; bottom: 10px;"
-            width="18"
+            class="activite-partielle mt-1 mr-1"
             height="24"
             v-if="prediction.value.activite_partielle"
             src="../assets/red_apart.svg"
           />
           <img
-            style="position: absolute; left: 550px; bottom: 10px;"
-            width="18"
+            class="activite-partielle mt-1 mr-1"
             height="24"
             v-if="!prediction.value.activite_partielle"
             src="../assets/gray_apart.svg"
           />
-
-          <div style="position: absolute; overflow: hidden; left: 584px; bottom: 3px; color: #333">
-            <span
-              style="font-size: 24px"
-            >{{ prediction.value.dernier_effectif || 'n/c' }}</span>
-          </div>
-
-          <div class="flex" style="position:absolute; overflow: hidden; left: 600px; top: 0px; bottom: 0px; right: 9px;">
-            <div class='label'>
-              CA {{prediction.value.annee_ca}}<br/>
-              <span style="font-size: 25px" :class="diane.ca_color">{{ diane.ca || "n/c" }}</span>
-            </div>
-          </div>
-          <div style="position:absolute; overflow: hidden; left: 780px; top: 42px">
-            <v-icon small v-if="diane.ca_arrow">{{ diane.ca_arrow }}</v-icon>
-          </div>
-          <div class="flex" style="position:absolute; overflow: hidden; left: 750px; top: 0px; bottom: 0px; right: 9px;">
-            <div class='label'>
-              Résultat d'exploitation<br/>
-              <span style="font-size: 25px" :class="diane.resultat_expl_color">{{ diane.resultat_expl }}</span>
-            </div>
-          </div>
-          <div class="flex" style="position:absolute; overflow: hidden; left: 830px; top: 0px; bottom: 0px; right: 9px;">
-            <div class='label' v-if="prediction.value.connu === true">
-               <img style="height: 55px; margin-top: 12px"  src="../assets/crp.png"/> 
-            </div>
-          </div>
+          <span class="effectif">{{ prediction.value.dernier_effectif || 'n/c' }}</span>
         </div>
-         <v-dialog lazy fullscreen v-model="dialog">
+        <div class="ca mr-2 text-xs-right">
+          CA {{prediction.value.annee_ca}}<br>
+          <span class="valeur" :class="diane.ca_color">{{ diane.ca || "n/c" }}</span>
+          <v-icon small v-if="diane.ca_arrow">{{ diane.ca_arrow }}</v-icon>
+        </div>
+        <div class="rex mr-2 text-xs-right">
+          REX<br>
+          <span class="valeur" :class="diane.resultat_expl_color">{{ diane.resultat_expl }}</span>
+        </div> 
+        <v-dialog lazy fullscreen v-model="dialog">
           <div style="height: 100%; width: 100%; font-weight: 800; font-family: 'Oswald', sans;">
             <v-toolbar fixed class="toolbar" height="35px" style="color: #fff; font-size: 22px; z-index: 50;">
               <v-spacer/>
@@ -93,14 +63,13 @@
             <Etablissement :siret="prediction.key.siret" :batch="currentBatchKey"></Etablissement>
           </div>
         </v-dialog>
-      </div>  
+      </div>
     </v-card>
   </div>
 </template>
 
 <script>
 import Etablissement from '@/components/Etablissement'
-// import PredictionWidgetScore from '@/components/PredictionWidgetScore'
 import ScoreWidget from '@/components/ScoreWidget'
 export default {
   props: ['prediction'],
@@ -111,11 +80,6 @@ export default {
   data() {
     return {
       dialog: false,
-      expand: false,
-      rowsPerPageItems: [4, 8, 12],
-      pagination: {
-        rowsPerPage: 4,
-      },
     }
   },
   computed: {
@@ -147,83 +111,73 @@ export default {
     },
   },
   methods: {
-    upOrDown(before, after, treshold) {
-      if (before == null || after == null) {
-        return 'mdi-help-circle'
-      }
-      if (after / before > 1 + treshold) {
-        return 'mdi-arrow-up'
-      }
-      if (after / before < 1 - treshold) {
-        return 'mdi-arrow-down'
-      }
-      return 'mdi-tilde'
-    },
-    upOrDownClass(before, after, treshold) {
-      if (before == null || after == null) {
-        return 'unknown'
-      }
-      if (after / before > 1 + treshold) {
-        return 'high'
-      }
-      if (after / before < 1 - treshold) {
-        return 'down'
-      }
-      return 'none'
-    },
     showEtablissement() {
       this.dialog = true
     },
   },
 }
 </script>
-
 <style scoped>
-div.flex {
+.etablissement-card {
+  background: linear-gradient(#fff, #eee 45%, #ccc);
   display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  font-size: 16px;
-  font-family: "Quicksand"
+  flex-direction: row;
+  min-height: 80px;
 }
-div.label {
-  text-align: right;
-  font-family: 'Abel';
-  width: 180px;
-}
-div.entete {
-  float: left;
-  background: linear-gradient(
-    270deg,
-    rgba(119, 122, 170, 0.219),
-    rgba(119, 122, 170, 0)
-  );
+.entete {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: linear-gradient(270deg, rgba(119, 122, 170, 0.219), rgba(119, 122, 170, 0));
   border-right: solid 1px #3334;
-  width: 80px;
-  height: 80px;
   text-align: center;
-  padding: 20px;
+  width: 80px;
 }
-div.corps {
-  flex: 1;
-  padding: 2px 5px;
-  margin-left: 80px;
-  height: 80px;
+.corps {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   background: linear-gradient(45deg, rgba(50, 51, 121, 0.212), #0000);
 }
-.high {
-  color: rgb(4, 153, 41);
+.corps > div:first-child {
+  flex: 1 1 auto;
+  overflow: hidden;
+}
+.raison-sociale {
+  font-family: 'Oswald';
+  font-size: 24px;
+  color: #333;
+}
+.identite {
+  font-family: 'Abel';
+  font-size: 14px;
+  font-weight: 400;
+}
+.effectif {
+  font-size: 25px;
+}
+.activite-partielle {
+  float: left;
+}
+.ca, .rex {
+  font-family: 'Abel';
+  font-size: 16px;
+}
+.ca {
+  min-width: 120px;
+}
+.rex {
+  min-width: 100px;
+}
+.valeur {
+  font-size: 25px;
 }
 .down {
   color: rgb(244, 67, 54);
 }
 .unknown {
   color: rgb(150, 150, 150);
-}
-td {
-  width: 80px;
-}
-.pointer {
-  cursor: pointer;
 }
 </style>
