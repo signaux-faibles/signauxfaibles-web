@@ -47,7 +47,7 @@ import OldFinance from '@/components/Etablissement/OldFinance.vue'
 // import Finance from '@/components/Etablissement/Finance.vue'
 import Commentaire from '@/components/Etablissement/Commentaire.vue'
 import axios from 'axios'
-
+import fr from 'apexcharts/dist/locales/fr.json'
 
 export default {
   props: ['siret', 'batch'],
@@ -292,6 +292,10 @@ export default {
     },
   },
   mounted() {
+    Apex.chart = {
+      locales: [fr],
+      defaultLocale: 'fr',
+    }
     this.getHistorique()
     this.getEtablissement()
   },
