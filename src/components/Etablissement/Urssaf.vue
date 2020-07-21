@@ -68,14 +68,24 @@ export default {
     options() {
       return {
         tooltip: {
-          enabled: false,
+          enabled: true,
+          x: {
+            formatter(val) {
+              return new Date(val).toLocaleDateString()
+            },
+          },
+          y: {
+            formatter(val) {
+              return parseFloat(val).toLocaleString() + ' €'
+            },
+          },
         },
         legend: {
           show: true,
-              showForSingleSeries: true,
-                  onItemHover: {
-        highlightDataSeries: false,
-    },
+          showForSingleSeries: true,
+          onItemHover: {
+            highlightDataSeries: false,
+          },
         },
         theme: {
           mode: 'light',
@@ -114,7 +124,9 @@ export default {
           type: 'datetime',
         },
         yaxis: {
-
+          title: {
+            text: '€ (euros)',
+          },
         },
         states: {
         hover: {
