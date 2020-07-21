@@ -36,26 +36,30 @@ export default {
     apdemandeSeries() {
       return {
         demande: (this.apdemande || [])
-        .sort((d1, d2) => d1.periode.start > d2.periode.start)
+        .sort((d1, d2) => {
+          return (d2.periode.start > d1.periode.start ? -1 : 1)
+        })
         .filter((d) => d.periode.end > this.min)
         .reduce((m, c) => {
           m = m.concat([
             [ new Date(c.periode.start),
               Math.max(c.effectif_autorise, 0)],
             [ new Date(c.periode.end),
-              0],
+              Math.max(c.effectif_autorise, 0)],
           ])
           return m
         }, []),
         conso: (this.apdemande || [])
-        .sort((d1, d2) => d1.periode.start > d2.periode.start)
+        .sort((d1, d2) => {
+          return (d2.periode.start > d1.periode.start ? -1 : 1)
+        })
         .filter((d) => d.periode.end > this.min)
         .reduce((m, c) => {
           m = m.concat([
             [ new Date(c.periode.start),
               Math.min(c.effectif_consomme, c.effectif_autorise)],
             [ new Date(c.periode.end),
-              0],
+              Math.min(c.effectif_consomme, c.effectif_autorise)],
           ])
           return m
         }, []),
@@ -94,7 +98,12 @@ export default {
           showForZeroSeries: false,
         },
         tooltip: {
-          enabled: false,
+          enabled: true,
+          x: {
+            formatter(val) {
+              return new Date(val).toLocaleDateString()
+            },
+          },
         },
         theme: {
           mode: 'light',
@@ -104,11 +113,11 @@ export default {
           toolbar: {
             show: false,
           },
-          id: 'effectifs',
-        },
-        zoom: {
+          zoom: {
             enabled: false,
           },
+          id: 'effectifs',
+        },
         xaxis: {
           type: 'datetime',
         },
