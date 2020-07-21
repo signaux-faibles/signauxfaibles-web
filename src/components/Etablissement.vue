@@ -170,7 +170,7 @@ export default {
         f.diane.productivite_potentiel_production.toLocaleString() : 'n/c'
       ratios.productiviteRentabilite.productiviteCapitalFinancier = f.diane.productivite_capital_financier ?
         f.diane.productivite_capital_financier.toLocaleString() : 'n/c'
-      ratios.productiviteRentabilite.productiviteCapitalFinancier = f.diane.productivite_capital_investi ?
+      ratios.productiviteRentabilite.productiviteCapitalInvesti = f.diane.productivite_capital_investi ?
         f.diane.productivite_capital_investi.toLocaleString() : 'n/c'
       ratios.productiviteRentabilite.tauxDInvestissementProductif = f.diane.taux_d_investissement_productif ?
         f.diane.taux_d_investissement_productif.toLocaleString() + '\u00A0%' : 'n/c'
