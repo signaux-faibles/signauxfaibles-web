@@ -10,7 +10,7 @@
           <p>Cette rubrique fait la synthèse des informations financières de l'entreprise sur les trois derniers exercices connus.</p>
           <p>Le premier graphique représente les soldes intermédiaires de gestion (SIG) : chiffre d'affaires (CA), valeur ajoutée (VA), excédent brut d'exploitation (EBE), résultat d'exploitation (REX), résultat net (RN) et capacité d'autofinancement (CAF).</p>
           <p>Le second graphique fait état de la trésorerie nette (TN) au travers du fonds de roulement net global (FRNG) et du besoin en fonds de roulement (BFR).</p>
-          <p>Des ratios financiers vous sont ensuite proposés selon 4 catégories : structure et liquidité, gestion, productivité et rentabilité, marge et valeur ajoutée. <br><em>Fournisseur : Diane.</em></p>
+          <p>Des ratios financiers vous sont ensuite proposés selon 4 catégories : structure et liquidité, gestion, productivité et rentabilité, marge et valeur ajoutée.<br><em>Fournisseur : Diane.</em></p>
           <p>Si besoin, il vous est possible de télécharger l'ensemble des documents comptables de l'entreprise.</p>
         </template>
       </Help>
