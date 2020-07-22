@@ -291,11 +291,13 @@ export default {
       return Math.round(value * (Math.pow(10, size))) / (Math.pow(10, size))
     },
   },
-  mounted() {
+  created() {
     Apex.chart = {
       locales: [fr],
       defaultLocale: 'fr',
     }
+  },
+  mounted() {
     this.getHistorique()
     this.getEtablissement()
   },
