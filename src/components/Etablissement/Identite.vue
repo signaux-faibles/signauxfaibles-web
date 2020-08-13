@@ -18,6 +18,15 @@
     {{ (naf.n5 || {})[(sirene.activite_principale || '')] }}<br/>
     Code APE: {{ (sirene.activite_principale || '') }}</div>
     </div>
+
+    <p>
+      Cet établissement a fait l'objet d'une visite. 
+      <a
+        target="_blank"
+        rel="noopener noreferrer"
+        :href="fceURL"
+      >Consulter Fiche Commune Entreprise</a>
+    </p>
     
     <h3>adresse postale</h3>
     <hr style="color: #eee;"/>
@@ -41,5 +50,10 @@ export default {
   name: 'Identite',
   props: ['sirene', 'historique', 'siret', 'naf'],
   components: { Help, Historique },
+  computed: {
+    fceURL() {
+      return `https://fce.fabrique.social.gouv.fr/establishment/${this.siret}#direccte`
+    },
+  },
 }
 </script>
