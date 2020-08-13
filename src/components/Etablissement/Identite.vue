@@ -13,20 +13,20 @@
     <h3>siren {{ siret.slice(0,9) }} <span style="color: #999">{{ siret.slice(9,14) }} siret</span></h3>
     <hr style="color: #eee;"/>
     <div style="padding: 10px; margin: 4px;">
-    
-    <div style="font-size: 16px">{{ (naf.n1 || {})[((naf.n5to1 || {})[(sirene.activite_principale || '')] || '')] }}<br/>
-    {{ (naf.n5 || {})[(sirene.activite_principale || '')] }}<br/>
-    Code APE: {{ (sirene.activite_principale || '') }}</div>
+      <div style="font-size: 16px">
+        {{ (naf.n1 || {})[((naf.n5to1 || {})[(sirene.activite_principale || '')] || '')] }}<br/>
+        {{ (naf.n5 || {})[(sirene.activite_principale || '')] }}<br/>
+        Code APE: {{ (sirene.activite_principale || '') }}<br/>
+        <p v-if="lienVisiteFCE">
+          Cet établissement a fait l'objet d'une visite. 
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            :href="lienVisiteFCE"
+          >Consulter Fiche Commune Entreprise</a>
+        </p>
+      </div>
     </div>
-
-    <p>
-      Cet établissement a fait l'objet d'une visite. 
-      <a
-        target="_blank"
-        rel="noopener noreferrer"
-        :href="fceURL"
-      >Consulter Fiche Commune Entreprise</a>
-    </p>
     
     <h3>adresse postale</h3>
     <hr style="color: #eee;"/>
@@ -48,12 +48,7 @@ import Historique from '@/components/Etablissement/Historique.vue'
 
 export default {
   name: 'Identite',
-  props: ['sirene', 'historique', 'siret', 'naf'],
+  props: ['sirene', 'historique', 'siret', 'naf', 'lienVisiteFCE'],
   components: { Help, Historique },
-  computed: {
-    fceURL() {
-      return `https://fce.fabrique.social.gouv.fr/establishment/${this.siret}#direccte`
-    },
-  },
 }
 </script>

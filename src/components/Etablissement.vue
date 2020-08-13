@@ -8,7 +8,7 @@
           md6
           class="pa-3"
           style="font-size: 18px; margin-top: 3em;">
-            <Identite :historique="historique" :sirene="sirene" :siret="siret" :naf="naf"/>
+            <Identite :historique="historique" :sirene="sirene" :siret="siret" :naf="naf" :lienVisiteFCE="lienVisiteFCE"/>
           </v-flex>
 
           <v-flex xs12 md6 class="text-xs-right pa-3" style="margin-top: 3em">
@@ -55,6 +55,7 @@ export default {
   components: { Effectif, Urssaf, Help, OldFinance, Identite, Map, Commentaire },
   data() {
     return {
+      lienVisiteFCE: null,
       axios: axios.create(),
       sirene: {},
       etablissement: { value: {} },
@@ -281,6 +282,24 @@ export default {
         this.sirene = r.data.etablissement
       }).catch((error) => {
         // this.etablissement = { value: {} }
+      })
+
+      this.axios.post('https://dgefp.opendatasoft.com/api/records/1.0/search/', {
+        'dataset': 'fce-visites',
+        'facet': 'siret',
+        'refine.siret': this.siret,
+      }, {
+        headers: {
+          Accept: 'application/json',
+          Authorization: 'Apikey ${ process.env.VUE_APP_FCE_API_KEY }',
+        },
+      })
+      .then((r) => {
+        if (r.data.nhits > 0) {
+          this.lienVisiteFCE = `https://fce.fabrique.social.gouv.fr/establishment/${this.siret}#direccte`
+        }
+      }).catch((error) => {
+        this.lienVisiteFCE = `#dummy` // TODO: remove this, when we do get access to the API
       })
 
     },
