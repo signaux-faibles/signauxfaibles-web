@@ -6,6 +6,8 @@ Ce serveur front-end s'appuie sur:
 - Keycloak (pour l'identification des utilisateurs, cf variables d'environnement `VUE_APP_KEYCLOAK_*`)
 - Datapi (pour accéder aux données, cf variable d'environnement `VUE_APP_DATAPI_BASE_URL`)
 
+Guide d'installation: [développement Datapi et frontal en local](https://github.com/signaux-faibles/documentation/blob/master/prise-en-main.md#developpement-datapi-et-frontal-en-local).
+
 ## Project setup
 ```
 yarn install
