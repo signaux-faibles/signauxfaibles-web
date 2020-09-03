@@ -37,29 +37,29 @@ export default {
       return {
         demande: (this.apdemande || [])
         .sort((d1, d2) => {
-          return (d2.periode.start > d1.periode.start ? -1 : 1)
+          return (d2.debut > d1.debut ? -1 : 1)
         })
-        .filter((d) => d.periode.end > this.min)
+        .filter((d) => d.fin > this.min)
         .reduce((m, c) => {
           m = m.concat([
-            [ new Date(c.periode.start),
-              Math.max(c.effectif_autorise, 0)],
-            [ new Date(c.periode.end),
-              Math.max(c.effectif_autorise, 0)],
+            [ new Date(c.debut),
+              Math.max(c.effectifAutorise, 0)],
+            [ new Date(c.debut),
+              Math.max(c.effectifAutorise, 0)],
           ])
           return m
         }, []),
         conso: (this.apdemande || [])
         .sort((d1, d2) => {
-          return (d2.periode.start > d1.periode.start ? -1 : 1)
+          return (d2.debut > d2.debut ? -1 : 1)
         })
-        .filter((d) => d.periode.end > this.min)
+        .filter((d) => d.fin > this.min)
         .reduce((m, c) => {
           m = m.concat([
-            [ new Date(c.periode.start),
-              Math.min(c.effectif_consomme, c.effectif_autorise)],
-            [ new Date(c.periode.end),
-              Math.min(c.effectif_consomme, c.effectif_autorise)],
+            [ new Date(c.debut),
+              Math.min(c.effectifConsomme, c.effectifAutorise)],
+            [ new Date(c.fin),
+              Math.min(c.effectifConsomme, c.effectifAutorise)],
           ])
           return m
         }, []),

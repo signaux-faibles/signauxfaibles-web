@@ -14,8 +14,8 @@
     <hr style="color: #eee;"/>
     <div style="padding: 10px; margin: 4px;">
     
-    <div style="font-size: 16px">{{ (naf.n1 || {})[((naf.n5to1 || {})[(sirene.activite_principale || '')] || '')] }}<br/>
-    {{ (naf.n5 || {})[(sirene.activite_principale || '')] }}<br/>
+    <div style="font-size: 16px">{{ naf.secteur || '' }}<br/>
+    {{ sirene.libelle_activite_principale || '' }}<br/>
     Code APE: {{ (sirene.activite_principale || '') }}</div>
     </div>
     

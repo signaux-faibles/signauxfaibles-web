@@ -150,22 +150,14 @@ export default {
   },
   methods: {
     send() {
-      const params = [{
-        key: {
-          siret: this.siret,
-          siren: this.siret.substring(0, 9),
-          author: this.jwt.email,
-          uuid: uuidv1(),
-          follows: this.follows,
-        },
-        value: {
-          date: new Date(),
-          name: this.jwt.name,
-          text: this.editor.getHTML(),
-        },
-      }]
+      const params = {
+        message: this.editor.getHTML(),
+      }
+      if (this.follows) {
+        params.idParent = this.follows
+      }
       this.dataSend = true
-      this.$axios.post('/data/put/comment', params).then((r) => {
+      this.$axios.post(`/etablissement/comments/${this.siret}`, params).then((r) => {
         this.dataSend = false
         this.$parent.viewComment = false
         this.$parent.viewChild = true

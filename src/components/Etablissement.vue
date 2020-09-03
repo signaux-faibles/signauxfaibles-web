@@ -15,7 +15,7 @@
             <Map :longitude="sirene.longitude" :latitude="sirene.latitude"/>
           </v-flex>
 
-          <v-flex xs12 md12 class="text-xs-right pa-3">
+           <v-flex xs12 md12 class="text-xs-right pa-3">
             <Commentaire :siret="siret"/>
           </v-flex>
 
@@ -23,12 +23,12 @@
             <Effectif :effectif="effectif" :apconso="apconso" :apdemande="apdemande"/>
           </v-flex>
 
-          <v-flex md6 xs12 class="pr-1">
+           <v-flex md6 xs12 class="pr-1">
             <Urssaf :debit="debit" :roles="roles" :cotisation="cotisation"/>
           </v-flex>
 
           <v-flex xs12 class="pr-1">
-            <OldFinance :finance="finance"/>
+            <OldFinance :finance="finance" :siret="siret"/>
           </v-flex>
 
         </v-layout>
@@ -57,7 +57,7 @@ export default {
     return {
       axios: axios.create(),
       sirene: {},
-      etablissement: { value: {} },
+      etablissement: {},
       historique: [],
       pagination: null,
       comments: [],
@@ -245,35 +245,12 @@ export default {
       this.tabs = this.tabs.filter((tab, index) => index !== this.activeTab)
       this.activeTab = this.activeTab - 1
     },
-    getHistorique() {
-      const params = {
-        key: {
-          siret: this.siret,
-          type: 'detection',
-        },
-      }
-
-      this.loading = true
-      this.$axios.post('/data/get/public', params).then((response) => {
-        this.error = false
-        this.historique = response.data.sort((d1, d2) => d1.key.batch < d2.key.batch) || []
-      }).catch((error) => {
-        this.error = true
-      })
-    },
     getEtablissement() {
-      const params = {
-        key: {
-          batch: this.batch,
-          siret: this.siret,
-          type: 'detail',
-        },
-      }
-
-      this.$axios.post('/data/get/public', params).then((response) => {
-        this.etablissement = response.data[0] || []
+      this.$axios.get(`/etablissement/get/${this.siret}`).then((response) => {
+        this.etablissement = response.data
+        this.historique = response.data.scores.sort((d1, d2) => d1.batch < d2.batch) || []
       }).catch((error) => {
-        this.etablissement = { value: {} }
+        this.etablissement = {}
       })
 
       this.axios.get(process.env.VUE_APP_SIRENE_BASE_URL + `/v1/siret/${this.siret}`)
@@ -298,12 +275,10 @@ export default {
     }
   },
   mounted() {
-    this.getHistorique()
     this.getEtablissement()
   },
   watch: {
     localSiret(val) {
-      this.getHistorique()
       this.getEtablissement()
     },
   },
@@ -312,33 +287,42 @@ export default {
       return this.zipDianeBDF.filter((z) => z.annee !== '0001-01-01').map((z) => this.computeFinance(z))
     },
     naf() {
-      return this.$store.state.naf[0] ? this.$store.state.naf[0].value : {}
+      return this.etablissement.sirene ? this.etablissement.sirene.naf : {}
     },
     localSiret() {
       return this.siret
     },
     apconso() {
-      return this.etablissement.value ? (this.etablissement.value.apconso || [])
-        .sort((a, b) => a.periode <= b.periode).slice(0, 10)
-        : []
+      return (this.etablissement.apConso || [])
+        .sort((a, b) => a <= b).slice(0, 10)
     },
     apdemande() {
-      return this.etablissement.value ? (this.etablissement.value.apdemande || [])
-        .sort((a, b) => a.periode.start <= b.periode.start).slice(0, 10)
-        : []
+      return (this.etablissement.apDemande || [])
+        .sort((a, b) => a.debut <= b.debut).slice(0, 10)
     },
     debit() {
-      return this.etablissement.value.debit || []
+      return this.etablissement.periodeUrssaf ? (this.etablissement.periodeUrssaf.periodes.map((p, i) => {
+        return {
+          part_ouvriere: this.etablissement.periodeUrssaf.partPatronale[i],
+          part_patronale: this.etablissement.periodeUrssaf.partSalariale[i],
+          periode: p,
+        }
+      }) || []) : []
     },
     cotisation() {
-      return (this.etablissement.value.cotisation || []).slice(0, 23)
+      return this.etablissement.periodeUrssaf ? (this.etablissement.periodeUrssaf.cotisation || []).slice(0, 23) : []
     },
     effectif() {
-      return this.etablissement.value.effectif || []
+      return this.etablissement.periodeUrssaf ? (this.etablissement.periodeUrssaf.periodes.map((p, i) => {
+        return {
+          effectif: this.etablissement.periodeUrssaf.effectif[i],
+          periode: p,
+        }
+      }) || []) : []
     },
     bdf() {
-      if (this.etablissement.value) {
-        return this.etablissement.value.bdf || []
+      if (this.etablissement.entreprise) {
+        return this.etablissement.entreprise.bdf || []
       } else {
         return []
       }
@@ -350,8 +334,8 @@ export default {
       return this.jwt.resource_access.signauxfaibles.roles
     },
     diane() {
-      if (this.etablissement.value) {
-        return this.etablissement.value.diane || []
+      if (this.etablissement.entreprise) {
+        return this.etablissement.entreprise.diane || []
       } else {
         return []
       }
@@ -360,15 +344,20 @@ export default {
       return this.$store.state.currentBatchKey
     },
     zipDianeBDF() {
-      const annees = new Set(this.bdf.map((b) => b.arrete_bilan_bdf)
-        .concat(this.diane.map((d) => d.arrete_bilan_diane)))
-      return (Array.from(annees) || []).sort((a, b) => a < b).map((a) => {
-        return {
-          annee: a.slice(0, 10),
-          bdf: this.bdf.filter((b) => b.arrete_bilan_bdf === a)[0] || {},
-          diane: this.diane.filter((d) => d.arrete_bilan_diane === a)[0] || {},
-        }
-      })
+      const entreprise = this.etablissement.entreprise
+      if (entreprise) {
+        const annees = new Set(entreprise.bdf.map((b) => b.arrete_bilan_bdf)
+        .concat(entreprise.diane.map((d) => d.arrete_bilan_diane)))
+        return (Array.from(annees) || []).sort((a, b) => a < b).map((a) => {
+          return {
+            annee: a.slice(0, 10),
+            bdf: entreprise.bdf.filter((b) => b.arrete_bilan_bdf === a)[0] || {},
+            diane: entreprise.diane.filter((d) => d.arrete_bilan_diane === a)[0] || {},
+          }
+        })
+      } else {
+        return []
+      }
     },
   },
 }

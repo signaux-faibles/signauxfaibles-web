@@ -165,10 +165,6 @@
         ></v-combobox>
       </div>
       <p style="height: 1px; border: 1px solid #eee"/>
-      <div style="display: flex; flex-direction: column; vertical-align: middle; padding: 0 15px; position: relative; top: -26px" >
-        <v-checkbox :disabled="loading" v-model="crp" class="mx-2 thin" label="Exclure les entreprises faisant l'objet d'un suivi" @change="getPrediction()"></v-checkbox>
-      </div>
-      <p style="height: 1px; border: 1px solid #eee"/>
       <div style="display: flex; flex-direction: column; vertical-align: middle; padding: 0 15px;" >
         <span style="font-size: 15px;" @change="getPrediction()">Visibilité selon statut des procédures</span>
         <v-switch :disabled="loading" v-model="in_bonis" class="mx-2 thin" @change="getPrediction()">
@@ -222,7 +218,7 @@
       </v-layout>
     </v-container>
   </v-card>
-  <PredictionWidget v-for="p in predictionView" :key="p.key.siret" :prediction="p"/> 
+  <PredictionWidget v-for="p in predictionView" :key="p.siret" :prediction="p"/> 
 
 </div>
 </template>
@@ -278,15 +274,14 @@ export default {
     },
     format(v) {
       let data = '"'
-      data += v.key.batch + '";"'
-      data += v.key.siren + '";"' + v.key.siret + '";"'
-      data += v.value.departement + '";"'
-      data += v.value.raison_sociale.replace('"', '\"') + '";"'
-      data += v.value.dernier_effectif + '";"'
-      data += v.value.activite + '";"'
-      data += (this.naf.n5 || {})[v.value.activite || ''] + '";"'
-      data += v.value.score + '";"'
-      data += v.value.alert + '"'
+      data += this.currentBatchKey + '";"'
+      data += v.siren + '";"' + v.siret + '";"'
+      data += v.departement + '";"'
+      data += v.raison_sociale.replace('"', '\"') + '";"'
+      data += v.dernier_effectif + '";"'
+      data += v.code_activite + '";"'
+      data += v.libelle_activite + '";"'
+      data += v.alert + '"'
       return data
     },
     download() {
@@ -311,101 +306,42 @@ export default {
       if (!this.loading) {
         this.prediction = []
         if (this.$store.state.currentBatchKey != null) {
-          const params = {
-            key: {
-              type: 'detection',
-              batch: this.$store.state.currentBatchKey,
-            },
-            limit: this.predictionLength,
-            filter: [{
-              field: 'effectif',
-              operator: '>=',
-              value: parseInt(this.minEffectif, 10),
-            }],
-            sort: [{
-              field: 'score',
-              order: -1,
-            }],
-          }
+          const params = {}
           if (!this.currentNaf.includes('NON')) {
-            params.filter = params.filter.concat([{
-              field: 'naf1',
-              operator: 'in',
-              value: this.currentNaf,
-            }])
+            params.activite = this.currentNaf
           }
           if (this.zone.length > 0) {
-            params.filter = params.filter.concat([{
-              field: 'zone',
-              operator: 'in',
-              value: this.zone,
-            }])
+            params.zone = this.zone
           }
-          if (this.crp) {
-            params.filter = params.filter.concat([{
-              field: 'crp',
-              operator: '=',
-              value: false,
-            }])
+          params.effectifMin = parseInt(this.minEffectif, 10)
+          params.procol = []
+          if (this.rj) {
+            params.procol = params.procol.concat(['redressement', 'plan_redressement'])
           }
-          if (!this.rj) {
-            params.filter = params.filter.concat([{
-              field: 'procol',
-              operator: 'not in',
-              value: ['redressement', 'plan_redressement'],
-            }])
+          if (this.lj) {
+            params.procol = params.procol.concat(['liquidation'])
           }
-
-          if (!this.lj) {
-            params.filter = params.filter.concat([{
-              field: 'procol',
-              operator: 'not in',
-              value: ['liquidation'],
-            }])
+          if (this.sauvegarde) {
+            params.procol = params.procol.concat(['sauvegarde'])
           }
-
-          if (!this.sauvegarde) {
-            params.filter = params.filter.concat([{
-              field: 'procol',
-              operator: 'not in',
-              value: ['sauvegarde'],
-            }])
+          if (this.plan_sauvegarde) {
+            params.procol = params.procol.concat(['plan_sauvegarde'])
           }
-
-          if (!this.plan_sauvegarde) {
-            params.filter = params.filter.concat([{
-              field: 'procol',
-              operator: 'not in',
-              value: ['plan_sauvegarde'],
-            }])
+          if (this.continuation) {
+            params.procol = params.procol.concat(['continuation'])
           }
-
-          if (!this.continuation) {
-            params.filter = params.filter.concat([{
-              field: 'procol',
-              operator: 'not in',
-              value: ['continuation'],
-            }])
+          if (this.in_bonis) {
+            params.procol = params.procol.concat(['in_bonis'])
           }
-
-          if (!this.in_bonis) {
-            params.filter = params.filter.concat([{
-              field: 'procol',
-              operator: 'not in',
-              value: ['in_bonis'],
-            }])
-          }
-
           this.loading = true
-          const self = this
-          this.$axios.post('/data/cache/public', params).then((response) => {
-            self.prediction = response.data.sort((p1, p2) => (p1.value.score < p2.value.score) ? 1 : -1)
-            self.loading = false
+          this.$axios.post(`/scores/${this.$store.state.currentBatchKey}`, params).then((response) => {
+            this.prediction = response.data.scores.sort((p1, p2) => (p1.alert > p2.alert) ? 1 : -1)
+            this.loading = false
           }).catch((error) => {
-            self.prediction = []
+            this.prediction = []
           }).finally(() => {
-            self.init = false
-            self.loading = false
+            this.init = false
+            this.loading = false
           })
         } else {
           window.setTimeout(this.getPrediction, 100)
@@ -464,6 +400,7 @@ export default {
       set(value) {this.$localStore.commit('setcurrentNaf', value)},
     },
     currentNafLibelle() {
+
       return this.currentNaf.map((n) => {
         return this.naf1.filter((n1) => (n1.value === n))[0].text
       })
@@ -481,17 +418,17 @@ export default {
       set(value) {this.$store.commit('setLoading', value)},
     },
     predictionAlerts() {
-      return this.prediction.filter((p) => (p.value.raison_sociale.includes(this.filter.toUpperCase()) ||
-        p.key.siret.includes(this.filter.toUpperCase())) && (p.value.alert === 'Alerte seuil F1')).length
+      return this.prediction.filter((p) => (p.raison_sociale.includes(this.filter.toUpperCase()) ||
+        p.siret.includes(this.filter.toUpperCase())) && (p.alert === 'Alerte seuil F1')).length
     },
     predictionWarnings() {
-      return this.prediction.filter((p) => (p.value.raison_sociale.includes(this.filter.toUpperCase()) ||
-        p.key.siret.includes(this.filter.toUpperCase())) && (p.value.alert === 'Alerte seuil F2')).length
+      return this.prediction.filter((p) => (p.raison_sociale.includes(this.filter.toUpperCase()) ||
+        p.siret.includes(this.filter.toUpperCase())) && (p.alert === 'Alerte seuil F2')).length
     },
     predictionFilter() {
       return this.prediction.filter((p) => {
-        return p.value.raison_sociale.includes(this.filter.toUpperCase()) ||
-          p.key.siret.includes(this.filter.toUpperCase())
+        return p.raison_sociale.includes(this.filter.toUpperCase()) ||
+          p.siret.includes(this.filter.toUpperCase())
       })
     },
     predictionView() {
@@ -514,13 +451,10 @@ export default {
         return undefined
       }
     },
-    naf() {
-      return (this.$store.getters.naf(this.$store.state.currentBatchKey) || { value: [] }).value
-    },
     naf1() {
-      return Object.keys((this.naf || {n1: {}}).n1).map((n) => {
+      return Object.keys(this.$store.state.naf).map((n) => {
         return {
-            text: this.naf.n1[n],
+            text: this.$store.state.naf[n],
             value: n,
         }
       })
@@ -538,7 +472,8 @@ export default {
       return this.nextNaf.length > 0 && !this.allNextNaf
     },
     batches() {
-      return this.$store.getters.batches
+      const batches = this.$store.getters.batches
+      return batches
     },
     scrollTop() {
       return this.$store.state.scrollTop
@@ -582,26 +517,20 @@ export default {
           value: [],
         },
       ]
-      const region = this.$store.state.region
-        .filter((r) => r.key.batch === this.currentBatchKey)
-        .map((r) => {
-          return {
-            text: r.key.region,
-            value: r.value.departements,
-          }
+      const region = Object.keys(this.$store.state.region).map((r) => {
+        return {
+          text: r,
+          value: this.$store.state.region[r],
+        }
       }).sort((r1, r2) => r1.text > r2.text)
-
       all = all.concat(region)
-      if (this.$store.state.departements.length > 0) {
-        const departement = Object.keys(this.$store.state.departements[0].value).map((d) => {
-          return {
-            text: d + ' ' + this.$store.state.departements[0].value[d],
-            value: [d],
-          }
-        }).sort((a, b) => a.value[0] > b.value[0])
-        all = all.concat(departement)
-      }
-
+      const departement = Object.keys(this.$store.state.departements).map((d) => {
+        return {
+          text: d + ' ' + this.$store.state.departements[d],
+          value: [d],
+        }
+      }).sort((d1, d2) => d1.value[0] > d2.value[0])
+      all = all.concat(departement)
       return all
     },
     currentBatch() {

@@ -696,7 +696,10 @@
                 </v-list-tile>
               </v-list-group>
             </v-list>
-            <div class="pb-3 text-xs-center"><v-btn dark color="indigo darken-5">Télécharger les documents comptables de {{ f.exercice }}</v-btn></div>
+            <div class="pb-3 text-xs-center" v-if="documentsComptablesDisponibles(f.exercice)">
+              <v-btn color="indigo darken-5" @click="getBilansDocuments(index, f.exercice)" :dark="!loading(index)" :loading="loading(index)" :disabled="loading(index)"><v-icon left>mdi-cloud-download</v-icon> Télécharger les documents comptables de {{ f.exercice }}</v-btn>
+              <v-alert :value="alert(index)" type="error" transition="scale-transition">Un problème est survenu lors du téléchargement des documents comptables.</v-alert>
+            </div>
           </v-card>
         </v-flex>
       </v-layout>
@@ -706,12 +709,40 @@
 
 <script>
 import Help from '@/components/Help.vue'
+import axios from 'axios'
 
 export default {
   name: 'OldFinance',
-  props: ['finance'],
+  props: ['finance', 'siret'],
   components: { Help },
+  data() {
+    return {
+      axios: axios.create(),
+      loading0: false,
+      loading1: false,
+      loading2: false,
+      alert0: false,
+      alert1: false,
+      alert2: false,
+      bilansExercices: null,
+    }
+  },
+  created() {
+    this.getBilansExercices()
+  },
   methods: {
+    loading(l) {
+      return this['loading' + l]
+    },
+    alert(l) {
+      return this['alert' + l]
+    },
+    loader(l) {
+      this['loading' + l] = true
+      setTimeout(() => {
+        this['loading' + l] = false
+      }, 3000)
+    },
     barOptions() {
       return {
         legend: {
@@ -812,16 +843,49 @@ export default {
     mois(m) {
       return m ? '(' + m + ' mois)' : ''
     },
+    getBilansDocuments(l, exercice) {
+      this['loading' + l] = true
+      this['alert' + l] = false
+      this.$axios.get('/bilans/130006018/2018', {responseType: 'blob'}).then((response) => {
+        const blob = new Blob([response.data])
+        const link = document.createElement('a')
+        link.href = URL.createObjectURL(blob)
+        const filename = response.headers['content-disposition'].split('filename=')[1]
+        if (filename) {
+          link.setAttribute('download', filename)
+        }
+        link.click()
+        link.remove()
+        this['loading' + l] = false
+      }).catch((error) => {
+        this['loading' + l] = false
+        this['alert' + l] = true
+      })
+    },
+    getBilansExercices() {
+      this.$axios.get('/bilans/130006018').then((response) => {
+        this.bilansExercices = response.data
+      }).catch((error) => {
+        this.bilansExercices = null
+      })
+    },
+    documentsComptablesDisponibles(exercice) {
+      if (this.bilansExercices) {
+        return this.bilansExercices.indexOf(exercice) > -1
+      } else {
+        return false
+      }
+    },
   },
   computed: {
     sortedFinance() {
       return this.sortFinance()
     },
     annees() {
-      return this.sortFinance().map((f) => f.annee )
+      return this.sortedFinance.map((f) => f.annee)
     },
     exercices() {
-      return this.sortFinance().map((f) => f.exercice )
+      return this.sortedFinance.map((f) => f.exercice)
     },
     sigOptions() {
       const title = {
@@ -883,6 +947,9 @@ export default {
       } else {
         return []
       }
+    },
+    siren() {
+      return this.siret.slice(0, 9)
     },
   },
 }

@@ -11,7 +11,7 @@ export default {
   props: ['prediction', 'size'],
   computed: {
     alert() {
-      return this.prediction || {value: {score: 0, diff: 0, alert: 'Pas d\'alerte'}}
+      return this.prediction || {alert: 'Pas d\'alerte'}
     },
     iconSize() {
       return this.size || '35px'
@@ -31,8 +31,8 @@ export default {
       }
     },
     detection() {
-      const alert = this.alert.value.alert
-      const diff = this.alert.value.diff
+      const alert = this.alert.alert
+      const diff = this.alert.diff
       let probClass = ''
       let diffClass = ''
       if (alert === 'Pas d\'alerte') {

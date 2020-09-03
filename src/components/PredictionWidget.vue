@@ -9,42 +9,42 @@
       </div>
       <div class="corps">
         <div class="mr-2 ml-2">
-          <span class="raison-sociale">{{ prediction.value.raison_sociale }}</span>
-          <img class="ml-2" v-if="prediction.value.connu === true" height="20" src="../assets/crp.png"/>
+          <span class="raison-sociale">{{ prediction.raison_sociale }}</span>
+          <img class="ml-2" v-if="prediction.connu === true" height="20" src="../assets/crp.png"/>
           <div class="identite">
-            {{ prediction.key.siret }} - <span :class="prediction.value.etat_procol == 'in_bonis'?'up':'down'">{{ prediction.value.etat_procol }}</span><br>
-            Dép.: {{ prediction.value.departement }} - Act: {{ (naf.n5|| {})[prediction.value.activite || ''].slice(0,65) }}
+            {{ prediction.siret }} - <span :class="prediction.etat_procol == 'in_bonis'?'up':'down'">{{ prediction.etat_procol }}</span><br>
+            Dép.: {{ prediction.departement }} - Act: {{ prediction.libelle_activite.slice(0,65) }}
           </div>
         </div>
         <div class="mr-2 text-xs-right">
           <img
             class="d-block mt-2 mb-2"
             width="70"
-            v-if="!prediction.value.urssaf || !roles.includes('urssaf')"
+            v-if="!prediction.urssaf || !roles.includes('urssaf')"
             src="../assets/gray_urssaf.svg"
           />
           <img
             class="d-block mt-2 mb-2"
             width="70"
-            v-if="prediction.value.urssaf && roles.includes('urssaf')"
+            v-if="prediction.urssaf && roles.includes('urssaf')"
             src="../assets/red_urssaf.svg"
           />
           <img
             class="activite-partielle mt-1 mr-1"
             height="24"
-            v-if="prediction.value.activite_partielle"
+            v-if="prediction.activite_partielle"
             src="../assets/red_apart.svg"
           />
           <img
             class="activite-partielle mt-1 mr-1"
             height="24"
-            v-if="!prediction.value.activite_partielle"
+            v-if="!prediction.activite_partielle"
             src="../assets/gray_apart.svg"
           />
-          <span class="effectif">{{ prediction.value.dernier_effectif || 'n/c' }}</span>
+          <span class="effectif">{{ prediction.dernier_effectif || 'n/c' }}</span>
         </div>
         <div class="ca mr-2 text-xs-right">
-          CA {{prediction.value.annee_ca}}<br>
+          CA {{prediction.annee_ca}}<br>
           <span class="valeur" :class="diane.ca_color">{{ diane.ca || "n/c" }}</span>
           <v-icon small v-if="diane.ca_arrow">{{ diane.ca_arrow }}</v-icon>
         </div>
@@ -60,7 +60,7 @@
               <v-spacer/>
               <v-icon @click="dialog=false;" style="color: #fff">mdi-close</v-icon>
             </v-toolbar>
-            <Etablissement :siret="prediction.key.siret" :batch="currentBatchKey"></Etablissement>
+            <Etablissement :siret="prediction.siret" :batch="currentBatchKey"></Etablissement>
           </div>
         </v-dialog>
       </div>
@@ -89,24 +89,18 @@ export default {
     roles() {
       return this.jwt.resource_access.signauxfaibles.roles
     },
-    naf() {
-      return this.$store.state.naf[0] ? this.$store.state.naf[0].value : {}
-    },
-    procol() {
-      return this.$store.state.procol
-    },
     currentBatchKey() {
       return this.$store.state.currentBatchKey
     },
     diane() {
       return {
-        ca: this.prediction.value.ca ? this.prediction.value.ca + ' k€' : 'n/c',
-        ca_arrow: (this.prediction.value.variation_ca || 1) > 1.05 ? 'mdi-arrow-top-right' :
-          (this.prediction.value.variation_ca || 1) < 0.95 ? 'mdi-arrow-bottom-right' : null,
-        ca_color: this.prediction.value.ca ? '' : 'unknown',
-        resultat_expl: this.prediction.value.resultat_expl ? this.prediction.value.resultat_expl + ' k€' : 'n/c',
-        resultat_expl_color: this.prediction.value.resultat_expl ?
-          (this.prediction.value.resultat_expl < 0 ? 'down' : null) : 'unknown',
+        ca: this.prediction.ca ? this.prediction.ca + ' k€' : 'n/c',
+        ca_arrow: (this.prediction.variation_ca || 1) > 1.05 ? 'mdi-arrow-top-right' :
+          (this.prediction.variation_ca || 1) < 0.95 ? 'mdi-arrow-bottom-right' : null,
+        ca_color: this.prediction.ca ? '' : 'unknown',
+        resultat_expl: this.prediction.resultat_expl ? this.prediction.resultat_expl + ' k€' : 'n/c',
+        resultat_expl_color: this.prediction.resultat_expl ?
+          (this.prediction.resultat_expl < 0 ? 'down' : null) : 'unknown',
       }
     },
   },

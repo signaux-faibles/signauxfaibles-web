@@ -20,12 +20,12 @@
     </div>
 
     <div v-if="viewChild">
-      <div v-for="t in thread" :key="JSON.stringify(t.key)" style="text-align: left;border-bottom: 1px dotted #bbb; padding: 0px">
-        <Thread :thread="t" :load="load"/>
+      <div v-for="t in thread" :key="JSON.stringify(t.id)" style="text-align: left;border-bottom: 1px dotted #bbb; padding: 0px">
+        <Thread :thread="t" :load="load" :siret="siret" />
       </div>
   
       <a v-if="!viewComment" @click="viewComment=!viewComment">Créer un nouveau fil de commentaire</a>
-      <NewComment v-if="viewComment" style="text-align: left; margin-top: 5px;" :siret="this.siret" :load="load"/>
+      <NewComment v-if="viewComment" style="text-align: left; margin-top: 5px;" :siret="siret" :load="load"/>
     </div>
   </div>
 </template>
@@ -60,33 +60,24 @@ export default {
   methods: {
     load() {
       const loading = true
-      const params = {
-        key: {
-          siret: this.siret,
-        },
-      }
-      this.$axios.post('/data/get/comment', params).then((d) => {
-        const comments = d.data.sort((c1, c2) => c1.value.date < c2.value.date)
-        this.thread = this.tree(comments, null)
+      this.$axios.get(`/etablissement/comments/${this.siret}`).then((d) => {
+        const comments = d.data.comments.sort(
+          (c1, c2) =>
+            new Date(c1.dateHistory[c1.dateHistory.length - 1]) -
+            new Date(c2.dateHistory[c2.dateHistory.length - 1]),
+        )
+        this.thread = comments
         this.loading = false
       })
     },
-    count(tree) {
-      return tree.reduce((m, t) => {
-        return m + t.count
-      }, 0)
-    },
-    tree(comments, id) {
-      return comments.reduce((m, c) => {
-        if ((c.key.follows || '') === (id || '')) {
-          c.thread = this.tree(comments, c.key.uuid)
-          c.count = c.thread.reduce((n, h) => {
-            return n + h.count
-          }, 1)
-          m.push(c)
+    count(thread) {
+      let count = thread.length
+      thread.map((c, i) => {
+        if (c.comments) {
+          count += this.count(c.comments)
         }
-        return m
-      }, [])
+      })
+      return count
     },
   },
 }
