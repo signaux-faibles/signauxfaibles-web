@@ -1,10 +1,5 @@
 <template>
-  <!-- <div>
-    <v-btn @click="test"/> -->
-  <div id='map' style="position: relative; width: 100%; height: 100%; border: 1px solid black">
-
-  </div>
-  <!-- </div> -->
+  <div id='map' style="position: relative; width: 100%; height: 100%; border: 1px solid black"></div>
 </template>
 
 <script>
@@ -37,9 +32,13 @@
       },
     },
     computed: {
-      ready() {return (this.longitude || '') !== ''},
       coordinates() {
         return [parseFloat(this.longitude) || 0, parseFloat(this.latitude) || 0]
+      },
+    },
+    methods: {
+      resizeMap() {
+        this.map.resize()
       },
     },
   }

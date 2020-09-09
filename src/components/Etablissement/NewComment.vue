@@ -7,12 +7,7 @@
             <editor-content class="editor__content" :editor="editor" style="padding: 5px" />
             <editor-menu-bar :editor="editor" v-slot="{ commands, isActive }">
               <div class="menubar">
-                <v-toolbar
-                  class = "localtoolbar"
-                  dark
-                  color = "rgb(43, 40, 73)"
-                  height="30px"
-                >
+                <v-toolbar class="localtoolbar" dark color="rgb(43, 40, 73)" height="30px">
                   <v-btn
                     fab
                     small
@@ -46,34 +41,15 @@
                     <v-icon>mdi-format-list-bulleted</v-icon>
                   </v-btn>
 
-
-                  <v-btn
-                    fab
-                    small
-                    flat
-                    class="menubar__button"
-                    @click="commands.undo"
-                  >
+                  <v-btn fab small flat class="menubar__button" @click="commands.undo">
                     <v-icon>mdi-undo</v-icon>
                   </v-btn>
 
-                  <v-btn
-                    fab
-                    small
-                    flat
-                    class="menubar__button"
-                    @click="commands.redo"
-                  >
+                  <v-btn fab small flat class="menubar__button" @click="commands.redo">
                     <v-icon>mdi-redo</v-icon>
                   </v-btn>
-                  <v-spacer/>
-                  <v-btn 
-                    fab
-                    flat 
-                    small
-                    class="menubar__button"
-                    :disabled="dataSend"
-                    @click="send">
+                  <v-spacer />
+                  <v-btn fab flat small class="menubar__button" :disabled="dataSend" @click="send">
                     <v-icon>mdi-send</v-icon>
                   </v-btn>
                 </v-toolbar>
@@ -87,9 +63,10 @@
             <li>des parts ni trop petites ni trop grandes</li>
             <li>quelques ingrédients bien choisis</li>
             <li>pas plus d'une pincée de sel</li>
-          </ul> 
+          </ul>
         </v-flex>
       </v-layout>
+      <v-alert :value="alert" type="error" transition="scale-transition">Quelque chose vient de se casser, l'envoi n'a pas eu lieu.</v-alert>
     </v-container>
   </div>
 </template>
@@ -117,7 +94,7 @@ import {
 
 export default {
   name: 'NewComment',
-  props: [ 'follows', 'siret', 'load' ],
+  props: ['follows', 'siret', 'load'],
   components: { EditorContent, EditorMenuBar },
   data() {
     return {
@@ -138,12 +115,8 @@ export default {
       }),
       text: '',
       dataSend: false,
+      alert: false,
     }
-  },
-  computed : {
-    jwt() {
-      return this.$keycloak.tokenParsed || {resource_access: { signauxfaibles: {roles: []}}}
-    },
   },
   beforeDestroy() {
     this.editor.destroy()
@@ -157,6 +130,7 @@ export default {
         params.idParent = this.follows
       }
       this.dataSend = true
+      this.alert = false
       this.$axios.post(`/etablissement/comments/${this.siret}`, params).then((r) => {
         this.dataSend = false
         this.$parent.viewComment = false
@@ -165,7 +139,7 @@ export default {
         this.load()
       }).catch((error) => {
         this.dataSend = false
-        window.alert('Quelque chose vient de se casser, l\'envoi n\'a pas eu lieu: ' + error)
+        this.alert = true
       })
     },
   },
@@ -180,8 +154,8 @@ export default {
 .editor {
   margin: 5px;
   border-radius: 5px;
-  font-weight: 400; 
-  font-family: 'Roboto Mono', monospace;
+  font-weight: 400;
+  font-family: "Roboto Mono", monospace;
   border: 1px solid rgb(43, 40, 73);
   width: 95%;
 }

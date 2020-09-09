@@ -13,7 +13,6 @@ Vue.prototype.$axios = store.axiosClient
 Vue.prototype.$store = store.sessionStore
 Vue.prototype.$localStore = store.localStore
 
-
 function tokenInterceptor() {
   Vue.prototype.$axios.interceptors.request.use((config: any) => {
     config.headers.Authorization = `Bearer ${Vue.prototype.$keycloak.token}`
@@ -56,4 +55,15 @@ Vue.use(VueKeyCloak, {
   },
 })
 
-
+Vue.mixin({
+  computed: {
+    jwt() {
+      const jwt = Vue.prototype.$keycloak.tokenParsed
+      return jwt
+    },
+    roles() {
+      const roles = (Vue.prototype.$keycloak.tokenParsed.resource_access.signauxfaibles || {}).roles || []
+      return roles
+    },
+  },
+})

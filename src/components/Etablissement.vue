@@ -3,34 +3,30 @@
     <div>
       <v-container>
         <v-layout wrap>
-          <v-flex
-          xs12
-          md6
-          class="pa-3"
-          style="font-size: 18px; margin-top: 3em;">
-            <Identite :historique="historique" :sirene="sirene" :siret="siret" :naf="naf"/>
+          <v-flex xs12 md6 class="pa-3" style="font-size: 18px; margin-top: 3em;">
+            <Identite
+              :denomination="denomination"
+              :historique="historique"
+              :sirene="sirene"
+              :siret="siret"
+              :adresse="adresse"
+            />
           </v-flex>
-
           <v-flex xs12 md6 class="text-xs-right pa-3" style="margin-top: 3em">
-            <Map :longitude="sirene.longitude" :latitude="sirene.latitude"/>
+            <Map :longitude="sirene.longitude" :latitude="sirene.lattitude" ref="map" />
           </v-flex>
-
-           <v-flex xs12 md12 class="text-xs-right pa-3">
-            <Commentaire :siret="siret"/>
+          <v-flex xs12 md12 class="text-xs-right pa-3">
+            <Commentaire :siret="siret" />
           </v-flex>
-
           <v-flex md6 xs12 class="pr-1" style="min-height: 200px">
-            <Effectif :effectif="effectif" :apconso="apconso" :apdemande="apdemande"/>
+            <Effectif :effectif="effectif" :apconso="apconso" :apdemande="apdemande" />
           </v-flex>
-
-           <v-flex md6 xs12 class="pr-1">
-            <Urssaf :debit="debit" :roles="roles" :cotisation="cotisation"/>
+          <v-flex md6 xs12 class="pr-1">
+            <Urssaf :debit="debit" :cotisation="cotisation" />
           </v-flex>
-
           <v-flex xs12 class="pr-1">
-            <OldFinance :finance="finance" :siret="siret"/>
+            <Finance :finance="finance" :siret="siret" />
           </v-flex>
-
         </v-layout>
       </v-container>
     </div>
@@ -43,8 +39,7 @@ import Urssaf from '@/components/Etablissement/Urssaf.vue'
 import Help from '@/components/Help.vue'
 import Identite from '@/components/Etablissement/Identite.vue'
 import Map from '@/components/Etablissement/Map.vue'
-import OldFinance from '@/components/Etablissement/OldFinance.vue'
-// import Finance from '@/components/Etablissement/Finance.vue'
+import Finance from '@/components/Etablissement/Finance.vue'
 import Commentaire from '@/components/Etablissement/Commentaire.vue'
 import axios from 'axios'
 import fr from 'apexcharts/dist/locales/fr.json'
@@ -52,22 +47,19 @@ import fr from 'apexcharts/dist/locales/fr.json'
 export default {
   props: ['siret', 'batch'],
   name: 'Etablissement',
-  components: { Effectif, Urssaf, Help, OldFinance, Identite, Map, Commentaire },
+  components: { Effectif, Urssaf, Help, Finance, Identite, Map, Commentaire },
   data() {
     return {
       axios: axios.create(),
       sirene: {},
       etablissement: {},
       historique: [],
-      pagination: null,
-      comments: [],
-      error: false,
-      loading: true,
+      adresse: '',
     }
   },
   methods: {
     computeFinance(f) {
-
+      // TODO: integration in component
       const annee = f.annee
 
       const ca = f.diane.ca ? f.diane.ca + '\u00A0k€' : 'n/c'
@@ -107,7 +99,7 @@ export default {
 
       // État de la trésorerie
       const frng = f.diane.couverture_ca_fdr ?
-      Math.round(f.diane.couverture_ca_fdr * f.diane.ca / 360) : null
+        Math.round(f.diane.couverture_ca_fdr * f.diane.ca / 360) : null
       const bfr = f.diane.couverture_ca_besoin_fdr ?
         Math.round(f.diane.couverture_ca_besoin_fdr * f.diane.ca / 360) : null
       const tresorerie = (frng && bfr) ? frng - bfr : null
@@ -154,7 +146,7 @@ export default {
         f.diane.capacite_remboursement.toLocaleString() : 'n/c'
       ratios.gestion.capaciteAutofinancement = f.diane.capacite_autofinancement ?
         f.diane.capacite_autofinancement.toLocaleString() + '\u00A0%' : 'n/c'
-      ratios.gestion.couvertureCaFdr = f.diane.couverture_ca_fdr  ?
+      ratios.gestion.couvertureCaFdr = f.diane.couverture_ca_fdr ?
         f.diane.couverture_ca_fdr.toLocaleString() + '\u00A0jours' : 'n/c'
       ratios.gestion.couvertureCaBesoinFdr = f.diane.couverture_ca_besoin_fdr ?
         f.diane.couverture_ca_besoin_fdr.toLocaleString() + '\u00A0jours' : 'n/c'
@@ -231,41 +223,27 @@ export default {
         axios: axios.create(),
       }
     },
-    formattedDate(d) {
-      let month = String(d.getMonth() + 1)
-      let day = String(d.getDate())
-      const year = String(d.getFullYear())
-
-      if (month.length < 2) {month = '0' + month}
-      if (day.length < 2) {day = '0' + day}
-
-      return `${day}/${month}/${year}`
-    },
-    close() {
-      this.tabs = this.tabs.filter((tab, index) => index !== this.activeTab)
-      this.activeTab = this.activeTab - 1
-    },
     getEtablissement() {
       this.$axios.get(`/etablissement/get/${this.siret}`).then((response) => {
         this.etablissement = response.data
-        this.historique = response.data.scores.sort((d1, d2) => d1.batch < d2.batch) || []
+        this.historique = (this.etablissement.scores || []).sort((d1, d2) => d1.batch < d2.batch)
+        this.sirene = this.etablissement.sirene
       }).catch((error) => {
         this.etablissement = {}
+        this.historique = []
+        this.sirene = {}
       })
-
-      this.axios.get(process.env.VUE_APP_SIRENE_BASE_URL + `/v1/siret/${this.siret}`)
-      .then((r) => {
-        this.sirene = r.data.etablissement
-      }).catch((error) => {
-        // this.etablissement = { value: {} }
+      this.axios.get(process.env.VUE_APP_SIRENE_BASE_URL + `/v1/siret/${this.siret}`).then((response) => {
+        const etablissement = response.data.etablissement || {}
+        const adresse = [etablissement.l1_normalisee,
+          etablissement.l2_normalisee,
+          etablissement.l4_normalisee,
+          etablissement.l5_normalisee,
+          etablissement.l6_normalisee,
+          etablissement.l7_normalisee].filter(Boolean).join('<br>')
+        this.adresse = adresse
+        this.$refs.map.resizeMap()
       })
-
-    },
-    printDate(date) {
-      return (date || '          ').substring(0, 10)
-    },
-    round(value, size) {
-      return Math.round(value * (Math.pow(10, size))) / (Math.pow(10, size))
     },
   },
   created() {
@@ -283,76 +261,60 @@ export default {
     },
   },
   computed: {
+    denomination() {
+      const entreprise = (this.etablissement || {}).entreprise || {}
+      return (entreprise.Sirene || {}).raisonSociale
+    },
     finance() {
-      return this.zipDianeBDF.filter((z) => z.annee !== '0001-01-01').map((z) => this.computeFinance(z))
+      return this.zipDianeBDF.map((z) => this.computeFinance(z))
     },
     naf() {
-      return this.etablissement.sirene ? this.etablissement.sirene.naf : {}
+      return ((this.etablissement || {}).sirene || {}).naf || {}
     },
     localSiret() {
       return this.siret
     },
     apconso() {
-      return (this.etablissement.apConso || [])
-        .sort((a, b) => a <= b).slice(0, 10)
+      return ((this.etablissement || {}).apConso || []).sort((a1, a2) => (a1.date < a2.date) ? 1 : -1).slice(0, 10)
     },
     apdemande() {
-      return (this.etablissement.apDemande || [])
-        .sort((a, b) => a.debut <= b.debut).slice(0, 10)
+      return ((this.etablissement || {}).apDemande || []).sort((a1, a2) => (a1.debut < a2.debut) ? 1 : -1).slice(0, 10)
     },
     debit() {
-      return this.etablissement.periodeUrssaf ? (this.etablissement.periodeUrssaf.periodes.map((p, i) => {
+      const periodeUrssaf = (this.etablissement || {}).periodeUrssaf || {}
+      return (periodeUrssaf.periodes || []).map((p, i) => {
         return {
-          part_ouvriere: this.etablissement.periodeUrssaf.partPatronale[i],
-          part_patronale: this.etablissement.periodeUrssaf.partSalariale[i],
+          part_ouvriere: periodeUrssaf.partPatronale[i],
+          part_patronale: periodeUrssaf.partSalariale[i],
           periode: p,
         }
-      }) || []) : []
+      })
     },
     cotisation() {
-      return this.etablissement.periodeUrssaf ? (this.etablissement.periodeUrssaf.cotisation || []).slice(0, 23) : []
+      const periodeUrssaf = (this.etablissement || {}).periodeUrssaf || {}
+      return (periodeUrssaf.cotisation || []).slice(0, 23)
     },
     effectif() {
-      return this.etablissement.periodeUrssaf ? (this.etablissement.periodeUrssaf.periodes.map((p, i) => {
+      const periodeUrssaf = (this.etablissement || {}).periodeUrssaf || {}
+      return (periodeUrssaf.periodes || []).map((p, i) => {
         return {
-          effectif: this.etablissement.periodeUrssaf.effectif[i],
+          effectif: periodeUrssaf.effectif[i],
           periode: p,
         }
-      }) || []) : []
-    },
-    bdf() {
-      if (this.etablissement.entreprise) {
-        return this.etablissement.entreprise.bdf || []
-      } else {
-        return []
-      }
-    },
-    jwt() {
-      return this.$keycloak.tokenParsed || {resource_access: { signauxfaibles: {roles: []}}}
-    },
-    roles() {
-      return this.jwt.resource_access.signauxfaibles.roles
-    },
-    diane() {
-      if (this.etablissement.entreprise) {
-        return this.etablissement.entreprise.diane || []
-      } else {
-        return []
-      }
-    },
-    currentBatchKey() {
-      return this.$store.state.currentBatchKey
+      })
     },
     zipDianeBDF() {
-      const entreprise = this.etablissement.entreprise
-      if (entreprise) {
-        const annees = new Set(entreprise.bdf.map((b) => b.arrete_bilan_bdf)
-        .concat(entreprise.diane.map((d) => d.arrete_bilan_diane)))
-        return (Array.from(annees) || []).sort((a, b) => a < b).map((a) => {
+      const entreprise = (this.etablissement || {}).entreprise || {}
+      if (entreprise.bdf || entreprise.diane) {
+        const bdf = entreprise.bdf || []
+        const diane = entreprise.diane || []
+        const annees = [...new Set(bdf.map((b) => b.arrete_bilan_bdf)
+          .concat(diane.map((d) => d.arrete_bilan_diane)))].sort((a1, a2) => (a1 > a2) ? 1 : -1)
+        return annees.map((a) => {
           return {
             annee: a.slice(0, 10),
-            bdf: entreprise.bdf.filter((b) => b.arrete_bilan_bdf === a)[0] || {},
-            diane: entreprise.diane.filter((d) => d.arrete_bilan_diane === a)[0] || {},
+            bdf: bdf.filter((b) => b.arrete_bilan_bdf === a)[0] || {},
+            diane: diane.filter((d) => d.arrete_bilan_diane === a)[0] || {},
           }
         })
       } else {
@@ -361,34 +323,13 @@ export default {
     },
   },
 }
-
 </script>
 
 <style scoped>
-.echarts {
-  width: 400px
-}
 .gray {
   color: #aaa;
 }
 .down {
   color: rgb(244, 67, 54);
-}
-.widget {
-  position: absolute;
-  left: 20px;
-  top: 20px;
-  right: 20px;
-}
-.localtoolbar {
-  font-weight: 600;
-  text-align: center;
-  width: 100%;
-}
-.nc {
-  color: #bbb;
-}
-.align-right > * {
-  text-align: center;
 }
 </style>

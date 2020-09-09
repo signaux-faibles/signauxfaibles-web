@@ -1,18 +1,19 @@
 <template>
   <div>
-    <v-card
-      @click="showEtablissement()"
-      class="etablissement-card elevation-2 ma-2 pointer"
-    >
+    <v-card @click="showEtablissement()" class="etablissement-card elevation-2 ma-2 pointer">
       <div class="entete">
-        <ScoreWidget :prediction="prediction"/>
+        <ScoreWidget :prediction="prediction" />
       </div>
       <div class="corps">
         <div class="mr-2 ml-2">
           <span class="raison-sociale">{{ prediction.raison_sociale }}</span>
-          <img class="ml-2" v-if="prediction.connu === true" height="20" src="../assets/crp.png"/>
+          <img class="ml-2" v-if="prediction.connu === true" height="20" src="../assets/crp.png" />
           <div class="identite">
-            {{ prediction.siret }} - <span :class="prediction.etat_procol == 'in_bonis'?'up':'down'">{{ prediction.etat_procol }}</span><br>
+            {{ prediction.siret }} -
+            <span
+              :class="prediction.etat_procol == 'in_bonis'?'up':'down'"
+            >{{ prediction.etat_procol }}</span>
+            <br />
             Dép.: {{ prediction.departement }} - Act: {{ prediction.libelle_activite.slice(0,65) }}
           </div>
         </div>
@@ -44,20 +45,26 @@
           <span class="effectif">{{ prediction.dernier_effectif || 'n/c' }}</span>
         </div>
         <div class="ca mr-2 text-xs-right">
-          CA {{prediction.annee_ca}}<br>
+          CA {{prediction.annee_ca}}
+          <br />
           <span class="valeur" :class="diane.ca_color">{{ diane.ca || "n/c" }}</span>
           <v-icon small v-if="diane.ca_arrow">{{ diane.ca_arrow }}</v-icon>
         </div>
         <div class="rex mr-2 text-xs-right">
-          REX<br>
+          REX
+          <br />
           <span class="valeur" :class="diane.resultat_expl_color">{{ diane.resultat_expl }}</span>
-        </div> 
+        </div>
         <v-dialog lazy fullscreen v-model="dialog">
           <div style="height: 100%; width: 100%; font-weight: 800; font-family: 'Oswald', sans;">
-            <v-toolbar fixed class="toolbar" height="35px" style="color: #fff; font-size: 22px; z-index: 50;">
-              <v-spacer/>
-                FICHE ETABLISSEMENT
-              <v-spacer/>
+            <v-toolbar
+              fixed
+              class="toolbar"
+              height="35px"
+              style="color: #fff; font-size: 22px; z-index: 50;"
+            >
+              <v-spacer />FICHE ETABLISSEMENT
+              <v-spacer />
               <v-icon @click="dialog=false;" style="color: #fff">mdi-close</v-icon>
             </v-toolbar>
             <Etablissement :siret="prediction.siret" :batch="currentBatchKey"></Etablissement>
@@ -83,12 +90,6 @@ export default {
     }
   },
   computed: {
-    jwt() {
-      return this.$keycloak.tokenParsed || {resource_access: { signauxfaibles: {roles: []}}}
-    },
-    roles() {
-      return this.jwt.resource_access.signauxfaibles.roles
-    },
     currentBatchKey() {
       return this.$store.state.currentBatchKey
     },
@@ -123,7 +124,11 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  background: linear-gradient(270deg, rgba(119, 122, 170, 0.219), rgba(119, 122, 170, 0));
+  background: linear-gradient(
+    270deg,
+    rgba(119, 122, 170, 0.219),
+    rgba(119, 122, 170, 0)
+  );
   border-right: solid 1px #3334;
   text-align: center;
   width: 80px;
@@ -140,12 +145,12 @@ export default {
   overflow: hidden;
 }
 .raison-sociale {
-  font-family: 'Oswald';
+  font-family: "Oswald";
   font-size: 24px;
   color: #333;
 }
 .identite {
-  font-family: 'Abel';
+  font-family: "Abel";
   font-size: 14px;
   font-weight: 400;
 }
@@ -155,8 +160,9 @@ export default {
 .activite-partielle {
   float: left;
 }
-.ca, .rex {
-  font-family: 'Abel';
+.ca,
+.rex {
+  font-family: "Abel";
   font-size: 16px;
 }
 .ca {

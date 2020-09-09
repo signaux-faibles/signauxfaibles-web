@@ -1,7 +1,15 @@
 <template>
   <span style="position: relative;">
-    <v-icon :size="iconSize" style="position: relative; right: 1px" :color="logo.alert[1]">{{logo.alert[0]}}</v-icon>
-    <v-icon size="15px" style="position: absolute; bottom: 10px; right: -5px" :color="logo.diff[1]">fa-arrow-down{{logo.diff[0]}}</v-icon>
+    <v-icon
+      :size="iconSize"
+      style="position: relative; right: 1px"
+      :color="logo.alert[1]"
+    >{{logo.alert[0]}}</v-icon>
+    <v-icon
+      size="15px"
+      style="position: absolute; bottom: 10px; right: -5px"
+      :color="logo.diff[1]"
+    >fa-arrow-down{{logo.diff[0]}}</v-icon>
   </span>
 </template>
 
@@ -11,7 +19,7 @@ export default {
   props: ['prediction', 'size'],
   computed: {
     alert() {
-      return this.prediction || {alert: 'Pas d\'alerte'}
+      return this.prediction || { alert: 'Pas d\'alerte' }
     },
     iconSize() {
       return this.size || '35px'
@@ -24,13 +32,13 @@ export default {
         up: ['fa-arrow-up', 'red'],
         down: ['fa-arrow-down', 'green'],
       }
-
       return {
         alert: alerts[this.detection.prob],
         diff: this.detection.diff !== 'none' || this.detection.prob !== 'green' ? alerts[this.detection.diff] : '',
       }
     },
     detection() {
+      // TODO: handle unknown state
       const alert = this.alert.alert
       const diff = this.alert.diff
       let probClass = ''
@@ -42,7 +50,6 @@ export default {
       } else {
         probClass = 'high'
       }
-
       if (Math.abs(diff) <= 0.1) {
         diffClass = 'none'
       } else if (diff < 0) {
@@ -50,7 +57,6 @@ export default {
       } else {
         diffClass = 'up'
       }
-
       return {
         prob: probClass,
         diff: diffClass,

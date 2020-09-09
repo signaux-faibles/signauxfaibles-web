@@ -5,7 +5,7 @@
       color='indigo darken-5'>
       <v-toolbar-title class="localtoolbar">
         Effectifs
-        <span v-if="jwt.resource_access.signauxfaibles.roles.includes('dgefp')">
+        <span v-if="roles.includes('dgefp')">
           / Activité partielle
         </span>
       </v-toolbar-title>
@@ -14,7 +14,7 @@
         <template>
           Ce graphique illustre les données d'emploi.<br/><br/>
           <b>effectifs</b>: Évolution des effectifs en nombre de salariés. (donnée fournie par l'ACOSS)<br/>
-          <div v-if="jwt.resource_access.signauxfaibles.roles.includes('dgefp')">
+          <div v-if="roles.includes('dgefp')">
           <b>autorisation d'activité partielle</b>: Nombre de salariés concernés par une autorisation d'activité partielle pour la période représentée. (donnée fournie par la DGEFP)<br/> 
           <b>consommation d'activité partielle</b>: Nombre de salariés concernés par une consommation d'activité partielle. (donnée fournie par la DGEFP)
           </div>
@@ -34,6 +34,7 @@ export default {
   components: { Help },
   computed: {
     apdemandeSeries() {
+      // TODO: understand the data
       return {
         demande: (this.apdemande || [])
         .sort((d1, d2) => {
@@ -66,10 +67,8 @@ export default {
       }
     },
     min() {
+      // TODO: update the date according to the new data
       return (this.effectif || []).reduce((m, e) => (m < e.periode) ? m : e.periode, '2018-01-01')
-    },
-    jwt() {
-      return this.$keycloak.tokenParsed || {resource_access: { signauxfaibles: {roles: []}}}
     },
     series() {
       return [{

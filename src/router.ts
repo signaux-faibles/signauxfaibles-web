@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Login from '@/views/Login.vue'
 import Prediction from '@/views/Prediction.vue'
 import Goup from '@/views/Goup.vue'
 import Browse from '@/views/Browse.vue'
@@ -26,7 +25,8 @@ export default new Router({
       name: 'goup',
       component: Goup,
     },
-    { path: '*',
+    {
+      path: '*',
       name: 'collector',
       component: PageNotFound,
     },

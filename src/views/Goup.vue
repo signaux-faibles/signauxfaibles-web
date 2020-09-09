@@ -81,7 +81,6 @@
       }
     },
     computed: {
-      jwt() {return this.$keycloak.tokenParsed},
       token() {return this.$keycloak.token},
       header() {
         return {

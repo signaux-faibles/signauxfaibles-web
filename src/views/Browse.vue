@@ -110,9 +110,6 @@
       },
     },
     computed: {
-      jwt() {
-        return this.$keycloak.tokenParsed
-      },
       searchUrl() {
         const root = process.env.VUE_APP_SIRENE_BASE_URL + '/v1/'
         return root + `${this.searchType}/${encodeURIComponent(this.search)}?page=${this.page}`

@@ -113,12 +113,12 @@
 
 <style scoped>
   .visibleComment {
-    visibility:visible;
-    position:relative;
+    visibility: visible;
+    position: relative;
   }
   .hiddenComment {
-    visibility:hidden;
-    position:absolute;
+    visibility: hidden;
+    position: absolute;
   }
   .editor {
     border-radius: 5px;

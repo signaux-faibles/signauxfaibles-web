@@ -1,36 +1,39 @@
 <template>
   <div>
     <h1>
-      {{ sirene.nom_raison_sociale }} 
+      {{ denomination }}
       <Help style="position: relative; top: -3px; right: 10px" titre="Identité de l'entreprise">
         <b>Raison Sociale, Coordonnées:</b>
-        Ces données sont issues du service API entreprises fourni par la DINSIC qui redistribue les données de l'INSEE.<br/>
+        Ces données sont issues du service API entreprises fourni par la DINSIC qui redistribue les données de l'INSEE.
+        <br />
         <b>Activité de l'entreprise:</b>
         Le code activité est issu de la base Sirène produite par l'INSEE et correspond aux données déclaratives fournies par l'entreprise. Il peut être constaté un décalage entre le code déclaré et l'activité réelle de l'entreprise.
       </Help>
     </h1>
-    <Historique style="padding: 4px; position: relative; bottom: 5px" :historique="historique"/>
-    <h3>siren {{ siret.slice(0,9) }} <span style="color: #999">{{ siret.slice(9,14) }} siret</span></h3>
-    <hr style="color: #eee;"/>
+    <Historique style="padding: 4px; position: relative; bottom: 5px" :historique="historique" />
+    <h3>
+      siren {{ siret.slice(0,9) }}
+      <span style="color: #999">{{ siret.slice(9,14) }} siret</span>
+    </h3>
+    <hr style="color: #eee;" />
     <div style="padding: 10px; margin: 4px;">
-    
-    <div style="font-size: 16px">{{ naf.secteur || '' }}<br/>
-    {{ sirene.libelle_activite_principale || '' }}<br/>
-    Code APE: {{ (sirene.activite_principale || '') }}</div>
+      <div style="font-size: 16px">
+        {{ libelleSecteur }}
+        <br />
+        {{ libelleActivite }}
+        <br />
+        Code APE&nbsp;: {{ codeActivite }}
+      </div>
     </div>
-    
     <h3>adresse postale</h3>
-    <hr style="color: #eee;"/>
+    <hr style="color: #eee;" />
     <div style="padding: 10px; margin: 4px; font-size: 16px">
-      <div v-if="(sirene.l1_normalisee||'')!=''"><b>{{ sirene.l1_normalisee }} <br/></b></div>
-      <div v-if="(sirene.l2_normalisee||'')!=''"><b>{{ sirene.l2_normalisee }} <br/></b></div>
-      <div v-if="(sirene.l3_normalisee||'')!=''"><b>{{ sirene.l3_normalisee }} <br/></b></div>
-      <div v-if="(sirene.l4_normalisee||'')!=''"><b>{{ sirene.l4_normalisee }} <br/></b></div>
-      <div v-if="(sirene.l5_normalisee||'')!=''"><b>{{ sirene.l5_normalisee }} <br/></b></div>
-      <div v-if="(sirene.l6_normalisee||'')!=''"><b>{{ sirene.l6_normalisee }} <br/></b></div>
-      <div v-if="(sirene.l7_normalisee||'')!=''"><b>{{ sirene.l7_normalisee }} <br/></b></div> 
+      <div v-if="(adresse || '') != ''">
+        <b v-html="adresse">
+        </b>
+      </div>
     </div>
-  </div>     
+  </div>
 </template>
 
 <script>
@@ -39,7 +42,21 @@ import Historique from '@/components/Etablissement/Historique.vue'
 
 export default {
   name: 'Identite',
-  props: ['sirene', 'historique', 'siret', 'naf'],
+  props: ['denomination', 'historique', 'siret', 'sirene', 'adresse'],
   components: { Help, Historique },
+  computed: {
+    naf() {
+      return (this.sirene || {}).naf || {}
+    },
+    libelleSecteur() {
+      return this.naf.secteur || ''
+    },
+    libelleActivite() {
+      return this.naf.activite || ''
+    },
+    codeActivite() {
+      return this.naf.n5 || ''
+    },
+  },
 }
 </script>

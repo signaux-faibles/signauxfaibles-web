@@ -1,242 +1,233 @@
 <template>
-<div id='#detection'>
-  <v-toolbar
-    height="35px"
-    class="toolbar elevation-12"
-    color="#ffffff"
-    extension-height="48px"
-    app
-  >
-    <v-icon
-      @click="leftDrawer=!leftDrawer"
-      class="fa-rotate-180"
-      v-if="!leftDrawer"
+  <div id="#detection">
+    <v-toolbar
+      height="35px"
+      class="toolbar elevation-12"
       color="#ffffff"
-      key="toolbar"
+      extension-height="48px"
+      app
     >
-      mdi-backburger
-    </v-icon>
+      <v-icon
+        @click="leftDrawer=!leftDrawer"
+        class="fa-rotate-180"
+        v-if="!leftDrawer"
+        color="#ffffff"
+        key="toolbar"
+      >mdi-backburger</v-icon>
 
-    <div style="width: 100%; text-align: center;" class="toolbar_titre">
-      Détection - {{ currentBatch }}
-    </div>
-    <v-spacer></v-spacer>
-    <v-icon
-    :class="loading?'rotate':''"
-    color="#ffffff" v-if="!rightDrawer" @click="rightDrawer=!rightDrawer">mdi-target</v-icon>
-  </v-toolbar>
-  <div style="width:100%">
-    <Spinner v-if="loading"/>
-    <div id="nodata" v-if="!loading && prediction.length == 0 && init==false">
-      Les paramètres de filtrage ne font ressortir aucune des entreprises pour lesquelles vous êtes habilité(e).
-    </div>
-    <v-navigation-drawer :class="(rightDrawer?'elevation-6':'') + ' rightDrawer'" transition="no-transition" v-model="rightDrawer" right app>
-      <v-toolbar flat class="transparent" height="40">
-        <v-icon :class="loading?'rotate':''" @click="rightDrawer=!rightDrawer">mdi-target</v-icon>
-      </v-toolbar>
-      <div style="width: 100%; padding: 0 15px;">
-        <v-select
-          :items="batches"
-          :disabled="loading"
-          v-model="currentBatchKey"
-          @change="getPrediction"
-          label="Liste de détection"
-        ></v-select>
-      </div>
-      <p style="height: 1px; border: 1px solid #eee"/>
-      <div style="vertical-align: middle; padding: 0 15px;" >
-        <v-icon style="margin-right: 10px;">fa-industry</v-icon>
-        <span style="color: rgba(0,0,0,0.54); font-size: 13px;">
-          Secteur d'activité
-        </span><p/>
-        <span style="color: #f00; font-weight: 600;" v-if="currentNaf.length == 0">Aucun secteur sélectionné</span>
-        <ul style="font-size: 11px" v-if="!allNaf">
-          <li v-for="l in currentNafLibelle.slice(0,4)" :key=l>{{ l }} </li>
-        </ul>
-        <span style="margin-left: 15px; font-size: 11px; color: #444" v-if="currentNaf.length > 4 && !allNaf">+ {{ currentNaf.length - 4 }} autre{{ (currentNaf.length > 5)?'s':'' }}</span>
-        <span style="margin-left: 15px; font-size: 11px; color: #444" v-if="allNaf">Tout secteur confondu</span>
-        <v-dialog
-          v-model="nafDialog"
-          persistent
-          scrollable
-          width="700"
-        >
-          <template v-slot:activator="{ on }">
-            <v-btn
-              light
-              color="rgba(0,0,0,0.74)"
-              :disabled="loading"
-              v-on="on"
-              @click="copyNaf()"
-              outline
-            >
-              <v-icon>mdi-filter</v-icon>selection des secteurs
-            </v-btn>
-          </template>
-          <v-card>
-            <v-toolbar
-              dark
-              dense
-              color="indigo"              
-            >
-              <v-toolbar-title >
-                Sélectionner les secteurs d'activité
-              </v-toolbar-title>
-              
-            </v-toolbar>
-            <v-card-text>
-              <v-list>
-                <v-list-tile>
-                  <v-list-tile-action>
-                    <v-icon
-                      style="cursor: pointer"
-                      @click="selectAllNaf()"
-                    >
-                      {{ allNextNaf ? 'mdi-close-box' : someNextNaf ? 'mdi-minus-box' : 'mdi-checkbox-blank-outline' }}
-                    </v-icon>
-                  </v-list-tile-action>
-                    Tout sélectionner
-                  <v-list-tile-content>
-                  </v-list-tile-content>
-                </v-list-tile>
-                <v-divider/>
-                <v-list-tile 
-                  v-for="n in naf1" 
-                  :key="n.value"
-                >
-                  <v-list-tile-action
-                  @click="toggleNaf(n.value)">
-                    <v-icon
-                      style="cursor: pointer;"
-                    >
-                      {{ nextNaf.includes(n.value) ?
+      <div
+        style="width: 100%; text-align: center;"
+        class="toolbar_titre"
+      >Détection - {{ currentBatch }}</div>
+      <v-spacer></v-spacer>
+      <v-icon
+        :class="loading?'rotate':''"
+        color="#ffffff"
+        v-if="!rightDrawer"
+        @click="rightDrawer=!rightDrawer"
+      >mdi-target</v-icon>
+    </v-toolbar>
+    <div style="width:100%">
+      <Spinner v-if="loading" />
+      <div
+        id="nodata"
+        v-if="!loading && prediction.length == 0 && init==false"
+      >Les paramètres de filtrage ne font ressortir aucune des entreprises pour lesquelles vous êtes habilité(e).</div>
+      <v-navigation-drawer
+        :class="(rightDrawer?'elevation-6':'') + ' rightDrawer'"
+        transition="no-transition"
+        v-model="rightDrawer"
+        right
+        app
+      >
+        <v-toolbar flat class="transparent" height="40">
+          <v-icon :class="loading?'rotate':''" @click="rightDrawer=!rightDrawer">mdi-target</v-icon>
+        </v-toolbar>
+        <div style="width: 100%; padding: 0 15px;">
+          <v-select
+            :items="batches"
+            :disabled="loading"
+            v-model="currentBatchKey"
+            @change="getPrediction"
+            label="Liste de détection"
+          ></v-select>
+        </div>
+        <p style="height: 1px; border: 1px solid #eee" />
+        <div style="vertical-align: middle; padding: 0 15px;">
+          <v-icon style="margin-right: 10px;">fa-industry</v-icon>
+          <span style="color: rgba(0,0,0,0.54); font-size: 13px;">Secteur d'activité</span>
+          <p />
+          <span
+            style="color: #f00; font-weight: 600;"
+            v-if="currentNaf.length == 0"
+          >Aucun secteur sélectionné</span>
+          <ul style="font-size: 11px" v-if="!allNaf">
+            <li v-for="l in currentNafLibelle.slice(0,4)" :key="l">{{ l }}</li>
+          </ul>
+          <span
+            style="margin-left: 15px; font-size: 11px; color: #444"
+            v-if="currentNaf.length > 4 && !allNaf"
+          >+ {{ currentNaf.length - 4 }} autre{{ (currentNaf.length > 5)?'s':'' }}</span>
+          <span
+            style="margin-left: 15px; font-size: 11px; color: #444"
+            v-if="allNaf"
+          >Tout secteur confondu</span>
+          <v-dialog v-model="nafDialog" persistent scrollable width="700">
+            <template v-slot:activator="{ on }">
+              <v-btn
+                light
+                color="rgba(0,0,0,0.74)"
+                :disabled="loading"
+                v-on="on"
+                @click="copyNaf()"
+                outline
+              >
+                <v-icon>mdi-filter</v-icon>selection des secteurs
+              </v-btn>
+            </template>
+            <v-card>
+              <v-toolbar dark dense color="indigo">
+                <v-toolbar-title>Sélectionner les secteurs d'activité</v-toolbar-title>
+              </v-toolbar>
+              <v-card-text>
+                <v-list>
+                  <v-list-tile>
+                    <v-list-tile-action>
+                      <v-icon
+                        style="cursor: pointer"
+                        @click="selectAllNaf()"
+                      >{{ allNextNaf ? 'mdi-close-box' : someNextNaf ? 'mdi-minus-box' : 'mdi-checkbox-blank-outline' }}</v-icon>
+                    </v-list-tile-action>Tout sélectionner
+                    <v-list-tile-content></v-list-tile-content>
+                  </v-list-tile>
+                  <v-divider />
+                  <v-list-tile v-for="n in naf1" :key="n.value">
+                    <v-list-tile-action @click="toggleNaf(n.value)">
+                      <v-icon style="cursor: pointer;">
+                        {{ nextNaf.includes(n.value) ?
                         'mdi-checkbox-marked' :
-                        'mdi-checkbox-blank-outline' 
-                      }}
-                    </v-icon>
-                  </v-list-tile-action>
-                  <v-list-tile-content>
-                    {{ n.text }}
-                  </v-list-tile-content>
-                </v-list-tile>
-              </v-list>
-            </v-card-text>
-            <v-card-actions style>
-              <v-spacer/>
-              <v-btn
-                light
-                color="error"
-                @click="nafDialog=false"
-              >
-                annuler
-              </v-btn>
-              <v-btn
-                light
-                color="success"
-                @click="applyNaf(); nafDialog=false"
-              >
-                appliquer
-              </v-btn>
+                        'mdi-checkbox-blank-outline'
+                        }}
+                      </v-icon>
+                    </v-list-tile-action>
+                    <v-list-tile-content>{{ n.text }}</v-list-tile-content>
+                  </v-list-tile>
+                </v-list>
+              </v-card-text>
+              <v-card-actions style>
+                <v-spacer />
+                <v-btn light color="error" @click="nafDialog=false">annuler</v-btn>
+                <v-btn light color="success" @click="applyNaf(); nafDialog=false">appliquer</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </div>
+        <p style="height: 1px; border: 1px solid #eee" />
+        <div style="display: flex; flex-direction: row; vertical-align: middle; padding: 0 15px;">
+          <v-icon style="margin-right: 10px;">fa-map</v-icon>
+          <v-select
+            :items="subzones"
+            :disabled="loading"
+            v-model="zone"
+            label="Zone Géographique"
+            @change="getPrediction()"
+          ></v-select>
+        </div>
+        <p style="height: 1px; border: 1px solid #eee" />
+        <div style="display: flex; flex-direction: row; vertical-align: middle; padding: 0 15px;">
+          <v-icon style="margin-right: 10px;">fa-users</v-icon>
+          <v-combobox
+            v-model="minEffectif"
+            :disabled="loading"
+            :items="effectifClass"
+            label="Effectif minimum"
+            @change="getPrediction()"
+          ></v-combobox>
+        </div>
+        <p style="height: 1px; border: 1px solid #eee" />
+        <div
+          style="display: flex; flex-direction: column; vertical-align: middle; padding: 0 15px;"
+        >
+          <span
+            style="font-size: 15px;"
+            @change="getPrediction()"
+          >Visibilité selon statut des procédures</span>
+          <v-switch
+            :disabled="loading"
+            v-model="in_bonis"
+            class="mx-2 thin"
+            @change="getPrediction()"
+          >
+            <span slot="label" style="font-size: 14px">In bonis</span>
+          </v-switch>
+          <v-switch
+            :disabled="loading"
+            v-model="continuation"
+            class="mx-2 thin"
+            @change="getPrediction()"
+          >
+            <span slot="label" style="font-size: 14px">In bonis (plan de continuation)</span>
+          </v-switch>
+          <v-switch
+            :disabled="loading"
+            v-model="sauvegarde"
+            class="mx-2 thin"
+            @change="getPrediction()"
+          >
+            <span slot="label" style="font-size: 14px">Sauvegarde</span>
+          </v-switch>
+          <v-switch
+            :disabled="loading"
+            v-model="plan_sauvegarde"
+            class="mx-2 thin"
+            @change="getPrediction()"
+          >
+            <span slot="label" style="font-size: 14px">Plan de sauvegarde</span>
+          </v-switch>
+          <v-switch :disabled="loading" v-model="rj" class="mx-2 thin" @change="getPrediction()">
+            <span slot="label" style="font-size: 14px">Redressement judiciaire</span>
+          </v-switch>
+          <v-switch :disabled="loading" v-model="lj" class="mx-2 thin" @change="getPrediction()">
+            <span slot="label" style="font-size: 14px">Liquidation judiciaire</span>
+          </v-switch>
+        </div>
 
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-      </div>
-      <p style="height: 1px; border: 1px solid #eee"/>
-      <div style="display: flex; flex-direction: row; vertical-align: middle; padding: 0 15px;" >
-        <v-icon style="margin-right: 10px;">fa-map</v-icon>
-        <v-select
-          :items="subzones"
-          :disabled="loading"
-          v-model="zone"
-          label="Zone Géographique"
-          @change="getPrediction()"
-        ></v-select>
-      </div>
-      <p style="height: 1px; border: 1px solid #eee"/>
-      <div style="display: flex; flex-direction: row; vertical-align: middle; padding: 0 15px;" >
-        <v-icon style="margin-right: 10px;">fa-users</v-icon>
-        <v-combobox
-          v-model="minEffectif"
-          :disabled="loading"
-          :items="effectifClass"
-          label="Effectif minimum"
-          @change="getPrediction()"
-        ></v-combobox>
-      </div>
-      <p style="height: 1px; border: 1px solid #eee"/>
-      <div style="display: flex; flex-direction: column; vertical-align: middle; padding: 0 15px;" >
-        <span style="font-size: 15px;" @change="getPrediction()">Visibilité selon statut des procédures</span>
-        <v-switch :disabled="loading" v-model="in_bonis" class="mx-2 thin" @change="getPrediction()">
-          <span slot="label" style="font-size: 14px">In bonis</span>
-        </v-switch>
-        <v-switch :disabled="loading" v-model="continuation" class="mx-2 thin" @change="getPrediction()">
-          <span slot="label" style="font-size: 14px">In bonis (plan de continuation)</span>
-        </v-switch>
-        <v-switch :disabled="loading" v-model="sauvegarde" class="mx-2 thin" @change="getPrediction()">
-          <span slot="label" style="font-size: 14px">Sauvegarde</span>          
-        </v-switch>
-        <v-switch :disabled="loading" v-model="plan_sauvegarde" class="mx-2 thin" @change="getPrediction()">
-          <span slot="label" style="font-size: 14px">Plan de sauvegarde</span>
-        </v-switch>
-        <v-switch :disabled="loading" v-model="rj" class="mx-2 thin" @change="getPrediction()">
-          <span slot="label" style="font-size: 14px">Redressement judiciaire</span>
-        </v-switch>
-        <v-switch :disabled="loading" v-model="lj" class="mx-2 thin" @change="getPrediction()">
-          <span slot="label" style="font-size: 14px">Liquidation judiciaire</span>
-        </v-switch>
-      </div>
-
-      <p style="height: 1px; border: 1px solid #eee; margin-top: 20px"/>
-    </v-navigation-drawer>
+        <p style="height: 1px; border: 1px solid #eee; margin-top: 20px" />
+      </v-navigation-drawer>
+    </div>
+    <v-card
+      style="height: 80px; text-align: center; vertical-align: top; background-color: #FFF0; position:"
+      class="elevation-0 ma-2 pointer"
+    >
+      <v-container style="position: relative; top: -10px">
+        <v-layout row>
+          <v-flex xs12 md6>
+            <v-text-field v-model="filter" solo label="filtre rapide" />
+          </v-flex>
+          <v-flex xs12 md6 style="line-height: 53px;">
+            <v-icon color="red">fa-exclamation-triangle</v-icon>
+            <span style="font-size: 25px">{{ predictionAlerts }}</span>
+            <span style="width: 100px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            <v-icon color="amber">fa-question</v-icon>
+            <span style="font-size: 25px;">{{ predictionWarnings }}</span>
+            <v-icon style="margin-left: 25px" @click="download">fa-file-download</v-icon>
+          </v-flex>
+        </v-layout>
+      </v-container>
+    </v-card>
+    <PredictionWidget v-for="p in predictionView" :key="p.siret" :prediction="p" />
   </div>
-  <v-card
-    style="height: 80px; text-align: center; vertical-align: top; background-color: #FFF0; position:"
-    class="elevation-0 ma-2 pointer"
-  >
-    <v-container style="position: relative; top: -10px">
-      <v-layout row>
-        <v-flex xs12 md6>
-          <v-text-field 
-            v-model="filter"
-            solo
-            label="filtre rapide"
-          />
-        </v-flex>
-        <v-flex xs12 md6 style="line-height: 53px;">  
-          <v-icon color="red">fa-exclamation-triangle</v-icon> 
-          <span style="font-size: 25px">{{ predictionAlerts }}</span>
-          <span style="width: 100px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-          <v-icon color="amber">fa-question</v-icon> 
-          <span style="font-size: 25px;">{{ predictionWarnings }}</span>
-          <v-icon 
-            style="margin-left: 25px" 
-            @click="download">
-            fa-file-download
-          </v-icon>
-        </v-flex>
-      </v-layout>
-    </v-container>
-  </v-card>
-  <PredictionWidget v-for="p in predictionView" :key="p.siret" :prediction="p"/> 
-
-</div>
 </template>
 
 <script>
 import Spinner from '@/components/Spinner'
 import PredictionWidget from '@/components/PredictionWidget'
 export default {
+  // TODO: right drawer in component
   data() {
     return {
       effectifClass: [10, 20, 50, 100],
-      predictionLength: 20,
-      connu: false,
-      horsCCSF: true,
-      horsProcol: true,
-      activitePartielle: false,
-      interetUrssaf: false,
-      activite: [],
+      predictionLength: 20, // TODO: check necessary or not
       init: true,
       filter: '',
       prediction: [],
@@ -268,9 +259,6 @@ export default {
       } else {
         this.nextNaf = []
       }
-    },
-    selectedNaf(value) {
-      return this.currentNaf.includes(value)
     },
     format(v) {
       let data = '"'
@@ -344,94 +332,93 @@ export default {
             this.loading = false
           })
         } else {
+          // TODO: check if necessary
           window.setTimeout(this.getPrediction, 100)
         }
       }
     },
   },
   computed: {
-    jwt() {
-      return this.$keycloak.tokenParsed || {resource_access: { signauxfaibles: {roles: []}}}
-    },
-    roles() {
-      return this.jwt.resource_access.signauxfaibles.roles
-    },
     crp: {
-      get() {return this.$localStore.state.crp},
-      set(value) {this.$localStore.commit('setcrp', value)},
+      get() { return this.$localStore.state.crp },
+      set(value) { this.$localStore.commit('setcrp', value) },
     },
     rj: {
-      get() {return this.$localStore.state.rj},
-      set(value) {this.$localStore.commit('setrj', value)},
+      get() { return this.$localStore.state.rj },
+      set(value) { this.$localStore.commit('setrj', value) },
     },
     lj: {
-      get() {return this.$localStore.state.lj},
-      set(value) {this.$localStore.commit('setlj', value)},
+      get() { return this.$localStore.state.lj },
+      set(value) { this.$localStore.commit('setlj', value) },
     },
     continuation: {
-      get() {return this.$localStore.state.continuation},
-      set(value) {this.$localStore.commit('setcontinuation', value)},
+      get() { return this.$localStore.state.continuation },
+      set(value) { this.$localStore.commit('setcontinuation', value) },
     },
     sauvegarde: {
-      get() {return this.$localStore.state.sauvegarde},
-      set(value) {this.$localStore.commit('setsauvegarde', value)},
+      get() { return this.$localStore.state.sauvegarde },
+      set(value) { this.$localStore.commit('setsauvegarde', value) },
     },
     plan_sauvegarde: {
-      get() {return this.$localStore.state.plan_sauvegarde},
-      set(value) {this.$localStore.commit('setplan_sauvegarde', value)},
+      get() { return this.$localStore.state.plan_sauvegarde },
+      set(value) { this.$localStore.commit('setplan_sauvegarde', value) },
     },
     in_bonis: {
-      get() {return this.$localStore.state.in_bonis},
-      set(value) {this.$localStore.commit('setin_bonis', value)},
+      get() { return this.$localStore.state.in_bonis },
+      set(value) { this.$localStore.commit('setin_bonis', value) },
     },
     currentNaf: {
       get() {
+        // TODO: NON, unselect does not work
         const naf = this.$localStore.state.currentNaf
         if ((typeof naf) === 'string') {
           if (naf === 'NON') {
             return ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
-                    'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U']
+              'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U']
           } else {
             return [naf]
           }
         }
         return naf
       },
-      set(value) {this.$localStore.commit('setcurrentNaf', value)},
+      set(value) { this.$localStore.commit('setcurrentNaf', value) },
     },
     currentNafLibelle() {
-
       return this.currentNaf.map((n) => {
         return this.naf1.filter((n1) => (n1.value === n))[0].text
       })
     },
     zone: {
-      get() {return this.$localStore.state.zone},
-      set(value) {this.$localStore.commit('setzone', value)},
+      get() { return this.$localStore.state.zone },
+      set(value) { this.$localStore.commit('setzone', value) },
     },
     minEffectif: {
-      get() {return this.$localStore.state.minEffectif},
-      set(value) {this.$localStore.commit('setminEffectif', value)},
+      get() { return this.$localStore.state.minEffectif },
+      set(value) { this.$localStore.commit('setminEffectif', value) },
     },
     loading: {
-      get() {return this.$store.state.loading},
-      set(value) {this.$store.commit('setLoading', value)},
+      get() { return this.$store.state.loading },
+      set(value) { this.$store.commit('setLoading', value) },
     },
     predictionAlerts() {
+      // TODO: API
       return this.prediction.filter((p) => (p.raison_sociale.includes(this.filter.toUpperCase()) ||
         p.siret.includes(this.filter.toUpperCase())) && (p.alert === 'Alerte seuil F1')).length
     },
     predictionWarnings() {
+      // TODO: API
       return this.prediction.filter((p) => (p.raison_sociale.includes(this.filter.toUpperCase()) ||
         p.siret.includes(this.filter.toUpperCase())) && (p.alert === 'Alerte seuil F2')).length
     },
     predictionFilter() {
+      // TODO: API
       return this.prediction.filter((p) => {
         return p.raison_sociale.includes(this.filter.toUpperCase()) ||
           p.siret.includes(this.filter.toUpperCase())
       })
     },
     predictionView() {
+      // TODO: API
       return this.predictionFilter.slice(0, this.detectionLength)
     },
     leftDrawer: {
@@ -442,31 +429,22 @@ export default {
         this.$store.dispatch('setLeftDrawer', drawer)
       },
     },
-    suiviQuery() {
-      if (this.suivi === 'false') {
-        return false
-      } else if (this.suivi === 'true') {
-        return true
-      } else {
-        return undefined
-      }
-    },
     naf1() {
+      // TODO: clean naf structure
+      // TODO: add prefix A, B, C, etc
       return Object.keys(this.$store.state.naf).map((n) => {
         return {
-            text: this.$store.state.naf[n],
-            value: n,
+          text: this.$store.state.naf[n],
+          value: n,
         }
       })
     },
     allNaf() {
+      // TODO : text unselect all
       return this.currentNaf.length === this.naf1.length
     },
     allNextNaf() {
       return this.nextNaf.length === this.naf1.length
-    },
-    someNaf() {
-      return this.currentNaf.length > 0 && !this.allNaf
     },
     someNextNaf() {
       return this.nextNaf.length > 0 && !this.allNextNaf
@@ -534,9 +512,10 @@ export default {
       return all
     },
     currentBatch() {
-      return (this.batches.filter((b) => b.value === this.currentBatchKey)[0] || {text: 'chargement'}).text
+      return (this.batches.filter((b) => b.value === this.currentBatchKey)[0] || { text: 'chargement' }).text
     },
     detectionLength() {
+      // TODO: API
       const length = Math.round((this.height + this.scrollTop) / 860 + 5) * 10
       if (length > this.predictionLength) {
         // const complement = length - this.predictionLength
@@ -565,11 +544,24 @@ export default {
   height: 25px;
 }
 .rotate {
-    -webkit-animation:spin 4s linear infinite;
-    -moz-animation:spin 4s linear infinite;
-    animation:spin 4s linear infinite;
+  -webkit-animation: spin 4s linear infinite;
+  -moz-animation: spin 4s linear infinite;
+  animation: spin 4s linear infinite;
 }
-@-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
-@-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
-@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
+@-moz-keyframes spin {
+  100% {
+    -moz-transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes spin {
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+@keyframes spin {
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
 </style>

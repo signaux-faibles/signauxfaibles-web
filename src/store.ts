@@ -2,8 +2,6 @@ import Vue from 'vue'
 import Vuex, { ActionContext } from 'vuex'
 import axios from 'axios'
 import createPersistedState from 'vuex-persistedstate'
-import jwt from 'jwt-decode'
-// import VueNativeSock from 'vue-native-websocket'
 
 const refreshRate = 60000
 
@@ -56,7 +54,6 @@ const sessionStore = new Vuex.Store({
     currentBatchKey: null as unknown as string,
     leftDrawer: true,
     rightDrawer: true,
-    rawReference: [] as any[],
     naf: [] as any[],
     batches: [] as any[],
     departements: [] as any[],
@@ -69,9 +66,6 @@ const sessionStore = new Vuex.Store({
     loading: false,
   },
   mutations: {
-    setPrediction(state, value) {
-      state.prediction = value
-    },
     setLoading(state, value) {
       state.loading = value
     },
@@ -81,12 +75,9 @@ const sessionStore = new Vuex.Store({
     rightDrawer(state, val) {
       state.rightDrawer = val
     },
-    storeReference(state, reference) {
-      state.rawReference = reference
-    },
     updateReference(state, reference) {
-      state.batches = reference.listes.sort((b1: any, b2: any) => b1.id > b2.id  ? -1 : 1 )
-      state.currentBatchKey = state.currentBatchKey || (state.batches[0] || {id: ''}).id
+      state.batches = reference.listes.sort((b1: any, b2: any) => b1.id > b2.id ? -1 : 1)
+      state.currentBatchKey = state.currentBatchKey || (state.batches[0] || { id: '' }).id
       state.naf = reference.naf
       state.region = reference.regions
       state.departements = reference.departements
@@ -114,10 +105,6 @@ const sessionStore = new Vuex.Store({
   actions: {
     setCurrentBatchKey(context, batchKey) {
       context.commit('setCurrentBatchKey', batchKey)
-      context.commit('updateReference', context.state.rawReference)
-    },
-    setTokens(context, tokens) {
-      context.commit('setTokens', tokens)
     },
     setHeight(context, height) {
       context.commit('setHeight', height)
@@ -131,13 +118,12 @@ const sessionStore = new Vuex.Store({
       const getRegions = axiosClient.get('/reference/regions')
       const getDepartements = axiosClient.get('/reference/departements')
       axios.all([getListes, getNaf, getRegions, getDepartements]).then(axios.spread((...responses) => {
-        const reference =  {
+        const reference = {
           listes: responses[0].data,
           naf: responses[1].data,
           regions: responses[2].data,
           departements: responses[3].data,
         }
-        context.commit('storeReference', reference)
         context.commit('updateReference', reference)
       }))
     },
