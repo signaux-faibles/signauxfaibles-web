@@ -49,13 +49,13 @@ export default {
       return (this.sirene || {}).naf || {}
     },
     libelleSecteur() {
-      return this.naf.secteur || ''
+      return this.naf.libelleSecteur || ''
     },
     libelleActivite() {
-      return this.naf.activite || ''
+      return this.naf.libelleactivite || ''
     },
     codeActivite() {
-      return this.naf.n5 || ''
+      return this.naf.codeActivite || ''
     },
   },
 }
