@@ -39,6 +39,15 @@
         </v-list-tile-content>
       </v-list-tile>
 
+      <v-list-tile to="/follow">
+        <v-list-tile-action>
+          <v-icon>mdi-wallet</v-icon>
+        </v-list-tile-action>
+        <v-list-tile-content>
+          <v-list-tile-title>Suivi d'entreprises</v-list-tile-title>
+        </v-list-tile-content>
+      </v-list-tile>
+
       <v-list-tile :href="fider_url">
         <v-list-tile-action>
           <v-icon>mdi-puzzle</v-icon>
