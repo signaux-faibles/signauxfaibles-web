@@ -9,7 +9,7 @@
         <v-text-field solo placeholder="Raison sociale ou SIRET" v-model="search"></v-text-field>
         <v-radio-group v-model="radios" :mandatory="false">
           <v-radio label="Parmi tous les établissements de mon secteur géographique" value="geo"></v-radio>
-          <v-radio label="Parmi tous les établissements rattachés aux entreprises de mon secteur géographique" value="visible"></v-radio>
+          <v-radio label="Parmi tous les établissements des entreprises implantées dans mon secteur géographique" value="visible"></v-radio>
           <v-radio label="Sur toute la France" value="tout"></v-radio>
         </v-radio-group>  
         <v-btn type="submit" style="width: 150px">
