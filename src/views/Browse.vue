@@ -39,7 +39,7 @@
         this.lookup()
       },
       lookup() {
-        this.$axios.get(this.searchURL, this.params).then((r) => {
+        this.$axios.get(this.searchURL, {params: this.params}).then((r) => {
           this.result = r.data
         }).catch((error) => {
           this.result = {}
