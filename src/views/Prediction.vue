@@ -133,6 +133,7 @@
             @change="getPrediction()"
           ></v-select>
         </div>
+        <v-checkbox :disabled="loading" v-model="ignorezone" class="mx-2 mt-1" label="Inclure tous les établissements des entreprises de ma zone" @change="getPrediction()"></v-checkbox>
         <p style="height: 1px; border: 1px solid #eee" />
         <div style="display: flex; flex-direction: row; vertical-align: middle; padding: 0 15px;">
           <v-icon style="margin-right: 10px;">fa-users</v-icon>
@@ -144,6 +145,7 @@
             @change="getPrediction()"
           ></v-combobox>
         </div>
+        <p style="height: 1px; border: 1px solid #eee"/>
         <p style="height: 1px; border: 1px solid #eee" />
         <div
           style="display: flex; flex-direction: column; vertical-align: middle; padding: 0 15px;"
@@ -302,6 +304,9 @@ export default {
             params.zone = this.zone
           }
           params.effectifMin = parseInt(this.minEffectif, 10)
+          if (this.ignorezone) {
+            params.ignorezone = this.ignorezone
+          }
           params.procol = []
           if (this.rj) {
             params.procol = params.procol.concat(['redressement', 'plan_redressement'])
@@ -339,9 +344,9 @@ export default {
     },
   },
   computed: {
-    crp: {
-      get() { return this.$localStore.state.crp },
-      set(value) { this.$localStore.commit('setcrp', value) },
+    ignorezone: {
+      get() { return this.$localStore.state.ignorezone },
+      set(value) { this.$localStore.commit('setignorezone', value) },
     },
     rj: {
       get() { return this.$localStore.state.rj },

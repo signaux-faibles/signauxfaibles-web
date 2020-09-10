@@ -28,7 +28,7 @@ export default {
         low: ['fa-exclamation-triangle', 'amber'],
         none: ['fa-check-circle', 'green'],
         forbidden: ['fa-ban', 'red accent-1'],
-        absent: ['fa-question-circle', '#33333358']
+        absent: ['fa-question-circle', '#33333358'],
       }
       return {
         alert: alerts[this.detection.prob],
@@ -37,11 +37,9 @@ export default {
     detection() {
       // TODO: handle unknown state
       const alert = this.alert.alert
-      
       let probClass = ''
-      
       if (alert == null && (this.alert.visible || this.alert.followed)) {
-        probClass = 'absent'  
+        probClass = 'absent'
       } else if (alert == null && (!this.alert.visible && !this.alert.followed)) {
         probClass = 'forbidden'
       } else if (alert === 'Pas d\'alerte') {
@@ -51,7 +49,6 @@ export default {
       } else {
         probClass = 'high'
       }
-      
       return {
         prob: probClass,
       }

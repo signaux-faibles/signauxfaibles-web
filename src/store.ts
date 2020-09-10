@@ -19,7 +19,7 @@ const axiosClient = axios.create(
 const localStore = new Vuex.Store({
   plugins: [createPersistedState({ storage: window.localStorage })],
   state: {
-    crp: false,
+    ignorezone: false,
     rj: false,
     lj: false,
     continuation: true,
@@ -33,7 +33,7 @@ const localStore = new Vuex.Store({
     securityConsent: new Date('1970-01-01'),
   },
   mutations: {
-    setcrp(state, val: boolean) { state.crp = val },
+    setignorezone(state, val: boolean) { state.ignorezone = val },
     setrj(state, val: boolean) { state.rj = val },
     setlj(state, val: boolean) { state.lj = val },
     setcontinuation(state, val: boolean) { state.continuation = val },

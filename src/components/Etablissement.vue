@@ -276,9 +276,10 @@ export default {
             this.followed = true
             this.followDialog = false
             this.followAlert = false
+            this.getEtablissement()
           }
         }).catch((error) => {
-          this.followAlertError = 'Un erreur est survenue lors du suivie'
+          this.followAlertError = 'Une erreur est survenue lors du suivi'
           this.followAlert = true
         })
       } else {
@@ -290,6 +291,7 @@ export default {
       this.$axios.delete(`/follow/${this.siret}`).then((response) => {
         if (response.status === 200 ) {
           this.followed = false
+          this.getEtablissement()
         }
       })
     },

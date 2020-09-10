@@ -65,10 +65,10 @@
         const p = {
           page: this.page,
         }
-        if (this.radios == 'visible' || this.radios == 'tout') {
+        if (this.radios === 'visible' || this.radios === 'tout') {
           p.ignorezone = true
         }
-        if (this.radios == 'tout') {
+        if (this.radios === 'tout') {
           p.ignoreroles = true
         }
         return p
