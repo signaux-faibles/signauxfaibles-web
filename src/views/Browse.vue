@@ -12,7 +12,10 @@
         </v-btn>
       </form>
     </div>
-    <div style="margin: 0px 80px;" v-if="((result.etablissement || []).length > 0 && searched)">
+
+    <PredictionWidget v-for="r in result.results" :key="r.siret" :prediction="r" />
+  </div>
+    <!-- <div style="margin: 0px 80px;" v-if="((result.etablissement || []).length > 0 && searched)">
       {{ result.total_results || (result.etablissement || []).length }} {{ 'resultat' + ((result.total_results > 1) ? 's' : '')}}
       <div style="margin:20px; font-size: 11px" v-for="e of result.etablissement" :key="e.id">
         <a style="font-size: 22px" @click="siret=e.siren+e.nic; dialog=true;">{{ e.nom_raison_sociale }}</a><br/>
@@ -21,9 +24,9 @@
         {{ e.l6_normalisee }}
         {{ e.l7_normalisee }}
       </div>
-    </div>
+    </div> -->
 
-    <div v-if="(result.etablissement || []).length > 0" style="height: 140px; width: 100%; text-align: center; vertical-align: middle; padding: 10px 10%"> 
+    <!-- <div v-if="(result.etablissement || []).length > 0" style="height: 140px; width: 100%; text-align: center; vertical-align: middle; padding: 10px 10%"> 
       <v-btn 
         :disabled="page <= 1"
         @click="page -= 1; lookup()" 
@@ -52,13 +55,12 @@
         <Etablissement :siret="siret" :batch="currentBatchKey"></Etablissement>
       </div>
     </v-dialog>
-  </div>
+  </div> -->
 </template>
 
 <script>
   import Toolbar from '@/components/Toolbar.vue'
-  import Etablissement from '@/components/Etablissement.vue'
-  import axios from 'axios'
+  import PredictionWidget from '@/components/PredictionWidget.vue'
   export default {
     data() {
       return {
@@ -66,10 +68,8 @@
         searched: false,
         result: [],
         page: 1,
-        axios: axios.create(),
         siret: '',
         dialog: false,
-        etablissement: null,
       }
     },
     mounted() {
@@ -77,57 +77,37 @@
     },
     methods: {
       load() {
-        this.page = 1
+        this.page = 0
         this.lookup()
       },
       lookup() {
-        this.axios.get(this.searchUrl).then((r) => {
+        this.$axios.get(this.searchURL, this.params).then((r) => {
           this.result = r.data
-
-          if ((this.result.etablissement || []).length === 1) {
-            this.siret = this.result.etablissement[0].siret
-            this.dialog = true
-          }
-
-          if (this.result.etablissement.siret) {
-            this.siret = this.result.etablissement.siret
-            this.result.etablissement = [this.result.etablissement]
-            this.dialog = true
-          }
-
-          if (this.result.siege_social) {
-            this.siret = this.result.siege_social.siret
-            this.result.etablissement = [this.result.siege_social]
-            this.dialog = true
-          }
         }).catch((error) => {
-          this.result = {
-            etablissement: [],
-          }
+          this.result = {}
         }).finally(() => {
           this.searched = true
         })
       },
     },
     computed: {
-      searchUrl() {
-        const root = process.env.VUE_APP_SIRENE_BASE_URL + '/v1/'
-        return root + `${this.searchType}/${encodeURIComponent(this.search)}?page=${this.page}`
+      searchURL() {
+        return `/etablissement/search/${this.search}`
       },
-      searchType() {
-        if (this.search.match(/^[0-9]{14}$/)) {
-          return 'siret'
+      params() {
+        const p = {
+          page: this.page,
         }
-        if (this.search.match(/^[0-9]{9}$/)) {
-          return 'siren'
+        if (this.ignorezone) {
+          p.ignorezone = true
         }
-        return 'full_text'
-      },
-      currentBatchKey() {
-        return this.$store.state.currentBatchKey
-      },
+        if (this.ignoreroles) {
+          p.ignoreroles = true
+        }
+        return p
+      }
     },
-    components: { Toolbar, Etablissement },
+    components: { PredictionWidget, Toolbar },
   }
 </script>
 
