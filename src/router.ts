@@ -35,6 +35,6 @@ export default new Router({
       path: '/follow',
       name: 'follow',
       component: Follow,
-    }
+    },
   ],
 })

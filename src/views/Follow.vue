@@ -1,70 +1,34 @@
 <template>
     <div>
-        <Toolbar title="Suivi d'entreprises" drawer/>
+        <Toolbar title="Suivi d'établissements" drawer/>
         <PredictionWidget v-for="e in etablissements" :key="e.siret" :prediction="e" />
     </div>
 </template>
-<script lang='ts'>
+<script>
 import PredictionWidget from '@/components/PredictionWidget'
 import Toolbar from '@/components/Toolbar'
-
-type Score = {
-    siren: string
-    siret: string
-    score?: number
-    diff?: number
-    raison_sociale: string
-    commune: string
-    libelle_activite: string
-    libelle_activite_n1: string
-    code_activite: string
-    departement: string
-    libelle_departement: string
-    dernier_effectif?: number
-    urssaf?: boolean
-    activite_partielle?: boolean
-    ca?: number
-    variation_ca?: number
-    arrete_bilan?: Date
-    resultat_expl?: number
-    etat_procol: string
-    alert?: string
-    visible: boolean
-    inZone: boolean
-    followed: boolean
-}
-
-type Follow = {
-    siret: string
-    username: string
-    active: boolean
-    since: Date
-    comment: string
-    etablissements: Score[]
-}
 
 export default {
     components: { PredictionWidget, Toolbar },
     data() {
         return {
             loading: false,
-            mister: 'tagada',
-            follow: [] as Follow[],
+            follow: [],
         }
     },
     mounted() {
-        this.getFollowedEntreprises()
+        this.getFollowedEtablissements()
     },
     methods: {
-        getFollowedEntreprises() {
-            this.$axios.get('/follow').then((r: any) => {
-                this.follow = r.data as Follow[]
+        getFollowedEtablissements() {
+            this.$axios.get('/follow').then((response) => {
+                this.follow = response.data
             })
-        }
+        },
     },
     computed: {
         etablissements() {
-            return this.follow.map(f => f.etablissements)
+            return this.follow.map((f) => f.etablissements)
         },
         leftDrawer: {
             get() {
@@ -82,6 +46,6 @@ export default {
                 this.$store.dispatch('setRightDrawer', val)
             },
         },
-    }
+    },
 }
 </script>

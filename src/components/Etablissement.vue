@@ -75,7 +75,7 @@ export default {
       followDialog: false,
       followComment: '',
       followAlert: false,
-      followAlertError: ''
+      followAlertError: '',
     }
   },
   methods: {
@@ -297,7 +297,7 @@ export default {
       this.followDialog = false
       this.followAlertError = ''
       this.followAlert = false
-    }
+    },
   },
   created() {
     Apex.chart = {

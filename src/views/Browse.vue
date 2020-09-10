@@ -63,7 +63,7 @@
           p.ignoreroles = true
         }
         return p
-      }
+      },
     },
     components: { PredictionWidget, Toolbar },
   }
