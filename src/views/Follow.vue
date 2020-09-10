@@ -1,37 +1,12 @@
 <template>
     <div>
-        <v-toolbar
-        height="35px"
-        class="toolbar elevation-12"
-        color="#ffffff"
-        extension-height="48px"
-        app
-        >
-        <v-icon
-            @click="leftDrawer=!leftDrawer"
-            class="fa-rotate-180"
-            v-if="!leftDrawer"
-            color="#ffffff"
-            key="toolbar"
-        >mdi-backburger</v-icon>
-
-        <div
-            style="width: 100%; text-align: center;"
-            class="toolbar_titre"
-        >Suivi d'entreprises</div>
-        <v-spacer></v-spacer>
-        <v-icon
-            :class="loading?'rotate':''"
-            color="#ffffff"
-            v-if="!rightDrawer"
-            @click="rightDrawer=!rightDrawer"
-        >mdi-target</v-icon>
-        </v-toolbar>
+        <Toolbar title="Suivi d'entreprises" drawer/>
         <PredictionWidget v-for="e in etablissements" :key="e.siret" :prediction="e" />
     </div>
 </template>
 <script lang='ts'>
 import PredictionWidget from '@/components/PredictionWidget'
+import Toolbar from '@/components/Toolbar'
 
 type Score = {
     siren: string
@@ -69,7 +44,7 @@ type Follow = {
 }
 
 export default {
-    components: { PredictionWidget },
+    components: { PredictionWidget, Toolbar },
     data() {
         return {
             loading: false,
