@@ -8,8 +8,8 @@
         </div>
         <v-text-field solo placeholder="Raison sociale ou SIRET" v-model="search"></v-text-field>
         <v-radio-group v-model="radios" :mandatory="false">
-          <v-radio label="Parmi tous les établissements de mon secteur géographique" value="geo"></v-radio>
-          <v-radio label="Parmi tous les établissements des entreprises implantées dans mon secteur géographique" value="visible"></v-radio>
+          <v-radio label="Parmi tous les établissements de ma zone géographique" value="geo"></v-radio>
+          <v-radio label="Parmi tous les établissements des entreprises implantées dans ma zone géographique" value="visible"></v-radio>
           <v-radio label="Sur toute la France" value="tout"></v-radio>
         </v-radio-group>  
         <v-btn type="submit" style="width: 150px">
@@ -17,7 +17,7 @@
         </v-btn>
       </form>
     </div>
-    <div v-if="searched" class="numbers">{{ result.total }} résultats</div>
+    <div v-if="searched" class="numbers">{{ result.total || 0}} résultat(s)</div>
     <PredictionWidget v-for="r in result.results" :key="r.siret" :prediction="r" />
   </div>
 </template>
@@ -36,7 +36,7 @@
         dialog: false,
         ignorezone: true,
         ignoreroles: true,
-        radios: 'geo'
+        radios: 'geo',
       }
     },
     mounted() {

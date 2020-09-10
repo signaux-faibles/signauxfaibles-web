@@ -28,6 +28,7 @@ export default {
         low: ['fa-exclamation-triangle', 'amber'],
         none: ['fa-check-circle', 'green'],
         forbidden: ['fa-ban', 'red accent-1'],
+        absent: ['fa-question-circle', '#33333358']
       }
       return {
         alert: alerts[this.detection.prob],
@@ -39,8 +40,10 @@ export default {
       
       let probClass = ''
       
-      if (alert == null) {
-        probClass = 'forbidden'  
+      if (alert == null && (this.alert.visible || this.alert.followed)) {
+        probClass = 'absent'  
+      } else if (alert == null && (!this.alert.visible && !this.alert.followed)) {
+        probClass = 'forbidden'
       } else if (alert === 'Pas d\'alerte') {
         probClass = 'none'
       } else if (alert === 'Alerte seuil F2') {
