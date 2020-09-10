@@ -204,20 +204,20 @@
       <v-container style="position: relative; top: -10px">
         <v-layout row>
           <v-flex xs12 md6>
-            <v-text-field v-model="filter" solo label="filtre rapide" />
+            <v-text-field v-model="filter" @input="getPrediction" solo label="filtre rapide" />
           </v-flex>
           <v-flex xs12 md6 style="line-height: 53px;">
             <v-icon color="red">fa-exclamation-triangle</v-icon>
             <span style="font-size: 25px">{{ predictionAlerts }}</span>
             <span style="width: 100px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-            <v-icon color="amber">fa-question</v-icon>
+            <v-icon color="amber">fa-exclamation-triangle</v-icon>
             <span style="font-size: 25px;">{{ predictionWarnings }}</span>
             <v-icon style="margin-left: 25px" @click="download">fa-file-download</v-icon>
           </v-flex>
         </v-layout>
       </v-container>
     </v-card>
-    <PredictionWidget v-for="p in predictionView" :key="p.siret" :prediction="p" />
+    <PredictionWidget v-for="p in prediction" :key="p.siret" :prediction="p" />
   </div>
 </template>
 
@@ -233,8 +233,11 @@ export default {
       init: true,
       filter: '',
       prediction: [],
+      predictionAlerts: 0,
+      predictionWarnings: 0,
       nafDialog: false,
       nextNaf: [],
+      timer: null,
     }
   },
   mounted() {
@@ -293,54 +296,63 @@ export default {
       document.body.removeChild(element)
     },
     getPrediction() {
-      if (!this.loading) {
-        this.prediction = []
-        if (this.$store.state.currentBatchKey != null) {
-          const params = {}
-          if (!this.currentNaf.includes('NON')) {
-            params.activite = this.currentNaf
+      clearTimeout(this.timer)
+
+      this.timer = setTimeout(() => {
+        if (!this.loading) {
+          this.prediction = []
+          if (this.$store.state.currentBatchKey != null) {
+            const params = {}
+            if (!this.currentNaf.includes('NON')) {
+              params.activite = this.currentNaf
+            }
+            if (this.zone.length > 0) {
+              params.zone = this.zone
+            }
+            params.effectifMin = parseInt(this.minEffectif, 10)
+            if (this.ignorezone) {
+              params.ignorezone = this.ignorezone
+            }
+            params.procol = []
+            if (this.rj) {
+              params.procol = params.procol.concat(['redressement', 'plan_redressement'])
+            }
+            if (this.lj) {
+              params.procol = params.procol.concat(['liquidation'])
+            }
+            if (this.sauvegarde) {
+              params.procol = params.procol.concat(['sauvegarde'])
+            }
+            if (this.plan_sauvegarde) {
+              params.procol = params.procol.concat(['plan_sauvegarde'])
+            }
+            if (this.continuation) {
+              params.procol = params.procol.concat(['continuation'])
+            }
+            if (this.in_bonis) {
+              params.procol = params.procol.concat(['in_bonis'])
+            }
+            if (this.filter || '' != '') {
+              params.filter = this.filter
+            }
+            this.loading = true
+            this.$axios.post(`/scores/${this.$store.state.currentBatchKey}`, params).then((response) => {
+              this.prediction = response.data.scores.sort((p1, p2) => (p1.alert > p2.alert) ? 1 : -1)
+              this.predictionWarnings = response.data.nbF2
+              this.predictionAlerts = response.data.nbF1
+              this.loading = false
+            }).catch((error) => {
+              this.prediction = []
+            }).finally(() => {
+              this.init = false
+              this.loading = false
+            })
+          } else {
+            // TODO: check if necessary
+            window.setTimeout(this.getPrediction, 100)
           }
-          if (this.zone.length > 0) {
-            params.zone = this.zone
-          }
-          params.effectifMin = parseInt(this.minEffectif, 10)
-          if (this.ignorezone) {
-            params.ignorezone = this.ignorezone
-          }
-          params.procol = []
-          if (this.rj) {
-            params.procol = params.procol.concat(['redressement', 'plan_redressement'])
-          }
-          if (this.lj) {
-            params.procol = params.procol.concat(['liquidation'])
-          }
-          if (this.sauvegarde) {
-            params.procol = params.procol.concat(['sauvegarde'])
-          }
-          if (this.plan_sauvegarde) {
-            params.procol = params.procol.concat(['plan_sauvegarde'])
-          }
-          if (this.continuation) {
-            params.procol = params.procol.concat(['continuation'])
-          }
-          if (this.in_bonis) {
-            params.procol = params.procol.concat(['in_bonis'])
-          }
-          this.loading = true
-          this.$axios.post(`/scores/${this.$store.state.currentBatchKey}`, params).then((response) => {
-            this.prediction = response.data.scores.sort((p1, p2) => (p1.alert > p2.alert) ? 1 : -1)
-            this.loading = false
-          }).catch((error) => {
-            this.prediction = []
-          }).finally(() => {
-            this.init = false
-            this.loading = false
-          })
-        } else {
-          // TODO: check if necessary
-          window.setTimeout(this.getPrediction, 100)
         }
-      }
+      }, 500)
     },
   },
   computed: {
@@ -404,27 +416,6 @@ export default {
     loading: {
       get() { return this.$store.state.loading },
       set(value) { this.$store.commit('setLoading', value) },
-    },
-    predictionAlerts() {
-      // TODO: API
-      return this.prediction.filter((p) => (p.raison_sociale.includes(this.filter.toUpperCase()) ||
-        p.siret.includes(this.filter.toUpperCase())) && (p.alert === 'Alerte seuil F1')).length
-    },
-    predictionWarnings() {
-      // TODO: API
-      return this.prediction.filter((p) => (p.raison_sociale.includes(this.filter.toUpperCase()) ||
-        p.siret.includes(this.filter.toUpperCase())) && (p.alert === 'Alerte seuil F2')).length
-    },
-    predictionFilter() {
-      // TODO: API
-      return this.prediction.filter((p) => {
-        return p.raison_sociale.includes(this.filter.toUpperCase()) ||
-          p.siret.includes(this.filter.toUpperCase())
-      })
-    },
-    predictionView() {
-      // TODO: API
-      return this.predictionFilter.slice(0, this.detectionLength)
     },
     leftDrawer: {
       get() {
