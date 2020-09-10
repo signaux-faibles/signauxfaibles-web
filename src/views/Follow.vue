@@ -72,6 +72,7 @@ export default {
     components: { PredictionWidget },
     data() {
         return {
+            loading: false,
             mister: 'tagada',
             follow: [] as Follow[],
         }
@@ -89,6 +90,22 @@ export default {
     computed: {
         etablissements() {
             return this.follow.map(f => f.etablissements)
+        },
+        leftDrawer: {
+            get() {
+                return this.$store.state.leftDrawer
+            },
+            set(val) {
+                this.$store.dispatch('setLeftDrawer', val)
+            },
+        },
+        rightDrawer: {
+            get() {
+                return this.$store.state.rightDrawer
+            },
+            set(val) {
+                this.$store.dispatch('setRightDrawer', val)
+            },
         },
     }
 }
