@@ -43,34 +43,38 @@ export default {
   props: ['debit', 'cotisation', 'chart'],
   computed: {
     series() {
-      return [{
-        name: 'cotisations appelées',
-        type: 'line',
-        data: this.cotisation.map((c, i) => {
-          return [
-            new Date(this.debit[i].periode),
-            Math.round(c),
-          ]
-        }),
-      }, {
-        name: 'dette (part patronale)',
-        type: 'area',
-        data: this.debit.map((d) => {
-          return [
-            new Date(d.periode),
-            Math.round(d.part_patronale),
-          ]
-        }),
-      }, {
-        name: 'dette (part salariale)',
-        type: 'area',
-        data: this.debit.map((d) => {
-          return [
-            new Date(d.periode),
-            Math.round(d.part_ouvriere),
-          ]
-        }),
-      }]
+      if ((this.cotisation || []).length > 0 || (this.debit || []).length > 0) {
+        return [{
+          name: 'cotisations appelées',
+          type: 'line',
+          data: this.cotisation.filter(Boolean).map((c, i) => {
+            return [
+              new Date(this.debit[i].periode),
+              Math.round(c),
+            ]
+          }),
+        }, {
+          name: 'dette (part patronale)',
+          type: 'area',
+          data: this.debit.map((d) => {
+            return [
+              new Date(d.periode),
+              Math.round(d.part_patronale),
+            ]
+          }),
+        }, {
+          name: 'dette (part salariale)',
+          type: 'area',
+          data: this.debit.map((d) => {
+            return [
+              new Date(d.periode),
+              Math.round(d.part_ouvriere),
+            ]
+          }),
+        }]
+      } else {
+        return []
+      }
     },
     options() {
       return {
@@ -141,6 +145,13 @@ export default {
               type: 'none',
             },
           },
+        },
+        noData: {
+          text: 'Il n\'y a pas de données associées',
+          align: 'center',
+          verticalAlign: 'middle',
+          offsetX: 0,
+          offsetY: 0,
         },
       }
     },

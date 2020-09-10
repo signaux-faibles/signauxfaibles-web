@@ -60,12 +60,6 @@ export default {
     },
   },
   mounted() {
-    // TODO: check if necessary
-    if (!this.$store.state.token) {
-      if (this.$route.path !== '/') {
-        this.$router.push('/')
-      }
-    }
     document.onscroll = this.handleScrolling
     window.onresize = this.handleResize
     this.height = Math.max(
@@ -74,9 +68,9 @@ export default {
     )
   },
   name: 'App',
+  // TODO: full css review
 }
 </script>
-
 <style>
 @import url("https://fonts.googleapis.com/css?family=Quicksand");
 @import url("https://fonts.googleapis.com/css?family=Abel");

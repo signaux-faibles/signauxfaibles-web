@@ -52,7 +52,7 @@ export default {
       return this.naf.libelleSecteur || ''
     },
     libelleActivite() {
-      return this.naf.libelleactivite || ''
+      return this.naf.libelleActivite || ''
     },
     codeActivite() {
       return this.naf.codeActivite || ''

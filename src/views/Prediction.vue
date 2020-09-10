@@ -97,7 +97,7 @@
                         style="cursor: pointer"
                         @click="selectAllNaf()"
                       >{{ allNextNaf ? 'mdi-close-box' : someNextNaf ? 'mdi-minus-box' : 'mdi-checkbox-blank-outline' }}</v-icon>
-                    </v-list-tile-action>Tout sélectionner
+                    </v-list-tile-action>{{ !allNextNaf ? 'Tout sélectionner' : 'Tout désélectionner' }}
                     <v-list-tile-content></v-list-tile-content>
                   </v-list-tile>
                   <v-divider />
@@ -431,16 +431,14 @@ export default {
     },
     naf1() {
       // TODO: clean naf structure
-      // TODO: add prefix A, B, C, etc
       return Object.keys(this.$store.state.naf).map((n) => {
         return {
-          text: this.$store.state.naf[n],
+          text: n + '\u00a0-\u00a0' + this.$store.state.naf[n],
           value: n,
         }
       })
     },
     allNaf() {
-      // TODO : text unselect all
       return this.currentNaf.length === this.naf1.length
     },
     allNextNaf() {

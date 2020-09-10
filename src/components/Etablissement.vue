@@ -282,13 +282,17 @@ export default {
     },
     debit() {
       const periodeUrssaf = (this.etablissement || {}).periodeUrssaf || {}
-      return (periodeUrssaf.periodes || []).map((p, i) => {
-        return {
-          part_ouvriere: periodeUrssaf.partPatronale[i],
-          part_patronale: periodeUrssaf.partSalariale[i],
-          periode: p,
-        }
-      })
+      if (periodeUrssaf.periodes && periodeUrssaf.partPatronale && periodeUrssaf.partSalariale) {
+        return periodeUrssaf.periodes.map((p, i) => {
+          return {
+            part_ouvriere: (periodeUrssaf.partPatronale || {})[i],
+            part_patronale: (periodeUrssaf.partSalariale || {})[i],
+            periode: p,
+          }
+        })
+      } else {
+        return []
+      }
     },
     cotisation() {
       const periodeUrssaf = (this.etablissement || {}).periodeUrssaf || {}
