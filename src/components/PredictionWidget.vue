@@ -14,32 +14,32 @@
               :class="prediction.etat_procol == 'in_bonis'?'up':'down'"
             >{{ prediction.etat_procol }}</span>
             <br />
-            Dép.: {{ prediction.departement }} - Act: {{ prediction.libelle_activite.slice(0,65) }}
+            Dép.: {{ prediction.departement }} - Act: {{ (prediction.libelle_activite || '').slice(0,65) }}
           </div>
         </div>
         <div class="mr-2 text-xs-right">
           <img
             class="d-block mt-2 mb-2"
             width="70"
-            v-if="!prediction.urssaf || !roles.includes('urssaf')"
+            v-if="!prediction.urssaf && roles.includes('urssaf') && (prediction.alert)"
             src="../assets/gray_urssaf.svg"
           />
           <img
             class="d-block mt-2 mb-2"
             width="70"
-            v-if="prediction.urssaf && roles.includes('urssaf')"
+            v-if="prediction.urssaf && roles.includes('urssaf') && (prediction.alert)"
             src="../assets/red_urssaf.svg"
           />
           <img
             class="activite-partielle mt-1 mr-1"
             height="24"
-            v-if="prediction.activite_partielle"
+            v-if="prediction.activite_partielle && roles.includes('dgefp') && (prediction.alert) "
             src="../assets/red_apart.svg"
           />
           <img
             class="activite-partielle mt-1 mr-1"
             height="24"
-            v-if="!prediction.activite_partielle"
+            v-if="!prediction.activite_partielle && roles.includes('dgefp') && (prediction.alert)"
             src="../assets/gray_apart.svg"
           />
           <span class="effectif">{{ prediction.dernier_effectif || 'n/c' }}</span>

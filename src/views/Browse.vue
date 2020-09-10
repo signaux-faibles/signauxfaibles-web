@@ -7,11 +7,17 @@
           <span class="fblue">Signaux</span>·<span class="fred">Faibles</span>
         </div>
         <v-text-field solo placeholder="Raison sociale ou SIRET" v-model="search"></v-text-field>
+        <v-radio-group v-model="radios" :mandatory="false">
+          <v-radio label="Parmi tous les établissements de mon secteur géographique" value="geo"></v-radio>
+          <v-radio label="Parmi tous les établissements rattachés aux entreprises de mon secteur géographique" value="visible"></v-radio>
+          <v-radio label="Sur toute la France" value="tout"></v-radio>
+        </v-radio-group>  
         <v-btn type="submit" style="width: 150px">
           <v-icon>search</v-icon>
         </v-btn>
       </form>
     </div>
+    <div v-if="searched" class="numbers">{{ result.total }} résultats</div>
     <PredictionWidget v-for="r in result.results" :key="r.siret" :prediction="r" />
   </div>
 </template>
@@ -28,6 +34,9 @@
         page: 1,
         siret: '',
         dialog: false,
+        ignorezone: true,
+        ignoreroles: true,
+        radios: 'geo'
       }
     },
     mounted() {
@@ -39,7 +48,7 @@
         this.lookup()
       },
       lookup() {
-        this.$axios.get(this.searchURL, this.params).then((r) => {
+        this.$axios.get(this.searchURL, {params: this.params}).then((r) => {
           this.result = r.data
         }).catch((error) => {
           this.result = {}
@@ -56,10 +65,10 @@
         const p = {
           page: this.page,
         }
-        if (this.ignorezone) {
+        if (this.radios == 'visible' || this.radios == 'tout') {
           p.ignorezone = true
         }
-        if (this.ignoreroles) {
+        if (this.radios == 'tout') {
           p.ignoreroles = true
         }
         return p
@@ -94,7 +103,7 @@
   }
 
   .loaded{
-    height: 150px;
+    height: 330px;
     width: 100%;
     text-align: center;
     vertical-align: middle;
@@ -111,4 +120,9 @@
     color: #e9222e
   }
 
+  div.numbers {
+    font-size: 25px;
+    width: 100%;
+    text-align: center;
+  }
 </style>
