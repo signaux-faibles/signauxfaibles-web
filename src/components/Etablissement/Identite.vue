@@ -9,6 +9,8 @@
         <b>Activité de l'entreprise:</b>
         Le code activité est issu de la base Sirène produite par l'INSEE et correspond aux données déclaratives fournies par l'entreprise. Il peut être constaté un décalage entre le code déclaré et l'activité réelle de l'entreprise.
       </Help>
+      <v-btn v-if="followed === false" dark color="indigo darken-5" @click="showFollowDialog"><v-icon left class="mr-2">mdi-star-outline</v-icon>Suivre</v-btn>
+      <v-btn v-if="followed === true" outline color="indigo darken-5" @click="unfollowEtablissement"><v-icon left class="mr-2">mdi-star</v-icon>Ne plus suivre</v-btn>
     </h1>
     <Historique style="padding: 4px; position: relative; bottom: 5px" :historique="historique" />
     <h3>
@@ -44,6 +46,17 @@ export default {
   name: 'Identite',
   props: ['denomination', 'historique', 'siret', 'sirene', 'adresse'],
   components: { Help, Historique },
+  methods: {
+    followEtablissement() {
+      this.$parent.followEtablissement()
+    },
+    unfollowEtablissement() {
+      this.$parent.unfollowEtablissement()
+    },
+    showFollowDialog() {
+      this.$parent.followDialog = true
+    },
+  },
   computed: {
     naf() {
       return (this.sirene || {}).naf || {}
@@ -56,6 +69,9 @@ export default {
     },
     codeActivite() {
       return this.naf.codeActivite || ''
+    },
+    followed() {
+      return this.$parent.followed
     },
   },
 }

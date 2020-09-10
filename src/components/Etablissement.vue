@@ -27,7 +27,23 @@
           <v-flex xs12 class="pr-1">
             <Finance :finance="finance" :siret="siret" />
           </v-flex>
+          <v-dialog v-model="followDialog" @input="closeFollowDialog()" max-width="500px">
+            <v-card>
+              <v-card-title class="headline">Suivre {{ denomination }} ?</v-card-title>
+              <v-card-text>
+                <v-textarea v-model="followComment" solo label="Pour quel motif souhaitez-vous suivre cet établissement ?"></v-textarea>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn flat @click="closeFollowDialog()">Annuler</v-btn>
+                <v-btn dark color="indigo darken-5" @click="followEtablissement()"><v-icon left class="mr-2">mdi-star-outline</v-icon>Suivre</v-btn>
+              </v-card-actions>
+              <v-alert :value="followAlert" type="error" transition="scale-transition">{{ followAlertError }}</v-alert>
+            </v-card>
+          </v-dialog>
         </v-layout>
+        <v-btn v-if="followed === false" fab fixed bottom right dark color="indigo darken-5" class="mr-2" @click="followDialog = true"><v-icon>mdi-star-outline</v-icon></v-btn>
+        <v-btn v-if="followed === true" fab fixed bottom right outline color="indigo darken-5" class="mr-2" @click="unfollowEtablissement()"><v-icon>mdi-star</v-icon></v-btn>
       </v-container>
     </div>
   </div>
@@ -55,6 +71,11 @@ export default {
       etablissement: {},
       historique: [],
       adresse: '',
+      followed: null,
+      followDialog: false,
+      followComment: '',
+      followAlert: false,
+      followAlertError: ''
     }
   },
   methods: {
@@ -228,6 +249,7 @@ export default {
         this.etablissement = response.data
         this.historique = (this.etablissement.scores || []).sort((d1, d2) => d1.batch < d2.batch)
         this.sirene = this.etablissement.sirene
+        this.followed = this.etablissement.followed
       }).catch((error) => {
         this.etablissement = {}
         this.historique = []
@@ -245,6 +267,37 @@ export default {
         this.$refs.map.resizeMap()
       })
     },
+    followEtablissement() {
+      if (this.followComment.trim().length > 0) {
+        const params = {}
+        params.comment = this.followComment
+        this.$axios.post(`/follow/${this.siret}`, params).then((response) => {
+          if (response.status === 201 || response.status === 204) {
+            this.followed = true
+            this.followDialog = false
+            this.followAlert = false
+          }
+        }).catch((error) => {
+          this.followAlertError = 'Un erreur est survenue lors du suivie'
+          this.followAlert = true
+        })
+      } else {
+        this.followAlertError = 'Un motif de suivi doit être indiqué'
+        this.followAlert = true
+      }
+    },
+    unfollowEtablissement() {
+      this.$axios.delete(`/follow/${this.siret}`).then((response) => {
+        if (response.status === 200 ) {
+          this.followed = false
+        }
+      })
+    },
+    closeFollowDialog() {
+      this.followDialog = false
+      this.followAlertError = ''
+      this.followAlert = false
+    }
   },
   created() {
     Apex.chart = {
