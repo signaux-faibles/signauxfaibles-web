@@ -332,7 +332,7 @@ export default {
             if (this.in_bonis) {
               params.procol = params.procol.concat(['in_bonis'])
             }
-            if (this.filter || '' != '') {
+            if (this.filter || '' !== '') {
               params.filter = this.filter
             }
             this.loading = true

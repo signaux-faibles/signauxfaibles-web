@@ -47,12 +47,15 @@ export default {
         return [{
           name: 'cotisations appelées',
           type: 'line',
-          data: this.cotisation.filter(Boolean).map((c, i) => {
-            return [
-              new Date(this.debit[i].periode),
-              Math.round(c),
-            ]
-          }),
+          data: this.cotisation.reduce((data, c, i) => {
+            if (c !== null) {
+              data.push([
+                new Date(this.debit[i].periode),
+                Math.round(c),
+              ])
+            }
+            return data
+          }, []),
         }, {
           name: 'dette (part patronale)',
           type: 'area',
