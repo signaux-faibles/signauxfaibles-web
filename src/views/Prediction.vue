@@ -279,16 +279,12 @@ export default {
       return data
     },
     download() {
-      const params = {
-        responseType: 'arraybuffer'
-      }
-      Object.assign(params, this.params)
-      this.$axios.request(
+      this.$axios(
         {
           url: `/scores/xls/${this.currentBatchKey}`,
-          method: 'POST',
+          method: 'post',
           responseType: 'arraybuffer',
-          params: this.params
+          data: this.params
         }
       ).then((r) => {
         const url = window.URL.createObjectURL(new Blob([r.data]));
