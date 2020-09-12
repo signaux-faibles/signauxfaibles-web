@@ -224,6 +224,7 @@
 <script>
 import Spinner from '@/components/Spinner'
 import PredictionWidget from '@/components/PredictionWidget'
+
 export default {
   // TODO: right drawer in component
   data() {
@@ -278,65 +279,36 @@ export default {
       return data
     },
     download() {
-      const element = document.createElement('a')
-      const header = '"batch";"siren";"siret";"departement";"raison_sociale";"dernier_effectif";"code_activite";"libelle_activite";"score";"alert"\n'
-
-      element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(
-        header + this.predictionFilter.map((p) => {
-          return this.format(p)
-        }).join('\n'),
-      ))
-      element.setAttribute('download', 'liste.csv')
-
-      element.style.display = 'none'
-      document.body.appendChild(element)
-
-      element.click()
-
-      document.body.removeChild(element)
+      const params = {
+        responseType: 'arraybuffer'
+      }
+      Object.assign(params, this.params)
+      this.$axios.request(
+        {
+          url: `/scores/xls/${this.currentBatchKey}`,
+          method: 'POST',
+          responseType: 'arraybuffer',
+          params: this.params
+        }
+      ).then((r) => {
+        const url = window.URL.createObjectURL(new Blob([r.data]));
+        const element = document.createElement('a')
+        element.setAttribute('href',  url)
+        element.setAttribute('download', 'extract.xlsx')
+        element.style.display = 'none'
+        document.body.appendChild(element)
+        element.click()
+        document.body.removeChild(element)
+      })
     },
     getPrediction() {
       clearTimeout(this.timer)
-
       this.timer = setTimeout(() => {
         if (!this.loading) {
           this.prediction = []
           if (this.$store.state.currentBatchKey != null) {
-            const params = {}
-            if (!this.currentNaf.includes('NON')) {
-              params.activite = this.currentNaf
-            }
-            if (this.zone.length > 0) {
-              params.zone = this.zone
-            }
-            params.effectifMin = parseInt(this.minEffectif, 10)
-            if (this.ignorezone) {
-              params.ignorezone = this.ignorezone
-            }
-            params.procol = []
-            if (this.rj) {
-              params.procol = params.procol.concat(['redressement', 'plan_redressement'])
-            }
-            if (this.lj) {
-              params.procol = params.procol.concat(['liquidation'])
-            }
-            if (this.sauvegarde) {
-              params.procol = params.procol.concat(['sauvegarde'])
-            }
-            if (this.plan_sauvegarde) {
-              params.procol = params.procol.concat(['plan_sauvegarde'])
-            }
-            if (this.continuation) {
-              params.procol = params.procol.concat(['continuation'])
-            }
-            if (this.in_bonis) {
-              params.procol = params.procol.concat(['in_bonis'])
-            }
-            if (this.filter || '' !== '') {
-              params.filter = this.filter
-            }
             this.loading = true
-            this.$axios.post(`/scores/${this.$store.state.currentBatchKey}`, params).then((response) => {
+            this.$axios.post(`/scores/liste/${this.$store.state.currentBatchKey}`, this.params).then((response) => {
               this.prediction = response.data.scores.sort((p1, p2) => (p1.alert > p2.alert) ? 1 : -1)
               this.predictionWarnings = response.data.nbF2
               this.predictionAlerts = response.data.nbF1
@@ -356,6 +328,42 @@ export default {
     },
   },
   computed: {
+    params() {
+      const params = {}
+      if (!this.currentNaf.includes('NON')) {
+        params.activite = this.currentNaf
+      }
+      if (this.zone.length > 0) {
+        params.zone = this.zone
+      }
+      params.effectifMin = parseInt(this.minEffectif, 10)
+      if (this.ignorezone) {
+        params.ignorezone = this.ignorezone
+      }
+      params.procol = []
+      if (this.rj) {
+        params.procol = params.procol.concat(['redressement', 'plan_redressement'])
+      }
+      if (this.lj) {
+        params.procol = params.procol.concat(['liquidation'])
+      }
+      if (this.sauvegarde) {
+        params.procol = params.procol.concat(['sauvegarde'])
+      }
+      if (this.plan_sauvegarde) {
+        params.procol = params.procol.concat(['plan_sauvegarde'])
+      }
+      if (this.continuation) {
+        params.procol = params.procol.concat(['continuation'])
+      }
+      if (this.in_bonis) {
+        params.procol = params.procol.concat(['in_bonis'])
+      }
+      if (this.filter || '' != '') {
+        params.filter = this.filter
+      }
+      return params
+    },
     ignorezone: {
       get() { return this.$localStore.state.ignorezone },
       set(value) { this.$localStore.commit('setignorezone', value) },
