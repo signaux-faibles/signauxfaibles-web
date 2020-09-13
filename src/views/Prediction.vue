@@ -1,5 +1,5 @@
 <template>
-  <div id="#detection">
+  <div id="#detection" ref="detection">
     <v-toolbar
       height="35px"
       class="toolbar elevation-12"
@@ -239,6 +239,8 @@ export default {
       nafDialog: false,
       nextNaf: [],
       timer: null,
+      page: 0,
+      listHeight: 0,
     }
   },
   mounted() {
@@ -298,32 +300,49 @@ export default {
       })
     },
     getPrediction() {
+      this.prediction = []
+      this.page = 0
+      this.getPredictionPage() 
+    },
+    getPredictionPage() {
       clearTimeout(this.timer)
       this.timer = setTimeout(() => {
         if (!this.loading) {
-          this.prediction = []
           if (this.$store.state.currentBatchKey != null) {
             this.loading = true
             this.$axios.post(`/scores/liste/${this.$store.state.currentBatchKey}`, this.params).then((response) => {
-              this.prediction = response.data.scores.sort((p1, p2) => (p1.alert > p2.alert) ? 1 : -1)
+              this.prediction = this.prediction.concat(response.data.scores.sort((p1, p2) => (p1.alert > p2.alert) ? 1 : -1))
               this.predictionWarnings = response.data.nbF2
               this.predictionAlerts = response.data.nbF1
-              this.loading = false
             }).catch((error) => {
               this.prediction = []
             }).finally(() => {
               this.init = false
               this.loading = false
+              this.page += 1
             })
           } else {
             // TODO: check if necessary
-            window.setTimeout(this.getPrediction, 100)
+            window.setTimeout(this.getPredictionPage, 100)
           }
         }
       }, 500)
     },
   },
+  watch: {
+    scrollTop() {
+      this.listHeight = this.$el.getBoundingClientRect().bottom
+    },
+    displayStatus() {
+      if (!this.displayStatus) {
+        this.getPredictionPage()
+      }
+    },
+  },
   computed: {
+    displayStatus() {
+      return !this.loading && this.height < this.listHeight 
+    },
     params() {
       const params = {}
       if (!this.currentNaf.includes('NON')) {
@@ -358,6 +377,7 @@ export default {
       if (this.filter || '' != '') {
         params.filter = this.filter
       }
+      params.page = this.page
       return params
     },
     ignorezone: {
