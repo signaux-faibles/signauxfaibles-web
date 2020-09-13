@@ -28,7 +28,6 @@
       >mdi-target</v-icon>
     </v-toolbar>
     <div style="width:100%">
-      <Spinner v-if="loading" />
       <div
         id="nodata"
         v-if="!loading && prediction.length == 0 && init==false"
@@ -218,6 +217,8 @@
       </v-container>
     </v-card>
     <PredictionWidget v-for="p in prediction" :key="p.siret" :prediction="p" />
+          <Spinner v-if="loading" />
+
   </div>
 </template>
 
@@ -230,7 +231,6 @@ export default {
   data() {
     return {
       effectifClass: [10, 20, 50, 100],
-      predictionLength: 20, // TODO: check necessary or not
       init: true,
       filter: '',
       prediction: [],
@@ -241,6 +241,7 @@ export default {
       timer: null,
       page: 0,
       listHeight: 0,
+      complete: false,
     }
   },
   mounted() {
@@ -302,6 +303,7 @@ export default {
     getPrediction() {
       this.prediction = []
       this.page = 0
+      this.complete = false
       this.getPredictionPage() 
     },
     getPredictionPage() {
@@ -314,8 +316,8 @@ export default {
               this.prediction = this.prediction.concat(response.data.scores.sort((p1, p2) => (p1.alert > p2.alert) ? 1 : -1))
               this.predictionWarnings = response.data.nbF2
               this.predictionAlerts = response.data.nbF1
-            }).catch((error) => {
-              this.prediction = []
+            }).catch(() => {
+              this.complete = true
             }).finally(() => {
               this.init = false
               this.loading = false
@@ -334,10 +336,13 @@ export default {
       this.listHeight = this.$el.getBoundingClientRect().bottom
     },
     displayStatus() {
-      if (!this.displayStatus) {
+      if (!this.displayStatus && !this.complete) {
         this.getPredictionPage()
       }
     },
+    prediction() {
+      this.listHeight = this.$el.getBoundingClientRect().bottom
+    }
   },
   computed: {
     displayStatus() {
