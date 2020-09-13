@@ -301,23 +301,28 @@ export default {
       })
     },
     getPrediction() {
-      this.prediction = []
-      this.page = 0
-      this.complete = false
-      this.getPredictionPage() 
-    },
-    getPredictionPage() {
       clearTimeout(this.timer)
       this.timer = setTimeout(() => {
+        this.prediction = []
+        this.page = 0
+        this.complete = false
+        this.getPredictionPage() 
+      }, 500)
+    },
+    getPredictionPage() {
         if (!this.loading) {
           if (this.$store.state.currentBatchKey != null) {
             this.loading = true
-            this.$axios.post(`/scores/liste/${this.$store.state.currentBatchKey}`, this.params).then((response) => {
-              this.prediction = this.prediction.concat(response.data.scores.sort((p1, p2) => (p1.alert > p2.alert) ? 1 : -1))
-              this.predictionWarnings = response.data.nbF2
-              this.predictionAlerts = response.data.nbF1
+            this.$axios.post(`/scores/liste/${this.currentBatchKey}`, this.params).then((response) => {
+              if (response.status == 200) {
+                this.prediction = this.prediction.concat(response.data.scores)
+                this.predictionWarnings = response.data.nbF2
+                this.predictionAlerts = response.data.nbF1
+              } else if (response.status == 204) {
+                this.complete = true
+              }
             }).catch(() => {
-              this.complete = true
+
             }).finally(() => {
               this.init = false
               this.loading = false
@@ -328,15 +333,14 @@ export default {
             window.setTimeout(this.getPredictionPage, 100)
           }
         }
-      }, 500)
     },
   },
   watch: {
     scrollTop() {
       this.listHeight = this.$el.getBoundingClientRect().bottom
     },
-    displayStatus() {
-      if (!this.displayStatus && !this.complete) {
+    predictionIsEnough() {
+      if (!this.predictionIsEnough) {
         this.getPredictionPage()
       }
     },
@@ -345,8 +349,8 @@ export default {
     }
   },
   computed: {
-    displayStatus() {
-      return !this.loading && this.height < this.listHeight 
+    predictionIsEnough() {
+      return this.complete || this.loading || this.height * 2 < this.listHeight
     },
     params() {
       const params = {}
@@ -536,15 +540,6 @@ export default {
     },
     currentBatch() {
       return (this.batches.filter((b) => b.value === this.currentBatchKey)[0] || { text: 'chargement' }).text
-    },
-    detectionLength() {
-      // TODO: API
-      const length = Math.round((this.height + this.scrollTop) / 860 + 5) * 10
-      if (length > this.predictionLength) {
-        // const complement = length - this.predictionLength
-        // this.getPrediction(complement, this.predictionLength)
-      }
-      return length
     },
   },
   components: { PredictionWidget, Spinner },

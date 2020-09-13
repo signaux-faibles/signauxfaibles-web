@@ -66,6 +66,7 @@ export default {
       document.documentElement.clientHeight,
       window.innerHeight || 0,
     )
+    this.$store.dispatch('updateReference')
   },
   name: 'App',
   // TODO: full css review

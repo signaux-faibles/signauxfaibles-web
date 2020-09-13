@@ -30,7 +30,7 @@ export default {
 #spinner {
   position: absolute;
   width: 100%;
-  height: 100%;
+  height: 250px;
   vertical-align: middle;
   text-align: center;
   font-size: 200px;
