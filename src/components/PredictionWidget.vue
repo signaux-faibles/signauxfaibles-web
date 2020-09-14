@@ -7,6 +7,7 @@
       <div class="corps">
         <div class="mr-2 ml-2">
           <span class="raison-sociale">{{ prediction.raison_sociale }}</span>
+          <v-icon class="ml-2" v-if="prediction.new === true" color="primary">fiber_new</v-icon>
           <img class="ml-2" v-if="prediction.connu === true" height="20" src="../assets/crp.png" />
           <div class="identite">
             {{ prediction.siret }} -
