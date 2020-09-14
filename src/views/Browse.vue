@@ -17,47 +17,88 @@
         </v-btn>
       </form>
     </div>
-    <div v-if="searched" class="numbers">{{ result.total || 0}} résultat(s)</div>
-    <PredictionWidget v-for="r in result.results" :key="r.siret" :prediction="r" />
+    <div v-if="searched" class="numbers">{{ total }} résultat(s)
+    </div>
+    <PredictionWidget v-for="r in result" :key="r.siret" :prediction="r" />
   </div>
 </template>
 
 <script>
   import Toolbar from '@/components/Toolbar.vue'
   import PredictionWidget from '@/components/PredictionWidget.vue'
+  import Spinner from '@/components/Spinner.vue'
+
   export default {
     data() {
       return {
         search: '',
         searched: false,
         result: [],
-        page: 1,
+        total: 0,
+        page: 0,
         siret: '',
         dialog: false,
         ignorezone: true,
         ignoreroles: true,
         radios: 'geo',
+        listHeight: 0,
+        complete: false,
+        loading: false,
       }
     },
-    mounted() {
-      this.$store.dispatch('updateReference')
+    watch: {
+      scrollTop() {
+        this.listHeight = this.$el.getBoundingClientRect().bottom
+      },
+      resultIsEnough() {
+        if (!this.displayStatus && !this.complete) {
+          this.getPredictionPage()
+        }
+      }
     },
     methods: {
       load() {
         this.page = 0
-        this.lookup()
+        this.complete = false
+        this.searched = true
+        this.result = []
+        this.lookupPage()
       },
-      lookup() {
+      lookupPage() {
+        this.loading = true
         this.$axios.get(this.searchURL, {params: this.params}).then((r) => {
-          this.result = r.data
+          if (r.status == 200) {
+            this.result = this.result.concat(r.data.results)
+            this.total = r.data.total
+            this.page += 1
+          } else if (r.status == 204) {
+            this.complete = true
+          }
         }).catch((error) => {
-          this.result = {}
+          console.log(error)
         }).finally(() => {
-          this.searched = true
+          this.loading = false
+
         })
       },
     },
+    watch: {
+      scrollTop() {
+        this.listHeight = this.$el.getBoundingClientRect().bottom
+      },
+      result() {
+        this.listHeight = this.$el.getBoundingClientRect().bottom
+      },
+      resultIsEnough() {
+        if (!this.resultIsEnough) {
+          this.lookupPage()
+        }
+      },
+    },
     computed: {
+      resultIsEnough() {
+        return !this.searched || this.complete || this.loading || this.height * 2 < this.listHeight
+      },
       searchURL() {
         return `/etablissement/search/${this.search}`
       },
@@ -73,6 +114,17 @@
         }
         return p
       },
+      scrollTop() {
+        return this.$store.state.scrollTop
+      },
+      height: {
+        get() {
+          return this.$store.state.height
+        },
+        set(height) {
+          this.$store.dispatch('setHeight', height)
+        },
+      },
     },
     components: { PredictionWidget, Toolbar },
   }
@@ -86,13 +138,11 @@
     vertical-align: middle; 
     padding: 10px 30%;
   }
-
   .empty_picto {
     margin-top: 20%;
     font-size: 40px;
     margin-bottom: 40px;
   }
-
   .empty_text {
     text-align: center;
     font-size: 25px;
@@ -101,7 +151,6 @@
   .loaded_picto {
     visibility: hidden;
   }
-
   .loaded{
     height: 330px;
     width: 100%;
@@ -109,17 +158,14 @@
     vertical-align: middle;
     padding: 10px 10%;
   }
-
   span.fblue {
     font-family: 'Quicksand', sans-serif;
     color: #20459a
   }
-
   span.fred {
     font-family: 'Quicksand', sans-serif;
     color: #e9222e
   }
-
   div.numbers {
     font-size: 25px;
     width: 100%;

@@ -1,5 +1,5 @@
 <template>
-  <div id="#detection">
+  <div id="#detection" ref="detection">
     <v-toolbar
       height="35px"
       class="toolbar elevation-12"
@@ -28,7 +28,6 @@
       >mdi-target</v-icon>
     </v-toolbar>
     <div style="width:100%">
-      <Spinner v-if="loading" />
       <div
         id="nodata"
         v-if="!loading && prediction.length == 0 && init==false"
@@ -218,18 +217,20 @@
       </v-container>
     </v-card>
     <PredictionWidget v-for="p in prediction" :key="p.siret" :prediction="p" />
+          <Spinner v-if="loading" />
+
   </div>
 </template>
 
 <script>
 import Spinner from '@/components/Spinner'
 import PredictionWidget from '@/components/PredictionWidget'
+
 export default {
   // TODO: right drawer in component
   data() {
     return {
       effectifClass: [10, 20, 50, 100],
-      predictionLength: 20, // TODO: check necessary or not
       init: true,
       filter: '',
       prediction: [],
@@ -238,6 +239,9 @@ export default {
       nafDialog: false,
       nextNaf: [],
       timer: null,
+      page: 0,
+      listHeight: 0,
+      complete: false,
     }
   },
   mounted() {
@@ -278,84 +282,113 @@ export default {
       return data
     },
     download() {
-      const element = document.createElement('a')
-      const header = '"batch";"siren";"siret";"departement";"raison_sociale";"dernier_effectif";"code_activite";"libelle_activite";"score";"alert"\n'
-
-      element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(
-        header + this.predictionFilter.map((p) => {
-          return this.format(p)
-        }).join('\n'),
-      ))
-      element.setAttribute('download', 'liste.csv')
-
-      element.style.display = 'none'
-      document.body.appendChild(element)
-
-      element.click()
-
-      document.body.removeChild(element)
+      this.$axios(
+        {
+          url: `/scores/xls/${this.currentBatchKey}`,
+          method: 'post',
+          responseType: 'arraybuffer',
+          data: this.params
+        }
+      ).then((r) => {
+        const url = window.URL.createObjectURL(new Blob([r.data]));
+        const element = document.createElement('a')
+        element.setAttribute('href',  url)
+        element.setAttribute('download', 'extract.xlsx')
+        element.style.display = 'none'
+        document.body.appendChild(element)
+        element.click()
+        document.body.removeChild(element)
+      })
     },
     getPrediction() {
       clearTimeout(this.timer)
-
       this.timer = setTimeout(() => {
+        this.prediction = []
+        this.page = 0
+        this.complete = false
+        this.getPredictionPage() 
+      }, 500)
+    },
+    getPredictionPage() {
         if (!this.loading) {
-          this.prediction = []
           if (this.$store.state.currentBatchKey != null) {
-            const params = {}
-            if (!this.currentNaf.includes('NON')) {
-              params.activite = this.currentNaf
-            }
-            if (this.zone.length > 0) {
-              params.zone = this.zone
-            }
-            params.effectifMin = parseInt(this.minEffectif, 10)
-            if (this.ignorezone) {
-              params.ignorezone = this.ignorezone
-            }
-            params.procol = []
-            if (this.rj) {
-              params.procol = params.procol.concat(['redressement', 'plan_redressement'])
-            }
-            if (this.lj) {
-              params.procol = params.procol.concat(['liquidation'])
-            }
-            if (this.sauvegarde) {
-              params.procol = params.procol.concat(['sauvegarde'])
-            }
-            if (this.plan_sauvegarde) {
-              params.procol = params.procol.concat(['plan_sauvegarde'])
-            }
-            if (this.continuation) {
-              params.procol = params.procol.concat(['continuation'])
-            }
-            if (this.in_bonis) {
-              params.procol = params.procol.concat(['in_bonis'])
-            }
-            if (this.filter || '' !== '') {
-              params.filter = this.filter
-            }
             this.loading = true
-            this.$axios.post(`/scores/${this.$store.state.currentBatchKey}`, params).then((response) => {
-              this.prediction = response.data.scores.sort((p1, p2) => (p1.alert > p2.alert) ? 1 : -1)
-              this.predictionWarnings = response.data.nbF2
-              this.predictionAlerts = response.data.nbF1
-              this.loading = false
-            }).catch((error) => {
-              this.prediction = []
+            this.$axios.post(`/scores/liste/${this.currentBatchKey}`, this.params).then((response) => {
+              if (response.status == 200) {
+                this.prediction = this.prediction.concat(response.data.scores)
+                this.predictionWarnings = response.data.nbF2
+                this.predictionAlerts = response.data.nbF1
+              } else if (response.status == 204) {
+                this.complete = true
+              }
+            }).catch(() => {
+
             }).finally(() => {
               this.init = false
               this.loading = false
+              this.page += 1
             })
           } else {
             // TODO: check if necessary
-            window.setTimeout(this.getPrediction, 100)
+            window.setTimeout(this.getPredictionPage, 100)
           }
         }
-      }, 500)
     },
   },
+  watch: {
+    scrollTop() {
+      this.listHeight = this.$el.getBoundingClientRect().bottom
+    },
+    predictionIsEnough() {
+      if (!this.predictionIsEnough) {
+        this.getPredictionPage()
+      }
+    },
+    prediction() {
+      this.listHeight = this.$el.getBoundingClientRect().bottom
+    }
+  },
   computed: {
+    predictionIsEnough() {
+      return this.complete || this.loading || this.height * 2 < this.listHeight
+    },
+    params() {
+      const params = {}
+      if (!this.currentNaf.includes('NON')) {
+        params.activite = this.currentNaf
+      }
+      if (this.zone.length > 0) {
+        params.zone = this.zone
+      }
+      params.effectifMin = parseInt(this.minEffectif, 10)
+      if (this.ignorezone) {
+        params.ignorezone = this.ignorezone
+      }
+      params.procol = []
+      if (this.rj) {
+        params.procol = params.procol.concat(['redressement', 'plan_redressement'])
+      }
+      if (this.lj) {
+        params.procol = params.procol.concat(['liquidation'])
+      }
+      if (this.sauvegarde) {
+        params.procol = params.procol.concat(['sauvegarde'])
+      }
+      if (this.plan_sauvegarde) {
+        params.procol = params.procol.concat(['plan_sauvegarde'])
+      }
+      if (this.continuation) {
+        params.procol = params.procol.concat(['continuation'])
+      }
+      if (this.in_bonis) {
+        params.procol = params.procol.concat(['in_bonis'])
+      }
+      if (this.filter || '' != '') {
+        params.filter = this.filter
+      }
+      params.page = this.page
+      return params
+    },
     ignorezone: {
       get() { return this.$localStore.state.ignorezone },
       set(value) { this.$localStore.commit('setignorezone', value) },
@@ -507,15 +540,6 @@ export default {
     },
     currentBatch() {
       return (this.batches.filter((b) => b.value === this.currentBatchKey)[0] || { text: 'chargement' }).text
-    },
-    detectionLength() {
-      // TODO: API
-      const length = Math.round((this.height + this.scrollTop) / 860 + 5) * 10
-      if (length > this.predictionLength) {
-        // const complement = length - this.predictionLength
-        // this.getPrediction(complement, this.predictionLength)
-      }
-      return length
     },
   },
   components: { PredictionWidget, Spinner },
