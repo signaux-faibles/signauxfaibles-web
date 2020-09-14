@@ -4,7 +4,7 @@
     <div :class="((result.etablissement || []).length > 0 || searched) ? 'loaded' : 'empty'">
       <form v-on:submit.prevent="load">
         <div :class="((result.etablissement || []).length > 0 || searched) ? 'loaded_picto' : 'empty_picto'">
-          <span class="fblue">Signaux</span>·<span class="fred">Faibles</span>
+          <img class="logotext" src="../assets/text_signaux_faibles.svg" />
         </div>
         <v-text-field solo placeholder="Raison sociale ou SIRET" v-model="search"></v-text-field>
         <v-radio-group v-model="radios" :mandatory="false">
@@ -54,7 +54,7 @@
         if (!this.displayStatus && !this.complete) {
           this.getPredictionPage()
         }
-      }
+      },
     },
     methods: {
       load() {
@@ -66,19 +66,16 @@
       },
       lookupPage() {
         this.loading = true
-        this.$axios.get(this.searchURL, {params: this.params}).then((r) => {
-          if (r.status == 200) {
-            this.result = this.result.concat(r.data.results)
-            this.total = r.data.total
+        this.$axios.get(this.searchURL, {params: this.params}).then((response) => {
+          if (response.status === 200) {
+            this.result = this.result.concat(response.data.results)
+            this.total = response.data.total
             this.page += 1
-          } else if (r.status == 204) {
+          } else if (response.status === 204) {
             this.complete = true
           }
-        }).catch((error) => {
-          console.log(error)
         }).finally(() => {
           this.loading = false
-
         })
       },
     },
@@ -131,7 +128,7 @@
 </script>
 
 <style scoped>
-  .empty{
+  .empty {
     height: 150px;
     width: 100%; 
     text-align: center; 
@@ -143,32 +140,22 @@
     font-size: 40px;
     margin-bottom: 40px;
   }
-  .empty_text {
-    text-align: center;
-    font-size: 25px;
-    margin: 80px;
-  }
   .loaded_picto {
     visibility: hidden;
   }
-  .loaded{
+  .loaded {
     height: 330px;
     width: 100%;
     text-align: center;
     vertical-align: middle;
     padding: 10px 10%;
   }
-  span.fblue {
-    font-family: 'Quicksand', sans-serif;
-    color: #20459a
-  }
-  span.fred {
-    font-family: 'Quicksand', sans-serif;
-    color: #e9222e
-  }
   div.numbers {
     font-size: 25px;
     width: 100%;
     text-align: center;
+  }
+  .logotext {
+    height: 50px;
   }
 </style>

@@ -956,13 +956,13 @@ export default {
 </script>
 <style scoped>
 
->>> .fraction {
+::v-deep .fraction {
   display: inline-block;
   vertical-align: middle;
   text-align: center;
 }
 
->>> .numerateur {
+::v-deep .numerateur {
   border-bottom: 2px solid black;
 }
 

@@ -274,16 +274,4 @@
     color: #666;
     font-size: 40px;
   }
-
-  div.file-listing{
-    vertical-align: middle;
-    width: 400px;
-    margin: auto;
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-  }
-
-  div.file-listing img{
-    height: 100px;
-  }
 </style>

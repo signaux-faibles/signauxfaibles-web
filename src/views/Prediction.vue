@@ -287,10 +287,10 @@ export default {
           url: `/scores/xls/${this.currentBatchKey}`,
           method: 'post',
           responseType: 'arraybuffer',
-          data: this.params
-        }
+          data: this.params,
+        },
       ).then((r) => {
-        const url = window.URL.createObjectURL(new Blob([r.data]));
+        const url = window.URL.createObjectURL(new Blob([r.data]))
         const element = document.createElement('a')
         element.setAttribute('href',  url)
         element.setAttribute('download', 'extract.xlsx')
@@ -306,7 +306,7 @@ export default {
         this.prediction = []
         this.page = 0
         this.complete = false
-        this.getPredictionPage() 
+        this.getPredictionPage()
       }, 500)
     },
     getPredictionPage() {
@@ -314,22 +314,19 @@ export default {
           if (this.$store.state.currentBatchKey != null) {
             this.loading = true
             this.$axios.post(`/scores/liste/${this.currentBatchKey}`, this.params).then((response) => {
-              if (response.status == 200) {
+              if (response.status === 200) {
                 this.prediction = this.prediction.concat(response.data.scores)
                 this.predictionWarnings = response.data.nbF2
                 this.predictionAlerts = response.data.nbF1
-              } else if (response.status == 204) {
+              } else if (response.status === 204) {
                 this.complete = true
               }
-            }).catch(() => {
-
             }).finally(() => {
               this.init = false
               this.loading = false
               this.page += 1
             })
           } else {
-            // TODO: check if necessary
             window.setTimeout(this.getPredictionPage, 100)
           }
         }
@@ -346,7 +343,7 @@ export default {
     },
     prediction() {
       this.listHeight = this.$el.getBoundingClientRect().bottom
-    }
+    },
   },
   computed: {
     predictionIsEnough() {
@@ -383,7 +380,7 @@ export default {
       if (this.in_bonis) {
         params.procol = params.procol.concat(['in_bonis'])
       }
-      if (this.filter || '' != '') {
+      if (this.filter || '' !== '') {
         params.filter = this.filter
       }
       params.page = this.page

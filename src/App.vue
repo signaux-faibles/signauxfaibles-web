@@ -69,41 +69,15 @@ export default {
     this.$store.dispatch('updateReference')
   },
   name: 'App',
-  // TODO: full css review
 }
 </script>
 <style>
-@import url("https://fonts.googleapis.com/css?family=Quicksand");
 @import url("https://fonts.googleapis.com/css?family=Abel");
 @import url("https://fonts.googleapis.com/css?family=Oswald");
-@import url("https://fonts.googleapis.com/css?family=Source+Serif+Pro");
 @import url("https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap");
 
 body {
-  font-family: "Quicksand", sans-serif;
-}
-.task {
-  background: linear-gradient(0deg, #111216, #21222b);
-}
-.tasktext {
-  color: white;
-  background: linear-gradient(
-    90deg,
-    #ffffff60 0px,
-    #00000060 2px,
-    #ffffff00 4px
-  );
-}
-.tasktitle {
-  color: white;
-
-  background: radial-gradient(
-    ellipse at top,
-    #a49bbd70,
-    #716a8170 35%,
-    #3a3b4b70 75%,
-    #21213b70 100%
-  );
+  font-family: "Roboto", sans-serif;
 }
 .toolbar {
   background-color: #222;
@@ -124,21 +98,6 @@ body {
   font-weight: 800;
   font-size: 22px;
 }
-.toolbar-widget {
-  color: #fff;
-  font-family: "Quicksand", sans-serif;
-  text-shadow: 0px 0px 2px rgb(146, 146, 146), 0px 0px 1px rgb(255, 255, 255);
-  background-color: #222;
-  /* background: linear-gradient(0deg, #b6b6b6, #6e6e6e00 7%, transparent),
-    radial-gradient(
-      ellipse at top,
-      #ffffff,
-      #e4e4e4 35%,
-      #c9c9cc 80%,
-      #afafcc 100%,
-      transparent,
-    ); */
-}
 #app {
   background: radial-gradient(
     circle at center,
@@ -153,5 +112,13 @@ body {
 }
 .span {
   max-height: 10px;
+}
+span.fblue {
+  font-family: "Quicksand", sans-serif;
+  color: #20459a;
+}
+span.fred {
+  font-family: "Quicksand", sans-serif;
+  color: #e9222e;
 }
 </style>

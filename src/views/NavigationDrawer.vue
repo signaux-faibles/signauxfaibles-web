@@ -8,8 +8,7 @@
           </v-list-tile-avatar>
           <v-list-tile-content>
             <v-list-tile-title>
-              <span class="fblue">Signaux</span>·
-              <span class="fred">Faibles</span>
+              <img class="logotext" src="../assets/text_signaux_faibles.svg" />
             </v-list-tile-title>
           </v-list-tile-content>
           <v-list-tile-avatar>
@@ -121,12 +120,7 @@ export default {
 </script>
 
 <style scoped>
-span.fblue {
-  font-family: "Quicksand", sans-serif;
-  color: #20459a;
-}
-span.fred {
-  font-family: "Quicksand", sans-serif;
-  color: #e9222e;
-}
+  .logotext {
+    height: 20px;
+  }
 </style>
