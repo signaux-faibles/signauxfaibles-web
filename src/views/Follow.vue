@@ -1,6 +1,9 @@
 <template>
     <div>
         <Toolbar title="Suivi d'établissements" drawer/>
+        <div id="nodata" v-if="!loading && follow.length == 0 && init == false">
+            Vous ne suivez pour le moment aucun établissement.<br>Pour ce faire, rendez-vous sur la fiche d'un établissement et appuyez sur le bouton Suivre.
+        </div>
         <PredictionWidget v-for="e in etablissements" :key="e.siret" :prediction="e" />
     </div>
 </template>
@@ -12,6 +15,7 @@ export default {
     components: { PredictionWidget, Toolbar },
     data() {
         return {
+            init: true,
             loading: false,
             follow: [],
         }
@@ -22,7 +26,11 @@ export default {
     methods: {
         getFollowedEtablissements() {
             this.$axios.get('/follow').then((response) => {
-                this.follow = response.data
+                if (response.status === 200) {
+                    this.follow = response.data
+                }
+            }).finally(() => {
+                this.init = false
             })
         },
     },
@@ -49,3 +57,16 @@ export default {
     },
 }
 </script>
+
+<style scoped>
+#nodata {
+  width: 80%;
+  max-width: 100%;
+  height: 400px;
+  margin: 200px 10%;
+  position: absolute;
+  vertical-align: middle;
+  text-align: center;
+  font-size: 40px;
+}
+</style>
