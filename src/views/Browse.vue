@@ -4,7 +4,7 @@
     <div :class="((result.etablissement || []).length > 0 || searched) ? 'loaded' : 'empty'">
       <form v-on:submit.prevent="load">
         <div :class="((result.etablissement || []).length > 0 || searched) ? 'loaded_picto' : 'empty_picto'">
-          <img class="logotext" src="../assets/text_signaux_faibles.svg" />
+          <img height="50" src="../assets/text_signaux_faibles.svg" />
         </div>
         <v-text-field solo placeholder="Raison sociale ou SIRET" v-model="search"></v-text-field>
         <v-radio-group v-model="radios" :mandatory="false">
@@ -154,8 +154,5 @@
     font-size: 25px;
     width: 100%;
     text-align: center;
-  }
-  .logotext {
-    height: 50px;
   }
 </style>

@@ -8,7 +8,7 @@
           </v-list-tile-avatar>
           <v-list-tile-content>
             <v-list-tile-title>
-              <img class="logotext" src="../assets/text_signaux_faibles.svg" />
+              <img height="20" src="../assets/text_signaux_faibles.svg" />
             </v-list-tile-title>
           </v-list-tile-content>
           <v-list-tile-avatar>
@@ -118,9 +118,3 @@ export default {
   },
 }
 </script>
-
-<style scoped>
-  .logotext {
-    height: 20px;
-  }
-</style>
