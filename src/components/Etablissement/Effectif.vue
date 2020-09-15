@@ -45,7 +45,7 @@ export default {
           m = m.concat([
             [ new Date(c.debut),
               Math.max(c.effectifAutorise, 0)],
-            [ new Date(c.debut),
+            [ new Date(c.fin),
               Math.max(c.effectifAutorise, 0)],
           ])
           return m
