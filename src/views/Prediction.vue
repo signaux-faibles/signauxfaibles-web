@@ -8,7 +8,7 @@
       app
     >
       <v-icon
-        @click="leftDrawer=!leftDrawer"
+        @click="openLeftDrawer()"
         class="fa-rotate-180"
         v-if="!leftDrawer"
         color="#ffffff"
@@ -24,7 +24,7 @@
         :class="loading?'rotate':''"
         color="#ffffff"
         v-if="!rightDrawer"
-        @click="rightDrawer=!rightDrawer"
+        @click="openRightDrawer()"
       >mdi-target</v-icon>
     </v-toolbar>
     <div style="width:100%">
@@ -40,7 +40,7 @@
         app
       >
         <v-toolbar flat class="transparent" height="40">
-          <v-icon :class="loading?'rotate':''" @click="rightDrawer=!rightDrawer">mdi-target</v-icon>
+          <v-icon :class="loading?'rotate':''" @click="closeRightDrawer()">mdi-target</v-icon>
         </v-toolbar>
         <div style="width: 100%; padding: 0 15px;">
           <v-select
@@ -282,6 +282,7 @@ export default {
       return data
     },
     download() {
+      this.$matomo.trackEvent('listes', 'extraire', this.eventName)
       this.$axios(
         {
           url: `/scores/xls/${this.currentBatchKey}`,
@@ -306,6 +307,7 @@ export default {
         this.prediction = []
         this.page = 0
         this.complete = false
+        this.$matomo.trackEvent('listes', 'charger_liste', this.eventName)
         this.getPredictionPage()
       }, 500)
     },
@@ -331,6 +333,18 @@ export default {
           }
         }
     },
+    openLeftDrawer() {
+      this.$matomo.trackEvent('general', 'ouvrir_menu')
+      this.leftDrawer = !this.leftDrawer
+    },
+    openRightDrawer() {
+      this.$matomo.trackEvent('general', 'ouvrir_volet_filtrage')
+      this.rightDrawer = !this.rightDrawer
+    },
+    closeRightDrawer() {
+      this.$matomo.trackEvent('general', 'fermer_volet_filtrage')
+      this.rightDrawer = !this.rightDrawer
+    },
   },
   watch: {
     scrollTop() {
@@ -338,6 +352,7 @@ export default {
     },
     predictionIsEnough() {
       if (!this.predictionIsEnough) {
+        this.$matomo.trackEvent('listes', 'voir_page_suivante', this.currentBatchKey, this.page)
         this.getPredictionPage()
       }
     },
@@ -537,6 +552,13 @@ export default {
     },
     currentBatch() {
       return (this.batches.filter((b) => b.value === this.currentBatchKey)[0] || { text: 'chargement' }).text
+    },
+    eventName() {
+      let eventName = this.currentBatchKey
+      if (this.filter || '' !== '') {
+        eventName = eventName.concat(',' + this.filter)
+      }
+      return eventName
     },
   },
   components: { PredictionWidget, Spinner },

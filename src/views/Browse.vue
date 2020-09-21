@@ -62,6 +62,15 @@
         this.complete = false
         this.searched = true
         this.result = []
+        let eventName = this.search
+        if (this.radios === 'visible') {
+          eventName = eventName.concat(',entreprises_zone')
+        } else if (this.radios === 'tout') {
+          eventName = eventName.concat(',france')
+        } else {
+          eventName = eventName.concat(',etablissements_zone')
+        }
+        this.$matomo.trackEvent('consultation', 'rechercher', eventName)
         this.lookupPage()
       },
       lookupPage() {
@@ -70,6 +79,7 @@
           if (response.status === 200) {
             this.result = this.result.concat(response.data.results)
             this.total = response.data.total
+            this.$matomo.trackEvent('consultation', 'resultats_recherche', this.search, this.total)
             this.page += 1
           } else if (response.status === 204) {
             this.complete = true
@@ -88,6 +98,7 @@
       },
       resultIsEnough() {
         if (!this.resultIsEnough) {
+          this.$matomo.trackEvent('consultation', 'voir_page_suivante', this.search, this.page)
           this.lookupPage()
         }
       },

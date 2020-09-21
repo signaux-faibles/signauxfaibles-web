@@ -109,12 +109,14 @@
 
         this.$refs.fileform.addEventListener('drop', ((e) => {
           for (const f of e.dataTransfer.files) {
+            this.$matomo.trackEvent('envoi_donnees', 'selectionner_fichiers')
             this.files.push(this.uploadObject(f))
           }
         }).bind(this))
 
         this.$refs.uploadForm.addEventListener('change', ((e) => {
           for (const f of e.target.files) {
+            this.$matomo.trackEvent('envoi_donnees', 'selectionner_fichiers')
             this.files.push(this.uploadObject(f))
           }
         }).bind(this))
@@ -185,6 +187,9 @@
         }
       },
       runUpload() {
+        const eventName = this.shared ? 'public' : this.jwt.goup_path
+        const eventValue = this.files.length
+        this.$matomo.trackEvent('envoi_donnees', 'envoyer', eventName, eventValue)
         this.updateToken()
         for (const i in this.files) {
           if (this.files[i].completed === false) {

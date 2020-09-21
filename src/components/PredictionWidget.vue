@@ -66,7 +66,7 @@
             >
               <v-spacer />FICHE ETABLISSEMENT
               <v-spacer />
-              <v-icon @click="dialog=false;" style="color: #fff">mdi-close</v-icon>
+              <v-icon @click="hideEtablissement() " style="color: #fff">mdi-close</v-icon>
             </v-toolbar>
             <Etablissement :siret="prediction.siret" :batch="currentBatchKey"></Etablissement>
           </div>
@@ -108,7 +108,12 @@ export default {
   },
   methods: {
     showEtablissement() {
+      this.$matomo.trackEvent('etablissement', 'ouvrir_fiche_etablissement', this.prediction.siret)
       this.dialog = true
+    },
+    hideEtablissement() {
+      this.$matomo.trackEvent('etablissement', 'fermer_fiche_etablissement', this.prediction.siret)
+      this.dialog = false
     },
   },
 }

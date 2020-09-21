@@ -8,7 +8,7 @@ import PageNotFound from '@/views/PageNotFound.vue'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   base: process.env.BASE_URL,
   routes: [
     {
@@ -38,3 +38,5 @@ export default new Router({
     },
   ],
 })
+
+export default router

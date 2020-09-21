@@ -123,6 +123,7 @@ export default {
   },
   methods: {
     send() {
+      this.$matomo.trackEvent('etablissement', 'commenter', this.siret)
       const params = {
         message: this.editor.getHTML(),
       }

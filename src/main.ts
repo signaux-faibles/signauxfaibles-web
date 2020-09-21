@@ -6,6 +6,8 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import VueApexCharts from 'vue-apexcharts'
+// @ts-ignore
+import VueMatomo from 'vue-matomo'
 
 Vue.config.productionTip = true
 
@@ -28,6 +30,14 @@ const redirectURI = window.location.pathname
 
 const bdf = (redirectURI.slice(-3) === 'bdf')
 
+Vue.use(VueMatomo, {
+  host: 'https://matomo-preprod.signaux-faibles.beta.gouv.fr/',
+  siteId: 1,
+  router,
+  debug: true,
+  trackInitialView: false,
+})
+
 Vue.use(VueKeyCloak, {
   init: {
     onLoad: 'check-sso',
@@ -44,6 +54,7 @@ Vue.use(VueKeyCloak, {
         idpHint: (bdf) ? 'bdfidp' : undefined,
       })
     } else {
+      (window as any)._paq.push(['setUserId', Vue.prototype.$keycloak.tokenParsed.preferred_username])
       tokenInterceptor()
       const tslintCantBeDisabledSorryForThis = new Vue({
         el: '#app',

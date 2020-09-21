@@ -12,7 +12,7 @@
             </v-list-tile-title>
           </v-list-tile-content>
           <v-list-tile-avatar>
-            <v-icon @click="drawer=!drawer">mdi-backburger</v-icon>
+            <v-icon @click="closeDrawer()">mdi-backburger</v-icon>
           </v-list-tile-avatar>
         </v-list-tile>
       </v-list>
@@ -94,10 +94,22 @@ export default {
   components: { News },
   methods: {
     logout() {
+      this.$matomo.trackEvent('general', 'se_deconnecter')
+      this.createNewMatomoVisit()
       this.$keycloak.logoutFn()
       if (this.$route.path !== '/') {
         this.$router.push('/')
       }
+    },
+    closeDrawer() {
+      this.$matomo.trackEvent('general', 'fermer_menu')
+      this.drawer = !this.drawer
+    },
+    createNewMatomoVisit() {
+      _paq.push(['resetUserId'])
+      _paq.push(['appendToTrackingUrl', 'new_visit=1'])
+      _paq.push(['trackPageView'])
+      _paq.push(['appendToTrackingUrl', ''])
     },
   },
   computed: {

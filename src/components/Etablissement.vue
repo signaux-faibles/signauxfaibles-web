@@ -268,6 +268,7 @@ export default {
       })
     },
     followEtablissement() {
+      this.$matomo.trackEvent('etablissement', 'suivre', this.siret)
       if (this.followComment.trim().length > 0) {
         const params = {}
         params.comment = this.followComment
@@ -288,6 +289,7 @@ export default {
       }
     },
     unfollowEtablissement() {
+      this.$matomo.trackEvent('etablissement', 'ne_plus_suivre', this.siret)
       this.$axios.delete(`/follow/${this.siret}`).then((response) => {
         if (response.status === 200 ) {
           this.followed = false

@@ -8,7 +8,7 @@
             fab
             flat
             small
-            @click="viewChild=!viewChild; viewComment=false;"
+            @click="toggleComments()"
           >
             <v-icon color="black">mdi-{{ viewChild ? 'minus' : 'plus' }}</v-icon>
           </a>
@@ -30,7 +30,7 @@
         <Thread :thread="t" :load="load" :siret="siret" />
       </div>
 
-      <a v-if="!viewComment" @click="viewComment=!viewComment">Créer un nouveau fil de commentaire</a>
+      <a v-if="!viewComment" @click="viewComment=!viewComment;">Créer un nouveau fil de commentaire</a>
       <NewComment
         v-if="viewComment"
         style="text-align: left; margin-top: 5px;"
@@ -83,6 +83,13 @@ export default {
         }
       })
       return count
+    },
+    toggleComments() {
+      if (!this.viewChild) {
+        this.$matomo.trackEvent('etablissement', 'voir_commentaires', this.siret)
+      }
+      this.viewChild = !this.viewChild
+      this.viewComment = false
     },
   },
 }
