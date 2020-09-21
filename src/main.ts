@@ -31,10 +31,9 @@ const redirectURI = window.location.pathname
 const bdf = (redirectURI.slice(-3) === 'bdf')
 
 Vue.use(VueMatomo, {
-  host: 'https://matomo-preprod.signaux-faibles.beta.gouv.fr/',
-  siteId: 1,
+  host: process.env.VUE_APP_MATOMO_URL,
+  siteId: process.env.VUE_APP_MATOMO_SITE_ID,
   router,
-  debug: true,
   trackInitialView: false,
 })
 
