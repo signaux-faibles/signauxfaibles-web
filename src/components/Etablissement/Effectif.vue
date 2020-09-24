@@ -16,7 +16,7 @@
           <b>effectifs</b>: Évolution des effectifs en nombre de salariés. (donnée fournie par l'ACOSS)<br/>
           <div v-if="roles.includes('dgefp')">
           <b>autorisation d'activité partielle</b>: Nombre de salariés concernés par une autorisation d'activité partielle pour la période représentée. (donnée fournie par la DGEFP)<br/> 
-          <b>consommation d'activité partielle</b>: Nombre d'équivalents temps plein (ETP) correspondant à l'activité partielle mensuelle. (donnée fournie par la DGEFP)
+          <b>consommation d'activité partielle</b>: Nombre d'équivalents temps plein mensuel calculé à partir de la somme du nombre d'heures d'activité partielle consommées divisée par la durée légale de 151,67 h. (donnée fournie par la DGEFP)
           </div>
         </template>
       </Help>
@@ -117,8 +117,11 @@ export default {
             },
           },
            y: {
-            formatter(val) {
-              return parseFloat(val.toFixed(1)).toLocaleString()
+            formatter(val, { series, seriesIndex, dataPointIndex, w }) {
+              let y = parseFloat(val.toFixed(1)).toLocaleString()
+              const etpIndex = 1
+              y += (seriesIndex === etpIndex) ? ' ETP' : ' salariés'
+              return y
             },
           },
         },
