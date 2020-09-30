@@ -30,12 +30,14 @@ const redirectURI = window.location.pathname
 
 const bdf = (redirectURI.slice(-3) === 'bdf')
 
-Vue.use(VueMatomo, {
-  host: process.env.VUE_APP_MATOMO_URL,
-  siteId: process.env.VUE_APP_MATOMO_SITE_ID,
-  router,
-  trackInitialView: false,
-})
+if (process.env.VUE_APP_MATOMO_ENABLED && !!JSON.parse(process.env.VUE_APP_MATOMO_ENABLED)) {
+  Vue.use(VueMatomo, {
+    host: process.env.VUE_APP_MATOMO_URL,
+    siteId: process.env.VUE_APP_MATOMO_SITE_ID,
+    router,
+    trackInitialView: false,
+  })
+}
 
 Vue.use(VueKeyCloak, {
   init: {
@@ -53,7 +55,9 @@ Vue.use(VueKeyCloak, {
         idpHint: (bdf) ? 'bdfidp' : undefined,
       })
     } else {
-      (window as any)._paq.push(['setUserId', Vue.prototype.$keycloak.tokenParsed.preferred_username])
+      if ((window as any)._paq) {
+        (window as any)._paq.push(['setUserId', Vue.prototype.$keycloak.tokenParsed.preferred_username])
+      }
       tokenInterceptor()
       const tslintCantBeDisabledSorryForThis = new Vue({
         el: '#app',
@@ -66,6 +70,13 @@ Vue.use(VueKeyCloak, {
 })
 
 Vue.mixin({
+  methods: {
+    trackMatomoEvent(category, action, name, value) {
+      if (Vue.prototype.$matomo) {
+        Vue.prototype.$matomo.trackEvent(category, action, name, value)
+      }
+    },
+  },
   computed: {
     jwt() {
       const jwt = Vue.prototype.$keycloak.tokenParsed

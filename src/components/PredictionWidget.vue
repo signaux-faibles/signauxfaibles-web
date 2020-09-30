@@ -108,11 +108,11 @@ export default {
   },
   methods: {
     showEtablissement() {
-      this.$matomo.trackEvent('etablissement', 'ouvrir_fiche_etablissement', this.prediction.siret)
+      this.trackMatomoEvent('etablissement', 'ouvrir_fiche_etablissement', this.prediction.siret)
       this.dialog = true
     },
     hideEtablissement() {
-      this.$matomo.trackEvent('etablissement', 'fermer_fiche_etablissement', this.prediction.siret)
+      this.trackMatomoEvent('etablissement', 'fermer_fiche_etablissement', this.prediction.siret)
       this.dialog = false
     },
   },

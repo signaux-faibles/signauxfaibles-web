@@ -6,7 +6,7 @@
         flat
         round
         v-on="on"
-        @click="$matomo.trackEvent('general', 'ouvrir_nouveautes')"
+        @click="trackMatomoEvent('general', 'ouvrir_nouveautes')"
       >Nouveautés ({{ newsToRead }})</v-btn>
     </template>
     <v-card>

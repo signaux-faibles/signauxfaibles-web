@@ -86,7 +86,7 @@ export default {
     },
     toggleComments() {
       if (!this.viewChild) {
-        this.$matomo.trackEvent('etablissement', 'voir_commentaires', this.siret)
+        this.trackMatomoEvent('etablissement', 'voir_commentaires', this.siret)
       }
       this.viewChild = !this.viewChild
       this.viewComment = false

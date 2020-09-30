@@ -35,7 +35,7 @@ export default {
   },
   methods: {
     openLeftDrawer() {
-      this.$matomo.trackEvent('general', 'ouvrir_menu')
+      this.trackMatomoEvent('general', 'ouvrir_menu')
       this.leftDrawer = !this.leftDrawer
     },
   },

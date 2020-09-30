@@ -1,6 +1,6 @@
 <template>
   <v-menu max-width="400px" offset-y>                 
-    <v-btn slot="activator" icon @click="$matomo.trackEvent('general', 'ouvrir_aide', titre)"><v-icon>help</v-icon></v-btn>
+    <v-btn slot="activator" icon @click="trackMatomoEvent('general', 'ouvrir_aide', titre)"><v-icon>help</v-icon></v-btn>
     <v-card>
       <v-card-title class="headline">
         {{ titre }}

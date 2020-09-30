@@ -94,7 +94,7 @@ export default {
   components: { News },
   methods: {
     logout() {
-      this.$matomo.trackEvent('general', 'se_deconnecter')
+      this.trackMatomoEvent('general', 'se_deconnecter')
       this.createNewMatomoVisit()
       this.$keycloak.logoutFn()
       if (this.$route.path !== '/') {
@@ -102,14 +102,16 @@ export default {
       }
     },
     closeDrawer() {
-      this.$matomo.trackEvent('general', 'fermer_menu')
+      this.trackMatomoEvent('general', 'fermer_menu')
       this.drawer = !this.drawer
     },
     createNewMatomoVisit() {
-      _paq.push(['resetUserId'])
-      _paq.push(['appendToTrackingUrl', 'new_visit=1'])
-      _paq.push(['trackPageView'])
-      _paq.push(['appendToTrackingUrl', ''])
+      if (window._paq) {
+        window._paq.push(['resetUserId'])
+        window._paq.push(['appendToTrackingUrl', 'new_visit=1'])
+        window._paq.push(['trackPageView'])
+        window._paq.push(['appendToTrackingUrl', ''])
+      }
     },
   },
   computed: {
