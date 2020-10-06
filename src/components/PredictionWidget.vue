@@ -7,7 +7,7 @@
       <div class="corps">
         <div class="mr-2 ml-2">
           <span class="raison-sociale">{{ prediction.raison_sociale }}</span>
-          <v-chip class="mt-0 ml-2 mb-2" v-if="prediction.firstAlert === true" small="true" color="primary" text-color="white">1re alerte</v-chip>
+          <v-chip class="mt-0 ml-2 mb-2" v-if="prediction.firstAlert === true" small color="primary" text-color="white">1re alerte</v-chip>
           <img class="ml-2" v-if="prediction.connu === true" height="20" src="../assets/crp.png" />
           <div class="identite">
             {{ prediction.siret }} -

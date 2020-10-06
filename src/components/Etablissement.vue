@@ -13,7 +13,7 @@
             />
           </v-flex>
           <v-flex xs12 md6 class="text-xs-right pa-3" style="margin-top: 3em">
-            <Map :longitude="sirene.longitude" :latitude="sirene.lattitude" ref="map" />
+            <Map :longitude="sirene.longitude" :latitude="sirene.latitude" ref="map" />
           </v-flex>
           <v-flex xs12 md12 class="text-xs-right pa-3">
             <Commentaire :siret="siret" />
@@ -29,9 +29,21 @@
           </v-flex>
           <v-dialog v-model="followDialog" @input="closeFollowDialog()" max-width="500px">
             <v-card>
-              <v-card-title class="headline">Suivre {{ denomination }} ?</v-card-title>
+              <v-card-title>
+                <div>
+                  <div class="headline">Suivre {{ denomination }} ?</div>
+                  <span class="grey--text">(siret {{ siret }})</span>
+                </div>
+              </v-card-title>
               <v-card-text>
-                <v-textarea v-model="followComment" solo label="Pour quel motif souhaitez-vous suivre cet établissement ?"></v-textarea>
+                Pour quel motif souhaitez-vous suivre cet établissement ?
+                <v-radio-group v-model="followCategory" :mandatory="true">
+                  <v-radio key="detection" value="detection"><template slot="label"><span class="text-pre-wrap">L'établissement fait partie d'une <strong>liste de détection</strong></span></template></v-radio>
+                  <v-radio key="source_externe" value="source_externe"><template slot="label"><span class="text-pre-wrap">J'ai eu connaissance de difficultés par l'<strong>ecosystème local</strong> ou <strong>la presse</strong></span></template></v-radio>
+                  <v-radio key="source_interne" value="source_interne"><template slot="label"><span class="text-pre-wrap">J'ai été contacté par l'<strong>entreprise</strong> ou un <strong>partenaire direct</strong>  (expert comptable, client, fournisseur, etc.)</span></template></v-radio>
+                  <v-radio key="autre" value="autre"><template slot="label"><span class="text-pre-wrap">Je souhaite suivre cet établissement pour un <strong>autre motif</strong></span></template></v-radio>
+                </v-radio-group>
+                <v-textarea v-show="followCategory === 'autre'" v-model="followComment" solo placeholder="Résumez en une phrase vos motivations"></v-textarea>
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
@@ -41,9 +53,33 @@
               <v-alert :value="followAlert" type="error" transition="scale-transition">{{ followAlertError }}</v-alert>
             </v-card>
           </v-dialog>
+          <v-dialog v-model="unfollowDialog" @input="closeUnfollowDialog()" max-width="500px">
+            <v-card>
+              <v-card-title>
+                <div>
+                  <div class="headline">Ne plus suivre {{ denomination }} ?</div>
+                  <span class="grey--text">(siret {{ siret }})</span>
+                </div>
+              </v-card-title>
+              <v-card-text>
+                Des actions ont-elles été menées auprès de cet établissement ?
+                <v-radio-group v-model="unfollowCategory" :mandatory="true">
+                  <v-radio key="actions" value="actions"><template slot="label"><span class="text-pre-wrap"><strong>OUI</strong>, une ou plusieurs actions</span></template></v-radio>
+                  <v-radio key="aucune-action" value="aucune_action"><template slot="label"><span class="text-pre-wrap"><strong>NON</strong>, aucune</span></template></v-radio>
+                </v-radio-group>
+                <v-textarea v-show="unfollowCategory" v-model="unfollowComment" solo :placeholder="unfollowCommentPlaceholder"></v-textarea>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn flat @click="closeUnfollowDialog()">Annuler</v-btn>
+                <v-btn dark color="indigo darken-5" @click="unfollowEtablissement()">Ne plus suivre</v-btn>
+              </v-card-actions>
+              <v-alert :value="followAlert" type="error" transition="scale-transition">{{ followAlertError }}</v-alert>
+            </v-card>
+          </v-dialog>
         </v-layout>
         <v-btn v-if="followed === false" fab fixed bottom right dark color="indigo darken-5" class="mr-2" @click="followDialog = true"><v-icon>mdi-star-outline</v-icon></v-btn>
-        <v-btn v-if="followed === true" fab fixed bottom right outline color="indigo darken-5" class="mr-2" @click="unfollowEtablissement()"><v-icon>mdi-star</v-icon></v-btn>
+        <v-btn v-if="followed === true" fab fixed bottom right outline color="indigo darken-5" class="mr-2" @click="unfollowDialog = true"><v-icon>mdi-star</v-icon></v-btn>
       </v-container>
     </div>
   </div>
@@ -73,9 +109,14 @@ export default {
       adresse: '',
       followed: null,
       followDialog: false,
+      followCategory: '',
       followComment: '',
       followAlert: false,
       followAlertError: '',
+      unfollowDialog: false,
+      unfollowCategory: '',
+      unfollowComment: '',
+      unfollowCommentPlaceholder: '',
     }
   },
   methods: {
@@ -267,15 +308,25 @@ export default {
         this.$refs.map.resizeMap()
       })
     },
+    isFollowValid() {
+      return this.followCategory === 'detection'
+        || this.followCategory === 'source_externe'
+        || this.followCategory === 'source_interne'
+        || (this.followCategory === 'autre' && this.followComment.trim().length > 0)
+    },
     followEtablissement() {
       this.trackMatomoEvent('etablissement', 'suivre', this.siret)
-      if (this.followComment.trim().length > 0) {
+      if (this.isFollowValid()) {
         const params = {}
+        params.category = this.followCategory
         params.comment = this.followComment
         this.$axios.post(`/follow/${this.siret}`, params).then((response) => {
           if (response.status === 201 || response.status === 204) {
             this.followed = true
+            this.followCategory = ''
+            this.followComment = ''
             this.followDialog = false
+            this.followAlertError = ''
             this.followAlert = false
             this.getEtablissement()
           }
@@ -288,17 +339,46 @@ export default {
         this.followAlert = true
       }
     },
+    isUnfollowValid() {
+      return this.unfollowCategory === 'actions'
+        || this.unfollowCategory === 'aucune_action'
+    },
     unfollowEtablissement() {
       this.trackMatomoEvent('etablissement', 'ne_plus_suivre', this.siret)
-      this.$axios.delete(`/follow/${this.siret}`).then((response) => {
-        if (response.status === 200 ) {
-          this.followed = false
-          this.getEtablissement()
-        }
-      })
+      if (this.isUnfollowValid()) {
+        const params = {}
+        params.unfollowCategory = this.unfollowCategory
+        params.unfollowComment = this.unfollowComment
+        this.$axios.delete(`/follow/${this.siret}`, { data: params }).then((response) => {
+          if (response.status === 200 ) {
+            this.followed = false
+            this.unfollowCategory = ''
+            this.unfollowComment = ''
+            this.unfollowDialog = false
+            this.followAlertError = ''
+            this.followAlert = false
+            this.getEtablissement()
+          }
+        }).catch((error) => {
+          this.followAlertError = 'Une erreur est survenue lors du suivi'
+          this.followAlert = true
+        })
+      } else {
+        this.followAlertError = 'Veuillez indiquer si des actions ont été menées'
+        this.followAlert = true
+      }
     },
     closeFollowDialog() {
+      this.followCategory = ''
+      this.followComment = ''
       this.followDialog = false
+      this.followAlertError = ''
+      this.followAlert = false
+    },
+    closeUnfollowDialog() {
+      this.unfollowCategory = ''
+      this.unfollowComment = ''
+      this.unfollowDialog = false
       this.followAlertError = ''
       this.followAlert = false
     },
@@ -315,6 +395,13 @@ export default {
   watch: {
     localSiret(val) {
       this.getEtablissement()
+    },
+    unfollowCategory(val) {
+      if (this.unfollowCategory === 'actions') {
+        this.unfollowCommentPlaceholder = 'Précisez la nature des actions si nécessaire'
+      } else {
+        this.unfollowCommentPlaceholder = 'Dites-nous pourquoi ; en particulier, s\'il s\'agissait selon vous d\'une erreur de détection'
+      }
     },
   },
   computed: {

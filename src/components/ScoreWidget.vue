@@ -35,7 +35,6 @@ export default {
       }
     },
     detection() {
-      // TODO: handle unknown state
       const alert = this.alert.alert
       let probClass = ''
       if (alert == null && (this.alert.visible || this.alert.followed)) {
