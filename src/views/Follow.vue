@@ -4,7 +4,7 @@
         <div id="nodata" v-if="!loading && follow.length == 0 && init == false">
             Vous ne suivez pour le moment aucun établissement.<br>Pour ce faire, rendez-vous sur la fiche d'un établissement et appuyez sur le bouton Suivre.
         </div>
-        <PredictionWidget v-for="e in etablissements" :key="e.siret" :prediction="e" />
+        <PredictionWidget v-for="e in etablissements" :key="e.siret" :prediction="e" @follow-etablissement="getFollowedEtablissements" @unfollow-etablissement="getFollowedEtablissements"/>
     </div>
 </template>
 <script>
@@ -28,6 +28,8 @@ export default {
             this.$axios.get('/follow').then((response) => {
                 if (response.status === 200) {
                     this.follow = response.data
+                } else {
+                    this.follow = []
                 }
             }).finally(() => {
                 this.init = false
@@ -36,7 +38,7 @@ export default {
     },
     computed: {
         etablissements() {
-            return this.follow.map((f) => f.etablissements)
+            return this.follow.map((f) => f.etablissementSummary)
         },
         leftDrawer: {
             get() {

@@ -336,6 +336,7 @@ export default {
             this.followAlertError = ''
             this.followAlert = false
             this.getEtablissement()
+            this.$emit('follow-etablissement')
           }
         }).catch((error) => {
           this.followAlertError = 'Une erreur est survenue lors du suivi'
@@ -365,6 +366,7 @@ export default {
             this.followAlertError = ''
             this.followAlert = false
             this.getEtablissement()
+            this.$emit('unfollow-etablissement')
           }
         }).catch((error) => {
           this.followAlertError = 'Une erreur est survenue lors du suivi'
