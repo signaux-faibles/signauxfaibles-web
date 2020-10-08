@@ -4,7 +4,7 @@
       {{ denomination }}
       <Help style="position: relative; top: -3px; right: 10px" titre="Identité de l'entreprise">
         <b>Raison Sociale, Coordonnées:</b>
-        Ces données sont issues du service API entreprises fourni par la DINSIC qui redistribue les données de l'INSEE.
+        Ces données sont issues du service API entreprises fourni par la DINUM qui redistribue les données de l'INSEE.
         <br />
         <b>Activité de l'entreprise:</b>
         Le code activité est issu de la base Sirène produite par l'INSEE et correspond aux données déclaratives fournies par l'entreprise. Il peut être constaté un décalage entre le code déclaré et l'activité réelle de l'entreprise.

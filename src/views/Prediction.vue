@@ -145,7 +145,6 @@
           ></v-combobox>
         </div>
         <p style="height: 1px; border: 1px solid #eee"/>
-        <p style="height: 1px; border: 1px solid #eee" />
         <div
           style="display: flex; flex-direction: column; vertical-align: middle; padding: 0 15px;"
         >

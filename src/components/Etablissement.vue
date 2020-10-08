@@ -27,6 +27,9 @@
           <v-flex xs12 class="pr-1">
             <Finance :finance="finance" :siret="siret" />
           </v-flex>
+          <v-flex xs12 class="pr-1 pt-3">
+            <Entreprise :siret="siret" :siege="etablissement.siege" :codeDepartement="sirene.codeDepartement" :etablissementsSummary="etablissementsSummary" v-on="$listeners" />
+          </v-flex>
           <v-dialog v-model="followDialog" @input="closeFollowDialog()" max-width="500px">
             <v-card>
               <v-card-title>
@@ -93,13 +96,14 @@ import Identite from '@/components/Etablissement/Identite.vue'
 import Map from '@/components/Etablissement/Map.vue'
 import Finance from '@/components/Etablissement/Finance.vue'
 import Commentaire from '@/components/Etablissement/Commentaire.vue'
+import Entreprise from '@/components/Etablissement/Entreprise.vue'
 import axios from 'axios'
 import fr from 'apexcharts/dist/locales/fr.json'
 
 export default {
   props: ['siret', 'batch'],
   name: 'Etablissement',
-  components: { Effectif, Urssaf, Help, Finance, Identite, Map, Commentaire },
+  components: { Effectif, Urssaf, Help, Finance, Identite, Map, Commentaire, Entreprise },
   data() {
     return {
       axios: axios.create(),
@@ -305,7 +309,9 @@ export default {
           etablissement.l6_normalisee,
           etablissement.l7_normalisee].filter(Boolean).join('<br>')
         this.adresse = adresse
-        this.$refs.map.resizeMap()
+        if (this.$refs.map) {
+          this.$refs.map.resizeMap()
+        }
       })
     },
     isFollowValid() {
@@ -468,6 +474,9 @@ export default {
       } else {
         return []
       }
+    },
+    etablissementsSummary() {
+      return (this.etablissement.entreprise || {}).etablissementsSummary || []
     },
   },
 }

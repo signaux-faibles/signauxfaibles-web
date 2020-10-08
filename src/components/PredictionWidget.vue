@@ -7,7 +7,8 @@
       <div class="corps">
         <div class="mr-2 ml-2">
           <span class="raison-sociale">{{ prediction.raison_sociale }}</span>
-          <v-chip class="mt-0 ml-2 mb-2" v-if="prediction.firstAlert === true" small color="primary" text-color="white">1re alerte</v-chip>
+          <v-chip class="mt-0 mr-0 ml-2 mb-2" v-if="prediction.siege === true" small color="grey darken-3" text-color="white">siège</v-chip>
+          <v-chip class="mt-0 mr-0 ml-2 mb-2"  small color="primary" text-color="white">1re alerte</v-chip>
           <img class="ml-2" v-if="prediction.connu === true" height="20" src="../assets/crp.png" />
           <div class="identite">
             {{ prediction.siret }} -
@@ -68,7 +69,7 @@
               <v-spacer />
               <v-icon @click="hideEtablissement() " style="color: #fff">mdi-close</v-icon>
             </v-toolbar>
-            <Etablissement :siret="prediction.siret" :batch="currentBatchKey"></Etablissement>
+            <Etablissement :siret="prediction.siret" :batch="currentBatchKey" @show-etablissement="hideEtablissement"></Etablissement>
           </div>
         </v-dialog>
       </div>
@@ -77,13 +78,13 @@
 </template>
 
 <script>
-import Etablissement from '@/components/Etablissement'
 import ScoreWidget from '@/components/ScoreWidget'
 export default {
+  name: 'PredictionWidget',
   props: ['prediction'],
   components: {
     ScoreWidget,
-    Etablissement,
+    Etablissement: () => import('@/components/Etablissement'),
   },
   data() {
     return {
@@ -110,6 +111,7 @@ export default {
     showEtablissement() {
       this.trackMatomoEvent('etablissement', 'ouvrir_fiche_etablissement', this.prediction.siret)
       this.dialog = true
+      this.$emit('show-etablissement')
     },
     hideEtablissement() {
       this.trackMatomoEvent('etablissement', 'fermer_fiche_etablissement', this.prediction.siret)
