@@ -16,6 +16,7 @@
     <h3>
       siren {{ siret.slice(0,9) }}
       <span style="color: #999">{{ siret.slice(9,14) }} siret</span>
+      {{ this.siege ? ' (siège)' : ''}}
     </h3>
     <hr style="color: #eee;" />
     <div style="padding: 10px; margin: 4px;">
@@ -25,15 +26,14 @@
         {{ libelleActivite }}
         <br />
         Code APE&nbsp;: {{ codeActivite }}
+        <br />
+        {{ this.groupe ? 'Groupe : ' + this.groupe : ''}}
       </div>
     </div>
-    <h3>adresse postale</h3>
+    <h3>adresse postale de l'établissement</h3>
     <hr style="color: #eee;" />
     <div style="padding: 10px; margin: 4px; font-size: 16px">
-      <div v-if="(adresse || '') != ''">
-        <b v-html="adresse">
-        </b>
-      </div>
+      <div v-html="adresse"></div>
     </div>
   </div>
 </template>
@@ -44,7 +44,7 @@ import Historique from '@/components/Etablissement/Historique.vue'
 
 export default {
   name: 'Identite',
-  props: ['denomination', 'historique', 'siret', 'sirene', 'adresse'],
+  props: ['denomination', 'historique', 'siret', 'sirene', 'siege', 'groupe'],
   components: { Help, Historique },
   methods: {
     showFollowDialog() {
@@ -69,6 +69,9 @@ export default {
     },
     followed() {
       return this.$parent.followed
+    },
+    adresse() {
+      return ((this.sirene || {}).adresse || '').split('\n').join('<br />')
     },
   },
 }

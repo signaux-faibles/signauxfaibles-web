@@ -14,11 +14,11 @@
       </Help>
     </v-toolbar>
     <div v-if="etablissementsSummary.length > 0" style="font-weight: normal">
-      <div class="pt-3 pl-3" style="margin-bottom: 48px">
-        <span v-if="siege">Cet établissement (siret {{ this.siret }}) est le siège de l'entreprise (siren {{ this.siren }}).</span><span v-else>Cet établissement (siret {{this.siret}}) n'est pas le siège de l'entreprise (siren {{ this.siren }}).</span>
-        Cette entreprise possède {{this.etablissementsSummary.length}} établissements en activité.
-        <v-btn v-if="autresEtablissements.length > 0" outline color="indigo darken-5" @click="toggle" class="ml-4">{{ show ? 'Masquer' : 'Afficher' }} les autres établissements</v-btn>
-      </div>
+      <v-layout align-center class="pt-3 pl-3" style="margin-bottom: 48px">
+        <v-flex><span v-if="siege">Cet établissement (siret {{ this.siret }}) est le siège social de l'entreprise (siren {{ this.siren }}).</span><span v-else>Cet établissement (siret {{this.siret}}) n'est pas le siège social de l'entreprise (siren {{ this.siren }}).</span>
+        Cette entreprise {{ this.groupe ? 'fait partie du groupe ' + this.groupe + ' et' : '' }} possède {{this.etablissementsSummary.length | pluralizeEtablissement}} en activité.</v-flex>
+        <v-flex md5 xs12 v-if="autresEtablissements.length > 0"><v-btn outline color="indigo darken-5" @click="toggle" class="ml-4">{{ show ? 'Masquer' : 'Afficher' }} les autres établissements</v-btn></v-flex>
+      </v-layout>
       <transition name="fade">
         <div v-if="show" style="margin-top: -48px">
           <div v-if="siegeEntreprise">
@@ -31,7 +31,7 @@
           </div>
           <div v-if="etablissementsDepartement && etablissementsDepartement.length > 0">
             <div class="pb-1 pt-2 pl-3 subheading">
-              Établissements secondaires du département {{ this.codeDepartement }} ({{ etablissementsDepartement.length }} établissements)
+              Établissements secondaires du département {{ this.codeDepartement }} ({{this.etablissementsDepartement.length | pluralizeEtablissement}})
             </div>
             <PredictionWidget
               v-for="e in etablissementsDepartement"
@@ -42,7 +42,7 @@
           </div>
           <div v-if="autresEtablissements && autresEtablissements.length > 0">
             <div class="pb-1 pt-2 pl-3 subheading">
-              Autres établissements secondaires ({{ autresEtablissements.length }} établissements)
+              Autres établissements secondaires ({{this.autresEtablissements.length | pluralizeEtablissement}})
             </div>
             <PredictionWidget
               v-for="e in autresEtablissements"
@@ -64,7 +64,7 @@ import axios from 'axios'
 
 export default {
   name: 'Entreprise',
-  props: ['siret', 'siege', 'codeDepartement', 'etablissementsSummary'],
+  props: ['siret', 'siege', 'groupe', 'codeDepartement', 'etablissementsSummary'],
   components: { Help, PredictionWidget },
   data() {
     return {
@@ -101,6 +101,15 @@ export default {
   computed: {
     siren() {
       return this.siret.slice(0, 9)
+    },
+  },
+  filters: {
+    pluralizeEtablissement(count) {
+      if (count === 1) {
+        return '1 établissement'
+      } else {
+        return count + ' établissements'
+      }
     },
   },
 }

@@ -9,7 +9,8 @@
               :historique="historique"
               :sirene="sirene"
               :siret="siret"
-              :adresse="adresse"
+              :siege="etablissement.siege"
+              :groupe="groupe"
             />
           </v-flex>
           <v-flex xs12 md6 class="text-xs-right pa-3" style="margin-top: 3em">
@@ -28,7 +29,7 @@
             <Finance :finance="finance" :siret="siret" />
           </v-flex>
           <v-flex xs12 class="pr-1 pt-3">
-            <Entreprise :siret="siret" :siege="etablissement.siege" :codeDepartement="sirene.codeDepartement" :etablissementsSummary="etablissementsSummary" v-on="$listeners" />
+            <Entreprise :siret="siret" :siege="etablissement.siege" :groupe="groupe" :codeDepartement="sirene.codeDepartement" :etablissementsSummary="etablissementsSummary" v-on="$listeners" />
           </v-flex>
           <v-dialog v-model="followDialog" @input="closeFollowDialog()" max-width="500px">
             <v-card>
@@ -477,6 +478,9 @@ export default {
     },
     etablissementsSummary() {
       return (this.etablissement.entreprise || {}).etablissementsSummary || []
+    },
+    groupe() {
+      return ((this.etablissement.entreprise || {}).groupe || {}).raison_sociale_groupe
     },
   },
 }

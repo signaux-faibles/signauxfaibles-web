@@ -7,8 +7,24 @@
       <div class="corps">
         <div class="mr-2 ml-2">
           <span class="raison-sociale">{{ prediction.raison_sociale }}</span>
-          <v-chip class="mt-0 mr-0 ml-2 mb-2" v-if="prediction.siege === true" small color="grey darken-3" text-color="white">siège</v-chip>
-          <v-chip class="mt-0 mr-0 ml-2 mb-2"  small color="primary" text-color="white">1re alerte</v-chip>
+          <v-tooltip bottom v-if="prediction.siege === true">
+            <template v-slot:activator="{ on, attrs }">
+              <v-chip v-bind="attrs" v-on="on" class="ma-0 ml-2 mb-2 chip" small color="grey darken-3" text-color="white">siège</v-chip>
+            </template>
+            <span>Cet établissement est le siège de l'entreprise</span>
+          </v-tooltip>
+          <v-tooltip bottom v-if="prediction.groupe === true">
+            <template v-slot:activator="{ on, attrs }">
+            <v-chip v-bind="attrs" v-on="on" class="ma-0 ml-2 mb-2 chip" small color="grey darken-3" text-color="white">groupe</v-chip>
+            </template>
+            <span>Cette entreprise fait partie d'un groupe</span>
+          </v-tooltip>
+          <v-tooltip bottom v-if="prediction.firstAlert === true">
+            <template v-slot:activator="{ on, attrs }">
+              <v-chip v-bind="attrs" v-on="on"  class="ma-0 ml-2 mb-2 chip" small color="primary" text-color="white">1re alerte</v-chip>
+            </template>
+            <span>Cet établissement est pour la première fois en alerte sur une liste de détection</span>
+          </v-tooltip>
           <img class="ml-2" v-if="prediction.connu === true" height="20" src="../assets/crp.png" />
           <div class="identite">
             {{ prediction.siret }} -
@@ -187,5 +203,9 @@ export default {
 }
 .unknown {
   color: rgb(150, 150, 150);
+}
+.chip {
+  font-family: 'Roboto';
+  font-size: 13px;
 }
 </style>
