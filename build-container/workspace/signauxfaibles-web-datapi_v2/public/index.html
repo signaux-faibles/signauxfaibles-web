@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="icon" href="<%= BASE_URL %>favicon.png">
+    <title>Signaux Faibles</title>
+    <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
+    <link href='https://cdn.materialdesignicons.com/3.5.95/css/materialdesignicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.4.1/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.4.1/mapbox-gl.css' rel='stylesheet' />
+    <style>
+    body { margin:0; padding:0; }
+    #map { position:absolute; top:0; bottom:0; width:100%; }
+    </style>
+
+    <script>
+      function compat() {
+        if (!!window.MSInputMethodContext && !!document.documentMode) {
+          document.getElementById('app').innerHTML = "<h1>Echec du chargement de Signaux Faibles</h1>Le navigateur que vous utilisez n'est pas pris en charge.<br/> Cette application est toutefois compatible avec <b>Mozilla Firefox</b>, <b>Google Chrome</b> et <b>Microsoft Edge</b>.<br/>Nous vous prions de nous excuser pour la gène occasionnée."
+        } 
+      }
+
+      window.onload = compat
+    </script>
+  </head>
+  <body>
+    <noscript>
+      <strong>Nous sommes désolés, mais Signaux Faibles utilise beaucoup (trop ?) de Javascript, merci de l'activer.</strong>
+    </noscript>
+    <div id="app">
+      <div style="width: 100%;
+      height: 100%;
+      position: absolute;    
+      margin:auto;
+      top:0;
+      bottom:0;
+      left:0;
+      right:0;
+      background: radial-gradient(
+        circle at center,
+        rgb(255, 255, 255),
+        rgb(233, 232, 232) 75%,
+        rgb(187, 187, 187) 100%
+      );">
+        <img src="/logo.svg"
+          style="max-width: 100%;
+          max-height: 100%;  
+          position: absolute;
+          margin:auto;
+          top:0;
+          bottom:0;
+          left:0;
+          right:0;"
+        />
+    </div>
+    
+    </div>
+  </body>
+</html>
