@@ -2,17 +2,17 @@
   <div>
     <div style="padding: 18px">
       <div style="border-bottom: 1px dashed #eee">
-      <a :href="'mailto:' + thread.key.author.trim()">
+      <a :href="'mailto:' + thread.author.username.trim()">
         <img :src="`data:image/png;base64,${iconData}`"/>
-      </a> <span style="font-weight: 100; font-family: 'Roboto Mono'"> {{ thread.value.name }}, le {{ displayDate(thread.value.date) }}</span>
+      </a> <span style="font-weight: 100; font-family: 'Roboto Mono'"> {{ thread.author.firstName + ' ' + thread.author.lastName }}, publié le {{ displayDate(thread.dateHistory[thread.dateHistory.length-1]) }} {{ thread.dateHistory.length > 1 ? 'et modifié le ' + displayDate(thread.dateHistory[0]) : '' }}</span>
       </div>
       <div class="editor">
         <editor-content class="editor__content" :editor="editor" />
       </div>
 
       <div
-      v-if="thread.thread.length > 0">
-        {{ thread.thread.length }} réponse{{ thread.thread.length > 1 ? 's distinctes' : ''}}
+      v-if="thread.comments">
+        {{ thread.comments.length }} réponse{{ thread.comments.length > 1 ? 's distinctes' : ''}}
         <v-btn 
           fab
           flat
@@ -23,14 +23,14 @@
         </v-btn> <a @click="viewComment=!viewComment" v-if="viewChild && !viewComment">Apporter une réponse différente</a>
       </div>
       
-      <a @click="viewComment=!viewComment" v-if="thread.thread.length == 0">Répondre</a>
+      <a @click="viewComment=!viewComment" v-if="!thread.comments">Répondre</a>
       <div v-if="viewComment" style="background-color: rgba(150, 150, 200, .2);text-align: left; border-bottom: 1px dotted #bbb; border-left: 1px solid #bbb; padding: 18px">
         <h2 style="left-margin: 10px">Écrivez ici votre réponse</h2>
-        <NewComment :follows="thread.key.uuid" :siret="thread.key.siret" :load="load"/>
+        <NewComment :follows="thread.id" :siret="siret" :load="load"/>
       </div>
       <div v-if="viewChild">
-        <div v-for="t in thread.thread" :key="JSON.stringify(t.key)" style="background-color: rgba(150, 150, 200, .2);text-align: left; border-bottom: 1px dotted #bbb; border-left: 1px solid #bbb; padding: 0px; margin-top: 20px">
-          <Thread :thread="t" :follows="thread.key.uuid" :load="load"/>
+        <div v-for="t in thread.comments" :key="JSON.stringify(t.id)" style="background-color: rgba(150, 150, 200, .2);text-align: left; border-bottom: 1px dotted #bbb; border-left: 1px solid #bbb; padding: 0px; margin-top: 20px">
+          <Thread :thread="t" :follows="thread.id" :load="load" :siret="siret"/>
         </div>
       </div>
     </div>
@@ -64,7 +64,7 @@
 
   export default {
     name: 'Thread',
-    props: [ 'thread', 'follows', 'load' ],
+    props: [ 'thread', 'follows', 'load' , 'siret' ],
     components: { NewComment, Thread, EditorContent },
     data() {
       return {
@@ -82,26 +82,19 @@
             new Italic(),
             new History(),
           ],
-          content: this.thread.value.text,
+          content: this.thread.messageHistory[0],
         }),
       editable: false,
       }
     },
     mounted() {
-      const h = md5(this.thread.value.name)
+      const h = md5(this.thread.author.username.trim())
       const data = new Identicon(h, 20).toString()
       this.iconData = data
     },
     computed: {
       commentClass() {
         return this.viewComment ? 'visibleComment' : 'hiddenComment'
-      },
-      avatar() {
-        const name = this.thread.value.name.trim()
-        return name.split(' ').reduce((m, c) => {
-          m += c[0]
-          return m
-        }, '')
       },
     },
     methods: {
@@ -120,12 +113,12 @@
 
 <style scoped>
   .visibleComment {
-    visibility:visible;
-    position:relative;
+    visibility: visible;
+    position: relative;
   }
   .hiddenComment {
-    visibility:hidden;
-    position:absolute;
+    visibility: hidden;
+    position: absolute;
   }
   .editor {
     border-radius: 5px;

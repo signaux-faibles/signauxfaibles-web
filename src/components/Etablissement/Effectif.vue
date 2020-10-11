@@ -5,7 +5,7 @@
       color='indigo darken-5'>
       <v-toolbar-title class="localtoolbar">
         Effectifs
-        <span v-if="jwt.resource_access.signauxfaibles.roles.includes('dgefp')">
+        <span v-if="roles.includes('dgefp')">
           / Activité partielle
         </span>
       </v-toolbar-title>
@@ -14,9 +14,9 @@
         <template>
           Ce graphique illustre les données d'emploi.<br/><br/>
           <b>effectifs</b>: Évolution des effectifs en nombre de salariés. (donnée fournie par l'ACOSS)<br/>
-          <div v-if="jwt.resource_access.signauxfaibles.roles.includes('dgefp')">
+          <div v-if="roles.includes('dgefp')">
           <b>autorisation d'activité partielle</b>: Nombre de salariés concernés par une autorisation d'activité partielle pour la période représentée. (donnée fournie par la DGEFP)<br/> 
-          <b>consommation d'activité partielle</b>: Nombre de salariés concernés par une consommation d'activité partielle. (donnée fournie par la DGEFP)
+          <b>consommation d'activité partielle</b>: Nombre d'équivalents temps plein mensuel calculé à partir de la somme du nombre d'heures d'activité partielle consommées divisée par la durée légale de 151,67 h. (donnée fournie par la DGEFP)
           </div>
         </template>
       </Help>
@@ -32,40 +32,56 @@ export default {
   name: 'Effectif',
   props: ['effectif', 'chart', 'apdemande', 'apconso'],
   components: { Help },
+  methods: {
+    equivalentTempsPlein(heures) {
+      return heures / 151.67
+    },
+    lastDayOfMonth(date) {
+      return new Date(date.getFullYear(), date.getMonth() + 1, 0)
+    },
+  },
   computed: {
     apdemandeSeries() {
       return {
         demande: (this.apdemande || [])
-        .sort((d1, d2) => d1.periode.start > d2.periode.start)
-        .filter((d) => d.periode.end > this.min)
+        .sort((d1, d2) => {
+          return (d2.debut > d1.debut ? -1 : 1)
+        })
+        .filter((d) => d.fin > this.min)
         .reduce((m, c) => {
           m = m.concat([
-            [ new Date(c.periode.start),
-              Math.max(c.effectif_autorise, 0)],
-            [ new Date(c.periode.end),
+            [ new Date(c.debut),
+              Math.max(c.effectifAutorise, 0)],
+            [ new Date(c.fin),
               0],
           ])
           return m
         }, []),
-        conso: (this.apdemande || [])
-        .sort((d1, d2) => d1.periode.start > d2.periode.start)
-        .filter((d) => d.periode.end > this.min)
-        .reduce((m, c) => {
-          m = m.concat([
-            [ new Date(c.periode.start),
-              Math.min(c.effectif_consomme, c.effectif_autorise)],
-            [ new Date(c.periode.end),
-              0],
-          ])
+        conso: (this.apconso || [])
+        .sort((d1, d2) => {
+          return (d2.date > d1.date ? -1 : 1)
+        })
+        .filter((d) => d.date > this.min)
+        .reduce((m, c, i) => {
+          const etp = Math.max(this.equivalentTempsPlein(c.heureConsomme), 0)
+          if (i > 0 && m[m.length - 2][0].getTime() === new Date(c.date).getTime()) {
+            m[m.length - 2][1] += etp
+          } else {
+            m = m.concat([
+              [ new Date(c.date),
+                etp],
+              [ this.lastDayOfMonth(new Date(c.date)),
+                0],
+            ])
+          }
           return m
         }, []),
       }
     },
     min() {
-      return (this.effectif || []).reduce((m, e) => (m < e.periode) ? m : e.periode, '2018-01-01')
-    },
-    jwt() {
-      return this.$keycloak.tokenParsed || {resource_access: { signauxfaibles: {roles: []}}}
+      const today = new Date()
+      const minLimit = new Date(today.getFullYear() - 2, 0, 0)
+      return (this.effectif || []).reduce((m, e) => (m < e.periode) ? m : e.periode, minLimit)
     },
     series() {
       return [{
@@ -94,7 +110,20 @@ export default {
           showForZeroSeries: false,
         },
         tooltip: {
-          enabled: false,
+          enabled: true,
+          x: {
+            formatter(val) {
+              return new Date(val).toLocaleDateString()
+            },
+          },
+           y: {
+            formatter(val, { series, seriesIndex, dataPointIndex, w }) {
+              let y = parseFloat(val.toFixed(1)).toLocaleString()
+              const etpIndex = 1
+              y += (seriesIndex === etpIndex) ? ' ETP' : ' salariés'
+              return y
+            },
+          },
         },
         theme: {
           mode: 'light',
@@ -104,13 +133,21 @@ export default {
           toolbar: {
             show: false,
           },
-          id: 'effectifs',
-        },
-        zoom: {
+          zoom: {
             enabled: false,
           },
+          id: 'effectifs',
+        },
         xaxis: {
           type: 'datetime',
+        },
+        yaxis: {
+          min: 0,
+          labels: {
+            formatter(val, index) {
+              return val.toFixed(0)
+            },
+          },
         },
         colors: ['#4f8a83', '#e76278', '#fac699'],
         fill: {
@@ -120,9 +157,6 @@ export default {
         stroke: {
           curve: ['smooth', 'stepline', 'stepline'],
           width: [5, 0, 0],
-        },
-        yaxis: {
-          min: 0,
         },
       }
     },

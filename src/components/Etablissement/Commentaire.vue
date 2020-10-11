@@ -1,31 +1,42 @@
 <template>
   <div style="text-align: left">
-    <div style="">
+    <div style>
       <h2>
-        <span v-if="thread.length > 0">commentaires ({{ count(thread) }})
+        <span v-if="thread.length > 0">
+          commentaires ({{ count(thread) }})
           <a
             fab
             flat
             small
-            @click="viewChild=!viewChild; viewComment=false;"
-            >
+            @click="toggleComments()"
+          >
             <v-icon color="black">mdi-{{ viewChild ? 'minus' : 'plus' }}</v-icon>
-          </a> 
+          </a>
         </span>
         <span v-if="thread.length == 0">
-          il n'y a encore aucun commentaire, <a @click="viewChild=true; viewComment=true">créer le premier ?</a>
+          il n'y a encore aucun commentaire,
+          <a @click="viewChild=true; viewComment=true">créer le premier ?</a>
         </span>
-        <hr style="color: #eee;"/>
+        <hr style="color: #eee;" />
       </h2>
     </div>
 
     <div v-if="viewChild">
-      <div v-for="t in thread" :key="JSON.stringify(t.key)" style="text-align: left;border-bottom: 1px dotted #bbb; padding: 0px">
-        <Thread :thread="t" :load="load"/>
+      <div
+        v-for="t in thread"
+        :key="JSON.stringify(t.id)"
+        style="text-align: left;border-bottom: 1px dotted #bbb; padding: 0px"
+      >
+        <Thread :thread="t" :load="load" :siret="siret" />
       </div>
-  
-      <a v-if="!viewComment" @click="viewComment=!viewComment">Créer un nouveau fil de commentaire</a>
-      <NewComment v-if="viewComment" style="text-align: left; margin-top: 5px;" :siret="this.siret" :load="load"/>
+
+      <a v-if="!viewComment" @click="viewComment=!viewComment;">Créer un nouveau fil de commentaire</a>
+      <NewComment
+        v-if="viewComment"
+        style="text-align: left; margin-top: 5px;"
+        :siret="siret"
+        :load="load"
+      />
     </div>
   </div>
 </template>
@@ -37,7 +48,7 @@ import NewComment from '@/components/Etablissement/NewComment.vue'
 
 export default {
   components: { Help, Thread, NewComment },
-  props: [ 'siret' ],
+  props: ['siret'],
   data() {
     return {
       text: '',
@@ -49,44 +60,36 @@ export default {
   mounted() {
     this.load()
   },
-  computed: {
-    jwt() {
-      return this.$keycloak.tokenParsed || {resource_access: { signauxfaibles: {roles: []}}}
-    },
-    roles() {
-      return this.jwt.resource_access.signauxfaibles.roles
-    },
-  },
   methods: {
     load() {
       const loading = true
-      const params = {
-        key: {
-          siret: this.siret,
-        },
-      }
-      this.$axios.post('/data/get/comment', params).then((d) => {
-        const comments = d.data.sort((c1, c2) => c1.value.date < c2.value.date)
-        this.thread = this.tree(comments, null)
-        this.loading = false
+      this.$axios.get(`/etablissement/comments/${this.siret}`).then((response) => {
+        if (response.status === 200) {
+          const comments = response.data.comments.sort(
+            (c1, c2) =>
+              new Date(c1.dateHistory[c1.dateHistory.length - 1]) -
+              new Date(c2.dateHistory[c2.dateHistory.length - 1]),
+          )
+          this.thread = comments
+          this.loading = false
+        }
       })
     },
-    count(tree) {
-      return tree.reduce((m, t) => {
-        return m + t.count
-      }, 0)
-    },
-    tree(comments, id) {
-      return comments.reduce((m, c) => {
-        if ((c.key.follows || '') === (id || '')) {
-          c.thread = this.tree(comments, c.key.uuid)
-          c.count = c.thread.reduce((n, h) => {
-            return n + h.count
-          }, 1)
-          m.push(c)
+    count(thread) {
+      let count = thread.length
+      thread.map((c, i) => {
+        if (c.comments) {
+          count += this.count(c.comments)
         }
-        return m
-      }, [])
+      })
+      return count
+    },
+    toggleComments() {
+      if (!this.viewChild) {
+        this.trackMatomoEvent('etablissement', 'voir_commentaires', this.siret)
+      }
+      this.viewChild = !this.viewChild
+      this.viewComment = false
     },
   },
 }

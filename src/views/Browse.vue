@@ -4,176 +4,166 @@
     <div :class="((result.etablissement || []).length > 0 || searched) ? 'loaded' : 'empty'">
       <form v-on:submit.prevent="load">
         <div :class="((result.etablissement || []).length > 0 || searched) ? 'loaded_picto' : 'empty_picto'">
-          <span class="fblue">Signaux</span>·<span class="fred">Faibles</span>
+          <img height="50" src="../assets/text_signaux_faibles.svg" />
         </div>
         <v-text-field solo placeholder="Raison sociale ou SIRET" v-model="search"></v-text-field>
+        <v-radio-group v-model="radios" :mandatory="false">
+          <v-radio label="Parmi tous les établissements de ma zone géographique" value="geo"></v-radio>
+          <v-radio label="Parmi tous les établissements des entreprises implantées dans ma zone géographique" value="visible"></v-radio>
+          <v-radio label="Sur toute la France" value="tout"></v-radio>
+        </v-radio-group>  
         <v-btn type="submit" style="width: 150px">
           <v-icon>search</v-icon>
         </v-btn>
       </form>
     </div>
-    <div style="margin: 0px 80px;" v-if="((result.etablissement || []).length > 0 && searched)">
-      {{ result.total_results || (result.etablissement || []).length }} {{ 'resultat' + ((result.total_results > 1) ? 's' : '')}}
-      <div style="margin:20px; font-size: 11px" v-for="e of result.etablissement" :key="e.id">
-        <a style="font-size: 22px" @click="siret=e.siren+e.nic; dialog=true;">{{ e.nom_raison_sociale }}</a><br/>
-        {{ e.libelle_nature_juridique_entreprise }} {{ e.siren + e.nic }} ({{ e.nic == e.nic_siege ? 'siège' : 'secondaire' }})<br/>
-        <span>{{ e.libelle_activite_principale }} (APE {{ e.activite_principale }})</span><br/>
-        {{ e.l6_normalisee }}
-        {{ e.l7_normalisee }}
-      </div>
+    <div v-if="searched" class="numbers">{{ total }} résultat(s)
     </div>
-
-    <div v-if="(result.etablissement || []).length > 0" style="height: 140px; width: 100%; text-align: center; vertical-align: middle; padding: 10px 10%"> 
-      <v-btn 
-        :disabled="page <= 1"
-        @click="page -= 1; lookup()" 
-        icon>
-        <v-icon>arrow_back</v-icon>
-      </v-btn> 
-      page {{ page }}/{{ result.total_pages || 1 }} 
-      <v-btn 
-        :disabled="page >= (result.total_pages || 1)"
-        @click="page +=1; lookup()" 
-        icon>
-        <v-icon>arrow_forward</v-icon>
-      </v-btn>
-    </div>
-    <div class="empty_text" v-if="(result.etablissement || []).length == 0 && searched">
-      Aucun résultat pour cette recherche.
-    </div>
-    <v-dialog  lazy fullscreen v-model="dialog">
-      <div style="height: 100%; width: 100%; font-weight: 800; font-family: 'Oswald', sans;">
-        <v-toolbar fixed class="toolbar" height="35px" style="color: #fff; font-size: 22px;">
-          <v-spacer/>
-            ETABLISSEMENT
-          <v-spacer/>
-          <v-icon @click="dialog=false;" style="color: #fff">mdi-close</v-icon>
-        </v-toolbar>
-        <Etablissement :siret="siret" :batch="currentBatchKey"></Etablissement>
-      </div>
-    </v-dialog>
+    <PredictionWidget v-for="r in result" :key="r.siret" :prediction="r" />
   </div>
 </template>
 
 <script>
   import Toolbar from '@/components/Toolbar.vue'
-  import Etablissement from '@/components/Etablissement.vue'
-  import axios from 'axios'
+  import PredictionWidget from '@/components/PredictionWidget.vue'
+  import Spinner from '@/components/Spinner.vue'
+
   export default {
     data() {
       return {
         search: '',
         searched: false,
         result: [],
-        page: 1,
-        axios: axios.create(),
+        total: 0,
+        page: 0,
         siret: '',
         dialog: false,
-        etablissement: null,
+        ignorezone: true,
+        ignoreroles: true,
+        radios: 'geo',
+        listHeight: 0,
+        complete: false,
+        loading: false,
       }
     },
-    mounted() {
-      this.$store.dispatch('updateReference')
+    watch: {
+      scrollTop() {
+        this.listHeight = this.$el.getBoundingClientRect().bottom
+      },
+      resultIsEnough() {
+        if (!this.displayStatus && !this.complete) {
+          this.getPredictionPage()
+        }
+      },
     },
     methods: {
       load() {
-        this.page = 1
-        this.lookup()
+        this.page = 0
+        this.complete = false
+        this.searched = true
+        this.result = []
+        let eventName = this.search
+        if (this.radios === 'visible') {
+          eventName = eventName.concat(',entreprises_zone')
+        } else if (this.radios === 'tout') {
+          eventName = eventName.concat(',france')
+        } else {
+          eventName = eventName.concat(',etablissements_zone')
+        }
+        this.trackMatomoEvent('consultation', 'rechercher', eventName)
+        this.lookupPage()
       },
-      lookup() {
-        this.axios.get(this.searchUrl).then((r) => {
-          this.result = r.data
-
-          if ((this.result.etablissement || []).length === 1) {
-            this.siret = this.result.etablissement[0].siret
-            this.dialog = true
-          }
-
-          if (this.result.etablissement.siret) {
-            this.siret = this.result.etablissement.siret
-            this.result.etablissement = [this.result.etablissement]
-            this.dialog = true
-          }
-
-          if (this.result.siege_social) {
-            this.siret = this.result.siege_social.siret
-            this.result.etablissement = [this.result.siege_social]
-            this.dialog = true
-          }
-        }).catch((error) => {
-          this.result = {
-            etablissement: [],
+      lookupPage() {
+        this.loading = true
+        this.$axios.get(this.searchURL, {params: this.params}).then((response) => {
+          if (response.status === 200) {
+            this.result = this.result.concat(response.data.results)
+            this.total = response.data.total
+            this.trackMatomoEvent('consultation', 'resultats_recherche', this.search, this.total)
+            this.page += 1
+          } else if (response.status === 204) {
+            this.complete = true
           }
         }).finally(() => {
-          this.searched = true
+          this.loading = false
         })
       },
     },
-    computed: {
-      jwt() {
-        return this.$keycloak.tokenParsed
+    watch: {
+      scrollTop() {
+        this.listHeight = this.$el.getBoundingClientRect().bottom
       },
-      searchUrl() {
-        const root = process.env.VUE_APP_SIRENE_BASE_URL + '/v1/'
-        return root + `${this.searchType}/${encodeURIComponent(this.search)}?page=${this.page}`
+      result() {
+        this.listHeight = this.$el.getBoundingClientRect().bottom
       },
-      searchType() {
-        if (this.search.match(/^[0-9]{14}$/)) {
-          return 'siret'
+      resultIsEnough() {
+        if (!this.resultIsEnough) {
+          this.trackMatomoEvent('consultation', 'voir_page_suivante', this.search, this.page)
+          this.lookupPage()
         }
-        if (this.search.match(/^[0-9]{9}$/)) {
-          return 'siren'
-        }
-        return 'full_text'
-      },
-      currentBatchKey() {
-        return this.$store.state.currentBatchKey
       },
     },
-    components: { Toolbar, Etablissement },
+    computed: {
+      resultIsEnough() {
+        return !this.searched || this.complete || this.loading || this.height * 2 < this.listHeight
+      },
+      searchURL() {
+        return `/etablissement/search/${this.search}`
+      },
+      params() {
+        const p = {
+          page: this.page,
+        }
+        if (this.radios === 'visible' || this.radios === 'tout') {
+          p.ignorezone = true
+        }
+        if (this.radios === 'tout') {
+          p.ignoreroles = true
+        }
+        return p
+      },
+      scrollTop() {
+        return this.$store.state.scrollTop
+      },
+      height: {
+        get() {
+          return this.$store.state.height
+        },
+        set(height) {
+          this.$store.dispatch('setHeight', height)
+        },
+      },
+    },
+    components: { PredictionWidget, Toolbar },
   }
 </script>
 
 <style scoped>
-  .empty{
+  .empty {
     height: 150px;
     width: 100%; 
     text-align: center; 
     vertical-align: middle; 
     padding: 10px 30%;
   }
-
   .empty_picto {
     margin-top: 20%;
     font-size: 40px;
     margin-bottom: 40px;
   }
-
-  .empty_text {
-    text-align: center;
-    font-size: 25px;
-    margin: 80px;
-  }
   .loaded_picto {
     visibility: hidden;
   }
-
-  .loaded{
-    height: 150px;
+  .loaded {
+    height: 330px;
     width: 100%;
     text-align: center;
     vertical-align: middle;
     padding: 10px 10%;
   }
-
-  span.fblue {
-    font-family: 'Quicksand', sans-serif;
-    color: #20459a
+  div.numbers {
+    font-size: 25px;
+    width: 100%;
+    text-align: center;
   }
-
-  span.fred {
-    font-family: 'Quicksand', sans-serif;
-    color: #e9222e
-  }
-
 </style>

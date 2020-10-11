@@ -6,13 +6,14 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import VueApexCharts from 'vue-apexcharts'
+// @ts-ignore
+import VueMatomo from 'vue-matomo'
 
 Vue.config.productionTip = true
 
 Vue.prototype.$axios = store.axiosClient
 Vue.prototype.$store = store.sessionStore
 Vue.prototype.$localStore = store.localStore
-
 
 function tokenInterceptor() {
   Vue.prototype.$axios.interceptors.request.use((config: any) => {
@@ -28,6 +29,15 @@ Vue.component('apexchart', VueApexCharts)
 const redirectURI = window.location.pathname
 
 const bdf = (redirectURI.slice(-3) === 'bdf')
+
+if (process.env.VUE_APP_MATOMO_ENABLED && !!JSON.parse(process.env.VUE_APP_MATOMO_ENABLED)) {
+  Vue.use(VueMatomo, {
+    host: process.env.VUE_APP_MATOMO_URL,
+    siteId: process.env.VUE_APP_MATOMO_SITE_ID,
+    router,
+    trackInitialView: false,
+  })
+}
 
 Vue.use(VueKeyCloak, {
   init: {
@@ -45,6 +55,9 @@ Vue.use(VueKeyCloak, {
         idpHint: (bdf) ? 'bdfidp' : undefined,
       })
     } else {
+      if ((window as any)._paq) {
+        (window as any)._paq.push(['setUserId', Vue.prototype.$keycloak.tokenParsed.preferred_username])
+      }
       tokenInterceptor()
       const tslintCantBeDisabledSorryForThis = new Vue({
         el: '#app',
@@ -56,4 +69,22 @@ Vue.use(VueKeyCloak, {
   },
 })
 
-
+Vue.mixin({
+  methods: {
+    trackMatomoEvent(category, action, name, value) {
+      if (Vue.prototype.$matomo) {
+        Vue.prototype.$matomo.trackEvent(category, action, name, value)
+      }
+    },
+  },
+  computed: {
+    jwt() {
+      const jwt = Vue.prototype.$keycloak.tokenParsed
+      return jwt
+    },
+    roles() {
+      const roles = (Vue.prototype.$keycloak.tokenParsed.resource_access.signauxfaibles || {}).roles || []
+      return roles
+    },
+  },
+})

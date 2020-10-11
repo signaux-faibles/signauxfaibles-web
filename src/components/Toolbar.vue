@@ -7,7 +7,7 @@
     app
   >
     <v-icon
-      @click="leftDrawer=!leftDrawer"
+      @click="openLeftDrawer()"
       class="fa-rotate-180"
       v-if="!leftDrawer"
       color="#ffffff"
@@ -32,6 +32,12 @@ export default {
     icon: String,
     title: String,
     drawer: Boolean,
+  },
+  methods: {
+    openLeftDrawer() {
+      this.trackMatomoEvent('general', 'ouvrir_menu')
+      this.leftDrawer = !this.leftDrawer
+    },
   },
   computed: {
     leftDrawer: {

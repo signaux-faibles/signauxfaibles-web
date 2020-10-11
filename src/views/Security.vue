@@ -39,8 +39,16 @@ export default {
       check: false,
     }
   },
+  mounted() {
+    if (window._paq) {
+      window._paq.push(['trackEvent', 'general', 'ouvrir_consentement_securite'])
+    }
+  },
   methods: {
     validation() {
+      if (window._paq) {
+        window._paq.push(['trackEvent', 'general', 'valider_consentement_securite'])
+      }
       const now = new Date()
       this.$localStore.commit('setSecurityConsent', now)
     },

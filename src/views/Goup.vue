@@ -81,7 +81,6 @@
       }
     },
     computed: {
-      jwt() {return this.$keycloak.tokenParsed},
       token() {return this.$keycloak.token},
       header() {
         return {
@@ -110,12 +109,14 @@
 
         this.$refs.fileform.addEventListener('drop', ((e) => {
           for (const f of e.dataTransfer.files) {
+            this.trackMatomoEvent('envoi_donnees', 'selectionner_fichiers')
             this.files.push(this.uploadObject(f))
           }
         }).bind(this))
 
         this.$refs.uploadForm.addEventListener('change', ((e) => {
           for (const f of e.target.files) {
+            this.trackMatomoEvent('envoi_donnees', 'selectionner_fichiers')
             this.files.push(this.uploadObject(f))
           }
         }).bind(this))
@@ -186,6 +187,9 @@
         }
       },
       runUpload() {
+        const eventName = this.shared ? 'public' : this.jwt.goup_path
+        const eventValue = this.files.length
+        this.trackMatomoEvent('envoi_donnees', 'envoyer', eventName, eventValue)
         this.updateToken()
         for (const i in this.files) {
           if (this.files[i].completed === false) {
@@ -274,17 +278,5 @@
     height: 300px;
     color: #666;
     font-size: 40px;
-  }
-
-  div.file-listing{
-    vertical-align: middle;
-    width: 400px;
-    margin: auto;
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-  }
-
-  div.file-listing img{
-    height: 100px;
   }
 </style>

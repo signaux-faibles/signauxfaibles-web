@@ -2,8 +2,6 @@ import Vue from 'vue'
 import Vuex, { ActionContext } from 'vuex'
 import axios from 'axios'
 import createPersistedState from 'vuex-persistedstate'
-import jwt from 'jwt-decode'
-// import VueNativeSock from 'vue-native-websocket'
 
 const refreshRate = 60000
 
@@ -21,7 +19,7 @@ const axiosClient = axios.create(
 const localStore = new Vuex.Store({
   plugins: [createPersistedState({ storage: window.localStorage })],
   state: {
-    crp: false,
+    ignorezone: false,
     rj: false,
     lj: false,
     continuation: true,
@@ -35,7 +33,7 @@ const localStore = new Vuex.Store({
     securityConsent: new Date('1970-01-01'),
   },
   mutations: {
-    setcrp(state, val: boolean) { state.crp = val },
+    setignorezone(state, val: boolean) { state.ignorezone = val },
     setrj(state, val: boolean) { state.rj = val },
     setlj(state, val: boolean) { state.lj = val },
     setcontinuation(state, val: boolean) { state.continuation = val },
@@ -56,7 +54,6 @@ const sessionStore = new Vuex.Store({
     currentBatchKey: null as unknown as string,
     leftDrawer: true,
     rightDrawer: true,
-    rawReference: [] as any[],
     naf: [] as any[],
     batches: [] as any[],
     departements: [] as any[],
@@ -69,9 +66,6 @@ const sessionStore = new Vuex.Store({
     loading: false,
   },
   mutations: {
-    setPrediction(state, value) {
-      state.prediction = value
-    },
     setLoading(state, value) {
       state.loading = value
     },
@@ -81,22 +75,12 @@ const sessionStore = new Vuex.Store({
     rightDrawer(state, val) {
       state.rightDrawer = val
     },
-    storeReference(state, reference) {
-      state.rawReference = reference
-    },
     updateReference(state, reference) {
-      state.batches = reference
-        .filter((r: any) => r.key.key === 'batch')
-        .sort((b1: any, b2: any) => b1.key.batch > b2.key.batch  ? -1 : 1 )
-      state.currentBatchKey = state.currentBatchKey || (state.batches[0] || {key: {batch: ''}}).key.batch
-      state.naf = reference
-        .filter((r: any) => r.key.key === 'naf')
-      state.region = reference
-        .filter((r: any) => r.key.type === 'region' && r.key.batch === state.currentBatchKey)
-      state.departements = reference
-        .filter((r: any) => r.key.type === 'departements' && r.key.batch === state.currentBatchKey)
-      state.procol = reference
-        .filter((r: any) => r.key.type === 'procol')
+      state.batches = reference.listes.sort((b1: any, b2: any) => b1.id > b2.id ? -1 : 1)
+      state.currentBatchKey = state.currentBatchKey || (state.batches[0] || { id: '' }).id
+      state.naf = reference.naf
+      state.region = reference.regions
+      state.departements = reference.departements
     },
     setHeight(state, height) {
       state.height = height
@@ -109,14 +93,11 @@ const sessionStore = new Vuex.Store({
     },
   },
   getters: {
-    naf: (state) => (batch: any) => {
-      return state.naf.filter((n: any) => n.key.batch === batch)[0] || {}
-    },
     batches(state) {
       return state.batches.map((b) => {
         return {
-          value: b.key.batch,
-          text: b.value.name,
+          value: b.id,
+          text: b.id,
         }
       })
     },
@@ -124,10 +105,6 @@ const sessionStore = new Vuex.Store({
   actions: {
     setCurrentBatchKey(context, batchKey) {
       context.commit('setCurrentBatchKey', batchKey)
-      context.commit('updateReference', context.state.rawReference)
-    },
-    setTokens(context, tokens) {
-      context.commit('setTokens', tokens)
     },
     setHeight(context, height) {
       context.commit('setHeight', height)
@@ -136,11 +113,19 @@ const sessionStore = new Vuex.Store({
       context.commit('setScrollTop', scrollTop)
     },
     updateReference(context) {
-      const params = {}
-      axiosClient.post('/data/get/reference', params).then((response) => {
-        context.commit('storeReference', response.data)
-        context.commit('updateReference', response.data)
-      })
+      const getListes = axiosClient.get('/listes')
+      const getNaf = axiosClient.get('/reference/naf')
+      const getRegions = axiosClient.get('/reference/regions')
+      const getDepartements = axiosClient.get('/reference/departements')
+      axios.all([getListes, getNaf, getRegions, getDepartements]).then(axios.spread((...responses) => {
+        const reference = {
+          listes: responses[0].data,
+          naf: responses[1].data,
+          regions: responses[2].data,
+          departements: responses[3].data,
+        }
+        context.commit('updateReference', reference)
+      }))
     },
     setLeftDrawer(context, val) {
       context.commit('leftDrawer', val)

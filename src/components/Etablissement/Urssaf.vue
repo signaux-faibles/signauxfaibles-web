@@ -1,32 +1,36 @@
 <template>
   <div>
-    <v-toolbar dark color='indigo darken-5'>
-      <v-toolbar-title class="localtoolbar">
-          Cotisations et impayés Urssaf
-      </v-toolbar-title>
-      <v-spacer/>
+    <v-toolbar dark color="indigo darken-5">
+      <v-toolbar-title class="localtoolbar">Cotisations et impayés Urssaf</v-toolbar-title>
+      <v-spacer />
       <Help titre="Cotisations et impayés URSSAF">
         <template>
-          Ce graphique représente les données de l'URSSAF.<br/>
-          Les dates représentées sont les dates de fin des périodes appelées<br/>
+          Ce graphique représente les données de l'URSSAF.
+          <br />Les dates représentées sont les dates de fin des périodes appelées
+          <br />
           <ul>
-            <li> Cotisations: Montant des cotisations appelées.</li>
-            <li> Dette (part patronale): Cumul des dettes restantes à payer sur la part patronale.</li>
-            <li> Dette (part salariale): Cumul des dettes restantes à payer sur la part salariale (ou ouvrière).</li>
-          </ul>
-          Fournisseur: <b>ACOSS</b>
+            <li>Cotisations: Montant des cotisations appelées.</li>
+            <li>Dette (part patronale): Cumul des dettes restantes à payer sur la part patronale.</li>
+            <li>Dette (part salariale): Cumul des dettes restantes à payer sur la part salariale (ou ouvrière).</li>
+          </ul>Fournisseur:
+          <b>ACOSS</b>
         </template>
       </Help>
     </v-toolbar>
-    <apexchart v-if="roles.includes('urssaf')" width="100%" heigth="100%" type="line" :options="options" :series="series"></apexchart>
-    <div 
-      style=" height: 250px; width: 100%; text-align: center;"
-      v-if="!roles.includes('urssaf')"
-    >
+    <apexchart
+      v-if="roles.includes('urssaf')"
+      width="100%"
+      heigth="100%"
+      type="line"
+      :options="options"
+      :series="series"
+    ></apexchart>
+    <div style=" height: 250px; width: 100%; text-align: center;" v-if="!roles.includes('urssaf')">
       <img
-      style="vertical-align: middle; margin: 125px 0; opacity: 0.2;"
-      height="100px"
-      src="@/assets/noaccess.svg"/>
+        style="vertical-align: middle; margin: 125px 0; opacity: 0.2;"
+        height="100px"
+        src="@/assets/noaccess.svg"
+      />
     </div>
   </div>
 </template>
@@ -36,46 +40,66 @@ import Help from '@/components/Help.vue'
 export default {
   name: 'Urssaf',
   components: { Help },
-  props: ['debit', 'cotisation', 'chart', 'roles'],
+  props: ['debit', 'cotisation', 'chart'],
   computed: {
     series() {
-      return [{
-        name: 'cotisations appelées',
-        type: 'line',
-        data: this.cotisation.map((c, i) => {
-          return [
-            new Date(this.debit[i].periode),
-            Math.round(c),
-          ]}).filter((d) => d[0].getTime() > 0),
-      }, {
-        name: 'dette (part patronale)',
-        type: 'area',
-        data: this.debit.map((d) => {
-          return [
-            new Date(d.periode),
-            Math.round(d.part_patronale),
-          ]}).filter((d) => d[0].getTime() > 0),
-      }, {
-        name: 'dette (part salariale)',
-        type: 'area',
-        data: this.debit.map((d) => {
-          return [
-            new Date(d.periode),
-            Math.round(d.part_ouvriere),
-          ]}).filter((d) => d[0].getTime() > 0),
-      }]
+      if ((this.cotisation || []).length > 0 || (this.debit || []).length > 0) {
+        return [{
+          name: 'cotisations appelées',
+          type: 'line',
+          data: this.cotisation.reduce((data, c, i) => {
+            if (c !== null) {
+              data.push([
+                new Date(this.debit[i].periode),
+                Math.round(c),
+              ])
+            }
+            return data
+          }, []),
+        }, {
+          name: 'dette (part patronale)',
+          type: 'area',
+          data: this.debit.map((d) => {
+            return [
+              new Date(d.periode),
+              Math.round(d.part_patronale),
+            ]
+          }),
+        }, {
+          name: 'dette (part salariale)',
+          type: 'area',
+          data: this.debit.map((d) => {
+            return [
+              new Date(d.periode),
+              Math.round(d.part_ouvriere),
+            ]
+          }),
+        }]
+      } else {
+        return []
+      }
     },
     options() {
       return {
         tooltip: {
-          enabled: false,
+          enabled: true,
+          x: {
+            formatter(val) {
+              return new Date(val).toLocaleDateString()
+            },
+          },
+          y: {
+            formatter(val) {
+              return parseFloat(val).toLocaleString() + ' €'
+            },
+          },
         },
         legend: {
           show: true,
-              showForSingleSeries: true,
-                  onItemHover: {
-        highlightDataSeries: false,
-    },
+          showForSingleSeries: true,
+          onItemHover: {
+            highlightDataSeries: false,
+          },
         },
         theme: {
           mode: 'light',
@@ -114,14 +138,23 @@ export default {
           type: 'datetime',
         },
         yaxis: {
-
+          title: {
+            text: '€ (euros)',
+          },
         },
         states: {
-        hover: {
-          filter: {
+          hover: {
+            filter: {
               type: 'none',
             },
           },
+        },
+        noData: {
+          text: 'Il n\'y a pas de données associées',
+          align: 'center',
+          verticalAlign: 'middle',
+          offsetX: 0,
+          offsetY: 0,
         },
       }
     },
