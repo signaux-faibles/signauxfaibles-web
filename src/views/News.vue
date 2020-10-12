@@ -59,6 +59,19 @@ export default {
       news: [
         // TODO: externalize
         {
+          date: new Date('2020-10-12'), news: [
+            'Signaux-Faibles version James M. Buchanan',
+            'Nouvel algorithme de détection expérimental pour prendre en compte les effets de la crise COVID',
+            'Fonctionnalité de suivi d\'entreprise',
+            'Consultation des établissements étendue au périmètre entreprise',
+            'Ajout des têtes de groupes, de la notion de siège',
+            'Navigation entre établissements d\'une même entreprise',
+            'Refonte de l\'affichage des données financières',
+            'Périmètre des données étendu à toutes les entreprises dont un établissement comporte plus de 10 salariés',
+            'Ajouts des données synthétiques dans la consultation d\'établissements',
+          ],
+        },
+        {
           date: new Date('2020-01-21'), news: [
             'Relooking mineur des filtres de la liste de détection',
             'Export excel de la liste affichée',
@@ -156,6 +169,7 @@ export default {
         },
         {
           date: new Date('2019-10-04'), news: [
+            'Signaux-Faibles version Maurice Allais',
             'L\'écran des listes de détection n\'est plus accessible aux agents habilités B',
             'Les données d\'activité partielle ne sont plus disponibles en visualisation pour les entreprises absentes des listes de détection.',
           ],
