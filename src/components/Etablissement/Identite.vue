@@ -16,7 +16,7 @@
     <h3>
       siren {{ siret.slice(0,9) }}
       <span style="color: #999">{{ siret.slice(9,14) }} siret</span>
-      {{ this.siege ? ' (siège)' : ''}}
+      {{ this.siege ? ' (siège)' : '' }}
     </h3>
     <hr style="color: #eee;" />
     <div style="padding: 10px; margin: 4px;">

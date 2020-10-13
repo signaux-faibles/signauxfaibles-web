@@ -7,32 +7,22 @@
       <div class="corps">
         <div class="mr-2 ml-2">
           <span class="raison-sociale">{{ prediction.raison_sociale }}</span>
-          <v-tooltip bottom v-if="prediction.siege === true">
-            <template v-slot:activator="{ on, attrs }">
-              <v-chip v-bind="attrs" v-on="on" class="ma-0 ml-2 mb-2 chip" small color="grey darken-3" text-color="white">siège</v-chip>
-            </template>
-            <span>Cet établissement est le siège de l'entreprise</span>
-          </v-tooltip>
-          <v-tooltip bottom v-if="prediction.groupe === true">
-            <template v-slot:activator="{ on, attrs }">
-            <v-chip v-bind="attrs" v-on="on" class="ma-0 ml-2 mb-2 chip" small color="grey darken-3" text-color="white">groupe</v-chip>
-            </template>
-            <span>Cette entreprise fait partie d'un groupe</span>
-          </v-tooltip>
           <v-tooltip bottom v-if="prediction.firstAlert === true">
             <template v-slot:activator="{ on, attrs }">
-              <v-chip v-bind="attrs" v-on="on"  class="ma-0 ml-2 mb-2 chip" small color="primary" text-color="white">1re alerte</v-chip>
+              <v-chip v-bind="attrs" v-on="on"  class="ma-0 ml-2 chip" small color="primary" text-color="white" style="margin-top: -12px !important">1re alerte</v-chip>
             </template>
             <span>Cet établissement est pour la première fois en alerte sur une liste de détection</span>
           </v-tooltip>
+          <v-tooltip bottom v-if="prediction.etat_procol !== 'in_bonis'">
+            <template v-slot:activator="{ on, attrs }">
+            <v-chip v-bind="attrs" v-on="on" class="ma-0 ml-2 chip" outline small text-color="red darken-1" style="margin-top: -12px !important">{{ prediction.etat_procol }}</v-chip>
+            </template>
+            <span>Cette entreprise est placée dans la procédure collective : {{ prediction.etat_procol }}</span>
+          </v-tooltip>
           <img class="ml-2" v-if="prediction.connu === true" height="20" src="../assets/crp.png" />
           <div class="identite">
-            {{ prediction.siret }} -
-            <span
-              :class="prediction.etat_procol == 'in_bonis'?'up':'down'"
-            >{{ prediction.etat_procol }}</span>
-            <br />
-            Dép.: {{ prediction.departement }} - Act: {{ (prediction.libelle_activite || '').slice(0,65) }}
+            {{ prediction.siret.slice(0,9) }} {{ prediction.siret.slice(9,14) }}{{ prediction.siege ? ' (siège)' : '' }}{{ prediction.groupe ? ' - Gr. ' + prediction.groupe : ''}}<br />
+            Dép. {{ prediction.departement }} - Act. {{ (prediction.libelle_activite || '').slice(0,65) }}
           </div>
         </div>
         <div class="mr-2 text-xs-right">
@@ -65,7 +55,7 @@
         <div class="ca mr-2 text-xs-right">
           CA {{prediction.annee_ca}}
           <br />
-          <span class="valeur" :class="diane.ca_color">{{ diane.ca || "n/c" }}</span>
+          <span class="valeur" :class="diane.ca_color">{{ diane.ca || 'n/c' }}</span>
           <v-icon small v-if="diane.ca_arrow">{{ diane.ca_arrow }}</v-icon>
         </div>
         <div class="rex mr-2 text-xs-right">
