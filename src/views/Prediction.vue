@@ -241,6 +241,7 @@ export default {
       page: 0,
       listHeight: 0,
       complete: false,
+      errorOccured: false,
     }
   },
   mounted() {
@@ -311,25 +312,26 @@ export default {
       }, 500)
     },
     getPredictionPage() {
-        if (!this.loading) {
-          if (this.$store.state.currentBatchKey != null) {
-            this.loading = true
-            this.$axios.post(`/scores/liste/${this.currentBatchKey}`, this.params).then((response) => {
-              if (response.status === 200) {
-                this.prediction = this.prediction.concat(response.data.scores)
-                this.predictionWarnings = response.data.nbF2
-                this.predictionAlerts = response.data.nbF1
-              } else if (response.status === 204) {
-                this.complete = true
-              }
-            }).finally(() => {
-              this.init = false
-              this.loading = false
-              this.page += 1
-            })
-          } else {
-            window.setTimeout(this.getPredictionPage, 100)
-          }
+        if (!this.loading && this.currentBatchKey) {
+          this.loading = true
+          this.errorOccured = false
+          this.$axios.post(`/scores/liste/${this.currentBatchKey}`, this.params).then((response) => {
+            if (response.status === 200) {
+              this.prediction = this.prediction.concat(response.data.scores)
+              this.predictionWarnings = response.data.nbF2
+              this.predictionAlerts = response.data.nbF1
+            } else if (response.status === 204) {
+              this.complete = true
+            } else {
+              this.errorOccured = true
+            }
+          }).catch((error) => {
+            this.errorOccured = true
+          }).finally(() => {
+            this.init = false
+            this.loading = false
+            this.page += 1
+          })
         }
     },
     openLeftDrawer() {
@@ -361,7 +363,7 @@ export default {
   },
   computed: {
     predictionIsEnough() {
-      return this.complete || this.loading || this.height * 2 < this.listHeight
+      return this.complete || this.loading || this.height * 2 < this.listHeight || this.errorOccured
     },
     params() {
       const params = {}

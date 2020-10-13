@@ -44,17 +44,8 @@
         listHeight: 0,
         complete: false,
         loading: false,
+        errorOccured: false,
       }
-    },
-    watch: {
-      scrollTop() {
-        this.listHeight = this.$el.getBoundingClientRect().bottom
-      },
-      resultIsEnough() {
-        if (!this.displayStatus && !this.complete) {
-          this.getPredictionPage()
-        }
-      },
     },
     methods: {
       load() {
@@ -75,6 +66,7 @@
       },
       lookupPage() {
         this.loading = true
+        this.errorOccured = false
         this.$axios.get(this.searchURL, {params: this.params}).then((response) => {
           if (response.status === 200) {
             this.result = this.result.concat(response.data.results)
@@ -83,7 +75,11 @@
             this.page += 1
           } else if (response.status === 204) {
             this.complete = true
+          } else {
+            this.errorOccured = true
           }
+        }).catch((error) => {
+          this.errorOccured = true
         }).finally(() => {
           this.loading = false
         })
@@ -105,7 +101,7 @@
     },
     computed: {
       resultIsEnough() {
-        return !this.searched || this.complete || this.loading || this.height * 2 < this.listHeight
+        return !this.searched || this.complete || this.loading || this.height * 2 < this.listHeight || this.errorOccured
       },
       searchURL() {
         return `/etablissement/search/${this.search}`
