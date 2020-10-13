@@ -1,62 +1,70 @@
 <template>
-    <div>
-        <Toolbar title="Suivi d'établissements" drawer/>
-        <div id="nodata" v-if="!loading && follow.length == 0 && init == false">
-            Vous ne suivez pour le moment aucun établissement.<br>Pour ce faire, rendez-vous sur la fiche d'un établissement et appuyez sur le bouton Suivre.
-        </div>
-        <PredictionWidget v-for="e in etablissements" :key="e.siret" :prediction="e" @follow-etablissement="getFollowedEtablissements" @unfollow-etablissement="getFollowedEtablissements"/>
+  <div>
+    <Toolbar title="Suivi d'établissements" drawer />
+    <div id="nodata" v-if="!loading && follow.length == 0 && init == false">
+      Vous ne suivez pour le moment aucun établissement.<br />Pour ce faire,
+      rendez-vous sur la fiche d'un établissement et appuyez sur le bouton
+      Suivre.
     </div>
+    <PredictionWidget
+      v-for="e in etablissements"
+      :key="e.siret"
+      :prediction="e"
+      @follow-etablissement="getFollowedEtablissements"
+      @unfollow-etablissement="getFollowedEtablissements"
+    />
+  </div>
 </template>
 <script>
 import PredictionWidget from '@/components/PredictionWidget'
 import Toolbar from '@/components/Toolbar'
 
 export default {
-    components: { PredictionWidget, Toolbar },
-    data() {
-        return {
-            init: true,
-            loading: false,
-            follow: [],
+  components: { PredictionWidget, Toolbar },
+  data() {
+    return {
+      init: true,
+      loading: false,
+      follow: [],
+    }
+  },
+  mounted() {
+    this.getFollowedEtablissements()
+  },
+  methods: {
+    getFollowedEtablissements() {
+      this.$axios.get('/follow').then((response) => {
+        if (response.status === 200) {
+          this.follow = response.data
+        } else {
+          this.follow = []
         }
+      }).finally(() => {
+        this.init = false
+      })
     },
-    mounted() {
-        this.getFollowedEtablissements()
+  },
+  computed: {
+    etablissements() {
+      return this.follow.map((f) => f.etablissementSummary)
     },
-    methods: {
-        getFollowedEtablissements() {
-            this.$axios.get('/follow').then((response) => {
-                if (response.status === 200) {
-                    this.follow = response.data
-                } else {
-                    this.follow = []
-                }
-            }).finally(() => {
-                this.init = false
-            })
-        },
+    leftDrawer: {
+      get() {
+        return this.$store.state.leftDrawer
+      },
+      set(val) {
+        this.$store.dispatch('setLeftDrawer', val)
+      },
     },
-    computed: {
-        etablissements() {
-            return this.follow.map((f) => f.etablissementSummary)
-        },
-        leftDrawer: {
-            get() {
-                return this.$store.state.leftDrawer
-            },
-            set(val) {
-                this.$store.dispatch('setLeftDrawer', val)
-            },
-        },
-        rightDrawer: {
-            get() {
-                return this.$store.state.rightDrawer
-            },
-            set(val) {
-                this.$store.dispatch('setRightDrawer', val)
-            },
-        },
+    rightDrawer: {
+      get() {
+        return this.$store.state.rightDrawer
+      },
+      set(val) {
+        this.$store.dispatch('setRightDrawer', val)
+      },
     },
+  },
 }
 </script>
 

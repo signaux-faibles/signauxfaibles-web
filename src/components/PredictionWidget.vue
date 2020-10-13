@@ -122,6 +122,7 @@ export default {
     hideEtablissement() {
       this.trackMatomoEvent('etablissement', 'fermer_fiche_etablissement', this.prediction.siret)
       this.dialog = false
+      this.$emit('hide-etablissement')
     },
   },
 }

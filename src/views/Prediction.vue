@@ -191,8 +191,9 @@
             <span slot="label" style="font-size: 14px">Liquidation judiciaire</span>
           </v-switch>
         </div>
-
         <p style="height: 1px; border: 1px solid #eee; margin-top: 20px" />
+        <v-checkbox :disabled="loading" v-model="exclureSuivi" class="mx-2 mt-1" label="Exclure tous les établissements que je suis" @change="getPrediction()"></v-checkbox>
+        <p style="height: 1px; border: 1px solid #eee" />
       </v-navigation-drawer>
     </div>
     <v-card
@@ -215,9 +216,8 @@
         </v-layout>
       </v-container>
     </v-card>
-    <PredictionWidget v-for="p in prediction" :key="p.siret" :prediction="p" />
-          <Spinner v-if="loading" />
-
+    <PredictionWidget v-for="p in prediction" :key="p.siret" :prediction="p" @hide-etablissement="onHideEtablissement" @follow-etablissement="followStateChanged = true" @unfollow-etablissement="followStateChanged = true"/>
+    <Spinner v-if="loading" />
   </div>
 </template>
 
@@ -242,12 +242,18 @@ export default {
       listHeight: 0,
       complete: false,
       errorOccured: false,
+      followStateChanged: false,
     }
   },
   mounted() {
     this.getPrediction()
   },
   methods: {
+    onHideEtablissement() {
+      if (this.exclureSuivi && this.followStateChanged) {
+        this.getPrediction()
+      }
+    },
     applyNaf() {
       this.currentNaf = this.nextNaf
       this.getPrediction()
@@ -331,6 +337,7 @@ export default {
             this.init = false
             this.loading = false
             this.page += 1
+            this.followStateChanged = false
           })
         }
     },
@@ -396,11 +403,18 @@ export default {
       if (this.in_bonis) {
         params.procol = params.procol.concat(['in_bonis'])
       }
+      if (this.exclureSuivi) {
+        params.exclureSuivi = this.exclureSuivi
+      }
       if (this.filter || '' !== '') {
         params.filter = this.filter
       }
       params.page = this.page
       return params
+    },
+    exclureSuivi: {
+      get() { return this.$localStore.state.exclureSuivi },
+      set(value) { this.$localStore.commit('setexclureSuivi', value) },
     },
     ignorezone: {
       get() { return this.$localStore.state.ignorezone },
