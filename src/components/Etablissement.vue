@@ -11,6 +11,7 @@
               :siret="siret"
               :siege="etablissement.siege"
               :groupe="groupe"
+              :terrind="(etablissement.territoireIndustrie ||  {}).libelle"
             />
           </v-flex>
           <v-flex xs12 md6 class="text-xs-right pa-3" style="margin-top: 3em">

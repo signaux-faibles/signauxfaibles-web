@@ -16,7 +16,7 @@
     <h3>
       siren {{ siret.slice(0,9) }}
       <span style="color: #999">{{ siret.slice(9,14) }} siret</span>
-      {{ this.siege ? ' (siège)' : '' }}
+      {{ siege ? ' (siège)' : '' }}
     </h3>
     <hr style="color: #eee;" />
     <div style="padding: 10px; margin: 4px;">
@@ -25,15 +25,23 @@
         <br />
         {{ libelleActivite }}
         <br />
-        Code APE&nbsp;: {{ codeActivite }}
+        {{ codeActivite ? 'Code APE&nbsp;: ' + codeActivite : ''}}
         <br />
-        {{ this.groupe ? 'Groupe : ' + this.groupe : ''}}
+        {{ groupe ? 'Groupe&nbsp;: ' + groupe : ''}}
       </div>
     </div>
     <h3>adresse postale de l'établissement</h3>
     <hr style="color: #eee;" />
     <div style="padding: 10px; margin: 4px; font-size: 16px">
       <div v-html="adresse"></div>
+      <div v-if="terrind" class="mt-2 text-uppercase" style="font-size: 18px">
+        <img class="mr-3 mb-3" style="vertical-align: middle" height="45" src="../../assets/terrind.png" />{{ terrind }}
+        <Help style="position: relative; top: -3px; right: 10px" titre="Territoires d’industrie">
+          Les Territoires d’industrie sont des <b>intercommunalités ou des groupes d’intercommunalités</b> situés dans les campagnes, les espaces périurbains, les villes petites et moyennes.<br />
+          Elles présentent <b>une forte identité et un savoir-faire industriel</b> et l’ensemble de leurs acteurs, notamment les entreprises et les collectivités territoriales, sont mobilisés pour le développement de l’industrie.<br /><br />
+          Pour en savoir davantage : <a href="https://agence-cohesion-territoires.gouv.fr/territoires-dindustrie-44">https://agence-cohesion-territoires.gouv.fr/territoires-dindustrie-44</a>
+        </Help>  
+      </div>
     </div>
   </div>
 </template>
@@ -44,7 +52,7 @@ import Historique from '@/components/Etablissement/Historique.vue'
 
 export default {
   name: 'Identite',
-  props: ['denomination', 'historique', 'siret', 'sirene', 'siege', 'groupe'],
+  props: ['denomination', 'historique', 'siret', 'sirene', 'siege', 'groupe', 'terrind'],
   components: { Help, Historique },
   methods: {
     showFollowDialog() {
