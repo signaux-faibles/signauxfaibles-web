@@ -33,15 +33,21 @@
     <h3>adresse postale de l'établissement</h3>
     <hr style="color: #eee;" />
     <div style="padding: 10px; margin: 4px; font-size: 16px">
-      <div v-html="adresse"></div>
-      <div v-if="terrind" class="mt-2 text-uppercase" style="font-size: 18px">
-        <img class="mr-3 mb-3" style="vertical-align: middle" height="45" src="../../assets/terrind.png" />{{ terrind }}
-        <Help style="position: relative; top: -3px; right: 10px" titre="Territoires d’industrie">
-          Les Territoires d’industrie sont des <b>intercommunalités ou des groupes d’intercommunalités</b> situés dans les campagnes, les espaces périurbains, les villes petites et moyennes.<br />
-          Elles présentent <b>une forte identité et un savoir-faire industriel</b> et l’ensemble de leurs acteurs, notamment les entreprises et les collectivités territoriales, sont mobilisés pour le développement de l’industrie.<br /><br />
-          Pour en savoir davantage : <a href="https://agence-cohesion-territoires.gouv.fr/territoires-dindustrie-44">https://agence-cohesion-territoires.gouv.fr/territoires-dindustrie-44</a>
-        </Help>  
-      </div>
+      <v-layout wrap>
+        <v-flex shrink>
+          <div v-html="adresse" class="mb-3 mr-5"></div>
+        </v-flex>
+        <v-flex grow>
+          <div v-if="terrind" class="text-uppercase" style="font-size: 18px">
+            <img class="mr-3 mb-3" style="vertical-align: middle" height="45" src="../../assets/terrind.png" />{{ terrind }}
+            <Help style="position: relative; top: -3px; right: 10px" titre="Territoires d’industrie">
+              Les Territoires d’industrie sont des <b>intercommunalités ou des groupes d’intercommunalités</b> situés dans les campagnes, les espaces périurbains, les villes petites et moyennes.<br />
+              Elles présentent <b>une forte identité et un savoir-faire industriel</b> et l’ensemble de leurs acteurs, notamment les entreprises et les collectivités territoriales, sont mobilisés pour le développement de l’industrie.<br /><br />
+              Pour en savoir davantage : <a href="https://agence-cohesion-territoires.gouv.fr/territoires-dindustrie-44">https://agence-cohesion-territoires.gouv.fr/territoires-dindustrie-44</a>
+            </Help>  
+          </div>
+        </v-flex>
+      </v-layout>
     </div>
   </div>
 </template>
