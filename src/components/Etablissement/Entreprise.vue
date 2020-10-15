@@ -17,7 +17,7 @@
       <v-layout align-center class="pt-3 pl-3" style="margin-bottom: 48px">
         <v-flex><span v-if="siege">Cet établissement (siret {{ this.siret }}) est le siège social de l'entreprise (siren {{ this.siren }}).</span><span v-else>Cet établissement (siret {{this.siret}}) n'est pas le siège social de l'entreprise (siren {{ this.siren }}).</span>
         Cette entreprise {{ this.groupe ? 'fait partie du groupe ' + this.groupe + ' et' : '' }} possède {{this.etablissementsSummary.length | pluralizeEtablissement}} en activité.</v-flex>
-        <v-flex md5 xs12 v-if="autresEtablissements.length > 0"><v-btn outline color="indigo darken-5" @click="toggle" class="ml-4">{{ show ? 'Masquer' : 'Afficher' }} les autres établissements</v-btn></v-flex>
+        <v-flex md5 xs12 v-if="siegeEntreprise || etablissementsDepartement.length > 0 || autresEtablissements.length > 0"><v-btn outline color="indigo darken-5" @click="toggle" class="ml-4">{{ show ? 'Masquer' : 'Afficher' }} les autres établissements</v-btn></v-flex>
       </v-layout>
       <transition name="fade">
         <div v-if="show" style="margin-top: -48px">
@@ -29,7 +29,7 @@
               v-on="$listeners"
             />
           </div>
-          <div v-if="etablissementsDepartement && etablissementsDepartement.length > 0">
+          <div v-if="etablissementsDepartement.length > 0">
             <div class="pb-1 pt-2 pl-3 subheading">
               Établissements secondaires du département {{ this.codeDepartement }} ({{this.etablissementsDepartement.length | pluralizeEtablissement}})
             </div>
@@ -40,7 +40,7 @@
               v-on="$listeners"
             />
           </div>
-          <div v-if="autresEtablissements && autresEtablissements.length > 0">
+          <div v-if="autresEtablissements.length > 0">
             <div class="pb-1 pt-2 pl-3 subheading">
               Autres établissements secondaires ({{this.autresEtablissements.length | pluralizeEtablissement}})
             </div>
