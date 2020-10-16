@@ -20,15 +20,7 @@
     </h3>
     <hr style="color: #eee;" />
     <div style="padding: 10px; margin: 4px;">
-      <div style="font-size: 16px">
-        {{ libelleSecteur }}
-        <br />
-        {{ libelleActivite }}
-        <br />
-        {{ codeActivite ? 'Code APE&nbsp;: ' + codeActivite : ''}}
-        <br />
-        {{ groupe ? 'Groupe&nbsp;: ' + groupe : ''}}
-      </div>
+      <div v-html="activiteHtml" style="font-size: 16px"></div>
     </div>
     <h3>adresse postale de l'établissement</h3>
     <hr style="color: #eee;" />
@@ -81,11 +73,21 @@ export default {
     codeActivite() {
       return this.naf.codeActivite || ''
     },
+    nomenActivite() {
+      return (this.naf.nomenActivite && this.naf.nomenActivite !== 'NAFRev2') ? ' (' + this.naf.nomenActivite + ')' : ''
+    },
     followed() {
       return this.$parent.followed
     },
     adresse() {
       return ((this.sirene || {}).adresse || '').split('\n').join('<br />')
+    },
+    activiteHtml() {
+      return [(this.libelleSecteur ? this.libelleSecteur : ''),
+        (this.libelleActivite ? this.libelleActivite : ''),
+        (this.codeActivite ? 'Code APE&nbsp;: ' + this.codeActivite + this.nomenActivite : ''),
+        (this.groupe ? 'Groupe&nbsp;: ' + this.groupe : '')]
+        .filter(Boolean).join('<br>')
     },
   },
 }

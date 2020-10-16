@@ -22,7 +22,7 @@
           <img class="ml-2" v-if="prediction.connu === true" height="20" src="../assets/crp.png" />
           <div class="identite">
             {{ prediction.siret.slice(0,9) }} {{ prediction.siret.slice(9,14) }}{{ prediction.siege ? ' (siège)' : '' }}{{ prediction.groupe ? ' - Gr. ' + prediction.groupe : ''}}<br />
-            Dép. {{ prediction.departement }} - Act. {{ (prediction.libelle_activite || '').slice(0,65) }}
+            Dép. {{ prediction.departement }}{{ prediction.libelle_activite ? ' - Act. ' + prediction.libelle_activite.slice(0,65) : '' }}
           </div>
         </div>
         <div class="mr-2 text-xs-right">
