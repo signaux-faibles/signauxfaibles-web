@@ -193,6 +193,8 @@
         </div>
         <p style="height: 1px; border: 1px solid #eee; margin-top: 20px" />
         <v-checkbox :disabled="loading" v-model="exclureSuivi" class="mx-2 mt-1" label="Exclure tous les établissements que je suis" @change="getPrediction()"></v-checkbox>
+        <p style="height: 1px; border: 1px solid #eee;" />
+        <v-checkbox :disabled="loading" v-model="siegeUniquement" class="mx-2 mt-1" label="N'afficher que les sièges des entreprises" @change="getPrediction()"></v-checkbox>
         <p style="height: 1px; border: 1px solid #eee" />
       </v-navigation-drawer>
     </div>
@@ -406,11 +408,18 @@ export default {
       if (this.exclureSuivi) {
         params.exclureSuivi = this.exclureSuivi
       }
+      if (this.siegeUniquement) {
+        params.siegeUniquement = this.siegeUniquement
+      }
       if (this.filter || '' !== '') {
         params.filter = this.filter
       }
       params.page = this.page
       return params
+    },
+    siegeUniquement: {
+      get() { return this.$localStore.state.siegeUniquement },
+      set(value) { this.$localStore.commit('setsiegeUniquement', value) },
     },
     exclureSuivi: {
       get() { return this.$localStore.state.exclureSuivi },
