@@ -456,11 +456,15 @@ export default {
     effectif() {
       const periodeUrssaf = (this.etablissement || {}).periodeUrssaf || {}
       return (periodeUrssaf.periodes || []).map((p, i) => {
-        return {
-          effectif: periodeUrssaf.effectif[i],
-          periode: p,
+        if (periodeUrssaf.effectif[i]) {
+          return {
+            effectif: periodeUrssaf.effectif[i],
+            periode: p,
+          }
+        } else {
+          return null
         }
-      })
+      }).filter(Boolean)
     },
     zipDianeBDF() {
       const entreprise = (this.etablissement || {}).entreprise || {}

@@ -47,7 +47,9 @@ export default {
         .sort((d1, d2) => {
           return (d2.debut > d1.debut ? -1 : 1)
         })
-        .filter((d) => d.fin > this.min)
+        .filter((d) => {
+          return new Date(d.fin) > new Date(this.min)
+        })
         .reduce((m, c) => {
           m = m.concat([
             [ new Date(c.debut),
@@ -61,7 +63,9 @@ export default {
         .sort((d1, d2) => {
           return (d2.date > d1.date ? -1 : 1)
         })
-        .filter((d) => d.date > this.min)
+        .filter((d) => {
+          return new Date(d.date) > new Date(this.min)
+        })
         .reduce((m, c, i) => {
           const etp = Math.max(this.equivalentTempsPlein(c.heureConsomme), 0)
           if (i > 0 && m[m.length - 2][0].getTime() === new Date(c.date).getTime()) {
@@ -84,22 +88,29 @@ export default {
       return (this.effectif || []).reduce((m, e) => (m < e.periode) ? m : e.periode, minLimit)
     },
     series() {
-      return [{
-        name: 'effectifs',
-        data: (this.effectif || []).map((e) => {
-          return [
-            new Date(e.periode),
-            e.effectif,
-          ]}),
-      }, {
-        name: 'consommation activité partielle',
-        data: this.apdemandeSeries.conso,
-        type: 'area',
-      }, {
-        name: 'autorisation activité partielle',
-        data: this.apdemandeSeries.demande,
-        type: 'area',
-      }]
+      if (this.effectif.length > 0
+        || this.apdemandeSeries.conso.length > 0
+        || this.apdemandeSeries.demande.length > 0) {
+        return [{
+          name: 'effectifs',
+          data: (this.effectif || []).map((e) => {
+            return [
+              new Date(e.periode),
+              e.effectif,
+            ]
+          }),
+        }, {
+          name: 'consommation activité partielle',
+          data: this.apdemandeSeries.conso,
+          type: 'area',
+        }, {
+          name: 'autorisation activité partielle',
+          data: this.apdemandeSeries.demande,
+          type: 'area',
+        }]
+      } else {
+        return []
+      }
     },
     options() {
       return {
@@ -157,6 +168,13 @@ export default {
         stroke: {
           curve: ['smooth', 'stepline', 'stepline'],
           width: [5, 0, 0],
+        },
+        noData: {
+          text: 'Il n\'y a pas de données associées',
+          align: 'center',
+          verticalAlign: 'middle',
+          offsetX: 0,
+          offsetY: 0,
         },
       }
     },
