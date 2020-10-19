@@ -601,7 +601,7 @@ export default {
   position: absolute;
   vertical-align: middle;
   text-align: center;
-  font-size: 40px;
+  font-size: 24px;
 }
 .thin {
   height: 25px;

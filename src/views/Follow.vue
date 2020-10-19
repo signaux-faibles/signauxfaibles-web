@@ -4,7 +4,7 @@
     <div id="nodata" v-if="!loading && follow.length == 0 && init == false">
       Vous ne suivez pour le moment aucun établissement.<br />Pour ce faire,
       rendez-vous sur la fiche d'un établissement et appuyez sur le bouton
-      Suivre.
+      Suivre.<br />Pour un import massif d'établissements, contactez-nous par email :<br /><a href="mailto:contact@signaux-faibles.beta.gouv.fr?subject=Import massif d'établissements" target="_blank"><code>contact@signaux-faibles.beta.gouv.fr</code></a>
     </div>
     <PredictionWidget
       v-for="e in etablissements"
@@ -77,6 +77,6 @@ export default {
   position: absolute;
   vertical-align: middle;
   text-align: center;
-  font-size: 40px;
+  font-size: 24px;
 }
 </style>

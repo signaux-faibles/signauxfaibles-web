@@ -35,7 +35,7 @@
             <Help style="position: relative; top: -3px; right: 10px" titre="Territoires d’industrie">
               Les Territoires d’industrie sont des <b>intercommunalités ou des groupes d’intercommunalités</b> situés dans les campagnes, les espaces périurbains, les villes petites et moyennes.<br />
               Elles présentent <b>une forte identité et un savoir-faire industriel</b> et l’ensemble de leurs acteurs, notamment les entreprises et les collectivités territoriales, sont mobilisés pour le développement de l’industrie.<br /><br />
-              Pour en savoir davantage : <a href="https://agence-cohesion-territoires.gouv.fr/territoires-dindustrie-44">https://agence-cohesion-territoires.gouv.fr/territoires-dindustrie-44</a>
+              Pour en savoir davantage : <a href="https://agence-cohesion-territoires.gouv.fr/territoires-dindustrie-44" target="_blank">https://agence-cohesion-territoires.gouv.fr/territoires-dindustrie-44</a>
             </Help>  
           </div>
         </v-flex>
