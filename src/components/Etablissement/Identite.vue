@@ -63,6 +63,15 @@ export default {
       const ageDiff = Date.now() - birthday.getTime()
       return Math.abs(new Date(ageDiff).getUTCFullYear() - 1970)
     },
+    pluralizeAge(count) {
+      if (count === 0) {
+        return 'moins d\'1 an'
+      } else if (count === 1) {
+        return '1 an'
+      } else {
+        return count + ' ans'
+      }
+    },
   },
   computed: {
     naf() {
@@ -99,11 +108,11 @@ export default {
         (this.codeActivite ? 'Code APE&nbsp;: ' + this.codeActivite + this.nomenActivite : ''),
         (this.ouverture ? 'Date d\'ouverture de l\'établissement&nbsp;: '
           + this.ouverture.toLocaleDateString('fr', {timeZone: 'Europe/Paris'})
-          + ' (' + this.calculateAge(this.ouverture) + ' ans)'
+          + ' (' + this.pluralizeAge(this.calculateAge(this.ouverture)) + ')'
           : ''),
         (this.creation ? 'Date de création de l\'entreprise&nbsp;: '
           + this.creation.toLocaleDateString('fr', {timeZone: 'Europe/Paris'})
-          + ' (' + this.calculateAge(this.creation) + ' ans)'
+          + ' (' + this.pluralizeAge(this.calculateAge(this.creation)) + ')'
           : ''),
         (this.groupe ? 'Groupe&nbsp;: ' + this.groupe : '')]
         .filter(Boolean).join('<br>')
