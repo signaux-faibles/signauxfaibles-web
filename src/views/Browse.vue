@@ -7,18 +7,26 @@
           <img height="50" src="../assets/text_signaux_faibles.svg" />
         </div>
         <v-text-field solo placeholder="Raison sociale ou SIRET" v-model="search"></v-text-field>
-        <v-radio-group v-model="radios" :mandatory="false">
-          <v-radio label="Parmi tous les établissements de ma zone géographique" value="geo"></v-radio>
-          <v-radio label="Parmi tous les établissements des entreprises implantées dans ma zone géographique" value="visible"></v-radio>
-          <v-radio label="Sur toute la France" value="tout"></v-radio>
-        </v-radio-group>  
+        <v-layout wrap>
+          <v-flex xs12 md6>
+            <v-subheader>Zone géographique</v-subheader>
+            <v-radio-group v-model="radios" :mandatory="false" class="mt-0" style="font-size: 14px">
+              <v-radio label="Parmi tous les établissements de ma zone géographique" value="geo"></v-radio>
+              <v-radio label="Parmi tous les établissements des entreprises implantées dans ma zone géographique" value="visible"></v-radio>
+              <v-radio label="Sur toute la France" value="tout"></v-radio>
+            </v-radio-group>
+          </v-flex>
+          <v-flex xs12 md6>
+            <v-subheader>Siège des entreprises</v-subheader>
+            <v-checkbox v-model="siegeUniquement" label="N'afficher que les sièges des entreprises" class="mt-0"></v-checkbox>
+          </v-flex>
+        </v-layout>
         <v-btn type="submit" style="width: 150px">
           <v-icon>search</v-icon>
         </v-btn>
       </form>
     </div>
-    <div v-if="searched" class="numbers">{{ total }} résultat(s)
-    </div>
+    <div v-if="searched" class="numbers">{{ total }} résultat(s)</div>
     <PredictionWidget v-for="r in result" :key="r.siret" :prediction="r" />
   </div>
 </template>
@@ -45,6 +53,7 @@
         complete: false,
         loading: false,
         errorOccured: false,
+        siegeUniquement: false,
       }
     },
     methods: {
@@ -116,6 +125,9 @@
         if (this.radios === 'tout') {
           p.ignoreroles = true
         }
+        if (this.siegeUniquement) {
+          p.siegeUniquement = this.siegeUniquement
+        }
         return p
       },
       scrollTop() {
@@ -151,7 +163,6 @@
     visibility: hidden;
   }
   .loaded {
-    height: 330px;
     width: 100%;
     text-align: center;
     vertical-align: middle;
@@ -162,4 +173,5 @@
     width: 100%;
     text-align: center;
   }
+</style>
 </style>
