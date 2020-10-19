@@ -50,7 +50,7 @@ import Historique from '@/components/Etablissement/Historique.vue'
 
 export default {
   name: 'Identite',
-  props: ['denomination', 'historique', 'siret', 'sirene', 'siege', 'groupe', 'terrind'],
+  props: ['denomination', 'historique', 'siret', 'sirene', 'siege', 'groupe', 'terrind', 'creation'],
   components: { Help, Historique },
   methods: {
     showFollowDialog() {
@@ -59,19 +59,30 @@ export default {
     showUnfollowDialog() {
       this.$parent.unfollowDialog = true
     },
+    calculateAge(birthday) {
+      const ageDiff = Date.now() - birthday.getTime()
+      return Math.abs(new Date(ageDiff).getUTCFullYear() - 1970)
+    },
   },
   computed: {
     naf() {
       return (this.sirene || {}).naf || {}
     },
+    ouverture() {
+      const ouvertureEtablissement = new Date((this.sirene || {}).creation)
+      const msInADay = 86400000
+      // rustine temporaire pour gérer les différences de TZ et exclure les dates d'ouverture improbables
+      return (!isNaN(ouvertureEtablissement.getTime())
+        && ouvertureEtablissement - this.creation > -msInADay) ? ouvertureEtablissement : null
+    },
     libelleSecteur() {
-      return this.naf.libelleSecteur || ''
+      return this.naf.libelleSecteur
     },
     libelleActivite() {
-      return this.naf.libelleActivite || ''
+      return this.naf.libelleActivite
     },
     codeActivite() {
-      return this.naf.codeActivite || ''
+      return this.naf.codeActivite
     },
     nomenActivite() {
       return (this.naf.nomenActivite && this.naf.nomenActivite !== 'NAFRev2') ? ' (' + this.naf.nomenActivite + ')' : ''
@@ -86,6 +97,14 @@ export default {
       return [(this.libelleSecteur ? this.libelleSecteur : ''),
         (this.libelleActivite ? this.libelleActivite : ''),
         (this.codeActivite ? 'Code APE&nbsp;: ' + this.codeActivite + this.nomenActivite : ''),
+        (this.ouverture ? 'Date d\'ouverture de l\'établissement&nbsp;: '
+          + this.ouverture.toLocaleDateString('fr', {timeZone: 'Europe/Paris'})
+          + ' (' + this.calculateAge(this.ouverture) + ' ans)'
+          : ''),
+        (this.creation ? 'Date de création de l\'entreprise&nbsp;: '
+          + this.creation.toLocaleDateString('fr', {timeZone: 'Europe/Paris'})
+          + ' (' + this.calculateAge(this.creation) + ' ans)'
+          : ''),
         (this.groupe ? 'Groupe&nbsp;: ' + this.groupe : '')]
         .filter(Boolean).join('<br>')
     },

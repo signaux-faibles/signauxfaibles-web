@@ -11,7 +11,8 @@
               :siret="siret"
               :siege="etablissement.siege"
               :groupe="groupe"
-              :terrind="(etablissement.territoireIndustrie ||  {}).libelle"
+              :terrind="terrind"
+              :creation="creation"
             />
           </v-flex>
           <v-flex xs12 md6 class="text-xs-right pa-3" style="margin-top: 3em">
@@ -484,6 +485,13 @@ export default {
     },
     groupe() {
       return ((this.etablissement.entreprise || {}).groupe || {}).raison_sociale_groupe
+    },
+    terrind() {
+      return (this.etablissement.territoireIndustrie ||  {}).libelle
+    },
+    creation() {
+      const creation = new Date(((this.etablissement.entreprise || {}).Sirene || {}).creation)
+      return (!isNaN(creation.getTime())) ? creation : null
     },
   },
 }
