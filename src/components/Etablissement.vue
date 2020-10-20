@@ -303,19 +303,6 @@ export default {
         this.historique = []
         this.sirene = {}
       })
-      this.axios.get(process.env.VUE_APP_SIRENE_BASE_URL + `/v1/siret/${this.siret}`).then((response) => {
-        const etablissement = response.data.etablissement || {}
-        const adresse = [etablissement.l1_normalisee,
-          etablissement.l2_normalisee,
-          etablissement.l4_normalisee,
-          etablissement.l5_normalisee,
-          etablissement.l6_normalisee,
-          etablissement.l7_normalisee].filter(Boolean).join('<br>')
-        this.adresse = adresse
-        if (this.$refs.map) {
-          this.$refs.map.resizeMap()
-        }
-      })
     },
     isFollowValid() {
       return this.followCategory === 'detection'
