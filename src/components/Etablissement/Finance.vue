@@ -728,7 +728,9 @@ export default {
     }
   },
   created() {
-    this.getBilansExercices()
+    if (process.env.VUE_APP_BILANS_ENABLED && !!JSON.parse(process.env.VUE_APP_BILANS_ENABLED)) {
+      this.getBilansExercices()
+    }
   },
   methods: {
     loading(l) {
