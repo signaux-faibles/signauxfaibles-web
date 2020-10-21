@@ -470,7 +470,7 @@
                 </v-list-tile>
                 <v-list-tile>
                   <v-list-tile-content>Productivité du capital financier&nbsp;:</v-list-tile-content>
-                  <v-list-tile-content class="valeur">>{{ f.ratios.productiviteRentabilite.productiviteCapitalFinancier }} <v-icon v-if="index > 0">trending_{{ trend(sortedFinance[index-1].ratios.productiviteRentabilite.productiviteCapitalFinancier, f.ratios.productiviteRentabilite.productiviteCapitalFinancier) }}</v-icon></v-list-tile-content>
+                  <v-list-tile-content class="valeur">{{ f.ratios.productiviteRentabilite.productiviteCapitalFinancier }} <v-icon v-if="index > 0">trending_{{ trend(sortedFinance[index-1].ratios.productiviteRentabilite.productiviteCapitalFinancier, f.ratios.productiviteRentabilite.productiviteCapitalFinancier) }}</v-icon></v-list-tile-content>
                   <Help titre="Productivité du capital financier">
                     <template>
                       <div>
@@ -543,7 +543,7 @@
                 </v-list-tile>
                 <v-list-tile>
                   <v-list-tile-content>Rendement brut des fonds propres nets&nbsp;:</v-list-tile-content>
-                  <v-list-tile-content class="valeur">>{{ f.ratios.productiviteRentabilite.rendementBrutFondsPropres }} <v-icon v-if="index > 0">trending_{{ trend(sortedFinance[index-1].ratios.productiviteRentabilite.rendementBrutFondsPropres, f.ratios.productiviteRentabilite.rendementBrutFondsPropres) }}</v-icon></v-list-tile-content>
+                  <v-list-tile-content class="valeur">{{ f.ratios.productiviteRentabilite.rendementBrutFondsPropres }} <v-icon v-if="index > 0">trending_{{ trend(sortedFinance[index-1].ratios.productiviteRentabilite.rendementBrutFondsPropres, f.ratios.productiviteRentabilite.rendementBrutFondsPropres) }}</v-icon></v-list-tile-content>
                   <Help titre="Rendement brut des fonds propres nets">
                     <template>
                       <div>
