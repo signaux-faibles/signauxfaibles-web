@@ -39,7 +39,7 @@
               <v-subheader>Ratios financiers clés</v-subheader>
               <v-list-tile>
                 <v-list-tile-content>Endettement&nbsp;:</v-list-tile-content>
-                <v-list-tile-content class="valeur">{{ sortedFinance[index].ratios.structureLiquidite.endettement }} <v-icon v-if="index > 0">trending_{{ trend(sortedFinance[index-1].ratios.structureLiquidite.endettement, f.ratios.structureLiquidite.endettement) }}</v-icon></v-list-tile-content>
+                <v-list-tile-content class="valeur">{{ f.ratios.structureLiquidite.endettement }} <v-icon v-if="index > 0">trending_{{ trend(sortedFinance[index-1].ratios.structureLiquidite.endettement, f.ratios.structureLiquidite.endettement) }}</v-icon></v-list-tile-content>
                 <Help titre="Endettement">
                   <template>
                     <div>
@@ -159,7 +159,7 @@
                 </v-list-tile>
                 <v-list-tile>
                   <v-list-tile-content>Degré d'amortissements des immobilisations corporelles&nbsp;:</v-list-tile-content>
-                  <v-list-tile-content class="valeur">{ f.ratios.structureLiquidite.degreImmoCorporelle }} <v-icon v-if="index > 0">trending_{{ trend(sortedFinance[index-1].ratios.structureLiquidite.degreImmoCorporelle, f.ratios.structureLiquidite.degreImmoCorporelle) }}</v-icon></v-list-tile-content>
+                  <v-list-tile-content class="valeur">{{ f.ratios.structureLiquidite.degreImmoCorporelle }} <v-icon v-if="index > 0">trending_{{ trend(sortedFinance[index-1].ratios.structureLiquidite.degreImmoCorporelle, f.ratios.structureLiquidite.degreImmoCorporelle) }}</v-icon></v-list-tile-content>
                   <Help titre="Degré d'amortissements des immobilisations corporelles">
                     <template>
                       <div>
@@ -470,7 +470,7 @@
                 </v-list-tile>
                 <v-list-tile>
                   <v-list-tile-content>Productivité du capital financier&nbsp;:</v-list-tile-content>
-                  <v-list-tile-content>{{ f.ratios.productiviteRentabilite.productiviteCapitalFinancier }} <v-icon v-if="index > 0">trending_{{ trend(sortedFinance[index-1].ratios.productiviteRentabilite.productiviteCapitalFinancier, f.ratios.productiviteRentabilite.productiviteCapitalFinancier) }}</v-icon></v-list-tile-content>
+                  <v-list-tile-content class="valeur">>{{ f.ratios.productiviteRentabilite.productiviteCapitalFinancier }} <v-icon v-if="index > 0">trending_{{ trend(sortedFinance[index-1].ratios.productiviteRentabilite.productiviteCapitalFinancier, f.ratios.productiviteRentabilite.productiviteCapitalFinancier) }}</v-icon></v-list-tile-content>
                   <Help titre="Productivité du capital financier">
                     <template>
                       <div>
@@ -543,7 +543,7 @@
                 </v-list-tile>
                 <v-list-tile>
                   <v-list-tile-content>Rendement brut des fonds propres nets&nbsp;:</v-list-tile-content>
-                  <v-list-tile-content>{{ f.ratios.productiviteRentabilite.rendementBrutFondsPropres }} <v-icon v-if="index > 0">trending_{{ trend(sortedFinance[index-1].ratios.productiviteRentabilite.rendementBrutFondsPropres, f.ratios.productiviteRentabilite.rendementBrutFondsPropres) }}</v-icon></v-list-tile-content>
+                  <v-list-tile-content class="valeur">>{{ f.ratios.productiviteRentabilite.rendementBrutFondsPropres }} <v-icon v-if="index > 0">trending_{{ trend(sortedFinance[index-1].ratios.productiviteRentabilite.rendementBrutFondsPropres, f.ratios.productiviteRentabilite.rendementBrutFondsPropres) }}</v-icon></v-list-tile-content>
                   <Help titre="Rendement brut des fonds propres nets">
                     <template>
                       <div>
@@ -588,7 +588,7 @@
                 </v-list-tile>
                 <v-list-tile>
                   <v-list-tile-content>Rendement des ressources durables nettes&nbsp;:</v-list-tile-content>
-                  <v-list-tile-content class="valeur">{ f.ratios.productiviteRentabilite.rendementRessourcesDurables }} <v-icon v-if="index > 0">trending_{{ trend(sortedFinance[index-1].ratios.productiviteRentabilite.rendementRessourcesDurables, f.ratios.productiviteRentabilite.rendementRessourcesDurables) }}</v-icon></v-list-tile-content>
+                  <v-list-tile-content class="valeur">{{ f.ratios.productiviteRentabilite.rendementRessourcesDurables }} <v-icon v-if="index > 0">trending_{{ trend(sortedFinance[index-1].ratios.productiviteRentabilite.rendementRessourcesDurables, f.ratios.productiviteRentabilite.rendementRessourcesDurables) }}</v-icon></v-list-tile-content>
                   <Help titre="Rendement des ressources durables nettes">
                     <template>
                       <div>
