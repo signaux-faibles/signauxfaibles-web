@@ -427,8 +427,8 @@ export default {
       if (periodeUrssaf.periodes && periodeUrssaf.partPatronale && periodeUrssaf.partSalariale) {
         return periodeUrssaf.periodes.map((p, i) => {
           return {
-            part_ouvriere: (periodeUrssaf.partPatronale || {})[i],
-            part_patronale: (periodeUrssaf.partSalariale || {})[i],
+            part_ouvriere: (periodeUrssaf.partSalariale || {})[i],
+            part_patronale: (periodeUrssaf.partPatronale || {})[i],
             periode: p,
           }
         })
