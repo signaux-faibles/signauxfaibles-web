@@ -18,7 +18,41 @@
       <div
         style="width: 100%; text-align: center;"
         class="toolbar_titre"
-      >Détection - {{ currentBatch }}</div>
+      >
+        Détection - {{ currentBatch }}
+        <Help ref="modelHelp" titre="Modèle de détection" :dark="true" :big="true">
+          <template>
+            <div>
+              <p>
+                Le modèle de détection a évolué ! Vous apprendrez ici l’essentiel sur ce nouveau modèle.
+              </p>
+              <p>
+                <b>Quel est le périmètre de détection ?</b><br>
+                Provisoirement, le nouveau modèle ne tourne que sur les entreprises industrielles de plus de 20 et moins de 400 salariés, et dont on a accès aux informations bilancielles en 2018 ou 2019. Ce périmètre restreint a pour but de tester la pertinence du modèle avant de travailler à son extension à d’autres secteurs.
+              </p>
+              <p>
+                <b>Comment fonctionne le nouveau modèle ?</b><br>
+                Le nouveau modèle est un modèle à variables latentes, c’est-à-dire qui évalue séparément différents aspects de l’entreprise et agrège ces scores intermédiaires pour former un score final. Ensuite, selon le score final, deux niveaux d’alertes sont définis.<br>
+                Les variables latentes utilisées dans ce modèle sont les suivantes : endettement de l’entreprise, endettement court terme de l’entreprise, rentabilité, type d’entreprise (taille, région, âge, secteur), santé du secteur d’activité (avec prise en compte de la crise COVID), dettes sur les cotisations sociales (idem).
+                </p>
+              <p>
+                <b>Pourquoi une entreprise particulière a-t-elle été détectée ?</b><br>
+                Contrairement au modèle précédent, la détection ne peut pas être interprétée comme une forte probabilité de défaillance à 18 mois, car du fait de la crise, le comportement de défaillances des entreprises est pour l’instant une inconnue. Les entreprises ont donc simplement été classées du profil « le plus à risque » au « moins à risque ».<br>
+                L’avantage du modèle à variables latentes est qu’il fournit en même temps que la prédiction des éléments explicatifs (les variables latentes). Ces éléments ne sont malheureusement pas encore disponibles pour l’utilisateur mais ont vocation à être partagés dans une mise-à-jour prochaine, patience !
+              </p>
+              <p>
+                <b>Puis-je faire confiance au modèle ?</b><br>
+                Il s’agit des premiers résultats de ce nouveau modèle, qui sont distribués à titre expérimental. De ce fait, la fiabilité des résultats, malgré nos vérifications statistiques, doit encore être confirmée sur le terrain. Il est donc important d’effectuer une analyse experte des données de l’entreprise pour confirmer la détection du modèle.<br>
+                Pour la même raison, les détections sont susceptibles de varier d’une liste à la suivante, et la stabilité dans le temps des détections n’est donc pas assurée.
+              </p>
+              <p>
+                Vous voyez une anomalie ? Vous avez d’autres questions ? Contactez-nous par email :
+                <a class="d-block mt-2 text-xs-center" href="mailto:contact@signaux-faibles.beta.gouv.fr?subject=Questions sur le modèle de détection" target="_blank"><code>contact@signaux-faibles.beta.gouv.fr</code></a>
+              </p>
+            </div>
+          </template>
+        </Help>
+      </div>
       <v-spacer></v-spacer>
       <v-icon
         :class="loading?'rotate':''"
@@ -42,7 +76,7 @@
         <v-toolbar flat class="transparent" height="40">
           <v-icon :class="loading?'rotate':''" @click="closeRightDrawer()">mdi-target</v-icon>
         </v-toolbar>
-        <div style="width: 100%; padding: 0 15px;">
+        <div class="mt-2" style="width: 100%; padding: 0 15px;">
           <v-select
             :items="batches"
             :disabled="loading"
@@ -191,8 +225,13 @@
             <span slot="label" style="font-size: 14px">Liquidation judiciaire</span>
           </v-switch>
         </div>
-
         <p style="height: 1px; border: 1px solid #eee; margin-top: 20px" />
+        <span class="ml-3" style="color: rgba(0,0,0,0.54); font-size: 13px;">Siège des entreprises</span>
+        <v-checkbox :disabled="loading" v-model="siegeUniquement" class="mx-2 mt-1" label="N'afficher que les sièges des entreprises" @change="getPrediction()"></v-checkbox>
+        <p style="height: 1px; border: 1px solid #eee;" />
+        <span class="ml-3" style="color: rgba(0,0,0,0.54); font-size: 13px;">Suivi d'établissements</span>
+        <v-checkbox :disabled="loading" v-model="exclureSuivi" class="mx-2 mt-1" label="Exclure tous les établissements que je suis" @change="getPrediction()"></v-checkbox>
+        <p style="height: 1px; border: 1px solid #eee" />
       </v-navigation-drawer>
     </div>
     <v-card
@@ -215,15 +254,20 @@
         </v-layout>
       </v-container>
     </v-card>
-    <PredictionWidget v-for="p in prediction" :key="p.siret" :prediction="p" />
-          <Spinner v-if="loading" />
-
+    <PredictionWidget v-for="p in prediction" :key="p.siret" :prediction="p" @hide-etablissement="onHideEtablissement" @follow-etablissement="followStateChanged = true" @unfollow-etablissement="followStateChanged = true"/>
+    <Spinner v-if="loading" />
+    <v-snackbar v-model="snackbar" :bottom="true" :timeout="0">
+      Le modèle de détection a évolué !
+      <v-btn color="primary" flat @click="showModelHelp()">En savoir plus</v-btn>
+      <v-btn icon @click="snackbar = false"><v-icon>clear</v-icon></v-btn> 
+    </v-snackbar>
   </div>
 </template>
 
 <script>
 import Spinner from '@/components/Spinner'
 import PredictionWidget from '@/components/PredictionWidget'
+import Help from '@/components/Help'
 
 export default {
   // TODO: right drawer in component
@@ -241,12 +285,23 @@ export default {
       page: 0,
       listHeight: 0,
       complete: false,
+      errorOccured: false,
+      followStateChanged: false,
+      snackbar: true,
     }
   },
   mounted() {
     this.getPrediction()
   },
   methods: {
+    showModelHelp() {
+      this.$refs.modelHelp.clickButton()
+    },
+    onHideEtablissement() {
+      if (this.exclureSuivi && this.followStateChanged) {
+        this.getPrediction()
+      }
+    },
     applyNaf() {
       this.currentNaf = this.nextNaf
       this.getPrediction()
@@ -311,25 +366,27 @@ export default {
       }, 500)
     },
     getPredictionPage() {
-        if (!this.loading) {
-          if (this.$store.state.currentBatchKey != null) {
-            this.loading = true
-            this.$axios.post(`/scores/liste/${this.currentBatchKey}`, this.params).then((response) => {
-              if (response.status === 200) {
-                this.prediction = this.prediction.concat(response.data.scores)
-                this.predictionWarnings = response.data.nbF2
-                this.predictionAlerts = response.data.nbF1
-              } else if (response.status === 204) {
-                this.complete = true
-              }
-            }).finally(() => {
-              this.init = false
-              this.loading = false
-              this.page += 1
-            })
-          } else {
-            window.setTimeout(this.getPredictionPage, 100)
-          }
+        if (!this.loading && this.currentBatchKey) {
+          this.loading = true
+          this.errorOccured = false
+          this.$axios.post(`/scores/liste/${this.currentBatchKey}`, this.params).then((response) => {
+            if (response.status === 200) {
+              this.prediction = this.prediction.concat(response.data.scores)
+              this.predictionWarnings = response.data.nbF2
+              this.predictionAlerts = response.data.nbF1
+            } else if (response.status === 204) {
+              this.complete = true
+            } else {
+              this.errorOccured = true
+            }
+          }).catch((error) => {
+            this.errorOccured = true
+          }).finally(() => {
+            this.init = false
+            this.loading = false
+            this.page += 1
+            this.followStateChanged = false
+          })
         }
     },
     openLeftDrawer() {
@@ -361,7 +418,7 @@ export default {
   },
   computed: {
     predictionIsEnough() {
-      return this.complete || this.loading || this.height * 2 < this.listHeight
+      return this.complete || this.loading || this.height * 2 < this.listHeight || this.errorOccured
     },
     params() {
       const params = {}
@@ -394,11 +451,25 @@ export default {
       if (this.in_bonis) {
         params.procol = params.procol.concat(['in_bonis'])
       }
+      if (this.exclureSuivi) {
+        params.exclureSuivi = this.exclureSuivi
+      }
+      if (this.siegeUniquement) {
+        params.siegeUniquement = this.siegeUniquement
+      }
       if (this.filter || '' !== '') {
         params.filter = this.filter
       }
       params.page = this.page
       return params
+    },
+    siegeUniquement: {
+      get() { return this.$localStore.state.siegeUniquement },
+      set(value) { this.$localStore.commit('setsiegeUniquement', value) },
+    },
+    exclureSuivi: {
+      get() { return this.$localStore.state.exclureSuivi },
+      set(value) { this.$localStore.commit('setexclureSuivi', value) },
     },
     ignorezone: {
       get() { return this.$localStore.state.ignorezone },
@@ -560,7 +631,7 @@ export default {
       return eventName
     },
   },
-  components: { PredictionWidget, Spinner },
+  components: { PredictionWidget, Spinner, Help },
   name: 'Prediction',
 }
 </script>
@@ -574,7 +645,7 @@ export default {
   position: absolute;
   vertical-align: middle;
   text-align: center;
-  font-size: 40px;
+  font-size: 24px;
 }
 .thin {
   height: 25px;

@@ -11,6 +11,8 @@
               :siret="siret"
               :siege="etablissement.siege"
               :groupe="groupe"
+              :terrind="terrind"
+              :creation="creation"
             />
           </v-flex>
           <v-flex xs12 md6 class="text-xs-right pa-3" style="margin-top: 3em">
@@ -301,19 +303,6 @@ export default {
         this.historique = []
         this.sirene = {}
       })
-      this.axios.get(process.env.VUE_APP_SIRENE_BASE_URL + `/v1/siret/${this.siret}`).then((response) => {
-        const etablissement = response.data.etablissement || {}
-        const adresse = [etablissement.l1_normalisee,
-          etablissement.l2_normalisee,
-          etablissement.l4_normalisee,
-          etablissement.l5_normalisee,
-          etablissement.l6_normalisee,
-          etablissement.l7_normalisee].filter(Boolean).join('<br>')
-        this.adresse = adresse
-        if (this.$refs.map) {
-          this.$refs.map.resizeMap()
-        }
-      })
     },
     isFollowValid() {
       return this.followCategory === 'detection'
@@ -454,11 +443,15 @@ export default {
     effectif() {
       const periodeUrssaf = (this.etablissement || {}).periodeUrssaf || {}
       return (periodeUrssaf.periodes || []).map((p, i) => {
-        return {
-          effectif: periodeUrssaf.effectif[i],
-          periode: p,
+        if (periodeUrssaf.effectif[i]) {
+          return {
+            effectif: periodeUrssaf.effectif[i],
+            periode: p,
+          }
+        } else {
+          return null
         }
-      })
+      }).filter(Boolean)
     },
     zipDianeBDF() {
       const entreprise = (this.etablissement || {}).entreprise || {}
@@ -483,6 +476,13 @@ export default {
     },
     groupe() {
       return ((this.etablissement.entreprise || {}).groupe || {}).raison_sociale_groupe
+    },
+    terrind() {
+      return (this.etablissement.territoireIndustrie ||  {}).libelle
+    },
+    creation() {
+      const creation = new Date(((this.etablissement.entreprise || {}).Sirene || {}).creation)
+      return (!isNaN(creation.getTime())) ? creation : null
     },
   },
 }

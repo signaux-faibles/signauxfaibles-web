@@ -59,6 +59,18 @@ export default {
       news: [
         // TODO: externalize
         {
+          date: new Date('2020-10-21'), news: [
+            'Identification des établissements qui apparaissent pour la 1ère fois dans une liste de détection',
+            'Révision de la vue synthétique d\'un établissement avec mise en avant des procédures collectives en cours',
+            'Possibilité d\'exclure les établissements suivis des listes de détection',
+            'Possibilité de n\'afficher que les sièges lors d\'une recherche ou sur une liste de détection',
+            'Rattachement des établissements à un Territoire d\'industrie (forte identité et savoir-faire industriel)',
+            'Affichage de la date de création de l\'entreprise, de la date d\'ouverture de l\'établissement et de leur ancienneté',
+            'Proposition d\'import massif d\'établissements à suivre',
+            'Présentation du nouveau modèle de détection',
+          ],
+        },
+        {
           date: new Date('2020-10-12'), news: [
             'Signaux-Faibles version James M. Buchanan',
             'Nouvel algorithme de détection expérimental pour prendre en compte les effets de la crise COVID',
