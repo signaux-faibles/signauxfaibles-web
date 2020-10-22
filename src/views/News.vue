@@ -59,6 +59,11 @@ export default {
       news: [
         // TODO: externalize
         {
+          date: new Date('2020-10-22'), news: [
+            'Bugfix: Inversion des parts de la dette Urssaf',
+          ],
+        },
+        {
           date: new Date('2020-10-21'), news: [
             'Identification des établissements qui apparaissent pour la 1ère fois dans une liste de détection',
             'Révision de la vue synthétique d\'un établissement avec mise en avant des procédures collectives en cours',
