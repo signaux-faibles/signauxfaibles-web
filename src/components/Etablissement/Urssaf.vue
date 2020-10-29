@@ -18,14 +18,14 @@
       </Help>
     </v-toolbar>
     <apexchart
-      v-if="roles.includes('urssaf')"
+      v-if="permUrssaf"
       width="100%"
       heigth="100%"
       type="line"
       :options="options"
       :series="series"
     ></apexchart>
-    <div style=" height: 250px; width: 100%; text-align: center;" v-if="!roles.includes('urssaf')">
+    <div style=" height: 250px; width: 100%; text-align: center;" v-if="!permUrssaf">
       <img
         style="vertical-align: middle; margin: 125px 0; opacity: 0.2;"
         height="100px"
@@ -40,7 +40,7 @@ import Help from '@/components/Help.vue'
 export default {
   name: 'Urssaf',
   components: { Help },
-  props: ['debit', 'cotisation', 'chart'],
+  props: ['debit', 'cotisation', 'chart', 'permUrssaf'],
   computed: {
     series() {
       if ((this.cotisation || []).length > 0 || (this.debit || []).length > 0) {

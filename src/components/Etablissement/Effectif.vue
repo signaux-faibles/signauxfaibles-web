@@ -5,7 +5,7 @@
       color='indigo darken-5'>
       <v-toolbar-title class="localtoolbar">
         Effectifs
-        <span v-if="roles.includes('dgefp')">
+        <span v-if="permDGEFP">
           / Activité partielle
         </span>
       </v-toolbar-title>
@@ -30,7 +30,7 @@ import Help from '@/components/Help.vue'
 
 export default {
   name: 'Effectif',
-  props: ['effectif', 'chart', 'apdemande', 'apconso'],
+  props: ['effectif', 'chart', 'apdemande', 'apconso', 'permDGEFP'],
   components: { Help },
   methods: {
     equivalentTempsPlein(heures) {

@@ -13,7 +13,7 @@
 <script>
 export default {
   name: 'ScoreWidget',
-  props: ['prediction', 'permScore', 'size'],
+  props: ['prediction', 'size'],
   computed: {
     alert() {
       return this.prediction
