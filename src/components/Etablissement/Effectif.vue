@@ -14,7 +14,7 @@
         <template>
           Ce graphique illustre les données d'emploi.<br/><br/>
           <b>effectifs</b>: Évolution des effectifs en nombre de salariés. (donnée fournie par l'ACOSS)<br/>
-          <div v-if="roles.includes('dgefp')">
+          <div v-if="permDGEFP">
           <b>autorisation d'activité partielle</b>: Nombre de salariés concernés par une autorisation d'activité partielle pour la période représentée. (donnée fournie par la DGEFP)<br/> 
           <b>consommation d'activité partielle</b>: Nombre d'équivalents temps plein mensuel calculé à partir de la somme du nombre d'heures d'activité partielle consommées divisée par la durée légale de 151,67 h. (donnée fournie par la DGEFP)
           </div>

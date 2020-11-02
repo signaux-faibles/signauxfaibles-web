@@ -475,7 +475,7 @@ export default {
       return (this.etablissement.entreprise || {}).etablissementsSummary || []
     },
     perms() {
-      const summary = this.etablissementsSummary.filter((s) => s.siret == this.siret)[0] || {}
+      const summary = this.etablissementsSummary.filter((s) => s.siret === this.siret)[0] || {}
       return {
         permDGEFP: summary.permDGEFP || false,
         permUrssaf: summary.permUrssaf || false,

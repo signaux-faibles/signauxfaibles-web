@@ -22,7 +22,7 @@ export default {
       return this.size || '35px'
     },
     permScore() {
-      return this.prediction.hasOwnProperty('permScore')?this.prediction.permScore:true
+      return this.prediction.hasOwnProperty('permScore') ? this.prediction.permScore : true
     },
     logo() {
       const alerts = {
@@ -41,7 +41,7 @@ export default {
       let probClass = ''
       if (!this.permScore) {
         probClass = 'forbidden'
-      } else if ((this.permScore || true) && alert == null) {
+      } else if (this.permScore && alert == null) {
         probClass = 'absent'
       } else if (alert === 'Pas d\'alerte') {
         probClass = 'none'
