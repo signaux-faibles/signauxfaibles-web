@@ -1,6 +1,6 @@
 <template>
   <span>
-    <h2>
+    <h2 v-if="historique.length > 0">
       Historique des alertes
       <Help titre="Historique des alertes">
         <template>

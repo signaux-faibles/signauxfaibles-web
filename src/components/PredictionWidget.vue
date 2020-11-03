@@ -29,25 +29,25 @@
           <img
             class="d-block mt-2 mb-2"
             width="70"
-            v-if="!prediction.urssaf && roles.includes('urssaf') && (prediction.alert)"
+            v-if="!prediction.urssaf && permUrssaf"
             src="../assets/gray_urssaf.svg"
           />
           <img
             class="d-block mt-2 mb-2"
             width="70"
-            v-if="prediction.urssaf && roles.includes('urssaf') && (prediction.alert)"
+            v-if="prediction.urssaf && permUrssaf"
             src="../assets/red_urssaf.svg"
           />
           <img
             class="activite-partielle mt-1 mr-1"
             height="24"
-            v-if="prediction.activite_partielle && roles.includes('dgefp') && (prediction.alert) "
+            v-if="prediction.activite_partielle && permDGEFP"
             src="../assets/red_apart.svg"
           />
           <img
             class="activite-partielle mt-1 mr-1"
             height="24"
-            v-if="!prediction.activite_partielle && roles.includes('dgefp') && (prediction.alert)"
+            v-if="!prediction.activite_partielle && permDGEFP"
             src="../assets/gray_apart.svg"
           />
           <span class="effectif">{{ prediction.dernier_effectif || 'n/c' }}</span>
@@ -111,6 +111,12 @@ export default {
         resultat_expl_color: this.prediction.resultat_expl ?
           (this.prediction.resultat_expl < 0 ? 'down' : null) : 'unknown',
       }
+    },
+    permUrssaf() {
+      return this.prediction.permUrssaf || false
+    },
+    permDGEFP() {
+      return this.prediction.permDGEFP || false
     },
   },
   methods: {

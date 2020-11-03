@@ -22,10 +22,10 @@
             <Commentaire :siret="siret" />
           </v-flex>
           <v-flex md6 xs12 class="pr-1" style="min-height: 200px">
-            <Effectif :effectif="effectif" :apconso="apconso" :apdemande="apdemande" />
+            <Effectif :effectif="effectif" :apconso="apconso" :apdemande="apdemande" :permDGEFP="perms.permDGEFP" />
           </v-flex>
           <v-flex md6 xs12 class="pr-1">
-            <Urssaf :debit="debit" :cotisation="cotisation" />
+            <Urssaf :debit="debit" :cotisation="cotisation" :permUrssaf="perms.permUrssaf" />
           </v-flex>
           <v-flex xs12 class="pr-1">
             <Finance :finance="finance" :siret="siret" />
@@ -473,6 +473,15 @@ export default {
     },
     etablissementsSummary() {
       return (this.etablissement.entreprise || {}).etablissementsSummary || []
+    },
+    perms() {
+      const summary = this.etablissementsSummary.filter((s) => s.siret === this.siret)[0] || {}
+      return {
+        permDGEFP: summary.permDGEFP || false,
+        permUrssaf: summary.permUrssaf || false,
+        permScore: summary.permScore || false,
+        permBDF: summary.permBDF || false,
+      }
     },
     groupe() {
       return ((this.etablissement.entreprise || {}).groupe || {}).raison_sociale_groupe

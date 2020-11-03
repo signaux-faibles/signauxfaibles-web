@@ -1,6 +1,5 @@
 <template>
   <span style="position: relative;">
-   
     <v-icon
       :size="iconSize"
       style="position: relative; right: 1px"
@@ -22,12 +21,15 @@ export default {
     iconSize() {
       return this.size || '35px'
     },
+    permScore() {
+      return this.prediction.hasOwnProperty('permScore') ? this.prediction.permScore : true
+    },
     logo() {
       const alerts = {
         high: ['fa-exclamation-triangle', 'red accent-2'],
         low: ['fa-exclamation-triangle', 'amber'],
         none: ['fa-check-circle', 'green'],
-        forbidden: ['fa-ban', 'red accent-1'],
+        forbidden: ['fa-lock', '#33333358'],
         absent: ['fa-question-circle', '#33333358'],
       }
       return {
@@ -37,10 +39,10 @@ export default {
     detection() {
       const alert = this.alert.alert
       let probClass = ''
-      if (alert == null && (this.alert.visible || this.alert.followed)) {
-        probClass = 'absent'
-      } else if (alert == null && (!this.alert.visible && !this.alert.followed)) {
+      if (!this.permScore) {
         probClass = 'forbidden'
+      } else if (this.permScore && alert == null) {
+        probClass = 'absent'
       } else if (alert === 'Pas d\'alerte') {
         probClass = 'none'
       } else if (alert === 'Alerte seuil F2') {
