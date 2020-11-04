@@ -4,7 +4,8 @@
     <div id="nodata" v-if="!loading && follow.length == 0 && init == false">
       Vous ne suivez pour le moment aucun établissement.<br />Pour ce faire,
       rendez-vous sur la fiche d'un établissement et appuyez sur le bouton
-      Suivre.<br />Pour un import massif d'établissements, contactez-nous par email :<br /><a href="mailto:contact@signaux-faibles.beta.gouv.fr?subject=Import massif d'établissements" target="_blank"><code>contact@signaux-faibles.beta.gouv.fr</code></a>
+      Suivre.<br />Pour un import massif d'établissements, contactez-nous par email :<br />
+      <a href="mailto:contact@signaux-faibles.beta.gouv.fr?subject=Import massif d'établissements" target="_blank"><code>contact@signaux-faibles.beta.gouv.fr</code></a>
     </div>
     <PredictionWidget
       v-for="e in etablissements"
@@ -13,6 +14,11 @@
       @follow-etablissement="getFollowedEtablissements"
       @unfollow-etablissement="getFollowedEtablissements"
     />
+    <v-snackbar v-model="snackbar" :bottom="true" :timeout="0" v-if="follow.length > 0">
+      <v-icon dark class="mr-2">move_to_inbox</v-icon>Besoin d'un import massif ?
+      <v-btn color="primary" flat href="mailto:contact@signaux-faibles.beta.gouv.fr?subject=Import massif d'établissements" target="_blank">Contactez-nous</v-btn>
+      <v-btn icon @click="snackbar = false"><v-icon>clear</v-icon></v-btn> 
+    </v-snackbar>
   </div>
 </template>
 <script>
@@ -26,6 +32,7 @@ export default {
       init: true,
       loading: false,
       follow: [],
+      snackbar: true,
     }
   },
   mounted() {
