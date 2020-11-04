@@ -936,16 +936,16 @@ export default {
       }
     },
     tresorerieSeries() {
-      if (this.sortedFinance.length > 0) {
+      if (this.sortedFinance.filter((f) => f.frng && f.bfr).length > 0) {
         return [{
           name: 'FRNG',
-          data: this.sortedFinance.map((f) => f.frng),
+          data: this.sortedFinance.map((f) => (f.frng && f.bfr) ? f.frng : null),
         }, {
           name: 'BFR',
-          data: this.sortedFinance.map((f) => f.bfr),
+          data: this.sortedFinance.map((f) => (f.frng && f.bfr) ? f.bfr : null),
         }, {
           name: 'TN',
-          data: this.sortedFinance.map((f) => f.tresorerie),
+          data: this.sortedFinance.map((f) => (f.frng && f.bfr) ? f.tresorerie : null),
         }]
       } else {
         return []
