@@ -7,6 +7,13 @@
       Suivre.<br />Pour un import massif d'établissements, contactez-nous par email :<br />
       <a href="mailto:contact@signaux-faibles.beta.gouv.fr?subject=Import massif d'établissements" target="_blank"><code>contact@signaux-faibles.beta.gouv.fr</code></a>
     </div>
+    <div class="pt-3 pl-3 text-xs-center" v-if="follow.length > 0">
+      <span class="intro">Vous suivez {{this.follow.length | pluralizeEtablissement}}.</span>
+      <v-btn outline color="indigo darken-5" @click="download" class="ml-4">
+        <v-icon small class="mr-2">fa-file-download</v-icon>
+        Exporter
+      </v-btn>
+    </div>
     <PredictionWidget
       v-for="e in etablissements"
       :key="e.siret"
@@ -50,6 +57,25 @@ export default {
         this.init = false
       })
     },
+    download() {
+      this.trackMatomoEvent('suivi', 'extraire')
+      this.$axios(
+        {
+          url: `/follow/xls`,
+          method: 'get',
+          responseType: 'arraybuffer',
+        },
+      ).then((r) => {
+        const url = window.URL.createObjectURL(new Blob([r.data]))
+        const element = document.createElement('a')
+        element.setAttribute('href',  url)
+        element.setAttribute('download', 'extract-suivi.xlsx')
+        element.style.display = 'none'
+        document.body.appendChild(element)
+        element.click()
+        document.body.removeChild(element)
+      })
+    },
   },
   computed: {
     etablissements() {
@@ -72,6 +98,15 @@ export default {
       },
     },
   },
+  filters: {
+    pluralizeEtablissement(count) {
+      if (count === 1) {
+        return '1 établissement'
+      } else {
+        return count + ' établissements'
+      }
+    },
+  },
 }
 </script>
 
@@ -85,5 +120,8 @@ export default {
   vertical-align: middle;
   text-align: center;
   font-size: 24px;
+}
+.intro {
+  font-size: 18px;
 }
 </style>
