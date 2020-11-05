@@ -6,7 +6,7 @@
       <Help titre="Liens capitalisques et autres établissements de l'entreprise">
         <template>
           <b>Liens capitalisques :</b>
-          Les liens capitalistiques ont été obtenus auprès de la société Ellisphere.
+          Les liens capitalistiques ont été obtenus auprès de la société Ellisphere. Sauf cas particulier d'arbitrage, est considérée comme tête de groupe (ou société mère) l'entreprise qui détient de façon directe ou indirecte plus de 50% du capital et qui n’est pas elle-même détenue à plus de 50% par une autre entreprise.
           <br />
           <b>Siège social, établissements secondaires :</b>
           Ces données sont issues du service API entreprises fourni par la DINUM qui redistribue les données de l'INSEE.
@@ -16,7 +16,7 @@
     <div v-if="etablissementsSummary.length > 0" style="font-weight: normal">
       <v-layout align-center class="pt-3 pl-3" style="margin-bottom: 48px">
         <v-flex><span v-if="siege">Cet établissement (siret {{ this.siret }}) est le siège social de l'entreprise (siren {{ this.siren }}).</span><span v-else>Cet établissement (siret {{this.siret}}) n'est pas le siège social de l'entreprise (siren {{ this.siren }}).</span>
-        Cette entreprise {{ this.groupe ? 'fait partie du groupe ' + this.groupe + ' et' : '' }} possède {{this.etablissementsSummary.length | pluralizeEtablissement}} en activité.</v-flex>
+        Cette entreprise {{ this.groupe ? 'a pour tête de groupe ' + this.groupe + ' et' : '' }} possède {{this.etablissementsSummary.length | pluralizeEtablissement}} en activité.</v-flex>
         <v-flex md5 xs12 v-if="siegeEntreprise || etablissementsDepartement.length > 0 || autresEtablissements.length > 0"><v-btn outline color="indigo darken-5" @click="toggle" class="ml-4">{{ show ? 'Masquer' : 'Afficher' }} les autres établissements</v-btn></v-flex>
       </v-layout>
       <transition name="fade">

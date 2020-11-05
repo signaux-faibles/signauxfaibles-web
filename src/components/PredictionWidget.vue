@@ -21,7 +21,7 @@
           </v-tooltip>
           <img class="ml-2" v-if="prediction.connu === true" height="20" src="../assets/crp.png" />
           <div class="identite">
-            {{ prediction.siret.slice(0,9) }} {{ prediction.siret.slice(9,14) }}{{ prediction.siege ? ' (siège)' : '' }}{{ prediction.groupe ? ' - Gr. ' + prediction.groupe : ''}}<br />
+            {{ prediction.siret.slice(0,9) }} {{ prediction.siret.slice(9,14) }}{{ prediction.siege ? ' (siège)' : '' }}{{ prediction.groupe ? ' - TdG. ' + prediction.groupe : ''}}<br />
             Dép. {{ prediction.departement }}{{ prediction.libelle_activite ? ' - Act. ' + prediction.libelle_activite.slice(0,65) : '' }}
           </div>
         </div>

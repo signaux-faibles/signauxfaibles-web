@@ -114,7 +114,7 @@ export default {
           + this.creation.toLocaleDateString('fr', {timeZone: 'Europe/Paris'})
           + ' (' + this.pluralizeAge(this.calculateAge(this.creation)) + ')'
           : ''),
-        (this.groupe ? 'Groupe&nbsp;: ' + this.groupe : '')]
+        (this.groupe ? 'Tête de groupe&nbsp;: ' + this.groupe : '')]
         .filter(Boolean).join('<br>')
     },
   },
