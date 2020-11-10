@@ -25,13 +25,9 @@
       :options="options"
       :series="series"
     ></apexchart>
-    <div style=" height: 250px; width: 100%; text-align: center;" v-if="!permUrssaf">
-      <img
-        style="vertical-align: middle; margin: 125px 0; opacity: 0.2;"
-        height="100px"
-        src="@/assets/noaccess.svg"
-      />
-    </div>
+    <v-layout align-center justify-center row style="min-height: 500px" v-if="!permUrssaf">
+      <v-icon style="color: #33333358" size="100">fa-lock</v-icon>
+    </v-layout>
   </div>
 </template>
 
