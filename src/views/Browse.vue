@@ -26,7 +26,7 @@
         </v-btn>
       </form>
     </div>
-    <div v-if="searched && (!loading || page !=0)" class="numbers">{{ total }} résultat(s)</div>
+    <div v-if="searched && (!loading || page !=0)" class="numbers">{{total | pluralizeResultats}}</div>
     <PredictionWidget v-for="r in result" :key="r.siret" :prediction="r" />
   </div>
 </template>
@@ -81,6 +81,10 @@
             this.trackMatomoEvent('consultation', 'resultats_recherche', this.search, this.total)
             this.page += 1
           } else if (response.status === 204) {
+            if (this.page === 0) {
+              this.result = []
+              this.total = 0
+            }
             this.complete = true
           } else {
             this.errorOccured = true
@@ -138,6 +142,17 @@
         set(height) {
           this.$store.dispatch('setHeight', height)
         },
+      },
+    },
+    filters: {
+      pluralizeResultats(count) {
+        if (count === 0) {
+          return 'Pas de résultat'
+        } else if (count === 1) {
+          return '1 résultat'
+        } else {
+          return count + ' résultats'
+        }
       },
     },
     components: { PredictionWidget, Toolbar },
