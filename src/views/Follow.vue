@@ -4,7 +4,15 @@
     <div id="nodata" v-if="!loading && follow.length == 0 && init == false">
       Vous ne suivez pour le moment aucun établissement.<br />Pour ce faire,
       rendez-vous sur la fiche d'un établissement et appuyez sur le bouton
-      Suivre.<br />Pour un import massif d'établissements, contactez-nous par email :<br /><a href="mailto:contact@signaux-faibles.beta.gouv.fr?subject=Import massif d'établissements" target="_blank"><code>contact@signaux-faibles.beta.gouv.fr</code></a>
+      Suivre.<br />Pour un import massif d'établissements, contactez-nous par email :<br />
+      <a href="mailto:contact@signaux-faibles.beta.gouv.fr?subject=Import massif d'établissements" target="_blank"><code>contact@signaux-faibles.beta.gouv.fr</code></a>
+    </div>
+    <div class="pt-3 pl-3 text-xs-center" v-if="follow.length > 0">
+      <span class="intro">Vous suivez {{this.follow.length | pluralizeEtablissement}}.</span>
+      <v-btn outline color="indigo darken-5" @click="download" class="ml-4">
+        <v-icon small class="mr-2">fa-file-download</v-icon>
+        Exporter
+      </v-btn>
     </div>
     <PredictionWidget
       v-for="e in etablissements"
@@ -13,6 +21,11 @@
       @follow-etablissement="getFollowedEtablissements"
       @unfollow-etablissement="getFollowedEtablissements"
     />
+    <v-snackbar v-model="snackbar" :bottom="true" :timeout="0" v-if="follow.length > 0">
+      <v-icon dark class="mr-2">move_to_inbox</v-icon>Besoin d'un import massif ?
+      <v-btn color="primary" flat href="mailto:contact@signaux-faibles.beta.gouv.fr?subject=Import massif d'établissements" target="_blank">Contactez-nous</v-btn>
+      <v-btn icon @click="snackbar = false"><v-icon>clear</v-icon></v-btn> 
+    </v-snackbar>
   </div>
 </template>
 <script>
@@ -26,6 +39,7 @@ export default {
       init: true,
       loading: false,
       follow: [],
+      snackbar: true,
     }
   },
   mounted() {
@@ -41,6 +55,25 @@ export default {
         }
       }).finally(() => {
         this.init = false
+      })
+    },
+    download() {
+      this.trackMatomoEvent('suivi', 'extraire')
+      this.$axios(
+        {
+          url: `/follow/xls`,
+          method: 'get',
+          responseType: 'arraybuffer',
+        },
+      ).then((r) => {
+        const url = window.URL.createObjectURL(new Blob([r.data]))
+        const element = document.createElement('a')
+        element.setAttribute('href',  url)
+        element.setAttribute('download', 'extract-suivi.xlsx')
+        element.style.display = 'none'
+        document.body.appendChild(element)
+        element.click()
+        document.body.removeChild(element)
       })
     },
   },
@@ -65,6 +98,15 @@ export default {
       },
     },
   },
+  filters: {
+    pluralizeEtablissement(count) {
+      if (count === 1) {
+        return '1 établissement'
+      } else {
+        return count + ' établissements'
+      }
+    },
+  },
 }
 </script>
 
@@ -78,5 +120,8 @@ export default {
   vertical-align: middle;
   text-align: center;
   font-size: 24px;
+}
+.intro {
+  font-size: 18px;
 }
 </style>

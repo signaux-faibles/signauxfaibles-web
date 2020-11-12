@@ -475,12 +475,11 @@ export default {
       return (this.etablissement.entreprise || {}).etablissementsSummary || []
     },
     perms() {
-      const summary = this.etablissementsSummary.filter((s) => s.siret === this.siret)[0] || {}
       return {
-        permDGEFP: summary.permDGEFP || false,
-        permUrssaf: summary.permUrssaf || false,
-        permScore: summary.permScore || false,
-        permBDF: summary.permBDF || false,
+        permDGEFP: (this.etablissement || {}).permDGEFP || false,
+        permUrssaf: (this.etablissement || {}).permUrssaf || false,
+        permScore: (this.etablissement || {}).permScore || false,
+        permBDF: (this.etablissement || {}).permBDF || false,
       }
     },
     groupe() {

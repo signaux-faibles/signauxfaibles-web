@@ -59,6 +59,13 @@ export default {
       news: [
         // TODO: externalize
         {
+          date: new Date('2020-11-10'), news: [
+            'Revue des autorisations d\'accès',
+            'Perfectionnement de la recherche',
+            'Export Excel des établissements suivis',
+          ],
+        },
+        {
           date: new Date('2020-10-22'), news: [
             'Bugfix: Inversion des parts de la dette Urssaf',
           ],

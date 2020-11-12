@@ -6,22 +6,22 @@
       </div>
       <div class="corps">
         <div class="mr-2 ml-2">
-          <span class="raison-sociale">{{ prediction.raison_sociale }}</span>
+          <span class="mr-2 raison-sociale">{{ prediction.raison_sociale }}</span>
           <v-tooltip bottom v-if="prediction.firstAlert === true">
             <template v-slot:activator="{ on, attrs }">
-              <v-chip v-bind="attrs" v-on="on"  class="ma-0 ml-2 chip" small color="primary" text-color="white" style="margin-top: -12px !important">1re alerte</v-chip>
+              <v-chip v-bind="attrs" v-on="on"  class="ma-0 chip" small color="primary" text-color="white">1re alerte</v-chip>
             </template>
             <span>Cet établissement est pour la première fois en alerte sur une liste de détection</span>
           </v-tooltip>
           <v-tooltip bottom v-if="prediction.etat_procol !== 'in_bonis'">
             <template v-slot:activator="{ on, attrs }">
-            <v-chip v-bind="attrs" v-on="on" class="ma-0 ml-2 chip" outline small text-color="red darken-1" style="margin-top: -12px !important">{{ prediction.etat_procol }}</v-chip>
+            <v-chip v-bind="attrs" v-on="on" class="ma-0 chip" outline small text-color="red darken-1">{{ prediction.etat_procol }}</v-chip>
             </template>
             <span>Cette entreprise est placée dans la procédure collective : {{ prediction.etat_procol }}</span>
           </v-tooltip>
           <img class="ml-2" v-if="prediction.connu === true" height="20" src="../assets/crp.png" />
           <div class="identite">
-            {{ prediction.siret.slice(0,9) }} {{ prediction.siret.slice(9,14) }}{{ prediction.siege ? ' (siège)' : '' }}{{ prediction.groupe ? ' - Gr. ' + prediction.groupe : ''}}<br />
+            {{ prediction.siret.slice(0,9) }} {{ prediction.siret.slice(9,14) }}{{ prediction.siege ? ' (siège)' : '' }}{{ prediction.groupe ? ' - TdG. ' + prediction.groupe : ''}}<br />
             Dép. {{ prediction.departement }}{{ prediction.libelle_activite ? ' - Act. ' + prediction.libelle_activite.slice(0,65) : '' }}
           </div>
         </div>
@@ -202,7 +202,8 @@ export default {
   color: rgb(150, 150, 150);
 }
 .chip {
-  font-family: 'Roboto';
+  font-family: "Roboto";
   font-size: 13px;
+  vertical-align: text-bottom;
 }
 </style>

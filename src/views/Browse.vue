@@ -6,11 +6,11 @@
         <div :class="((result.etablissement || []).length > 0 || searched) ? 'loaded_picto' : 'empty_picto'">
           <img height="50" src="../assets/text_signaux_faibles.svg" />
         </div>
-        <v-text-field solo placeholder="Raison sociale ou SIRET" v-model="search"></v-text-field>
+        <v-text-field solo placeholder="Raison sociale ou SIRET" v-model="search" :disabled="loading"></v-text-field>
         <v-layout wrap>
           <v-flex xs12 md6>
             <v-subheader>Zone géographique</v-subheader>
-            <v-radio-group v-model="radios" :mandatory="false" class="mt-0" style="font-size: 14px">
+            <v-radio-group v-model="radios" :mandatory="false" class="mt-0" style="font-size: 14px" :disabled="loading">
               <v-radio label="Parmi tous les établissements de ma zone géographique" value="geo"></v-radio>
               <v-radio label="Parmi tous les établissements des entreprises implantées dans ma zone géographique" value="visible"></v-radio>
               <v-radio label="Sur toute la France" value="tout"></v-radio>
@@ -18,15 +18,15 @@
           </v-flex>
           <v-flex xs12 md6>
             <v-subheader>Siège des entreprises</v-subheader>
-            <v-checkbox v-model="siegeUniquement" label="N'afficher que les sièges des entreprises" class="mt-0"></v-checkbox>
+            <v-checkbox v-model="siegeUniquement" label="N'afficher que les sièges des entreprises" class="mt-0" :disabled="loading"></v-checkbox>
           </v-flex>
         </v-layout>
-        <v-btn type="submit" style="width: 150px">
+        <v-btn type="submit" style="width: 150px" :disabled="loading || search.length < 3">
           <v-icon>search</v-icon>
         </v-btn>
       </form>
     </div>
-    <div v-if="searched" class="numbers">{{ total }} résultat(s)</div>
+    <div v-if="searched && (!loading || page !=0)" class="numbers">{{total | pluralizeResultats}}</div>
     <PredictionWidget v-for="r in result" :key="r.siret" :prediction="r" />
   </div>
 </template>
@@ -44,8 +44,6 @@
         result: [],
         total: 0,
         page: 0,
-        siret: '',
-        dialog: false,
         ignorezone: true,
         ignoreroles: true,
         radios: 'geo',
@@ -83,6 +81,10 @@
             this.trackMatomoEvent('consultation', 'resultats_recherche', this.search, this.total)
             this.page += 1
           } else if (response.status === 204) {
+            if (this.page === 0) {
+              this.result = []
+              this.total = 0
+            }
             this.complete = true
           } else {
             this.errorOccured = true
@@ -142,6 +144,17 @@
         },
       },
     },
+    filters: {
+      pluralizeResultats(count) {
+        if (count === 0) {
+          return 'Pas de résultat'
+        } else if (count === 1) {
+          return '1 résultat'
+        } else {
+          return count + ' résultats'
+        }
+      },
+    },
     components: { PredictionWidget, Toolbar },
   }
 </script>
@@ -173,5 +186,4 @@
     width: 100%;
     text-align: center;
   }
-</style>
 </style>
