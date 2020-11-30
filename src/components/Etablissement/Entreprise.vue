@@ -63,7 +63,7 @@ import Help from '@/components/Help.vue'
 import axios from 'axios'
 
 export default {
-  name: 'Entreprise',
+  name: 'EtablissementEntreprise',
   props: ['siret', 'siege', 'groupe', 'codeDepartement', 'etablissementsSummary'],
   components: { Help, PredictionWidget },
   data() {
