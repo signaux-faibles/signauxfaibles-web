@@ -94,9 +94,9 @@
             >
               <v-spacer />FICHE ENTREPRISE
               <v-spacer />
-              <v-icon @click="hideEntreprise() " style="color: #fff">mdi-close</v-icon>
+              <v-icon @click="hideEntreprise()" style="color: #fff">mdi-close</v-icon>
             </v-toolbar>
-            <Entreprise :siren="etablissement.siren"/>
+            <Entreprise :siren="etablissement.siren" v-on="$listeners" />
           </div>
         </v-dialog>
         </v-layout>

@@ -95,7 +95,7 @@
               <v-spacer />
               <v-icon @click="hideEtablissement()" style="color: #fff">mdi-close</v-icon>
             </v-toolbar>
-            <Etablissement :siret="prediction.siret" :batch="currentBatchKey" @show-etablissement="hideEtablissement" v-on="$listeners"></Etablissement>
+            <Etablissement v-if="dialog" :siret="prediction.siret" :batch="currentBatchKey" v-on="$listeners"></Etablissement>
           </div>
         </v-dialog>
       </div>

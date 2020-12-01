@@ -17,6 +17,7 @@
             <EntrepriseSocial
               :etablissementsSummary="etablissementsSummary"
               :etablissements="etablissements"
+              v-on="$listeners"
             />
           </v-flex>
           <v-flex xs12 class="pr-1">
