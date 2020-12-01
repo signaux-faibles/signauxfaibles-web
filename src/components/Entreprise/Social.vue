@@ -552,7 +552,7 @@ export default {
             return data
           }, []),
         }, {
-          name: 'dette (part patronale)',
+          name: 'dette restante (part patronale)',
           type: 'area',
           data: Object.keys(this.historiqueDetteSociale).sort((d1, d2) => {
             return (d2 > d1 ? -1 : 1)
@@ -563,7 +563,7 @@ export default {
             ]
           }),
         }, {
-          name: 'dette (part salariale)',
+          name: 'dette restante (part salariale)',
           type: 'area',
           data: Object.keys(this.historiqueDetteSociale).sort((d1, d2) => {
             return (d2 > d1 ? -1 : 1)

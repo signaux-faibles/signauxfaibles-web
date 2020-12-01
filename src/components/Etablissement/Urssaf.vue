@@ -10,8 +10,8 @@
           <br />
           <ul>
             <li>Cotisations: Montant des cotisations appelées.</li>
-            <li>Dette (part patronale): Cumul des dettes restantes à payer sur la part patronale.</li>
-            <li>Dette (part salariale): Cumul des dettes restantes à payer sur la part salariale (ou ouvrière).</li>
+            <li>Dette (part patronale): Montant cumulé des dettes restant à payer sur la part patronale.</li>
+            <li>Dette (part salariale): Montant cumulé des dettes restant à payer sur la part salariale (ou ouvrière).</li>
           </ul>Fournisseur:
           <b>ACOSS</b>
         </template>
@@ -53,7 +53,7 @@ export default {
             return data
           }, []),
         }, {
-          name: 'dette (part patronale)',
+          name: 'dette restante (part patronale)',
           type: 'area',
           data: this.debit.map((d) => {
             return [
@@ -62,7 +62,7 @@ export default {
             ]
           }),
         }, {
-          name: 'dette (part salariale)',
+          name: 'dette restante (part salariale)',
           type: 'area',
           data: this.debit.map((d) => {
             return [
