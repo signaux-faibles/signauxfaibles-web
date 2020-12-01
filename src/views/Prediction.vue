@@ -249,7 +249,10 @@
             <span style="width: 100px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
             <v-icon color="amber">fa-exclamation-triangle</v-icon>
             <span style="font-size: 25px;">{{ predictionWarnings }}</span>
-            <v-icon style="margin-left: 25px" @click="download">fa-file-download</v-icon>
+            <v-btn outline color="indigo darken-5" @click="download" class="ml-4 mb-3">
+              <v-icon small class="mr-2">fa-file-download</v-icon>
+              Exporter
+            </v-btn>
           </v-flex>
         </v-layout>
       </v-container>
