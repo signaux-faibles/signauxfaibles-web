@@ -230,7 +230,7 @@
         <v-checkbox :disabled="loading" v-model="siegeUniquement" class="mx-2 mt-1" label="N'afficher que les sièges des entreprises" @change="getPrediction()"></v-checkbox>
         <p style="height: 1px; border: 1px solid #eee;" />
         <span class="ml-3" style="color: rgba(0,0,0,0.54); font-size: 13px;">Suivi d'établissements</span>
-        <v-checkbox :disabled="loading" v-model="exclureSuivi" class="mx-2 mt-1" label="Exclure tous les établissements que je suis" @change="getPrediction()"></v-checkbox>
+        <v-checkbox :disabled="loading" v-model="exclureSuivi" class="mx-2 mt-1" label="Exclure mes établissements suivis" @change="getPrediction()"></v-checkbox>
         <p style="height: 1px; border: 1px solid #eee" />
       </v-navigation-drawer>
     </div>
