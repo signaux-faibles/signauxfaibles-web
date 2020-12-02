@@ -533,6 +533,38 @@ export default {
           offsetX: 0,
           offsetY: 0,
         },
+        annotations: {
+          position: 'front',
+          xaxis: [{
+            x: new Date('17 Mar 2020').getTime(),
+            x2: new Date('11 May 2020').getTime(),
+            borderColor: '#000',
+            fillColor: '#000',
+            opacity: 0.1,
+            label: {
+              text: 'Confinement national n°1',
+              borderColor: '#000',
+              style: {
+                color: '#fff',
+                background: '#000',
+              },
+            },
+          }, {
+            x: new Date('30 Oct 2020').getTime(),
+            x2: new Date('15 Dec 2020').getTime(),
+            borderColor: '#000',
+            fillColor: '#000',
+            opacity: 0.1,
+            label: {
+              text: 'Confinement national n°2',
+              borderColor: '#000',
+              style: {
+                color: '#fff',
+                background: '#000',
+              },
+            },
+          }],
+        },
       }
     },
     urssafSeries() {
@@ -659,6 +691,38 @@ export default {
           verticalAlign: 'middle',
           offsetX: 0,
           offsetY: 0,
+        },
+        annotations: {
+          position: 'front',
+          xaxis: [{
+            x: new Date('17 Mar 2020').getTime(),
+            x2: new Date('11 May 2020').getTime(),
+            borderColor: '#000',
+            fillColor: '#000',
+            opacity: 0.1,
+            label: {
+              text: 'Confinement national n°1',
+              borderColor: '#000',
+              style: {
+                color: '#fff',
+                background: '#000',
+              },
+            },
+          }, {
+            x: new Date('30 Oct 2020').getTime(),
+            x2: new Date('15 Dec 2020').getTime(),
+            borderColor: '#000',
+            fillColor: '#000',
+            opacity: 0.1,
+            label: {
+              text: 'Confinement national n°2',
+              borderColor: '#000',
+              style: {
+                color: '#fff',
+                background: '#000',
+              },
+            },
+          }],
         },
       }
     },

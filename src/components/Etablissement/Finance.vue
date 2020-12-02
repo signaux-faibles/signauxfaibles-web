@@ -796,8 +796,8 @@ export default {
               }],
             },
             dataLabels: {
-              position: 'top'
-            }
+              position: 'top',
+            },
           },
         },
         dataLabels: {
@@ -807,11 +807,11 @@ export default {
             colors: ['#000'],
           },
           offsetY: -25,
-          formatter: function(val, opt) {
+          formatter(val, opt) {
             if (val) {
               return opt.w.config.series[opt.seriesIndex].name
             }
-          }
+          },
         },
         stroke: {
           show: true,
