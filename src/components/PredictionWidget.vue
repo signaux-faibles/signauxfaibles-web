@@ -72,7 +72,7 @@
             <span class="effectif">{{ prediction.dernier_effectif || 'n/c' }}</span>
           </div>
           <div class="ca mr-2 text-xs-right">
-            CA {{prediction.annee_ca}}
+            CA {{prediction.exerciceDiane}}
             <br />
             <span class="valeur" :class="diane.ca_color">{{ diane.ca || 'n/c' }}</span>
             <v-icon small v-if="diane.ca_arrow">{{ diane.ca_arrow }}</v-icon>
