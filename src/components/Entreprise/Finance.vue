@@ -787,7 +787,7 @@ export default {
         plotOptions: {
           bar: {
             horizontal: false,
-            columnWidth: '50%',
+            columnWidth: '75%',
             colors: {
               ranges: [{
                 from: -Infinity,
@@ -795,10 +795,23 @@ export default {
                 color: '#e76278',
               }],
             },
+            dataLabels: {
+              position: 'top'
+            }
           },
         },
         dataLabels: {
-          enabled: false,
+          enabled: true,
+          style: {
+            fontSize: '12px',
+            colors: ['#000'],
+          },
+          offsetY: -25,
+          formatter: function(val, opt) {
+            if (val) {
+              return opt.w.config.series[opt.seriesIndex].name
+            }
+          }
         },
         stroke: {
           show: true,
