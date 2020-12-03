@@ -8,7 +8,7 @@
           <p>Cette rubrique fait la synthèse des informations sociales de l'entreprise.</p>
           <p>En premier lieu, vous trouvez l'effectif total de l'entreprise, la consommation moyenne en activité partielle sur les 12 derniers mois et le montant de la dernière dette sociale connue.</p>
           <p>Ensuite, l'ensemble des établissements de l'entreprise vous sont présentés sous forme de carte et sous forme de liste triée par effectif, activité partielle ou dette sociale.</p>
-          <p>Vous avez également la possibilité de consulter l'historique de ses données agrégées au niveau entreprise sur les 24 derniers mois.</p>
+          <p>Vous avez également la possibilité de consulter l'historique de ces données, agrégées au niveau entreprise, sur les 24 derniers mois.</p>
           <p>Le premier graphique représente l'évolution des effectifs et de la consommation de l'activité partielle.<br><em>Fournisseur : ACOSS et DGEFP.</em></p>
           <p>Le second graphique représente l'évolution des montants des cotisations appelées et des dettes patronales et salariales.<br><em>Fournisseur : ACOSS.</em></p>
         </template>
@@ -20,21 +20,18 @@
           <v-layout column px-2 fill-height>
             <v-flex shrink>
               <v-layout row align-center class="resume">
-                <v-flex text-xs-left>
-                  <span class="valeur">
-                    {{ etablissementsSummary.length | pluralizeEtablissement }} en
-                    activité
-                  </span>
+                <v-flex text-xs-left class="valeur" style="line-height: 1.2em">
+                  {{ etablissementsSummary.length | pluralizeEtablissement }} en activité
                 </v-flex>
-                <v-flex text-xs-right shrink>
+                <v-flex text-xs-right shrink ml-3>
                   EFFECTIF
                   <div class="valeur">{{ effectifEntreprise }}</div>
                 </v-flex>
-                <v-flex v-if="permDGEFP" text-xs-right shrink ml-4>
+                <v-flex v-if="permDGEFP" text-xs-right shrink ml-3>
                   ACT. PARTIELLE
                   <div class="valeur">{{ activitePartielleEntreprise }}</div>
                 </v-flex>
-                <v-flex v-if="permUrssaf" text-xs-right shrink ml-4>
+                <v-flex v-if="permUrssaf" text-xs-right shrink ml-3>
                   DETTE SOC.
                   <div class="valeur">{{ detteSocialeEntreprise }}</div>
                 </v-flex>
@@ -98,7 +95,7 @@
       <v-layout mt-4 wrap>
         <v-flex v-if="ecartEffectif >= 0" md6 xs12>
           <v-layout px-3 align-center>
-            <v-flex>
+            <v-flex style="font-size: 16px">
               L'effectif de cette entreprise {{ introEffectif }}
               <span v-if="permDGEFP">
                 et elle
@@ -130,7 +127,7 @@
         </v-flex>
         <v-flex v-if="permUrssaf" md6 xs12>
           <v-layout px-3 align-center>
-            <v-flex>
+            <v-flex style="font-size: 16px">
               Cette entreprise
               {{
               hasDetteSociale
