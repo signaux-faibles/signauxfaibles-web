@@ -38,7 +38,7 @@
             <v-card>
               <v-card-title>
                 <div>
-                  <div class="headline">Suivre {{ denomination }} ?</div>
+                  <div class="headline">Suivre {{ denomination }} {{ commune }} ?</div>
                   <span class="grey--text">(siret {{ siret }})</span>
                 </div>
               </v-card-title>
@@ -64,7 +64,7 @@
             <v-card>
               <v-card-title>
                 <div>
-                  <div class="headline">Ne plus suivre {{ denomination }} ?</div>
+                  <div class="headline">Ne plus suivre {{ denomination }} {{ commune }} ?</div>
                   <span class="grey--text">(siret {{ siret }})</span>
                 </div>
               </v-card-title>
@@ -515,6 +515,10 @@ export default {
     creation() {
       const creation = new Date(((this.etablissement.entreprise || {}).Sirene || {}).creation)
       return (!isNaN(creation.getTime())) ? creation : null
+    },
+    commune() {
+      const summary = this.etablissementsSummary.filter((es) => es.siret === this.siret)[0]
+      return summary.commune
     },
   },
 }
