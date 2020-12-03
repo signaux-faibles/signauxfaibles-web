@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card @click="showEtablissement()" @mouseover="highlightEtablissement()" class="etablissement-card elevation-2 ma-2 pointer">
+    <v-card @click="showEtablissement()" @mouseover="social ? highlightEtablissement() : showRaccourci = true" @mouseout="showRaccourci = false" class="etablissement-card elevation-2 ma-2 pointer">
       <div class="entete">
         <ScoreWidget :prediction="prediction" />
       </div>
@@ -26,6 +26,11 @@
             Dép. {{ prediction.departement }}{{ prediction.libelle_activite ? ' - Act. ' + prediction.libelle_activite.slice(0,65) : '' }}
           </div>
         </div>
+        <transition name="fade">
+          <div v-show="showRaccourci" style="position: absolute; right: 0">
+            <v-btn v-if="prediction.siren" dark color="indigo darken-5" @click="showEntreprise">Voir Fiche Entreprise</v-btn>
+          </div>
+        </transition>
         <template v-if="social">
           <div class="eff mr-2 text-xs-right">
             EFFECTIF
@@ -98,6 +103,21 @@
             <Etablissement v-if="dialog" :siret="prediction.siret" :batch="currentBatchKey" v-on="$listeners"></Etablissement>
           </div>
         </v-dialog>
+        <v-dialog lazy fullscreen v-model="entrepriseDialog">
+          <div style="height: 100%; width: 100%; font-weight: 800; font-family: 'Oswald', sans;">
+            <v-toolbar
+              fixed
+              class="toolbar"
+              height="35px"
+              style="color: #fff; font-size: 22px; z-index: 50;"
+            >
+              <v-spacer />FICHE ENTREPRISE
+              <v-spacer />
+              <v-icon @click="hideEntreprise()" style="color: #fff">mdi-close</v-icon>
+            </v-toolbar>
+            <Entreprise :siren="prediction.siren" v-on="$listeners" />
+          </div>
+        </v-dialog>
       </div>
     </v-card>
   </div>
@@ -111,10 +131,13 @@ export default {
   components: {
     ScoreWidget,
     Etablissement: () => import('@/components/Etablissement'),
+    Entreprise: () => import('@/components/Entreprise'),
   },
   data() {
     return {
       dialog: false,
+      entrepriseDialog: false,
+      showRaccourci: false,
     }
   },
   computed: {
@@ -154,6 +177,15 @@ export default {
       if (this.social) {
         this.$emit('highlight-etablissement')
       }
+    },
+    showEntreprise(event) {
+      this.trackMatomoEvent('entreprise', 'ouvrir_fiche_entreprise', this.prediction.siren)
+      this.entrepriseDialog = true
+      event.stopPropagation()
+    },
+    hideEntreprise() {
+      this.trackMatomoEvent('entreprise', 'fermer_fiche_entreprise', this.prediction.siren)
+      this.entrepriseDialog = false
     },
   },
 }
@@ -238,5 +270,11 @@ export default {
   font-family: "Roboto";
   font-size: 13px;
   vertical-align: text-bottom;
+}
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
 }
 </style>

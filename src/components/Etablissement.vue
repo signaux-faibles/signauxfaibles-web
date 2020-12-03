@@ -85,20 +85,20 @@
             </v-card>
           </v-dialog>
           <v-dialog lazy fullscreen v-model="entrepriseDialog">
-          <div style="height: 100%; width: 100%; font-weight: 800; font-family: 'Oswald', sans;">
-            <v-toolbar
-              fixed
-              class="toolbar"
-              height="35px"
-              style="color: #fff; font-size: 22px; z-index: 50;"
-            >
-              <v-spacer />FICHE ENTREPRISE
-              <v-spacer />
-              <v-icon @click="hideEntreprise()" style="color: #fff">mdi-close</v-icon>
-            </v-toolbar>
-            <Entreprise :siren="etablissement.siren" v-on="$listeners" />
-          </div>
-        </v-dialog>
+            <div style="height: 100%; width: 100%; font-weight: 800; font-family: 'Oswald', sans;">
+              <v-toolbar
+                fixed
+                class="toolbar"
+                height="35px"
+                style="color: #fff; font-size: 22px; z-index: 50;"
+              >
+                <v-spacer />FICHE ENTREPRISE
+                <v-spacer />
+                <v-icon @click="hideEntreprise()" style="color: #fff">mdi-close</v-icon>
+              </v-toolbar>
+              <Entreprise :siren="etablissement.siren" v-on="$listeners" />
+            </div>
+          </v-dialog>
         </v-layout>
         <v-btn v-if="followed === false" fab fixed bottom right dark color="indigo darken-5" class="mr-2" @click="followDialog = true"><v-icon>mdi-star-outline</v-icon></v-btn>
         <v-btn v-if="followed === true" fab fixed bottom right outline color="indigo darken-5" class="mr-2" @click="unfollowDialog = true"><v-icon>mdi-star</v-icon></v-btn>
