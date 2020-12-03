@@ -40,7 +40,7 @@
             <v-flex pt-3>
               <div
                 id="entrepriseMap"
-                style="min-height: 850px; height: 100%; border: 1px solid black"
+                style="min-height: 425px; height: 100%; border: 1px solid black"
               ></div>
             </v-flex>
           </v-layout>
@@ -65,6 +65,7 @@
                   :detteSociale="derniereDetteSociale[siegeEntreprise.siret]"
                   @highlight-etablissement="highlightEtablissement(siegeEntreprise.siret)"
                   v-on="$listeners"
+                  @hook:mounted="refreshMap()"
                 />
               </div>
               <div v-if="autresEtablissements.length > 0">
@@ -194,8 +195,9 @@ export default {
       defaultMarkerColor: '#999999',
       highlightedColor: '#1976d2',
       currentPage: 1,
-      itemsPerPage: 7,
+      itemsPerPage: 5,
       render: 0,
+      bounds: null,
     }
   },
   mounted() {
@@ -203,9 +205,6 @@ export default {
     this.map = new mapboxgl.Map({
       container: 'entrepriseMap',
       style: this.mapStyle,
-    })
-    this.map.once('load', () => {
-      this.map.resize()
     })
     const franceBounds = [-4.7681, 42.3288, 8.2581, 51.0858]
     this.map.fitBounds(franceBounds, { padding: 50 })
@@ -226,7 +225,7 @@ export default {
       })
     },
     etablissements(val) {
-      const bounds = new mapboxgl.LngLatBounds()
+      this.bounds = new mapboxgl.LngLatBounds()
       let coordinates = null
       val.forEach((e) => {
         if ((e.sirene || {}).longitude && (e.sirene || {}).latitude) {
@@ -245,13 +244,15 @@ export default {
           }, false)
           marker.addTo(this.map)
           this.markers[e.siret] = marker
-          bounds.extend(coordinates)
+          this.bounds.extend(coordinates)
         }
       })
-      this.map.fitBounds(bounds, { padding: 50 })
-      if (val.length === 1 && coordinates) {
+      this.refreshMap()
+      if (this.etablissements.length === 1) {
         this.map.setZoom(8)
-        this.map.flyTo({ center: coordinates })
+        if (coordinates) {
+          this.map.flyTo({ center: coordinates })
+        }
       }
       this.highlightEtablissement(this.siegeEntreprise.siret)
     },
@@ -269,6 +270,12 @@ export default {
     },
   },
   methods: {
+    refreshMap() {
+      this.map.resize()
+      if (this.etablissements.length > 1) {
+        this.map.fitBounds(this.bounds, { padding: 50 })
+      }
+    },
     equivalentTempsPlein(heures) {
       return heures / 151.67
     },
