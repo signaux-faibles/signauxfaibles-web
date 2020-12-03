@@ -15,13 +15,17 @@
           </v-flex>
           <v-flex xs12 class="pb-3 pr-1">
             <EntrepriseSocial
+              :siren="siren"
               :etablissementsSummary="etablissementsSummary"
               :etablissements="etablissements"
               v-on="$listeners"
             />
           </v-flex>
           <v-flex xs12 class="pr-1">
-            <EntrepriseFinance :finance="finance" :siren="siren" />
+            <EntrepriseFinance 
+              :siren="siren"
+              :finance="finance"
+            />
           </v-flex>
         </v-layout>
       </v-container>

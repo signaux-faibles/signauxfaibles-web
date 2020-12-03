@@ -399,9 +399,11 @@ export default {
       this.followAlert = false
     },
     showEntreprise() {
+      this.trackMatomoEvent('entreprise', 'ouvrir_fiche_entreprise', this.etablissement.siren)
       this.entrepriseDialog = true
     },
     hideEntreprise() {
+      this.trackMatomoEvent('entreprise', 'fermer_fiche_entreprise', this.etablissement.siren)
       this.entrepriseDialog = false
     },
   },
@@ -518,7 +520,7 @@ export default {
     },
     commune() {
       const summary = this.etablissementsSummary.filter((es) => es.siret === this.siret)[0]
-      return summary.commune
+      return (summary || {}).commune || ''
     },
   },
 }

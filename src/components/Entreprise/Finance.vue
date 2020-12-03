@@ -713,7 +713,7 @@ import axios from 'axios'
 
 export default {
   name: 'EntrepriseFinance',
-  props: ['finance', 'siren'],
+  props: ['siren', 'finance'],
   components: { Help },
   data() {
     return {

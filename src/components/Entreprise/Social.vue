@@ -175,7 +175,7 @@ import axios from 'axios'
 
 export default {
   name: 'EntrepriseSocial',
-  props: ['etablissementsSummary', 'etablissements'],
+  props: ['siren', 'etablissementsSummary', 'etablissements'],
   components: { Help, Map, PredictionWidget },
   data() {
     return {
@@ -287,9 +287,19 @@ export default {
     },
     toggleHistoriqueEffectif() {
       this.showHistoriqueEffectif = !this.showHistoriqueEffectif
+      if (this.showHistoriqueEffectif) {
+        this.trackMatomoEvent('entreprise', 'afficher_historique_effectif', this.siren)
+      } else {
+        this.trackMatomoEvent('entreprise', 'masquer_historique_effectif', this.siren)
+      }
     },
     toggleHistoriqueDetteSociale() {
       this.showHistoriqueDetteSociale = !this.showHistoriqueDetteSociale
+      if (this.showHistoriqueDetteSociale) {
+        this.trackMatomoEvent('entreprise', 'afficher_historique_dette_sociale', this.siren)
+      } else {
+        this.trackMatomoEvent('entreprise', 'masquer_historique_dette_sociale', this.siren)
+      }
     },
     reinitAllMarkers() {
       Object.keys(this.markers).forEach((siret) => {

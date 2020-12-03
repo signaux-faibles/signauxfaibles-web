@@ -96,6 +96,11 @@ export default {
   methods: {
     toggle() {
       this.show = !this.show
+      if (this.show) {
+        this.trackMatomoEvent('etablissement', 'afficher_autres_etablissements', this.siret)
+      } else {
+        this.trackMatomoEvent('etablissement', 'masquer_autres_etablissements', this.siret)
+      }
     },
   },
   computed: {
