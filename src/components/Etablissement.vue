@@ -96,7 +96,7 @@
                 <v-spacer />
                 <v-icon @click="hideEntreprise()" style="color: #fff">mdi-close</v-icon>
               </v-toolbar>
-              <Entreprise :siren="etablissement.siren" v-on="$listeners" />
+              <Entreprise v-if="entrepriseDialog" :siren="etablissement.siren" v-on="$listeners" />
             </div>
           </v-dialog>
         </v-layout>
