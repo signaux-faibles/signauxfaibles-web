@@ -5,15 +5,16 @@
       <v-spacer />
       <Help titre="Cotisations et impayés URSSAF">
         <template>
-          Ce graphique représente les données de l'URSSAF.
-          <br />Les dates représentées sont les dates de fin des périodes appelées
-          <br />
-          <ul>
-            <li>Cotisations: Montant des cotisations appelées.</li>
-            <li>Dette (part patronale): Montant cumulé des dettes restant à payer sur la part patronale.</li>
-            <li>Dette (part salariale): Montant cumulé des dettes restant à payer sur la part salariale (ou ouvrière).</li>
-          </ul>Fournisseur:
-          <b>ACOSS</b>
+          <p>Ce graphique représente les données de l'URSSAF.</p>
+          <p>Les dates représentées sont les dates de fin des périodes appelées.</p>
+          <p>
+            <ul>
+              <li>Cotisations : montant des cotisations appelées.</li>
+              <li>Dette (part patronale) : montant cumulé des dettes <strong>restant à payer</strong> sur la part patronale.</li>
+              <li>Dette (part salariale) : montant cumulé des dettes <strong>restant à payer</strong> sur la part salariale (ou ouvrière).</li>
+            </ul>
+          </p>
+          <em>Fournisseur : ACOSS.</em>
         </template>
       </Help>
     </v-toolbar>
