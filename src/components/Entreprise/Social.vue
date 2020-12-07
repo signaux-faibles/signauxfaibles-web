@@ -95,7 +95,7 @@
       </v-layout>
       <v-layout mt-4 wrap>
         <v-flex v-if="ecartEffectif >= 0" md6 xs12>
-          <v-layout px-3 align-center>
+          <v-layout px-3 align-center style="min-height: 80px">
             <v-flex style="font-size: 16px">
               L'effectif de cette entreprise {{ introEffectif }}
               <span v-if="permDGEFP">
@@ -105,7 +105,7 @@
               </span>
               sur les 24 derniers mois.
             </v-flex>
-            <v-flex md5 xs12>
+            <v-flex md5 shrink>
               <v-btn outline color="indigo darken-5" @click="toggleHistoriqueEffectif" class="ml-4">
                 {{
                 showHistoriqueEffectif ? "Masquer" : "Afficher"
@@ -127,7 +127,7 @@
           </transition>
         </v-flex>
         <v-flex v-if="permUrssaf" md6 xs12>
-          <v-layout px-3 align-center>
+          <v-layout px-3 align-center style="min-height: 80px">
             <v-flex style="font-size: 16px">
               Cette entreprise
               {{
@@ -137,7 +137,7 @@
               }}
               sur les 24 derniers mois.
             </v-flex>
-            <v-flex md5 xs12>
+            <v-flex md5 shrink>
               <v-btn
                 outline
                 color="indigo darken-5"
