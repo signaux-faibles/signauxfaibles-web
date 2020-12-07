@@ -81,7 +81,7 @@ const sessionStore = new Vuex.Store({
       state.rightDrawer = val
     },
     updateReference(state, reference) {
-      state.batches = reference.listes.sort((b1: any, b2: any) => b1.id > b2.id ? -1 : 1)
+      state.batches = reference.listes
       state.currentBatchKey = state.currentBatchKey || (state.batches[0] || { id: '' }).id
       state.naf = reference.naf
       state.region = reference.regions
