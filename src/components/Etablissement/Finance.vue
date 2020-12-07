@@ -787,7 +787,7 @@ export default {
         plotOptions: {
           bar: {
             horizontal: false,
-            columnWidth: '75%',
+            columnWidth: '90%',
             colors: {
               ranges: [{
                 from: -Infinity,
@@ -803,8 +803,8 @@ export default {
         dataLabels: {
           enabled: true,
           style: {
-            fontSize: '12px',
-            colors: ['#000'],
+            fontSize: '11px',
+            colors: ['#373D3F'],
           },
           offsetY: -25,
           formatter(val, opt) {
