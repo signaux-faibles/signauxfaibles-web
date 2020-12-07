@@ -158,29 +158,29 @@ export default {
           xaxis: [{
             x: new Date('17 Mar 2020').getTime(),
             x2: new Date('11 May 2020').getTime(),
-            borderColor: '#000',
-            fillColor: '#000',
+            borderColor: '#373D3F',
+            fillColor: '#373D3F',
             opacity: 0.1,
             label: {
               text: 'Confinement national n°1',
-              borderColor: '#000',
+              borderColor: '#373D3F',
               style: {
                 color: '#fff',
-                background: '#000',
+                background: '#373D3F',
               },
             },
           }, {
             x: new Date('30 Oct 2020').getTime(),
             x2: new Date('15 Dec 2020').getTime(),
-            borderColor: '#000',
-            fillColor: '#000',
+            borderColor: '#373D3F',
+            fillColor: '#373D3F',
             opacity: 0.1,
             label: {
               text: 'Confinement national n°2',
-              borderColor: '#000',
+              borderColor: '#373D3F',
               style: {
                 color: '#fff',
-                background: '#000',
+                background: '#373D3F',
               },
             },
           }],
