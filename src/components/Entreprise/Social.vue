@@ -47,7 +47,7 @@
         </v-flex>
         <v-flex md6 xs12>
           <v-layout column fill-height style="font-weight: normal">
-            <v-flex v-if="permDGEFP || permUrssaf" py-2 text-xs-center shrink>
+            <v-flex v-if="permDGEFP || permUrssaf" py-3 text-xs-center shrink>
               <v-btn-toggle mandatory v-model="sort">
                 <v-btn flat value="effectif">Trié par effectif</v-btn>
                 <v-btn v-if="permDGEFP" flat value="activite-partielle">Par activité partielle</v-btn>
