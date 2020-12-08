@@ -14,6 +14,7 @@
               :terrind="terrind"
               :creation="creation"
             />
+            <v-btn v-if="etablissement.siren" dark color="indigo darken-5" @click="showEntreprise">Voir Fiche Entreprise</v-btn>
           </v-flex>
           <v-flex xs12 md6 class="text-xs-right pa-3" style="margin-top: 3em">
             <Map :longitude="sirene.longitude" :latitude="sirene.latitude" ref="map" />
@@ -31,13 +32,13 @@
             <Finance :finance="finance" :siret="siret" />
           </v-flex>
           <v-flex xs12 class="pr-1 pt-3">
-            <Entreprise :siret="siret" :siege="etablissement.siege" :groupe="groupe" :codeDepartement="sirene.codeDepartement" :etablissementsSummary="etablissementsSummary" v-on="$listeners" />
+            <EtablissementEntreprise :siret="siret" :siege="etablissement.siege" :groupe="groupe" :codeDepartement="sirene.codeDepartement" :etablissementsSummary="etablissementsSummary" v-on="$listeners" />
           </v-flex>
           <v-dialog v-model="followDialog" @input="closeFollowDialog()" max-width="500px">
             <v-card>
               <v-card-title>
                 <div>
-                  <div class="headline">Suivre {{ denomination }} ?</div>
+                  <div class="headline">Suivre {{ denomination }} {{ commune }} ?</div>
                   <span class="grey--text">(siret {{ siret }})</span>
                 </div>
               </v-card-title>
@@ -63,7 +64,7 @@
             <v-card>
               <v-card-title>
                 <div>
-                  <div class="headline">Ne plus suivre {{ denomination }} ?</div>
+                  <div class="headline">Ne plus suivre {{ denomination }} {{ commune }} ?</div>
                   <span class="grey--text">(siret {{ siret }})</span>
                 </div>
               </v-card-title>
@@ -83,6 +84,21 @@
               <v-alert :value="followAlert" type="error" transition="scale-transition">{{ followAlertError }}</v-alert>
             </v-card>
           </v-dialog>
+          <v-dialog lazy fullscreen v-model="entrepriseDialog">
+            <div style="height: 100%; width: 100%; font-weight: 800; font-family: 'Oswald', sans;">
+              <v-toolbar
+                fixed
+                class="toolbar"
+                height="35px"
+                style="color: #fff; font-size: 22px; z-index: 50;"
+              >
+                <v-spacer />FICHE ENTREPRISE
+                <v-spacer />
+                <v-icon @click="hideEntreprise()" style="color: #fff">mdi-close</v-icon>
+              </v-toolbar>
+              <Entreprise v-if="entrepriseDialog" :siren="etablissement.siren" v-on="$listeners" />
+            </div>
+          </v-dialog>
         </v-layout>
         <v-btn v-if="followed === false" fab fixed bottom right dark color="indigo darken-5" class="mr-2" @click="followDialog = true"><v-icon>mdi-star-outline</v-icon></v-btn>
         <v-btn v-if="followed === true" fab fixed bottom right outline color="indigo darken-5" class="mr-2" @click="unfollowDialog = true"><v-icon>mdi-star</v-icon></v-btn>
@@ -99,14 +115,15 @@ import Identite from '@/components/Etablissement/Identite.vue'
 import Map from '@/components/Etablissement/Map.vue'
 import Finance from '@/components/Etablissement/Finance.vue'
 import Commentaire from '@/components/Etablissement/Commentaire.vue'
-import Entreprise from '@/components/Etablissement/Entreprise.vue'
+import EtablissementEntreprise from '@/components/Etablissement/Entreprise.vue'
+import Entreprise from '@/components/Entreprise.vue'
 import axios from 'axios'
 import fr from 'apexcharts/dist/locales/fr.json'
 
 export default {
   props: ['siret', 'batch'],
   name: 'Etablissement',
-  components: { Effectif, Urssaf, Help, Finance, Identite, Map, Commentaire, Entreprise },
+  components: { Effectif, Urssaf, Help, Finance, Identite, Map, Commentaire, EtablissementEntreprise, Entreprise },
   data() {
     return {
       axios: axios.create(),
@@ -124,6 +141,7 @@ export default {
       unfollowCategory: '',
       unfollowComment: '',
       unfollowCommentPlaceholder: '',
+      entrepriseDialog: false,
     }
   },
   methods: {
@@ -380,6 +398,14 @@ export default {
       this.followAlertError = ''
       this.followAlert = false
     },
+    showEntreprise() {
+      this.trackMatomoEvent('entreprise', 'ouvrir_fiche_entreprise', this.etablissement.siren)
+      this.entrepriseDialog = true
+    },
+    hideEntreprise() {
+      this.trackMatomoEvent('entreprise', 'fermer_fiche_entreprise', this.etablissement.siren)
+      this.entrepriseDialog = false
+    },
   },
   created() {
     Apex.chart = {
@@ -491,6 +517,10 @@ export default {
     creation() {
       const creation = new Date(((this.etablissement.entreprise || {}).Sirene || {}).creation)
       return (!isNaN(creation.getTime())) ? creation : null
+    },
+    commune() {
+      const summary = this.etablissementsSummary.filter((es) => es.siret === this.siret)[0]
+      return (summary || {}).commune || ''
     },
   },
 }

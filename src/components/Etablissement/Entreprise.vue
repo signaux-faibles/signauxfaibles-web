@@ -17,7 +17,7 @@
       <v-layout align-center class="pt-3 pl-3" style="margin-bottom: 48px">
         <v-flex><span v-if="siege">Cet établissement (siret {{ this.siret }}) est le siège social de l'entreprise (siren {{ this.siren }}).</span><span v-else>Cet établissement (siret {{this.siret}}) n'est pas le siège social de l'entreprise (siren {{ this.siren }}).</span>
         Cette entreprise {{ this.groupe ? 'a pour tête de groupe ' + this.groupe + ' et' : '' }} possède {{this.etablissementsSummary.length | pluralizeEtablissement}} en activité.</v-flex>
-        <v-flex md5 xs12 v-if="siegeEntreprise || etablissementsDepartement.length > 0 || autresEtablissements.length > 0"><v-btn outline color="indigo darken-5" @click="toggle" class="ml-4">{{ show ? 'Masquer' : 'Afficher' }} les autres établissements</v-btn></v-flex>
+        <v-flex md5 shrink v-if="siegeEntreprise || etablissementsDepartement.length > 0 || autresEtablissements.length > 0"><v-btn outline color="indigo darken-5" @click="toggle" class="ml-4">{{ show ? 'Masquer' : 'Afficher' }} les autres établissements</v-btn></v-flex>
       </v-layout>
       <transition name="fade">
         <div v-if="show" style="margin-top: -48px">
@@ -63,7 +63,7 @@ import Help from '@/components/Help.vue'
 import axios from 'axios'
 
 export default {
-  name: 'Entreprise',
+  name: 'EtablissementEntreprise',
   props: ['siret', 'siege', 'groupe', 'codeDepartement', 'etablissementsSummary'],
   components: { Help, PredictionWidget },
   data() {
@@ -96,6 +96,11 @@ export default {
   methods: {
     toggle() {
       this.show = !this.show
+      if (this.show) {
+        this.trackMatomoEvent('etablissement', 'afficher_autres_etablissements', this.siret)
+      } else {
+        this.trackMatomoEvent('etablissement', 'masquer_autres_etablissements', this.siret)
+      }
     },
   },
   computed: {

@@ -59,6 +59,12 @@ export default {
       news: [
         // TODO: externalize
         {
+          date: new Date('2020-12-03'), news: [
+            'Nouvelle fiche Entreprise',
+            'Matérialisation des périodes de confinement sur les graphiques',
+          ],
+        },
+        {
           date: new Date('2020-11-10'), news: [
             'Revue des autorisations d\'accès',
             'Perfectionnement de la recherche',

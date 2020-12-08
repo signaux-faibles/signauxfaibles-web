@@ -10,7 +10,7 @@
         accessToken: process.env.VUE_APP_MAPBOX_TOKEN,
         mapStyle: 'mapbox://styles/mapbox/navigation-guidance-day-v4',
         map: null,
-        marker: new mapboxgl.Marker(),
+        marker: new mapboxgl.Marker({color: '#1976d2'}),
       }
     },
     mounted() {

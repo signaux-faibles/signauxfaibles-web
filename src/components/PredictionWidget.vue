@@ -1,12 +1,13 @@
 <template>
   <div>
-    <v-card @click="showEtablissement()" class="etablissement-card elevation-2 ma-2 pointer">
+    <v-card @click="showEtablissement()" @mouseover="social ? highlightEtablissement() : showRaccourci = true" @mouseout="showRaccourci = false" class="etablissement-card elevation-2 ma-2 pointer">
       <div class="entete">
         <ScoreWidget :prediction="prediction" />
       </div>
       <div class="corps">
         <div class="mr-2 ml-2">
-          <span class="mr-2 raison-sociale">{{ prediction.raison_sociale }}</span>
+          <span v-if="social" class="mr-2 commune">ETS {{ prediction.commune }}</span>
+          <span v-else class="mr-2 raison-sociale">{{ prediction.raison_sociale }}</span>
           <v-tooltip bottom v-if="prediction.firstAlert === true">
             <template v-slot:activator="{ on, attrs }">
               <v-chip v-bind="attrs" v-on="on"  class="ma-0 chip" small color="primary" text-color="white">1re alerte</v-chip>
@@ -21,48 +22,72 @@
           </v-tooltip>
           <img class="ml-2" v-if="prediction.connu === true" height="20" src="../assets/crp.png" />
           <div class="identite">
-            {{ prediction.siret.slice(0,9) }} {{ prediction.siret.slice(9,14) }}{{ prediction.siege ? ' (siège)' : '' }}{{ prediction.groupe ? ' - TdG. ' + prediction.groupe : ''}}<br />
+            {{ prediction.siret.slice(0,9) }} {{ prediction.siret.slice(9,14) }}{{ prediction.siege ? ' (siège)' : '' }}{{ (prediction.groupe && !social) ? ' - TdG. ' + prediction.groupe : ''}}<br />
             Dép. {{ prediction.departement }}{{ prediction.libelle_activite ? ' - Act. ' + prediction.libelle_activite.slice(0,65) : '' }}
           </div>
         </div>
-        <div class="mr-2 text-xs-right">
-          <img
-            class="d-block mt-2 mb-2"
-            width="70"
-            v-if="!prediction.urssaf && permUrssaf"
-            src="../assets/gray_urssaf.svg"
-          />
-          <img
-            class="d-block mt-2 mb-2"
-            width="70"
-            v-if="prediction.urssaf && permUrssaf"
-            src="../assets/red_urssaf.svg"
-          />
-          <img
-            class="activite-partielle mt-1 mr-1"
-            height="24"
-            v-if="prediction.activite_partielle && permDGEFP"
-            src="../assets/red_apart.svg"
-          />
-          <img
-            class="activite-partielle mt-1 mr-1"
-            height="24"
-            v-if="!prediction.activite_partielle && permDGEFP"
-            src="../assets/gray_apart.svg"
-          />
-          <span class="effectif">{{ prediction.dernier_effectif || 'n/c' }}</span>
-        </div>
-        <div class="ca mr-2 text-xs-right">
-          CA {{prediction.annee_ca}}
-          <br />
-          <span class="valeur" :class="diane.ca_color">{{ diane.ca || 'n/c' }}</span>
-          <v-icon small v-if="diane.ca_arrow">{{ diane.ca_arrow }}</v-icon>
-        </div>
-        <div class="rex mr-2 text-xs-right">
-          REX
-          <br />
-          <span class="valeur" :class="diane.resultat_expl_color">{{ diane.resultat_expl }}</span>
-        </div>
+        <transition name="fade">
+          <div v-show="showRaccourci" style="position: absolute; right: 0">
+            <v-btn v-if="prediction.siren" dark color="indigo darken-5" @click="showEntreprise">Voir Fiche Entreprise</v-btn>
+          </div>
+        </transition>
+        <template v-if="social">
+          <div class="eff mr-2 text-xs-right">
+            EFFECTIF
+            <br />
+            <span class="valeur" >{{ prediction.dernier_effectif || 'n/c' }}</span>
+          </div>
+          <div v-if="permDGEFP" class="ap mr-2 text-xs-right">
+            ACT. PARTIELLE
+            <br />
+            <span class="valeur" :class="prediction.apHeureConsommeAVG12m > 0 ? 'down' : ''" >{{ this.$parent.formatActivitePartielle(this.$parent.equivalentTempsPlein(prediction.apHeureConsommeAVG12m || 0)) }}</span>
+          </div>
+          <div v-if="permUrssaf" class="ds mr-2 text-xs-right">
+            DETTE SOC.
+            <br />
+            <span class="valeur" :class="prediction.detteUrssaf > 0 ? 'down' : ''">{{ prediction.detteUrssaf != null ? this.$parent.formatDetteSociale(prediction.detteUrssaf) : 'n/c'}}</span>
+          </div>
+        </template>
+        <template v-else>
+          <div class="mr-2 text-xs-right">
+            <img
+              class="d-block mt-2 mb-2"
+              width="70"
+              v-if="!prediction.urssaf && permUrssaf"
+              src="../assets/gray_urssaf.svg"
+            />
+            <img
+              class="d-block mt-2 mb-2"
+              width="70"
+              v-if="prediction.urssaf && permUrssaf"
+              src="../assets/red_urssaf.svg"
+            />
+            <img
+              class="activite-partielle mt-1 mr-1"
+              height="24"
+              v-if="prediction.activite_partielle && permDGEFP"
+              src="../assets/red_apart.svg"
+            />
+            <img
+              class="activite-partielle mt-1 mr-1"
+              height="24"
+              v-if="!prediction.activite_partielle && permDGEFP"
+              src="../assets/gray_apart.svg"
+            />
+            <span class="effectif">{{ prediction.dernier_effectif || 'n/c' }}</span>
+          </div>
+          <div class="ca mr-2 text-xs-right">
+            CA {{prediction.exerciceDiane}}
+            <br />
+            <span class="valeur" :class="diane.ca_color">{{ diane.ca || 'n/c' }}</span>
+            <v-icon small v-if="diane.ca_arrow">{{ diane.ca_arrow }}</v-icon>
+          </div>
+          <div class="rex mr-2 text-xs-right">
+            REX
+            <br />
+            <span class="valeur" :class="diane.resultat_expl_color">{{ diane.resultat_expl }}</span>
+          </div>
+        </template>
         <v-dialog lazy fullscreen v-model="dialog">
           <div style="height: 100%; width: 100%; font-weight: 800; font-family: 'Oswald', sans;">
             <v-toolbar
@@ -73,9 +98,24 @@
             >
               <v-spacer />FICHE ETABLISSEMENT
               <v-spacer />
-              <v-icon @click="hideEtablissement() " style="color: #fff">mdi-close</v-icon>
+              <v-icon @click="hideEtablissement()" style="color: #fff">mdi-close</v-icon>
             </v-toolbar>
-            <Etablissement :siret="prediction.siret" :batch="currentBatchKey" @show-etablissement="hideEtablissement" v-on="$listeners"></Etablissement>
+            <Etablissement v-if="dialog" :siret="prediction.siret" :batch="currentBatchKey" v-on="$listeners"></Etablissement>
+          </div>
+        </v-dialog>
+        <v-dialog lazy fullscreen v-model="entrepriseDialog">
+          <div style="height: 100%; width: 100%; font-weight: 800; font-family: 'Oswald', sans;">
+            <v-toolbar
+              fixed
+              class="toolbar"
+              height="35px"
+              style="color: #fff; font-size: 22px; z-index: 50;"
+            >
+              <v-spacer />FICHE ENTREPRISE
+              <v-spacer />
+              <v-icon @click="hideEntreprise()" style="color: #fff">mdi-close</v-icon>
+            </v-toolbar>
+            <Entreprise v-if="entrepriseDialog" :siren="prediction.siren" v-on="$listeners" />
           </div>
         </v-dialog>
       </div>
@@ -87,14 +127,17 @@
 import ScoreWidget from '@/components/ScoreWidget'
 export default {
   name: 'PredictionWidget',
-  props: ['prediction'],
+  props: ['prediction', 'social', 'activitePartielle', 'detteSociale'],
   components: {
     ScoreWidget,
     Etablissement: () => import('@/components/Etablissement'),
+    Entreprise: () => import('@/components/Entreprise'),
   },
   data() {
     return {
       dialog: false,
+      entrepriseDialog: false,
+      showRaccourci: false,
     }
   },
   computed: {
@@ -129,6 +172,20 @@ export default {
       this.trackMatomoEvent('etablissement', 'fermer_fiche_etablissement', this.prediction.siret)
       this.dialog = false
       this.$emit('hide-etablissement')
+    },
+    highlightEtablissement() {
+      if (this.social) {
+        this.$emit('highlight-etablissement')
+      }
+    },
+    showEntreprise(event) {
+      this.trackMatomoEvent('entreprise', 'ouvrir_fiche_entreprise', this.prediction.siren)
+      this.entrepriseDialog = true
+      event.stopPropagation()
+    },
+    hideEntreprise() {
+      this.trackMatomoEvent('entreprise', 'fermer_fiche_entreprise', this.prediction.siren)
+      this.entrepriseDialog = false
     },
   },
 }
@@ -165,6 +222,11 @@ export default {
   flex: 1 1 auto;
   overflow: hidden;
 }
+.commune {
+  font-family: "Oswald";
+  font-size: 20px;
+  color: #333;
+}
 .raison-sociale {
   font-family: "Oswald";
   font-size: 24px;
@@ -181,16 +243,19 @@ export default {
 .activite-partielle {
   float: left;
 }
-.ca,
-.rex {
+.ca, .rex,
+.eff, .ap, .ds {
   font-family: "Abel";
   font-size: 16px;
 }
 .ca {
   min-width: 120px;
 }
-.rex {
+.rex, .ap {
   min-width: 100px;
+}
+.eff, .ds {
+  min-width: 80px;
 }
 .valeur {
   font-size: 25px;
@@ -205,5 +270,11 @@ export default {
   font-family: "Roboto";
   font-size: 13px;
   vertical-align: text-bottom;
+}
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
 }
 </style>

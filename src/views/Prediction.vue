@@ -230,7 +230,7 @@
         <v-checkbox :disabled="loading" v-model="siegeUniquement" class="mx-2 mt-1" label="N'afficher que les sièges des entreprises" @change="getPrediction()"></v-checkbox>
         <p style="height: 1px; border: 1px solid #eee;" />
         <span class="ml-3" style="color: rgba(0,0,0,0.54); font-size: 13px;">Suivi d'établissements</span>
-        <v-checkbox :disabled="loading" v-model="exclureSuivi" class="mx-2 mt-1" label="Exclure tous les établissements que je suis" @change="getPrediction()"></v-checkbox>
+        <v-checkbox :disabled="loading" v-model="exclureSuivi" class="mx-2 mt-1" label="Exclure mes établissements suivis" @change="getPrediction()"></v-checkbox>
         <p style="height: 1px; border: 1px solid #eee" />
       </v-navigation-drawer>
     </div>
@@ -241,7 +241,7 @@
       <v-container style="position: relative; top: -10px">
         <v-layout row>
           <v-flex xs12 md6>
-            <v-text-field v-model="filter" @input="getPrediction" solo label="filtre rapide" />
+            <v-text-field v-model="filter" @input="getPrediction" solo label="Filtre rapide par raison sociale ou SIRET" />
           </v-flex>
           <v-flex xs12 md6 style="line-height: 53px;">
             <v-icon color="red">fa-exclamation-triangle</v-icon>
@@ -249,7 +249,10 @@
             <span style="width: 100px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
             <v-icon color="amber">fa-exclamation-triangle</v-icon>
             <span style="font-size: 25px;">{{ predictionWarnings }}</span>
-            <v-icon style="margin-left: 25px" @click="download">fa-file-download</v-icon>
+            <v-btn outline color="indigo darken-5" @click="download" class="ml-4 mb-3">
+              <v-icon small class="mr-2">fa-file-download</v-icon>
+              Exporter
+            </v-btn>
           </v-flex>
         </v-layout>
       </v-container>

@@ -97,7 +97,7 @@
                 </Help>
               </v-list-tile>
               <v-list-group>
-                <v-subheader slot="activator" @click="trackMatomoEvent('etablissement', 'ratios_categorie_structure_et_liquidite', siret, f.exercice)">Structure et liquidité</v-subheader>
+                <v-subheader slot="activator" @click="trackMatomoEvent('etablissement', 'ratios_categorie_structure_et_liquidite', siren, f.exercice)">Structure et liquidité</v-subheader>
                 <v-list-tile>
                   <v-list-tile-content>Équilibre financier&nbsp;:</v-list-tile-content>
                   <v-list-tile-content class="valeur">{{ f.ratios.structureLiquidite.equilibreFinancier }} <v-icon v-if="index > 0">trending_{{ trend(sortedFinance[index-1].ratios.structureLiquidite.equilibreFinancier, f.ratios.structureLiquidite.equilibreFinancier) }}</v-icon></v-list-tile-content>
@@ -216,7 +216,7 @@
                 </v-list-tile>
               </v-list-group>
               <v-list-group>
-                <v-subheader slot="activator" @click="trackMatomoEvent('etablissement', 'ratios_categorie_gestion', siret, f.exercice)">Gestion</v-subheader>
+                <v-subheader slot="activator" @click="trackMatomoEvent('etablissement', 'ratios_categorie_gestion', siren, f.exercice)">Gestion</v-subheader>
                 <v-list-tile>
                   <v-list-tile-content>Rotation des stocks&nbsp;:</v-list-tile-content>
                   <v-list-tile-content class="valeur">{{ f.ratios.gestion.rotationStocks }} <v-icon v-if="index > 0">trending_{{ trend(sortedFinance[index-1].ratios.gestion.rotationStocks, f.ratios.gestion.rotationStocks) }}</v-icon></v-list-tile-content>
@@ -438,7 +438,7 @@
                 </v-list-tile>
               </v-list-group>
               <v-list-group>
-                <v-subheader slot="activator" @click="trackMatomoEvent('etablissement', 'ratios_categorie_productivite_et_rentabilite', siret, f.exercice)">Productivité et rentabilité</v-subheader>
+                <v-subheader slot="activator" @click="trackMatomoEvent('etablissement', 'ratios_categorie_productivite_et_rentabilite', siren, f.exercice)">Productivité et rentabilité</v-subheader>
                 <v-list-tile>
                   <v-list-tile-content>Efficacité économique&nbsp;:</v-list-tile-content>
                   <v-list-tile-content class="valeur">{{ f.ratios.productiviteRentabilite.efficaciteEconomique }} <v-icon v-if="index > 0">trending_{{ trend(sortedFinance[index-1].ratios.productiviteRentabilite.efficaciteEconomique, f.ratios.productiviteRentabilite.efficaciteEconomique) }}</v-icon></v-list-tile-content>
@@ -603,7 +603,7 @@
                 </v-list-tile>
               </v-list-group>
               <v-list-group>
-                <v-subheader slot="activator" @click="trackMatomoEvent('etablissement', 'ratios_categorie_marge_et_valeur_ajoutee', siret, f.exercice)">Marge et valeur ajoutée</v-subheader>
+                <v-subheader slot="activator" @click="trackMatomoEvent('etablissement', 'ratios_categorie_marge_et_valeur_ajoutee', siren, f.exercice)">Marge et valeur ajoutée</v-subheader>
                 <v-list-tile>
                   <v-list-tile-content>Taux de marge commerciale&nbsp;:</v-list-tile-content>
                   <v-list-tile-content class="valeur">{{ f.ratios.margeValeurAjoutee.tauxMargeCommerciale }} <v-icon v-if="index > 0">trending_{{ trend(sortedFinance[index-1].ratios.margeValeurAjoutee.tauxMargeCommerciale, f.ratios.margeValeurAjoutee.tauxMargeCommerciale) }}</v-icon></v-list-tile-content>
@@ -712,8 +712,8 @@ import Help from '@/components/Help.vue'
 import axios from 'axios'
 
 export default {
-  name: 'Finance',
-  props: ['finance', 'siret'],
+  name: 'EntrepriseFinance',
+  props: ['siren', 'finance'],
   components: { Help },
   data() {
     return {
@@ -859,7 +859,7 @@ export default {
       return m ? '(' + m + ' mois)' : ''
     },
     getBilansDocuments(l, exercice) {
-      this.trackMatomoEvent('etablissement', 'telecharger_documents_comptables', this.siret, exercice)
+      this.trackMatomoEvent('etablissement', 'telecharger_documents_comptables', this.siren, exercice)
       this['loading' + l] = true
       this['alert' + l] = false
       this.$axios.get('/bilans/130006018/2018', {responseType: 'blob'}).then((response) => {
@@ -964,26 +964,19 @@ export default {
         return []
       }
     },
-    siren() {
-      return this.siret.slice(0, 9)
-    },
   },
 }
 </script>
 <style scoped>
-
 ::v-deep .fraction {
   display: inline-block;
   vertical-align: middle;
   text-align: center;
 }
-
 ::v-deep .numerateur {
   border-bottom: 2px solid black;
 }
-
 .valeur {
   align-items: flex-end !important;
 }
-
 </style>

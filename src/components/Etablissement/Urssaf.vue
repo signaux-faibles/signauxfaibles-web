@@ -5,15 +5,16 @@
       <v-spacer />
       <Help titre="Cotisations et impayés URSSAF">
         <template>
-          Ce graphique représente les données de l'URSSAF.
-          <br />Les dates représentées sont les dates de fin des périodes appelées
-          <br />
-          <ul>
-            <li>Cotisations: Montant des cotisations appelées.</li>
-            <li>Dette (part patronale): Cumul des dettes restantes à payer sur la part patronale.</li>
-            <li>Dette (part salariale): Cumul des dettes restantes à payer sur la part salariale (ou ouvrière).</li>
-          </ul>Fournisseur:
-          <b>ACOSS</b>
+          <p>Ce graphique représente les données de l'URSSAF.</p>
+          <p>Les dates représentées sont les dates de fin des périodes appelées.</p>
+          <p>
+            <ul>
+              <li>Cotisations : montant des cotisations appelées.</li>
+              <li>Dette (part patronale) : montant cumulé des dettes <strong>restant à payer</strong> sur la part patronale.</li>
+              <li>Dette (part salariale) : montant cumulé des dettes <strong>restant à payer</strong> sur la part salariale (ou ouvrière).</li>
+            </ul>
+          </p>
+          <em>Fournisseur : ACOSS.</em>
         </template>
       </Help>
     </v-toolbar>
@@ -53,7 +54,7 @@ export default {
             return data
           }, []),
         }, {
-          name: 'dette (part patronale)',
+          name: 'dette restante (part patronale)',
           type: 'area',
           data: this.debit.map((d) => {
             return [
@@ -62,7 +63,7 @@ export default {
             ]
           }),
         }, {
-          name: 'dette (part salariale)',
+          name: 'dette restante (part salariale)',
           type: 'area',
           data: this.debit.map((d) => {
             return [
@@ -151,6 +152,38 @@ export default {
           verticalAlign: 'middle',
           offsetX: 0,
           offsetY: 0,
+        },
+        annotations: {
+          position: 'front',
+          xaxis: [{
+            x: new Date('17 Mar 2020').getTime(),
+            x2: new Date('11 May 2020').getTime(),
+            borderColor: '#373D3F',
+            fillColor: '#373D3F',
+            opacity: 0.1,
+            label: {
+              text: 'Confinement national n°1',
+              borderColor: '#373D3F',
+              style: {
+                color: '#fff',
+                background: '#373D3F',
+              },
+            },
+          }, {
+            x: new Date('30 Oct 2020').getTime(),
+            x2: new Date('15 Dec 2020').getTime(),
+            borderColor: '#373D3F',
+            fillColor: '#373D3F',
+            opacity: 0.1,
+            label: {
+              text: 'Confinement national n°2',
+              borderColor: '#373D3F',
+              style: {
+                color: '#fff',
+                background: '#373D3F',
+              },
+            },
+          }],
         },
       }
     },
