@@ -24,7 +24,7 @@
               <template>
                 Cette information est fournie par <em>Fiche Commune Entreprise</em>.<br>
                 Vous pouvez consulter ce service édité par l'incubateur des ministères sociaux pour en savoir davantage sur la date et la nature des visites.<br>
-                Un compte avec une adresse email spécifique est nécessaire.
+                Un compte Fiche Commune Entreprise avec une adresse email <code>@direccte.gouv.fr</code> est nécessaire.
               </template>
             </Help>
           </h2>
