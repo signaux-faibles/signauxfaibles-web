@@ -12,7 +12,27 @@
       <v-btn v-if="followed === false" dark color="indigo darken-5" @click="showFollowDialog"><v-icon left class="mr-2">mdi-star-outline</v-icon>Suivre</v-btn>
       <v-btn v-if="followed === true" outline color="indigo darken-5" @click="showUnfollowDialog"><v-icon left class="mr-2">mdi-star</v-icon>Ne plus suivre</v-btn>
     </h1>
-    <Historique style="padding: 4px; position: relative; bottom: 5px" :historique="historique" />
+    <v-layout ma-2 wrap>
+      <v-flex md6 xs12>
+        <Historique :historique="historique" />
+      </v-flex>
+      <v-flex md4 xs12>
+        <div v-if="showFCE && visiteFCE">
+          <h2>
+            Visites de la Direccte
+            <Help titre="Visites de la Direccte">
+              <template>
+                Cette information est fournie par <em>Fiche Commune Entreprise</em>.<br>
+                Vous pouvez consulter ce service édité par l'incubateur des ministères sociaux pour en savoir davantage sur la date et la nature des visites.<br>
+                Un compte avec une adresse email spécifique est nécessaire.
+              </template>
+            </Help>
+          </h2>
+          Cet établissement a reçu la visite de la Direccte au cours des 24 derniers mois.
+          <v-btn class="ma-3" small outline color="indigo darken-5" :href="lienVisiteFCE" target="_blank"><v-icon small left class="mr-2">open_in_new</v-icon>Fiche Commune Entreprise</v-btn>
+        </div>
+      </v-flex>
+    </v-layout>
     <h3>
       siren {{ siret.slice(0,9) }}
       <span style="color: #999">{{ siret.slice(9,14) }} siret</span>
@@ -50,7 +70,7 @@ import Historique from '@/components/Etablissement/Historique.vue'
 
 export default {
   name: 'Identite',
-  props: ['denomination', 'historique', 'siret', 'sirene', 'siege', 'groupe', 'terrind', 'creation'],
+  props: ['denomination', 'historique', 'siret', 'sirene', 'siege', 'groupe', 'terrind', 'creation', 'visiteFCE'],
   components: { Help, Historique },
   methods: {
     showFollowDialog() {
@@ -116,6 +136,14 @@ export default {
           : ''),
         (this.groupe ? 'Tête de groupe&nbsp;: ' + this.groupe : '')]
         .filter(Boolean).join('<br>')
+    },
+    lienVisiteFCE() {
+      return `https://fce.fabrique.social.gouv.fr/establishment/${this.siret}#direccte`
+    },
+    showFCE() {
+      const emailDomain = this.jwt.email.split('@').pop()
+      return process.env.VUE_APP_FCE_ENABLED && !!JSON.parse(process.env.VUE_APP_FCE_ENABLED)
+        && process.env.VUE_APP_FCE_DOMAIN_LIST.split(',').includes(emailDomain)
     },
   },
 }
