@@ -186,44 +186,22 @@
             style="font-size: 15px;"
             @change="getPrediction()"
           >Visibilité selon statut des procédures</span>
-          <v-switch
+          <v-select
+            ref="procol" 
+            v-model="procol"
+            :items="procolItems"
+            :menu-props="{ maxHeight: 400 }"
             :disabled="loading"
-            v-model="in_bonis"
-            class="mx-2 thin"
-            @change="getPrediction()"
+            multiple
+            chips
+            @blur="getPrediction()"
           >
-            <span slot="label" style="font-size: 14px">In bonis</span>
-          </v-switch>
-          <v-switch
-            :disabled="loading"
-            v-model="continuation"
-            class="mx-2 thin"
-            @change="getPrediction()"
-          >
-            <span slot="label" style="font-size: 14px">In bonis (plan de continuation)</span>
-          </v-switch>
-          <v-switch
-            :disabled="loading"
-            v-model="sauvegarde"
-            class="mx-2 thin"
-            @change="getPrediction()"
-          >
-            <span slot="label" style="font-size: 14px">Sauvegarde</span>
-          </v-switch>
-          <v-switch
-            :disabled="loading"
-            v-model="plan_sauvegarde"
-            class="mx-2 thin"
-            @change="getPrediction()"
-          >
-            <span slot="label" style="font-size: 14px">Plan de sauvegarde</span>
-          </v-switch>
-          <v-switch :disabled="loading" v-model="rj" class="mx-2 thin" @change="getPrediction()">
-            <span slot="label" style="font-size: 14px">Redressement judiciaire</span>
-          </v-switch>
-          <v-switch :disabled="loading" v-model="lj" class="mx-2 thin" @change="getPrediction()">
-            <span slot="label" style="font-size: 14px">Liquidation judiciaire</span>
-          </v-switch>
+            <template v-slot:append-item>
+              <div class="text-xs-center my-2">
+                <v-btn @click="$refs.procol.isMenuActive = false" color="primary">OK</v-btn>
+              </div>
+            </template>
+          </v-select>
         </div>
         <p style="height: 1px; border: 1px solid #eee; margin-top: 20px" />
         <span class="ml-3" style="color: rgba(0,0,0,0.54); font-size: 13px;">Siège des entreprises</span>
@@ -291,6 +269,8 @@ export default {
       errorOccured: false,
       followStateChanged: false,
       snackbar: true,
+      procolItems: ['In bonis', 'In bonis (plan de continuation)', 'Sauvegarde', 'Plan de sauvegarde', 'Redressement judiciaire', 'Liquidation judiciaire'],
+      procolParams: [['in_bonis'], ['continuation'], ['sauvegarde'], ['plan_sauvegarde'], ['redressement', 'plan_redressement'], ['liquidation']],
     }
   },
   mounted() {
@@ -436,24 +416,11 @@ export default {
         params.ignorezone = this.ignorezone
       }
       params.procol = []
-      if (this.rj) {
-        params.procol = params.procol.concat(['redressement', 'plan_redressement'])
-      }
-      if (this.lj) {
-        params.procol = params.procol.concat(['liquidation'])
-      }
-      if (this.sauvegarde) {
-        params.procol = params.procol.concat(['sauvegarde'])
-      }
-      if (this.plan_sauvegarde) {
-        params.procol = params.procol.concat(['plan_sauvegarde'])
-      }
-      if (this.continuation) {
-        params.procol = params.procol.concat(['continuation'])
-      }
-      if (this.in_bonis) {
-        params.procol = params.procol.concat(['in_bonis'])
-      }
+      this.procolItems.forEach((p, i) => {
+        if (this.procol.includes(p)) {
+          params.procol = params.procol.concat(this.procolParams[i])
+        }
+      })
       if (this.exclureSuivi) {
         params.exclureSuivi = this.exclureSuivi
       }
@@ -478,29 +445,9 @@ export default {
       get() { return this.$localStore.state.ignorezone },
       set(value) { this.$localStore.commit('setignorezone', value) },
     },
-    rj: {
-      get() { return this.$localStore.state.rj },
-      set(value) { this.$localStore.commit('setrj', value) },
-    },
-    lj: {
-      get() { return this.$localStore.state.lj },
-      set(value) { this.$localStore.commit('setlj', value) },
-    },
-    continuation: {
-      get() { return this.$localStore.state.continuation },
-      set(value) { this.$localStore.commit('setcontinuation', value) },
-    },
-    sauvegarde: {
-      get() { return this.$localStore.state.sauvegarde },
-      set(value) { this.$localStore.commit('setsauvegarde', value) },
-    },
-    plan_sauvegarde: {
-      get() { return this.$localStore.state.plan_sauvegarde },
-      set(value) { this.$localStore.commit('setplan_sauvegarde', value) },
-    },
-    in_bonis: {
-      get() { return this.$localStore.state.in_bonis },
-      set(value) { this.$localStore.commit('setin_bonis', value) },
+    procol: {
+      get() { return this.$localStore.state.procol },
+      set(value) { this.$localStore.commit('setprocol', value) },
     },
     currentNaf: {
       get() {
