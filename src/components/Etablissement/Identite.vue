@@ -17,19 +17,19 @@
         <Historique :historique="historique" />
       </v-flex>
       <v-flex md4 xs12>
-        <div v-if="showFCE && visiteFCE">
+        <div v-if="visiteFCE">
           <h2>
             Visites de la Direccte
             <Help titre="Visites de la Direccte">
               <template>
-                Cette information est fournie par <em>Fiche Commune Entreprise</em>.<br>
+                Cette information est fournie par <a href="https://fce.fabrique.social.gouv.fr/a-propos" target="_blank">Fiche Commune Entreprise</a>.<br>
                 Vous pouvez consulter ce service édité par l'incubateur des ministères sociaux pour en savoir davantage sur la date et la nature des visites.<br>
                 Un compte Fiche Commune Entreprise avec une adresse email <code>@direccte.gouv.fr</code> est nécessaire.
               </template>
             </Help>
           </h2>
           Cet établissement a reçu la visite de la Direccte au cours des 24 derniers mois.
-          <v-btn class="ma-3" small outline color="indigo darken-5" :href="lienVisiteFCE" target="_blank"><v-icon small left class="mr-2">open_in_new</v-icon>Fiche Commune Entreprise</v-btn>
+          <v-btn v-if="showFCE" class="ma-3" small outline color="indigo darken-5" :href="lienVisiteFCE" target="_blank"><v-icon small left class="mr-2">open_in_new</v-icon>Fiche Commune Entreprise</v-btn>
         </div>
       </v-flex>
     </v-layout>
