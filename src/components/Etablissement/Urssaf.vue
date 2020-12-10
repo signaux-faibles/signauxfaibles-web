@@ -26,8 +26,8 @@
       :options="options"
       :series="series"
     ></apexchart>
-    <v-layout align-center justify-center row style="min-height: 500px" v-if="!permUrssaf">
-      <v-icon style="color: #33333358" size="100">fa-lock</v-icon>
+    <v-layout align-center justify-center text-xs-center style="min-height: 500px" v-if="!permUrssaf">
+      <v-flex xs5><v-icon size="100">fa-lock</v-icon><div class="lock-urssaf mt-2">Vous n'êtes malheureusement pas autorisé(e) à consulter les données de cotisations et d'impayés Urssaf</div></v-flex>  
     </v-layout>
   </div>
 </template>
@@ -190,3 +190,11 @@ export default {
   },
 }
 </script>
+<style scoped>
+.lock-urssaf {
+  color: #0000008A;
+  font-family: "Abel";
+  font-size: 16px;
+  font-weight: 800;
+}
+</style>
