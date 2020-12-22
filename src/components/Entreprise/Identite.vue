@@ -17,6 +17,58 @@
         <div style="padding: 10px; margin: 4px;">
           <div v-html="activiteHtml" style="font-size: 16px"></div>
         </div>
+        <div v-if="showSecteursCovid" class="text-uppercase" style="font-size: 18px">
+          Secteurs COVID-19
+          <Help
+            style="position: relative; top: -3px; right: 10px"
+            titre="Secteurs COVID-19"
+          >
+            <p>Nous nous basons sur le code APE déclaré pour le siège de l’entreprise afin de suggérer l’appartenance à certains secteurs dits COVID-19 :</p>
+            <ul>
+              <li>
+                <strong>S1</strong> : secteurs du tourisme, de l’hôtellerie, de la restauration, du sport, de la culture, du transport aérien et de l’événementiel qui ont été affectés par les conséquences économiques et financières de l’épidémie de COVID-19, en raison notamment de la dépendance de leur activité à l’accueil du public.<br>
+                La liste détaillée est consultable <a href="https://www.legifrance.gouv.fr/loda/id/LEGIARTI000042706893/" target="_blank">en annexe I</a> du décret relatif au fonds de solidarité.
+              </li>
+              <li>
+                <strong>S1 bis</strong> : secteurs dont l’activité dépend directement, en amont ou en aval, de celles du secteur S1 et qui ont subi une très forte baisse de leur chiffre d’affaires.<br>
+                La liste détaillée est consultable <a href="https://www.legifrance.gouv.fr/loda/id/LEGIARTI000042706890/" target="_blank">en annexe II</a> du décret relatif au fonds de solidarité.
+              </li>
+              <li>
+                <strong>S2</strong> : autres secteurs d’activité (non exhaustif) impliquant l’accueil du public et dont l’activité a été interrompue du fait de la propagation de l’épidémie de COVID-19, à l’exclusion des fermetures volontaires.
+              </li>
+            </ul>
+          </Help>
+          <v-tooltip bottom v-if="s1">
+            <template v-slot:activator="{ on, attrs }">
+            <v-chip v-bind="attrs" v-on="on" class="ma-2" label outline text-color="grey darken-3">S1 : très probable</v-chip>
+            </template>
+            <span>Cette entreprise fait très probablement partie du secteur S1 au titre de l'activité :<br>{{ s1.libelleActivite }}</span>
+          </v-tooltip>
+          <v-tooltip bottom v-if="s1Possible">
+            <template v-slot:activator="{ on, attrs }">
+            <v-chip v-bind="attrs" v-on="on" class="ma-2" label outline text-color="grey darken-3" style="border-style: dashed solid">S1 : possible</v-chip>
+            </template>
+            <span>Cette entreprise peut faire partie du secteur S1 au titre de l'activité :<br>{{ s1Possible.libelleActivite }}</span>
+          </v-tooltip>
+          <v-tooltip bottom v-if="s1bis">
+            <template v-slot:activator="{ on, attrs }">
+            <v-chip v-bind="attrs" v-on="on" class="ma-2" label outline text-color="grey darken-3">S1 bis : très probable</v-chip>
+            </template>
+            <span>Cette entreprise fait très probablement partie du secteur S1 bis au titre de l'activité :<br>{{ s1bis.libelleActivite }}</span>
+          </v-tooltip>
+          <v-tooltip bottom v-if="s1bisPossible">
+            <template v-slot:activator="{ on, attrs }">
+            <v-chip v-bind="attrs" v-on="on" class="ma-2" label outline text-color="grey darken-3" style="border-style: dashed solid">S1 bis : possible</v-chip>
+            </template>
+            <span>Cette entreprise peut faire partie du secteur S1 bis au titre de l'activité :<br>{{ s1bisPossible.libelleActivite }}</span>
+          </v-tooltip>
+          <v-tooltip bottom v-if="s2">
+            <template v-slot:activator="{ on, attrs }">
+            <v-chip v-bind="attrs" v-on="on" class="ma-2" label outline text-color="grey darken-3">S2 : très probable</v-chip>
+            </template>
+            <span>Cette entreprise fait probablement partie du secteur S2</span>
+          </v-tooltip>
+        </div>
       </v-flex>
       <v-flex xs12 md6>
         <h3>adresse postale du siège</h3>
@@ -61,11 +113,17 @@
 
 <script>
 import Help from '@/components/Help.vue'
+import secteursCovid from '@/assets/secteurs_covid.json'
 
 export default {
   name: 'EntrepriseIdentite',
   props: ['denomination', 'siren', 'siege', 'groupe', 'terrind', 'creation'],
   components: { Help },
+  data() {
+    return {
+      secteursCovid,
+    }
+  },
   methods: {
     calculateAge(birthday) {
       const ageDiff = Date.now() - birthday.getTime()
@@ -79,6 +137,9 @@ export default {
       } else {
         return count + ' ans'
       }
+    },
+    filteredSecteur(secteur) {
+      return secteur.filter((a) => a.codeActivite === this.codeActivite)[0] || null
     },
   },
   computed: {
@@ -110,6 +171,24 @@ export default {
         : ''),
       (this.groupe ? 'Tête de groupe&nbsp;: ' + this.groupe : '')]
         .filter(Boolean).join('<br>')
+    },
+    showSecteursCovid() {
+      return this.s1 || this.s1Possible || this.s1bis || this.s1bisPossible || this.s2
+    },
+    s1() {
+      return this.filteredSecteur(this.secteursCovid.s1)
+    },
+    s1Possible() {
+      return this.filteredSecteur(this.secteursCovid.s1Possible)
+    },
+    s1bis() {
+      return this.filteredSecteur(this.secteursCovid.s1bis)
+    },
+    s1bisPossible() {
+      return this.filteredSecteur(this.secteursCovid.s1bisPossible)
+    },
+    s2() {
+      return this.filteredSecteur(this.secteursCovid.s2)
     },
   },
 }
