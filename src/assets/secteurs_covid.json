@@ -82,7 +82,7 @@
     },
     {
       "codeActivite": "9001Z",
-      "libelleActivite": "Arts du spectacle vivant"
+      "libelleActivite": "Arts du spectacle vivant, cirques"
     },
     {
       "codeActivite": "9002Z",
@@ -212,7 +212,7 @@
     },
     {
       "codeActivite": "4778C",
-      "libelleActivite": "Galeries d'art"
+      "libelleActivite": "Galeries d'art ou magasins de souvenirs et de piété"
     },
     {
       "codeActivite": "7990Z",
@@ -503,10 +503,6 @@
       "libelleActivite": "Stations-service"
     },
     {
-      "codeActivite": "4778C",
-      "libelleActivite": "Magasins de souvenirs et de piété"
-    },
-    {
       "codeActivite": "9200Z",
       "libelleActivite": "Paris sportifs"
     },
@@ -553,6 +549,14 @@
     {
       "codeActivite": "1399Z",
       "libelleActivite": "Fabrication de dentelle et broderie"
+    },
+    {
+      "codeActivite": "4622Z",
+      "libelleActivite": "Commerce de gros de vêtements de travail"
+    },
+    {
+      "codeActivite": "5813Z",
+      "libelleActivite": "Médias locaux"
     }
   ],
   "s2": [

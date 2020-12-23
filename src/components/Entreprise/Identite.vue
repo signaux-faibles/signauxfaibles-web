@@ -27,11 +27,11 @@
             <ul>
               <li>
                 <strong>S1</strong> : secteurs du tourisme, de l’hôtellerie, de la restauration, du sport, de la culture, du transport aérien et de l’événementiel qui ont été affectés par les conséquences économiques et financières de l’épidémie de COVID-19, en raison notamment de la dépendance de leur activité à l’accueil du public.<br>
-                La liste détaillée est consultable <a href="https://www.legifrance.gouv.fr/loda/id/LEGIARTI000042706893/" target="_blank">en annexe I</a> du décret relatif au fonds de solidarité.
+                La liste détaillée est consultable <a href="https://www.legifrance.gouv.fr/loda/id/LEGIARTI000042706893/2020-12-21/" target="_blank">en annexe I</a> du décret relatif au fonds de solidarité (version en vigueur au 21/12/2020).
               </li>
               <li>
                 <strong>S1 bis</strong> : secteurs dont l’activité dépend directement, en amont ou en aval, de celles du secteur S1 et qui ont subi une très forte baisse de leur chiffre d’affaires.<br>
-                La liste détaillée est consultable <a href="https://www.legifrance.gouv.fr/loda/id/LEGIARTI000042706890/" target="_blank">en annexe II</a> du décret relatif au fonds de solidarité.
+                La liste détaillée est consultable <a href="https://www.legifrance.gouv.fr/loda/id/LEGIARTI000042706890/2020-12-21/" target="_blank">en annexe II</a> du décret relatif au fonds de solidarité (version en vigueur au 21/12/2020).
               </li>
               <li>
                 <strong>S2</strong> : autres secteurs d’activité (non exhaustif) impliquant l’accueil du public et dont l’activité a été interrompue du fait de la propagation de l’épidémie de COVID-19, à l’exclusion des fermetures volontaires.
