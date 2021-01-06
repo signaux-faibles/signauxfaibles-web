@@ -13,24 +13,22 @@
       <v-btn v-if="followed === true" outline color="indigo darken-5" @click="showUnfollowDialog"><v-icon left class="mr-2">mdi-star</v-icon>Ne plus suivre</v-btn>
     </h1>
     <v-layout ma-2 wrap>
-      <v-flex md6 xs12>
+      <v-flex v-if="historique.length > 0" md6 xs12>
         <Historique :historique="historique" />
       </v-flex>
-      <v-flex md4 xs12>
-        <div v-if="visiteFCE">
-          <h2>
-            Visites de la Direccte
-            <Help titre="Visites de la Direccte">
-              <template>
-                Cette information est fournie par <a href="https://fce.fabrique.social.gouv.fr/a-propos" target="_blank">Fiche Commune Entreprise</a>.<br>
-                Vous pouvez consulter ce service édité par l'incubateur des ministères sociaux pour en savoir davantage sur la date et la nature des visites.<br>
-                Un compte Fiche Commune Entreprise avec une adresse email <code>@direccte.gouv.fr</code> est nécessaire.
-              </template>
-            </Help>
-          </h2>
-          Cet établissement a reçu la visite de la Direccte au cours des 24 derniers mois.
-          <v-btn v-if="showFCE" class="ma-3" small outline color="indigo darken-5" :href="lienVisiteFCE" target="_blank"><v-icon small left class="mr-2">open_in_new</v-icon>Fiche Commune Entreprise</v-btn>
-        </div>
+      <v-flex md4 xs12 v-if="visiteFCE">
+        <h2>
+          Visites de la Direccte
+          <Help titre="Visites de la Direccte">
+            <template>
+              Cette information est fournie par <a href="https://fce.fabrique.social.gouv.fr/a-propos" target="_blank">Fiche Commune Entreprise</a>.<br>
+              Vous pouvez consulter ce service édité par l’incubateur des ministères sociaux pour en savoir davantage sur la date et la nature des visites.<br>
+              Un compte Fiche Commune Entreprise avec une adresse email spécifique est nécessaire.
+            </template>
+          </Help>
+        </h2>
+        Cet établissement a reçu la visite de la Direccte au cours des 24 derniers mois.
+        <v-btn v-if="showFCE" class="ma-3" small outline color="indigo darken-5" :href="lienVisiteFCE" target="_blank"><v-icon small left class="mr-2">open_in_new</v-icon>Fiche Commune Entreprise</v-btn>
       </v-flex>
     </v-layout>
     <h3>
