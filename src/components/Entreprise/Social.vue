@@ -629,9 +629,7 @@ export default {
         tooltip: {
           enabled: true,
           x: {
-            formatter(val) {
-              return new Date(val).toLocaleDateString()
-            },
+            format: 'MM/yyyy',
           },
           y: {
             formatter(val) {
