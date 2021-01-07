@@ -16,7 +16,7 @@
       <v-flex v-if="historique.length > 0" md6 xs12>
         <Historique :historique="historique" />
       </v-flex>
-      <v-flex md4 xs12 v-if="visiteFCE">
+      <v-flex md4 xs12 v-if="showFCE && visiteFCE">
         <h2>
           Visites de la Direccte
           <Help titre="Visites de la Direccte">
@@ -28,7 +28,7 @@
           </Help>
         </h2>
         Cet établissement a reçu la visite de la Direccte au cours des 24 derniers mois.
-        <v-btn v-if="showFCE" class="ma-3" small outline color="indigo darken-5" :href="lienVisiteFCE" target="_blank"><v-icon small left class="mr-2">open_in_new</v-icon>Fiche Commune Entreprise</v-btn>
+        <v-btn v-if="showLienVisiteFCE" class="ma-3" small outline color="indigo darken-5" :href="lienVisiteFCE" target="_blank" @click="getLienVisiteFCE()"><v-icon small left class="mr-2">open_in_new</v-icon>Fiche Commune Entreprise</v-btn>
       </v-flex>
     </v-layout>
     <h3>
@@ -70,6 +70,14 @@ export default {
   name: 'Identite',
   props: ['denomination', 'historique', 'siret', 'sirene', 'siege', 'groupe', 'terrind', 'creation', 'visiteFCE'],
   components: { Help, Historique },
+  data() {
+    return {
+      lienVisiteFCE: '',
+    }
+  },
+  mounted() {
+    this.getLienVisiteFCE()
+  },
   methods: {
     showFollowDialog() {
       this.$parent.followDialog = true
@@ -89,6 +97,14 @@ export default {
       } else {
         return count + ' ans'
       }
+    },
+    getLienVisiteFCE() {
+      const lienVisiteFCE = `https://fce.fabrique.social.gouv.fr/establishment/${this.siret}`
+      this.$axios.get(`/fce/${this.siret}`).then((response) => {
+        this.lienVisiteFCE = response.data || lienVisiteFCE
+      }).catch((error) => {
+        this.lienVisiteFCE = lienVisiteFCE
+      })
     },
   },
   computed: {
@@ -135,13 +151,12 @@ export default {
         (this.groupe ? 'Tête de groupe&nbsp;: ' + this.groupe : '')]
         .filter(Boolean).join('<br>')
     },
-    lienVisiteFCE() {
-      return `https://fce.fabrique.social.gouv.fr/establishment/${this.siret}#direccte`
-    },
     showFCE() {
-      const emailDomain = this.jwt.email.split('@').pop()
       return process.env.VUE_APP_FCE_ENABLED && !!JSON.parse(process.env.VUE_APP_FCE_ENABLED)
-        && process.env.VUE_APP_FCE_DOMAIN_LIST.split(',').includes(emailDomain)
+    },
+    showLienVisiteFCE() {
+      const emailDomain = this.jwt.email.split('@').pop()
+      return process.env.VUE_APP_FCE_DOMAIN_LIST.split(',').includes(emailDomain)
     },
   },
 }
