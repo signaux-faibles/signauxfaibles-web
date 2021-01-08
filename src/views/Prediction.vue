@@ -58,7 +58,7 @@
             label="Liste de détection"
           ></v-select>
         </div>
-        <p style="height: 1px; border: 1px solid #eee" />
+        <v-divider class="mb-3" />
         <div style="vertical-align: middle; padding: 0 15px;">
           <v-icon style="margin-right: 10px;">fa-industry</v-icon>
           <span style="color: rgba(0,0,0,0.54); font-size: 13px;">Secteur d'activité</span>
@@ -87,6 +87,7 @@
                 v-on="on"
                 @click="copyNaf()"
                 outline
+                class="ma-3"
               >
                 <v-icon>mdi-filter</v-icon>selection des secteurs
               </v-btn>
@@ -128,7 +129,7 @@
             </v-card>
           </v-dialog>
         </div>
-        <p style="height: 1px; border: 1px solid #eee" />
+        <v-divider class="mb-3" />
         <div style="display: flex; flex-direction: row; vertical-align: middle; padding: 0 15px;">
           <v-icon style="margin-right: 10px;">fa-map</v-icon>
           <v-select
@@ -139,8 +140,7 @@
             @change="getPrediction()"
           ></v-select>
         </div>
-        <v-checkbox :disabled="loading" v-model="ignorezone" class="mx-2 mt-1" label="Inclure tous les établissements des entreprises de ma zone" @change="getPrediction()"></v-checkbox>
-        <p style="height: 1px; border: 1px solid #eee" />
+        <v-divider class="mb-3" />
         <div style="display: flex; flex-direction: row; vertical-align: middle; padding: 0 15px;">
           <v-icon style="margin-right: 10px;">fa-users</v-icon>
           <v-combobox
@@ -151,7 +151,7 @@
             @change="getPrediction()"
           ></v-combobox>
         </div>
-        <p style="height: 1px; border: 1px solid #eee"/>
+        <v-divider class="mb-3" />
         <div
           style="display: flex; flex-direction: column; vertical-align: middle; padding: 0 15px;"
         >
@@ -176,13 +176,38 @@
             </template>
           </v-select>
         </div>
-        <p style="height: 1px; border: 1px solid #eee; margin-top: 20px" />
-        <span class="ml-3" style="color: rgba(0,0,0,0.54); font-size: 13px;">Siège des entreprises</span>
-        <v-checkbox :disabled="loading" v-model="siegeUniquement" class="mx-2 mt-1" label="N'afficher que les sièges des entreprises" @change="getPrediction()"></v-checkbox>
-        <p style="height: 1px; border: 1px solid #eee;" />
-        <span class="ml-3" style="color: rgba(0,0,0,0.54); font-size: 13px;">Suivi d'établissements</span>
-        <v-checkbox :disabled="loading" v-model="exclureSuivi" class="mx-2 mt-1" label="Exclure mes établissements suivis" @change="getPrediction()"></v-checkbox>
-        <p style="height: 1px; border: 1px solid #eee" />
+        <v-list three-line>
+          <v-list-group>
+            <v-subheader slot="activator">Filtres avancés</v-subheader>
+            <v-list-tile :disabled="loading">
+              <v-list-tile-action>
+                <v-checkbox v-model="ignorezone" @change="getPrediction()"></v-checkbox>
+              </v-list-tile-action>
+              <v-list-tile-content @click="toggleIgnoreZone()">
+                <v-list-tile-title>Établissements toute zone</v-list-tile-title>
+                <v-list-tile-sub-title>Inclure tous les établissements des entreprises de ma zone</v-list-tile-sub-title>
+              </v-list-tile-content>
+            </v-list-tile>
+            <v-list-tile :disabled="loading">
+              <v-list-tile-action>
+                <v-checkbox v-model="siegeUniquement" @change="getPrediction()"></v-checkbox>
+              </v-list-tile-action>
+              <v-list-tile-content @click="toggleSiegeUniquement()">
+                <v-list-tile-title>Sièges uniquement</v-list-tile-title>
+                <v-list-tile-sub-title>Exclure les établissements secondaires</v-list-tile-sub-title>
+              </v-list-tile-content>
+            </v-list-tile>
+            <v-list-tile :disabled="loading">
+              <v-list-tile-action>
+                <v-checkbox v-model="exclureSuivi" @change="getPrediction()"></v-checkbox>
+              </v-list-tile-action>
+              <v-list-tile-content @click="toggleExclureSuivi()">
+                <v-list-tile-title>Établissements non suivis</v-list-tile-title>
+                <v-list-tile-sub-title>Exclure mes établissements suivis</v-list-tile-sub-title>
+              </v-list-tile-content>
+            </v-list-tile>
+          </v-list-group>
+        </v-list>
       </v-navigation-drawer>
     </div>
     <v-card
@@ -356,6 +381,18 @@ export default {
     closeRightDrawer() {
       this.trackMatomoEvent('general', 'fermer_volet_filtrage')
       this.rightDrawer = !this.rightDrawer
+    },
+    toggleIgnoreZone() {
+      this.ignorezone = !this.ignorezone
+      this.getPrediction()
+    },
+    toggleSiegeUniquement() {
+      this.siegeUniquement = !this.siegeUniquement
+      this.getPrediction()
+    },
+    toggleExclureSuivi() {
+      this.exclureSuivi = !this.exclureSuivi
+      this.getPrediction()
     },
   },
   watch: {
