@@ -21,14 +21,14 @@
           Visites de la Direccte
           <Help titre="Visites de la Direccte">
             <template>
-              Cette information est fournie par <a href="https://fce.fabrique.social.gouv.fr/a-propos" target="_blank">Fiche Commune Entreprise</a>.<br>
+              Cette information est fournie par <a href="https://fce.fabrique.social.gouv.fr/a-propos" target="_blank" rel="noopener">Fiche Commune Entreprise</a>.<br>
               Vous pouvez consulter ce service édité par l’incubateur des ministères sociaux pour en savoir davantage sur la date et la nature des visites.<br>
               Un compte Fiche Commune Entreprise avec une adresse email spécifique est nécessaire.
             </template>
           </Help>
         </h2>
         Cet établissement a reçu la visite de la Direccte au cours des 24 derniers mois.
-        <v-btn v-if="showLienVisiteFCE" class="ma-3" small outline color="indigo darken-5" :href="lienVisiteFCE" target="_blank" @click="getLienVisiteFCE()"><v-icon small left class="mr-2">open_in_new</v-icon>Fiche Commune Entreprise</v-btn>
+        <v-btn v-if="showLienVisiteFCE" class="ma-3" small outline color="indigo darken-5" :href="lienVisiteFCE" target="_blank" rel="noopener" @click="getLienVisiteFCE()"><v-icon small left class="mr-2">open_in_new</v-icon>Fiche Commune Entreprise</v-btn>
       </v-flex>
     </v-layout>
     <h3>
@@ -53,7 +53,7 @@
             <Help style="position: relative; top: -3px; right: 10px" titre="Territoires d’industrie">
               Les Territoires d’industrie sont des <b>intercommunalités ou des groupes d’intercommunalités</b> situés dans les campagnes, les espaces périurbains, les villes petites et moyennes.<br />
               Elles présentent <b>une forte identité et un savoir-faire industriel</b> et l’ensemble de leurs acteurs, notamment les entreprises et les collectivités territoriales, sont mobilisés pour le développement de l’industrie.<br /><br />
-              Pour en savoir davantage : <a href="https://agence-cohesion-territoires.gouv.fr/territoires-dindustrie-44" target="_blank">https://agence-cohesion-territoires.gouv.fr/territoires-dindustrie-44</a>
+              Pour en savoir davantage : <a href="https://agence-cohesion-territoires.gouv.fr/territoires-dindustrie-44" target="_blank" rel="noopener">https://agence-cohesion-territoires.gouv.fr/territoires-dindustrie-44</a>
             </Help>  
           </div>
         </v-flex>
