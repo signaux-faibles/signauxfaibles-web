@@ -487,6 +487,10 @@
     {
       "codeActivite": "1413Z",
       "libelleActivite": "Couturiers"
+    },
+    {
+      "codeActivite": "9523Z",
+      "libelleActivite": "Réparation de chaussures et d'articles en cuir"
     }
   ],
   "s1bisPossible": [
@@ -555,8 +559,16 @@
       "libelleActivite": "Commerce de gros de vêtements de travail"
     },
     {
-      "codeActivite": "5813Z",
-      "libelleActivite": "Médias locaux"
+      "codeActivite": "6010Z",
+      "libelleActivite": "Edition et diffusion de programmes radios à audience locale, éditions de chaînes de télévision à audience locale"
+    },
+    {
+      "codeActivite": "6020B",
+      "libelleActivite": "Edition et diffusion de programmes radios à audience locale, éditions de chaînes de télévision à audience locale"
+    },
+    {
+      "codeActivite": "3230Z",
+      "libelleActivite": "Fabrication de skis, fixations et bâtons pour skis, chaussures de ski"
     }
   ],
   "s2": [
