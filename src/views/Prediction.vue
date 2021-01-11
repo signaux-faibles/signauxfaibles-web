@@ -184,7 +184,7 @@
                 <v-checkbox v-model="ignorezone" @change="getPrediction()"></v-checkbox>
               </v-list-tile-action>
               <v-list-tile-content @click="toggleIgnoreZone()">
-                <v-list-tile-title>Établissements toute zone</v-list-tile-title>
+                <v-list-tile-title>Tous les établissements</v-list-tile-title>
                 <v-list-tile-sub-title>Inclure tous les établissements des entreprises de ma zone</v-list-tile-sub-title>
               </v-list-tile-content>
             </v-list-tile>
@@ -634,5 +634,11 @@ export default {
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg);
   }
+}
+::v-deep .v-list__tile__action {
+  min-width: 46px;
+}
+::v-deep .v-list__tile {
+  padding-right: 8px;
 }
 </style>
