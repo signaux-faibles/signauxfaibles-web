@@ -295,7 +295,7 @@ export default {
       return (this.entreprise || {}).etablissements || []
     },
     paydex() {
-      return (this.entreprise || {}).paydex || {}
+      return (this.entreprise || {}).paydex
     },
   },
 }
