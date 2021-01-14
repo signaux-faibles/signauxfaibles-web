@@ -108,6 +108,33 @@
               </div>
             </v-flex>
           </v-layout>
+          <v-layout wrap>
+            <div v-if="relance" class="text-uppercase" style="font-size: 18px">
+              <img
+                class="mr-3"
+                style="vertical-align: middle"
+                height="64"
+                src="../../assets/france-relance.png"
+              />
+                Lauréat {{ relance }}
+              <Help
+                style="position: relative; top: -3px; right: 10px"
+                titre="Plan de relance"
+              >
+                  Pour faire face aux impacts de la crise sanitaire, le Gouvernement mobilise en 2020, 2021 et 2022, des moyens exceptionnels dédiés au soutien à l’investissement et à la modernisation de l’industrie.<br />
+                  Dans ce cadre, la DGE et Bpifrance mettent en place des appels à projets visant à soutenir des <em>projets d’investissement industriel au bénéfice de secteurs stratégiques et des territoires</em> :<br />
+                  <ul>
+                    <li><strong>Territoires d'industrie</strong> - Accélération des investissements dans les territoires d'industrie</li>
+                    <li><strong>Automobile</strong> - Modernisation de la filière automobile</li>
+                    <li><strong>Aéronautique</strong> - Modernisation de la filière aéronautique</li>
+                    <li><strong>Relocalisation</strong> - (Re)localisation dans les secteurs critiques</li>
+                    <li><strong>Efficacité énergétique</strong> - Efficacité énergétique dans l’industrie</li>
+                    <li><strong>Décarbonation</strong> - Décarbonation dans l'industrie</li>
+                  </ul><br />
+                  <em>Source : portail des données ouvertes du Ministère de l'Economie, des Finances, et de la Relance.</em>
+              </Help>
+            </div>
+          </v-layout>
         </div>
       </v-flex>
     </v-layout>
@@ -117,6 +144,7 @@
 <script>
 import Help from '@/components/Help.vue'
 import secteursCovid from '@/assets/secteurs_covid.json'
+import axios from 'axios'
 
 export default {
   name: 'EntrepriseIdentite',
@@ -125,7 +153,11 @@ export default {
   data() {
     return {
       secteursCovid,
+      relance: null,
     }
+  },
+  mounted() {
+    this.getRelance()
   },
   methods: {
     calculateAge(birthday) {
@@ -143,6 +175,13 @@ export default {
     },
     filteredSecteur(secteur) {
       return secteur.filter((a) => a.codeActivite === this.codeActivite)[0] || null
+    },
+    getRelance() {
+      axios.create().get(process.env.VUE_APP_RELANCE_URL + this.siren).then((response) => {
+        this.relance = response.data.records[0].fields.mesure_light
+      }).catch((error) => {
+        this.relance = null
+      })
     },
   },
   computed: {
