@@ -59,6 +59,15 @@ export default {
       news: [
         // TODO: externalize
         {
+          date: new Date('2021-01-14'), news: [
+            'Visites de la Direccte au cours des 24 derniers mois (Fiche Commune Entreprise)',
+            'Suggestion d\'appartenance aux secteurs dits COVID-19 (S1, S1 bis, S2)',
+            'Comportement de paiement de l\'entreprise vis à vis de ses créanciers',
+            'Mise en avant des lauréats du plan de relance',
+            'Révision des filtres des listes de détection',
+          ],
+        },
+        {
           date: new Date('2020-12-03'), news: [
             'Nouvelle fiche Entreprise',
             'Matérialisation des périodes de confinement sur les graphiques',
