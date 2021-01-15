@@ -21,10 +21,16 @@
               v-on="$listeners"
             />
           </v-flex>
-          <v-flex xs12 class="pr-1">
+          <v-flex xs12 class="pb-3 pr-1">
             <EntrepriseFinance 
               :siren="siren"
               :finance="finance"
+            />
+          </v-flex>
+          <v-flex xs12 class="pr-1">
+            <EntreprisePaiement
+              :siren="siren"
+              :paydex="paydex"
             />
           </v-flex>
         </v-layout>
@@ -37,17 +43,24 @@
 import EntrepriseIdentite from '@/components/Entreprise/Identite.vue'
 import EntrepriseSocial from '@/components/Entreprise/Social.vue'
 import EntrepriseFinance from '@/components/Entreprise/Finance.vue'
+import EntreprisePaiement from '@/components/Entreprise/Paiement.vue'
 import axios from 'axios'
 import fr from 'apexcharts/dist/locales/fr.json'
 
 export default {
   name: 'Entreprise',
   props: ['siren'],
-  components: { EntrepriseIdentite, EntrepriseSocial, EntrepriseFinance },
+  components: { EntrepriseIdentite, EntrepriseSocial, EntrepriseFinance, EntreprisePaiement },
   data() {
     return {
       axios: axios.create(),
       entreprise: {},
+    }
+  },
+  created() {
+    Apex.chart = {
+      locales: [fr],
+      defaultLocale: 'fr',
     }
   },
   mounted() {
@@ -280,6 +293,9 @@ export default {
     },
     etablissements() {
       return (this.entreprise || {}).etablissements || []
+    },
+    paydex() {
+      return (this.entreprise || {}).paydex
     },
   },
 }

@@ -20,36 +20,9 @@
         class="toolbar_titre"
       >
         Détection - {{ currentBatch }}
-        <Help ref="modelHelp" titre="Modèle de détection" :dark="true" :big="true">
+        <Help v-if="currentBatchDescription" ref="modelHelp" titre="Modèle de détection" :dark="true" :big="true">
           <template>
-            <div>
-              <p>
-                Le modèle de détection a évolué ! Vous apprendrez ici l’essentiel sur ce nouveau modèle.
-              </p>
-              <p>
-                <b>Quel est le périmètre de détection ?</b><br>
-                Provisoirement, le nouveau modèle ne tourne que sur les entreprises industrielles de plus de 20 et moins de 400 salariés, et dont on a accès aux informations bilancielles en 2018 ou 2019. Ce périmètre restreint a pour but de tester la pertinence du modèle avant de travailler à son extension à d’autres secteurs.
-              </p>
-              <p>
-                <b>Comment fonctionne le nouveau modèle ?</b><br>
-                Le nouveau modèle est un modèle à variables latentes, c’est-à-dire qui évalue séparément différents aspects de l’entreprise et agrège ces scores intermédiaires pour former un score final. Ensuite, selon le score final, deux niveaux d’alertes sont définis.<br>
-                Les variables latentes utilisées dans ce modèle sont les suivantes : endettement de l’entreprise, endettement court terme de l’entreprise, rentabilité, type d’entreprise (taille, région, âge, secteur), santé du secteur d’activité (avec prise en compte de la crise COVID), dettes sur les cotisations sociales (idem).
-                </p>
-              <p>
-                <b>Pourquoi une entreprise particulière a-t-elle été détectée ?</b><br>
-                Contrairement au modèle précédent, la détection ne peut pas être interprétée comme une forte probabilité de défaillance à 18 mois, car du fait de la crise, le comportement de défaillances des entreprises est pour l’instant une inconnue. Les entreprises ont donc simplement été classées du profil « le plus à risque » au « moins à risque ».<br>
-                L’avantage du modèle à variables latentes est qu’il fournit en même temps que la prédiction des éléments explicatifs (les variables latentes). Ces éléments ne sont malheureusement pas encore disponibles pour l’utilisateur mais ont vocation à être partagés dans une mise-à-jour prochaine, patience !
-              </p>
-              <p>
-                <b>Puis-je faire confiance au modèle ?</b><br>
-                Il s’agit des premiers résultats de ce nouveau modèle, qui sont distribués à titre expérimental. De ce fait, la fiabilité des résultats, malgré nos vérifications statistiques, doit encore être confirmée sur le terrain. Il est donc important d’effectuer une analyse experte des données de l’entreprise pour confirmer la détection du modèle.<br>
-                Pour la même raison, les détections sont susceptibles de varier d’une liste à la suivante, et la stabilité dans le temps des détections n’est donc pas assurée.
-              </p>
-              <p>
-                Vous voyez une anomalie ? Vous avez d’autres questions ? Contactez-nous par email :
-                <a class="d-block mt-2 text-xs-center" href="mailto:contact@signaux-faibles.beta.gouv.fr?subject=Questions sur le modèle de détection" target="_blank"><code>contact@signaux-faibles.beta.gouv.fr</code></a>
-              </p>
-            </div>
+            <div v-html="currentBatchDescription"></div>
           </template>
         </Help>
       </div>
@@ -85,7 +58,7 @@
             label="Liste de détection"
           ></v-select>
         </div>
-        <p style="height: 1px; border: 1px solid #eee" />
+        <v-divider class="mb-3" />
         <div style="vertical-align: middle; padding: 0 15px;">
           <v-icon style="margin-right: 10px;">fa-industry</v-icon>
           <span style="color: rgba(0,0,0,0.54); font-size: 13px;">Secteur d'activité</span>
@@ -114,6 +87,7 @@
                 v-on="on"
                 @click="copyNaf()"
                 outline
+                class="ma-3"
               >
                 <v-icon>mdi-filter</v-icon>selection des secteurs
               </v-btn>
@@ -155,7 +129,7 @@
             </v-card>
           </v-dialog>
         </div>
-        <p style="height: 1px; border: 1px solid #eee" />
+        <v-divider class="mb-3" />
         <div style="display: flex; flex-direction: row; vertical-align: middle; padding: 0 15px;">
           <v-icon style="margin-right: 10px;">fa-map</v-icon>
           <v-select
@@ -166,8 +140,7 @@
             @change="getPrediction()"
           ></v-select>
         </div>
-        <v-checkbox :disabled="loading" v-model="ignorezone" class="mx-2 mt-1" label="Inclure tous les établissements des entreprises de ma zone" @change="getPrediction()"></v-checkbox>
-        <p style="height: 1px; border: 1px solid #eee" />
+        <v-divider class="mb-3" />
         <div style="display: flex; flex-direction: row; vertical-align: middle; padding: 0 15px;">
           <v-icon style="margin-right: 10px;">fa-users</v-icon>
           <v-combobox
@@ -178,7 +151,7 @@
             @change="getPrediction()"
           ></v-combobox>
         </div>
-        <p style="height: 1px; border: 1px solid #eee"/>
+        <v-divider class="mb-3" />
         <div
           style="display: flex; flex-direction: column; vertical-align: middle; padding: 0 15px;"
         >
@@ -186,52 +159,55 @@
             style="font-size: 15px;"
             @change="getPrediction()"
           >Visibilité selon statut des procédures</span>
-          <v-switch
+          <v-select
+            ref="procol" 
+            v-model="procol"
+            :items="procolItems"
+            :menu-props="{ maxHeight: 400 }"
             :disabled="loading"
-            v-model="in_bonis"
-            class="mx-2 thin"
-            @change="getPrediction()"
+            multiple
+            chips
+            @blur="getPrediction()"
           >
-            <span slot="label" style="font-size: 14px">In bonis</span>
-          </v-switch>
-          <v-switch
-            :disabled="loading"
-            v-model="continuation"
-            class="mx-2 thin"
-            @change="getPrediction()"
-          >
-            <span slot="label" style="font-size: 14px">In bonis (plan de continuation)</span>
-          </v-switch>
-          <v-switch
-            :disabled="loading"
-            v-model="sauvegarde"
-            class="mx-2 thin"
-            @change="getPrediction()"
-          >
-            <span slot="label" style="font-size: 14px">Sauvegarde</span>
-          </v-switch>
-          <v-switch
-            :disabled="loading"
-            v-model="plan_sauvegarde"
-            class="mx-2 thin"
-            @change="getPrediction()"
-          >
-            <span slot="label" style="font-size: 14px">Plan de sauvegarde</span>
-          </v-switch>
-          <v-switch :disabled="loading" v-model="rj" class="mx-2 thin" @change="getPrediction()">
-            <span slot="label" style="font-size: 14px">Redressement judiciaire</span>
-          </v-switch>
-          <v-switch :disabled="loading" v-model="lj" class="mx-2 thin" @change="getPrediction()">
-            <span slot="label" style="font-size: 14px">Liquidation judiciaire</span>
-          </v-switch>
+            <template v-slot:append-item>
+              <div class="text-xs-center my-2">
+                <v-btn @click="$refs.procol.isMenuActive = false" color="primary">OK</v-btn>
+              </div>
+            </template>
+          </v-select>
         </div>
-        <p style="height: 1px; border: 1px solid #eee; margin-top: 20px" />
-        <span class="ml-3" style="color: rgba(0,0,0,0.54); font-size: 13px;">Siège des entreprises</span>
-        <v-checkbox :disabled="loading" v-model="siegeUniquement" class="mx-2 mt-1" label="N'afficher que les sièges des entreprises" @change="getPrediction()"></v-checkbox>
-        <p style="height: 1px; border: 1px solid #eee;" />
-        <span class="ml-3" style="color: rgba(0,0,0,0.54); font-size: 13px;">Suivi d'établissements</span>
-        <v-checkbox :disabled="loading" v-model="exclureSuivi" class="mx-2 mt-1" label="Exclure mes établissements suivis" @change="getPrediction()"></v-checkbox>
-        <p style="height: 1px; border: 1px solid #eee" />
+        <v-list three-line>
+          <v-list-group>
+            <v-subheader slot="activator">Filtres avancés</v-subheader>
+            <v-list-tile :disabled="loading">
+              <v-list-tile-action>
+                <v-checkbox v-model="ignorezone" @change="getPrediction()"></v-checkbox>
+              </v-list-tile-action>
+              <v-list-tile-content @click="toggleIgnoreZone()">
+                <v-list-tile-title>Tous les établissements</v-list-tile-title>
+                <v-list-tile-sub-title>Inclure tous les établissements des entreprises de ma zone</v-list-tile-sub-title>
+              </v-list-tile-content>
+            </v-list-tile>
+            <v-list-tile :disabled="loading">
+              <v-list-tile-action>
+                <v-checkbox v-model="siegeUniquement" @change="getPrediction()"></v-checkbox>
+              </v-list-tile-action>
+              <v-list-tile-content @click="toggleSiegeUniquement()">
+                <v-list-tile-title>Sièges uniquement</v-list-tile-title>
+                <v-list-tile-sub-title>Exclure les établissements secondaires</v-list-tile-sub-title>
+              </v-list-tile-content>
+            </v-list-tile>
+            <v-list-tile :disabled="loading">
+              <v-list-tile-action>
+                <v-checkbox v-model="exclureSuivi" @change="getPrediction()"></v-checkbox>
+              </v-list-tile-action>
+              <v-list-tile-content @click="toggleExclureSuivi()">
+                <v-list-tile-title>Établissements non suivis</v-list-tile-title>
+                <v-list-tile-sub-title>Exclure mes établissements suivis</v-list-tile-sub-title>
+              </v-list-tile-content>
+            </v-list-tile>
+          </v-list-group>
+        </v-list>
       </v-navigation-drawer>
     </div>
     <v-card
@@ -259,7 +235,7 @@
     </v-card>
     <PredictionWidget v-for="p in prediction" :key="p.siret" :prediction="p" @hide-etablissement="onHideEtablissement" @follow-etablissement="followStateChanged = true" @unfollow-etablissement="followStateChanged = true"/>
     <Spinner v-if="loading" />
-    <v-snackbar v-model="snackbar" :bottom="true" :timeout="0">
+    <v-snackbar v-if="currentBatchDescription" v-model="snackbar" :bottom="true">
       Le modèle de détection a évolué !
       <v-btn color="primary" flat @click="showModelHelp()">En savoir plus</v-btn>
       <v-btn icon @click="snackbar = false"><v-icon>clear</v-icon></v-btn> 
@@ -291,6 +267,8 @@ export default {
       errorOccured: false,
       followStateChanged: false,
       snackbar: true,
+      procolItems: ['In bonis', 'In bonis (plan de continuation)', 'Sauvegarde', 'Plan de sauvegarde', 'Redressement judiciaire', 'Liquidation judiciaire'],
+      procolParams: [['in_bonis'], ['continuation'], ['sauvegarde'], ['plan_sauvegarde'], ['redressement', 'plan_redressement'], ['liquidation']],
     }
   },
   mounted() {
@@ -404,6 +382,18 @@ export default {
       this.trackMatomoEvent('general', 'fermer_volet_filtrage')
       this.rightDrawer = !this.rightDrawer
     },
+    toggleIgnoreZone() {
+      this.ignorezone = !this.ignorezone
+      this.getPrediction()
+    },
+    toggleSiegeUniquement() {
+      this.siegeUniquement = !this.siegeUniquement
+      this.getPrediction()
+    },
+    toggleExclureSuivi() {
+      this.exclureSuivi = !this.exclureSuivi
+      this.getPrediction()
+    },
   },
   watch: {
     scrollTop() {
@@ -436,24 +426,11 @@ export default {
         params.ignorezone = this.ignorezone
       }
       params.procol = []
-      if (this.rj) {
-        params.procol = params.procol.concat(['redressement', 'plan_redressement'])
-      }
-      if (this.lj) {
-        params.procol = params.procol.concat(['liquidation'])
-      }
-      if (this.sauvegarde) {
-        params.procol = params.procol.concat(['sauvegarde'])
-      }
-      if (this.plan_sauvegarde) {
-        params.procol = params.procol.concat(['plan_sauvegarde'])
-      }
-      if (this.continuation) {
-        params.procol = params.procol.concat(['continuation'])
-      }
-      if (this.in_bonis) {
-        params.procol = params.procol.concat(['in_bonis'])
-      }
+      this.procolItems.forEach((p, i) => {
+        if (this.procol.includes(p)) {
+          params.procol = params.procol.concat(this.procolParams[i])
+        }
+      })
       if (this.exclureSuivi) {
         params.exclureSuivi = this.exclureSuivi
       }
@@ -478,29 +455,9 @@ export default {
       get() { return this.$localStore.state.ignorezone },
       set(value) { this.$localStore.commit('setignorezone', value) },
     },
-    rj: {
-      get() { return this.$localStore.state.rj },
-      set(value) { this.$localStore.commit('setrj', value) },
-    },
-    lj: {
-      get() { return this.$localStore.state.lj },
-      set(value) { this.$localStore.commit('setlj', value) },
-    },
-    continuation: {
-      get() { return this.$localStore.state.continuation },
-      set(value) { this.$localStore.commit('setcontinuation', value) },
-    },
-    sauvegarde: {
-      get() { return this.$localStore.state.sauvegarde },
-      set(value) { this.$localStore.commit('setsauvegarde', value) },
-    },
-    plan_sauvegarde: {
-      get() { return this.$localStore.state.plan_sauvegarde },
-      set(value) { this.$localStore.commit('setplan_sauvegarde', value) },
-    },
-    in_bonis: {
-      get() { return this.$localStore.state.in_bonis },
-      set(value) { this.$localStore.commit('setin_bonis', value) },
+    procol: {
+      get() { return this.$localStore.state.procol },
+      set(value) { this.$localStore.commit('setprocol', value) },
     },
     currentNaf: {
       get() {
@@ -626,6 +583,10 @@ export default {
     currentBatch() {
       return (this.batches.filter((b) => b.value === this.currentBatchKey)[0] || { text: 'chargement' }).text
     },
+    currentBatchDescription() {
+      const batches = this.$store.state.batches
+      return (batches.filter((b) => b.id === this.currentBatchKey)[0]).description
+    },
     eventName() {
       let eventName = this.currentBatchKey
       if (this.filter || '' !== '') {
@@ -673,5 +634,11 @@ export default {
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg);
   }
+}
+::v-deep .v-list__tile__action {
+  min-width: 46px;
+}
+::v-deep .v-list__tile {
+  padding-right: 8px;
 }
 </style>

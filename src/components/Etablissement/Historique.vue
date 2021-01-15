@@ -1,6 +1,6 @@
 <template>
-  <span>
-    <h2 v-if="historique.length > 0">
+  <div>
+    <h2>
       Historique des alertes
       <Help titre="Historique des alertes">
         <template>
@@ -13,7 +13,7 @@
       <ScoreWidget style="position: relative; bottom: 4px" size="25px" :prediction="h" />
       {{ h.idListe }}
     </div>
-  </span>
+  </div>
 </template>
 
 <script>

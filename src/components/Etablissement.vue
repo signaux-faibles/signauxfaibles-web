@@ -13,6 +13,7 @@
               :groupe="groupe"
               :terrind="terrind"
               :creation="creation"
+              :visiteFCE="visiteFCE"
             />
             <v-btn v-if="etablissement.siren" dark color="indigo darken-5" @click="showEntreprise">Voir Fiche Entreprise</v-btn>
           </v-flex>
@@ -521,6 +522,9 @@ export default {
     commune() {
       const summary = this.etablissementsSummary.filter((es) => es.siret === this.siret)[0]
       return (summary || {}).commune || ''
+    },
+    visiteFCE() {
+      return this.etablissement.visiteFCE ||  false
     },
   },
 }

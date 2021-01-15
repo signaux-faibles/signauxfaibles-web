@@ -12,7 +12,25 @@
       <v-btn v-if="followed === false" dark color="indigo darken-5" @click="showFollowDialog"><v-icon left class="mr-2">mdi-star-outline</v-icon>Suivre</v-btn>
       <v-btn v-if="followed === true" outline color="indigo darken-5" @click="showUnfollowDialog"><v-icon left class="mr-2">mdi-star</v-icon>Ne plus suivre</v-btn>
     </h1>
-    <Historique style="padding: 4px; position: relative; bottom: 5px" :historique="historique" />
+    <v-layout ma-2 wrap>
+      <v-flex v-if="historique.length > 0" md6 xs12>
+        <Historique :historique="historique" />
+      </v-flex>
+      <v-flex md4 xs12 v-if="showFCE && visiteFCE">
+        <h2>
+          Visites de la Direccte
+          <Help titre="Visites de la Direccte">
+            <template>
+              Cette information est fournie par <a href="https://fce.fabrique.social.gouv.fr/a-propos" target="_blank" rel="noopener">Fiche Commune Entreprise</a>.<br>
+              Vous pouvez consulter ce service édité par l’incubateur des ministères sociaux pour en savoir davantage sur la date et la nature des visites.<br>
+              Un compte Fiche Commune Entreprise avec une adresse email spécifique est nécessaire.
+            </template>
+          </Help>
+        </h2>
+        Cet établissement a reçu la visite de la Direccte au cours des 24 derniers mois.
+        <v-btn v-if="showLienVisiteFCE" class="ma-3" small outline color="indigo darken-5" :href="lienVisiteFCE" target="_blank" rel="noopener" @click="getLienVisiteFCE()"><v-icon small left class="mr-2">open_in_new</v-icon>Fiche Commune Entreprise</v-btn>
+      </v-flex>
+    </v-layout>
     <h3>
       siren {{ siret.slice(0,9) }}
       <span style="color: #999">{{ siret.slice(9,14) }} siret</span>
@@ -35,7 +53,7 @@
             <Help style="position: relative; top: -3px; right: 10px" titre="Territoires d’industrie">
               Les Territoires d’industrie sont des <b>intercommunalités ou des groupes d’intercommunalités</b> situés dans les campagnes, les espaces périurbains, les villes petites et moyennes.<br />
               Elles présentent <b>une forte identité et un savoir-faire industriel</b> et l’ensemble de leurs acteurs, notamment les entreprises et les collectivités territoriales, sont mobilisés pour le développement de l’industrie.<br /><br />
-              Pour en savoir davantage : <a href="https://agence-cohesion-territoires.gouv.fr/territoires-dindustrie-44" target="_blank">https://agence-cohesion-territoires.gouv.fr/territoires-dindustrie-44</a>
+              Pour en savoir davantage : <a href="https://agence-cohesion-territoires.gouv.fr/territoires-dindustrie-44" target="_blank" rel="noopener">https://agence-cohesion-territoires.gouv.fr/territoires-dindustrie-44</a>
             </Help>  
           </div>
         </v-flex>
@@ -50,8 +68,16 @@ import Historique from '@/components/Etablissement/Historique.vue'
 
 export default {
   name: 'Identite',
-  props: ['denomination', 'historique', 'siret', 'sirene', 'siege', 'groupe', 'terrind', 'creation'],
+  props: ['denomination', 'historique', 'siret', 'sirene', 'siege', 'groupe', 'terrind', 'creation', 'visiteFCE'],
   components: { Help, Historique },
+  data() {
+    return {
+      lienVisiteFCE: '',
+    }
+  },
+  mounted() {
+    this.getLienVisiteFCE()
+  },
   methods: {
     showFollowDialog() {
       this.$parent.followDialog = true
@@ -71,6 +97,14 @@ export default {
       } else {
         return count + ' ans'
       }
+    },
+    getLienVisiteFCE() {
+      const lienVisiteFCE = `https://fce.fabrique.social.gouv.fr/establishment/${this.siret}`
+      this.$axios.get(`/fce/${this.siret}`).then((response) => {
+        this.lienVisiteFCE = response.data || lienVisiteFCE
+      }).catch((error) => {
+        this.lienVisiteFCE = lienVisiteFCE
+      })
     },
   },
   computed: {
@@ -116,6 +150,13 @@ export default {
           : ''),
         (this.groupe ? 'Tête de groupe&nbsp;: ' + this.groupe : '')]
         .filter(Boolean).join('<br>')
+    },
+    showFCE() {
+      return process.env.VUE_APP_FCE_ENABLED && !!JSON.parse(process.env.VUE_APP_FCE_ENABLED)
+    },
+    showLienVisiteFCE() {
+      const emailDomain = this.jwt.email.split('@').pop()
+      return process.env.VUE_APP_FCE_DOMAIN_LIST.split(',').includes(emailDomain)
     },
   },
 }
