@@ -1,9 +1,9 @@
 <template>
-  <div style="background: #fff">
+  <div style="background: #fff; font-weight: 800; font-family: 'Oswald', sans;">
     <div>
       <v-container>
-        <v-layout wrap>
-          <v-flex xs12 md6 class="pa-3" style="font-size: 18px; margin-top: 3em;">
+        <v-layout wrap style="margin-top: 3em">
+          <v-flex xs12 md6 class="pa-3" style="font-size: 18px">
             <Identite
               :denomination="denomination"
               :historique="historique"
@@ -17,8 +17,14 @@
             />
             <v-btn v-if="etablissement.siren" dark color="indigo darken-5" @click="showEntreprise">Voir Fiche Entreprise</v-btn>
           </v-flex>
-          <v-flex xs12 md6 class="text-xs-right pa-3" style="margin-top: 3em">
-            <Map :longitude="sirene.longitude" :latitude="sirene.latitude" ref="map" />
+          <v-flex xs12 md6 class="text-xs-left pa-3" style="font-size: 18px">
+            <div v-if="followCard" class="followCard">
+              <h2>Suivi de l'établissement</h2>
+              <h3 class="mt-3">Statut du suivi <v-chip class="chip ml-3">{{ this.followCard.status }}</v-chip></h3>
+              <div class="description my-3" v-html="followCard.description"></div>
+              <v-btn dark color="indigo darken-5" :href="followCard.url" target="_blank" rel="noopener">Voir Carte Suivi</v-btn>
+            </div>
+            <Map v-else :longitude="sirene.longitude" :latitude="sirene.latitude" ref="map" />
           </v-flex>
           <v-flex xs12 md12 class="text-xs-right pa-3">
             <Commentaire :siret="siret" />
@@ -59,6 +65,55 @@
                 <v-btn dark color="indigo darken-5" @click="followEtablissement()"><v-icon left class="mr-2">mdi-star-outline</v-icon>Suivre</v-btn>
               </v-card-actions>
               <v-alert :value="followAlert" type="error" transition="scale-transition">{{ followAlertError }}</v-alert>
+            </v-card>
+          </v-dialog>
+          <v-dialog v-model="cardCreationDialog" @input="closeCardCreationDialog()" max-width="500px">
+            <v-card>
+              <v-card-title>
+                <div>
+                  <div class="headline">Créer une carte de suivi ?</div>
+                  <span class="grey--text">(siret {{ siret }})</span>
+                </div>
+              </v-card-title>
+              <v-card-text>
+                Pour le moment, aucune carte de suivi n'est rattachée à cet établissement. Répondez aux questions suivantes afin d'en créer une.<br><br>
+                Quelles sont les difficultés diagnostiquées pour cet établissement ?
+                <v-select
+                  ref="problems"
+                  v-model="problems"
+                  :items="problemItems"
+                  :menu-props="{ maxHeight: 400 }"
+                  multiple
+                  chips
+                >
+                  <template v-slot:append-item>
+                    <div class="text-xs-center my-2">
+                      <v-btn @click="$refs.problems.isMenuActive = false" color="primary">OK</v-btn>
+                    </div>
+                  </template>
+                </v-select>
+                Quelles actions ont déjà été menées ou sont envisagées ?
+                <v-select
+                  ref="actions"
+                  v-model="actions"
+                  :items="actionItems"
+                  :menu-props="{ maxHeight: 400 }"
+                  multiple
+                  chips
+                >
+                  <template v-slot:append-item>
+                    <div class="text-xs-center my-2">
+                      <v-btn @click="$refs.actions.isMenuActive = false" color="primary">OK</v-btn>
+                    </div>
+                  </template>
+                </v-select>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn flat @click="closeCardCreationDialog()">Passer</v-btn>
+                <v-btn dark color="indigo darken-5" @click="createNewFollowCard()"><v-icon left class="mr-2">mdi-star-outline</v-icon>Créer carte</v-btn>
+              </v-card-actions>
+              <v-alert :value="cardCreationAlert" type="error" transition="scale-transition">{{ cardCreationAlertError }}</v-alert>
             </v-card>
           </v-dialog>
           <v-dialog v-model="unfollowDialog" @input="closeUnfollowDialog()" max-width="500px">
@@ -120,6 +175,7 @@ import EtablissementEntreprise from '@/components/Etablissement/Entreprise.vue'
 import Entreprise from '@/components/Entreprise.vue'
 import axios from 'axios'
 import fr from 'apexcharts/dist/locales/fr.json'
+import MarkdownIt from 'markdown-it'
 
 export default {
   props: ['siret', 'batch'],
@@ -143,6 +199,17 @@ export default {
       unfollowComment: '',
       unfollowCommentPlaceholder: '',
       entrepriseDialog: false,
+      cardCreationDialog: false,
+      statusItems: ['À définir', 'Veille', 'Suivi en cours', 'Suivi terminé'],
+      problemItems: ['difficulté #1', 'difficulté #2', 'difficulté #3', 'difficulté #4'],
+      problems: [],
+      actionItems: ['action #1', 'action #2', 'action #3', 'action #4'],
+      actions: [],
+      cardCreationAlert: false,
+      cardCreationAlertError: '',
+      followCard: null,
+      wekanConfig: {},
+      effectifClass: [10, 20, 50, 100],
     }
   },
   methods: {
@@ -312,7 +379,7 @@ export default {
       }
     },
     getEtablissement() {
-      this.$axios.get(`/etablissement/get/${this.siret}`).then((response) => {
+      return this.$axios.get(`/etablissement/get/${this.siret}`).then((response) => {
         this.etablissement = response.data
         this.historique = (this.etablissement.scores || []).sort((d1, d2) => d1.batch < d2.batch)
         this.sirene = this.etablissement.sirene
@@ -345,6 +412,9 @@ export default {
             this.followAlert = false
             this.getEtablissement()
             this.$emit('follow-etablissement')
+            if (!this.followCard && this.userId && this.inZone) {
+              this.cardCreationDialog = true
+            }
           }
         }).catch((error) => {
           this.followAlertError = 'Une erreur est survenue lors du suivi'
@@ -385,6 +455,99 @@ export default {
         this.followAlert = true
       }
     },
+    getWekanConfig() {
+      return this.$axios.get(`/wekan`).then((response) => {
+        this.wekanConfig = response.data
+      }).catch((error) => {
+        this.followCard = null
+      })
+    },
+    getFollowCard() {
+      const board = (this.wekanConfig.boards || {})[this.region]
+      if (board && this.userToken) {
+        const headers = {
+          Accept: 'application/json',
+          Authorization: 'Bearer ' + this.userToken,
+        }
+        const config = { headers }
+        const url = process.env.VUE_APP_WEKAN_URL + 'api/boards/' + board.boardId
+          + '/cardsByCustomField/' + board.customFields.siretField + '/' + this.siret
+        return axios.get(url, config).then((response) => {
+          const cards = response.data
+          if (cards.length > 0) {
+            const cardId = cards[0]._id
+            const listId = cards[0].listId
+            const md = new MarkdownIt()
+            this.followCard = {
+              status: this.statusItems[board.lists.indexOf(listId)],
+              description: md.render(cards[0].description),
+              url: process.env.VUE_APP_WEKAN_URL + 'b/' + board.boardId + '/' + board.slug + '/' + cardId,
+            }
+          } else {
+            this.followCard = null
+          }
+        }).catch((error) => {
+          this.followCard = null
+        })
+      } else {
+        this.followCard = null
+      }
+    },
+    createNewFollowCard() {
+      const board = (this.wekanConfig.boards || {})[this.region]
+      if (board && this.userToken) {
+        const headers = {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer ' + this.userToken,
+        }
+        const userId = this.userId
+        const swimlaneId = board.swimlanes[this.codeDepartement]
+        const creationData = {
+          authorId: userId,
+          members: [userId],
+          title: this.denomination,
+          description: this.formattedDescription,
+          swimlaneId,
+        }
+        const config = { headers }
+        const defaultList = board.lists[0]
+        const creationUrl = process.env.VUE_APP_WEKAN_URL + 'api/boards/' + board.boardId
+          + '/lists/' + defaultList + '/cards'
+        axios.post(creationUrl, creationData, config).then((response) => {
+          this.problems = []
+          this.actions = []
+          this.cardCreationDialog = false
+          this.cardCreationAlertError = ''
+          this.cardCreationAlert = false
+          const cardId = response.data._id
+          const editionData = {
+            customFields: [{
+              _id: board.customFields.siretField,
+              value: this.siret,
+            }, {
+              _id: board.customFields.activiteField,
+              value: this.activiteField,
+            }, {
+              _id: board.customFields.effectifField.effectifFieldId,
+              value: board.customFields.effectifField.effectifFieldItems[this.effectifIndex],
+            }, {
+              _id: board.customFields.ficheEntrepriseField,
+              value: this.ficheEntrepriseField,
+            }],
+            startAt: new Date(),
+          }
+          const editionUrl = process.env.VUE_APP_WEKAN_URL + 'api/boards/' + board.boardId
+            + '/lists/' + defaultList + '/cards/' + cardId
+          axios.put(editionUrl, editionData, config).then(() => {
+            this.getFollowCard()
+          })
+        }).catch((error) => {
+          this.cardCreationAlertError = 'Une erreur est survenue lors de la création de la carte de suivi'
+          this.cardCreationAlert = true
+        })
+      }
+    },
     closeFollowDialog() {
       this.followCategory = ''
       this.followComment = ''
@@ -398,6 +561,13 @@ export default {
       this.unfollowDialog = false
       this.followAlertError = ''
       this.followAlert = false
+    },
+    closeCardCreationDialog() {
+      this.problems = []
+      this.actions = []
+      this.cardCreationDialog = false
+      this.cardCreationAlertError = ''
+      this.cardCreationAlert = false
     },
     showEntreprise() {
       this.trackMatomoEvent('entreprise', 'ouvrir_fiche_entreprise', this.etablissement.siren)
@@ -414,8 +584,10 @@ export default {
       defaultLocale: 'fr',
     }
   },
-  mounted() {
-    this.getEtablissement()
+  async mounted() {
+    await this.getEtablissement()
+    await this.getWekanConfig()
+    await this.getFollowCard()
   },
   watch: {
     localSiret(val) {
@@ -526,6 +698,65 @@ export default {
     visiteFCE() {
       return this.etablissement.visiteFCE ||  false
     },
+    formattedDescription() {
+      let formattedDescription = '**Difficultés :**\n'
+      this.problems.forEach((p, i) => {
+        formattedDescription += '- ' + p + '\n'
+      })
+      formattedDescription += '\n'
+      formattedDescription += '**Actions :**\n'
+      this.actions.forEach((a, i) => {
+        formattedDescription += '- ' + a + '\n'
+      })
+      return formattedDescription
+    },
+    libelleActivite() {
+      return this.naf.libelleActivite
+    },
+    codeActivite() {
+      return this.naf.codeActivite
+    },
+    activiteField() {
+      let activite = ''
+      if (this.libelleActivite && this.codeActivite) {
+        activite += this.libelleActivite + ' (' + this.codeActivite + ')'
+      }
+      return activite
+    },
+    ficheEntrepriseField() {
+      return process.env.VUE_APP_WEB_BASE_URL + 'ets/' + this.siret
+    },
+    username() {
+      const username = this.jwt.preferred_username
+      return username
+    },
+    userId() {
+      return (this.wekanConfig || {}).users[this.username]
+    },
+    userToken() {
+      return (this.wekanConfig || {}).userToken
+    },
+    codeDepartement() {
+      return this.sirene.codeDepartement
+    },
+    region() {
+      return this.sirene.region
+    },
+    inZone() {
+      return (this.etablissement || {}).inZone || false
+    },
+    effectifIndex() {
+      let effectifIndex = null
+      const summary = this.etablissementsSummary.filter((es) => es.siret === this.siret)[0]
+      const dernierEffectif = summary.dernier_effectif
+      for (let i = this.effectifClass.length - 1; i >= 0; i--) {
+        if (dernierEffectif >= this.effectifClass[i]) {
+          effectifIndex = i
+          break
+        }
+      }
+      return effectifIndex
+    },
   },
 }
 </script>
@@ -536,5 +767,8 @@ export default {
 }
 .down {
   color: rgb(244, 67, 54);
+}
+::v-deep .followCard .description p {
+  margin: 8px 0;
 }
 </style>
