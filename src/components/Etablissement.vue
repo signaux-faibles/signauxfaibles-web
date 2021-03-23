@@ -208,7 +208,7 @@ export default {
       cardCreationAlert: false,
       cardCreationAlertError: '',
       followCard: null,
-      wekanConfig: {},
+      wekanUser: false,
       effectifClass: [10, 20, 50, 100],
     }
   },
@@ -379,7 +379,7 @@ export default {
       }
     },
     getEtablissement() {
-      return this.$axios.get(`/etablissement/get/${this.siret}`).then((response) => {
+      this.$axios.get(`/etablissement/get/${this.siret}`).then((response) => {
         this.etablissement = response.data
         this.historique = (this.etablissement.scores || []).sort((d1, d2) => d1.batch < d2.batch)
         this.sirene = this.etablissement.sirene
@@ -412,7 +412,7 @@ export default {
             this.followAlert = false
             this.getEtablissement()
             this.$emit('follow-etablissement')
-            if (!this.followCard && this.userId && this.inZone) {
+            if (!this.followCard && this.inZone && this.wekanUser) {
               this.cardCreationDialog = true
             }
           }
@@ -455,98 +455,38 @@ export default {
         this.followAlert = true
       }
     },
-    getWekanConfig() {
-      return this.$axios.get(`/wekan`).then((response) => {
-        this.wekanConfig = response.data
+    getFollowCard() {
+      this.$axios.get(`/wekan/cards/${this.siret}`).then((response) => {
+        const card = response.data
+        const md = new MarkdownIt()
+        this.followCard = {
+          status: this.statusItems[card.listIndex],
+          description: md.render(card.cardDescription),
+          url: card.cardURL,
+        }
+        this.wekanUser = true
       }).catch((error) => {
+        if (error.response.status === 404) {
+          this.wekanUser = true
+        }
         this.followCard = null
       })
     },
-    getFollowCard() {
-      const board = (this.wekanConfig.boards || {})[this.region]
-      if (board && this.userToken) {
-        const headers = {
-          Accept: 'application/json',
-          Authorization: 'Bearer ' + this.userToken,
-        }
-        const config = { headers }
-        const url = process.env.VUE_APP_WEKAN_URL + 'api/boards/' + board.boardId
-          + '/cardsByCustomField/' + board.customFields.siretField + '/' + this.siret
-        return axios.get(url, config).then((response) => {
-          const cards = response.data
-          if (cards.length > 0) {
-            const cardId = cards[0]._id
-            const listId = cards[0].listId
-            const md = new MarkdownIt()
-            this.followCard = {
-              status: this.statusItems[board.lists.indexOf(listId)],
-              description: md.render(cards[0].description),
-              url: process.env.VUE_APP_WEKAN_URL + 'b/' + board.boardId + '/' + board.slug + '/' + cardId,
-            }
-          } else {
-            this.followCard = null
-          }
-        }).catch((error) => {
-          this.followCard = null
-        })
-      } else {
-        this.followCard = null
-      }
-    },
     createNewFollowCard() {
-      const board = (this.wekanConfig.boards || {})[this.region]
-      if (board && this.userToken) {
-        const headers = {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': 'Bearer ' + this.userToken,
-        }
-        const userId = this.userId
-        const swimlaneId = board.swimlanes[this.codeDepartement]
-        const creationData = {
-          authorId: userId,
-          members: [userId],
-          title: this.denomination,
-          description: this.formattedDescription,
-          swimlaneId,
-        }
-        const config = { headers }
-        const defaultList = board.lists[0]
-        const creationUrl = process.env.VUE_APP_WEKAN_URL + 'api/boards/' + board.boardId
-          + '/lists/' + defaultList + '/cards'
-        axios.post(creationUrl, creationData, config).then((response) => {
-          this.problems = []
-          this.actions = []
-          this.cardCreationDialog = false
-          this.cardCreationAlertError = ''
-          this.cardCreationAlert = false
-          const cardId = response.data._id
-          const editionData = {
-            customFields: [{
-              _id: board.customFields.siretField,
-              value: this.siret,
-            }, {
-              _id: board.customFields.activiteField,
-              value: this.activiteField,
-            }, {
-              _id: board.customFields.effectifField.effectifFieldId,
-              value: board.customFields.effectifField.effectifFieldItems[this.effectifIndex],
-            }, {
-              _id: board.customFields.ficheEntrepriseField,
-              value: this.ficheEntrepriseField,
-            }],
-            startAt: new Date(),
-          }
-          const editionUrl = process.env.VUE_APP_WEKAN_URL + 'api/boards/' + board.boardId
-            + '/lists/' + defaultList + '/cards/' + cardId
-          axios.put(editionUrl, editionData, config).then(() => {
-            this.getFollowCard()
-          })
-        }).catch((error) => {
-          this.cardCreationAlertError = 'Une erreur est survenue lors de la création de la carte de suivi'
-          this.cardCreationAlert = true
-        })
+      const params = {
+        description: this.formattedDescription,
       }
+      this.$axios.post(`/wekan/cards/${this.siret}`, params).then((response) => {
+        this.problems = []
+        this.actions = []
+        this.cardCreationDialog = false
+        this.cardCreationAlertError = ''
+        this.cardCreationAlert = false
+        this.getFollowCard()
+      }).catch((error) => {
+        this.cardCreationAlertError = 'Une erreur est survenue lors de la création de la carte de suivi'
+        this.cardCreationAlert = true
+      })
     },
     closeFollowDialog() {
       this.followCategory = ''
@@ -584,10 +524,9 @@ export default {
       defaultLocale: 'fr',
     }
   },
-  async mounted() {
-    await this.getEtablissement()
-    await this.getWekanConfig()
-    await this.getFollowCard()
+  mounted() {
+    this.getEtablissement()
+    this.getFollowCard()
   },
   watch: {
     localSiret(val) {
@@ -729,12 +668,6 @@ export default {
     username() {
       const username = this.jwt.preferred_username
       return username
-    },
-    userId() {
-      return (this.wekanConfig || {}).users[this.username]
-    },
-    userToken() {
-      return (this.wekanConfig || {}).userToken
     },
     codeDepartement() {
       return this.sirene.codeDepartement
