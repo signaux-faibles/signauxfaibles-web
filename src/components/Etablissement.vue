@@ -15,14 +15,14 @@
               :creation="creation"
               :visiteFCE="visiteFCE"
             />
-            <v-btn v-if="etablissement.siren" dark color="indigo darken-5" @click="showEntreprise">Voir Fiche Entreprise</v-btn>
+            <v-btn v-if="etablissement.siren" dark color="indigo" @click="showEntreprise">Voir Fiche Entreprise</v-btn>
           </v-flex>
           <v-flex xs12 md6 class="text-xs-left pa-3" style="font-size: 18px">
             <div v-if="followCard" class="followCard">
               <h2>Suivi de l'établissement</h2>
               <h3 class="mt-3">Statut du suivi <v-chip class="chip ml-3">{{ this.followCard.status }}</v-chip></h3>
               <div class="description my-3" v-html="followCard.description"></div>
-              <v-btn dark color="indigo darken-5" :href="followCard.url" target="_blank" rel="noopener">Voir Carte Suivi</v-btn>
+              <v-btn dark color="indigo" :href="followCard.url" target="_blank" rel="noopener">Voir Carte Suivi</v-btn>
             </div>
             <Map v-else :longitude="sirene.longitude" :latitude="sirene.latitude" ref="map" />
           </v-flex>
@@ -62,7 +62,7 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn flat @click="closeFollowDialog()">Annuler</v-btn>
-                <v-btn dark color="indigo darken-5" @click="followEtablissement()"><v-icon left class="mr-2">mdi-star-outline</v-icon>Suivre</v-btn>
+                <v-btn dark color="indigo" @click="followEtablissement()"><v-icon left class="mr-2">mdi-star-outline</v-icon>Suivre</v-btn>
               </v-card-actions>
               <v-alert :value="followAlert" type="error" transition="scale-transition">{{ followAlertError }}</v-alert>
             </v-card>
@@ -111,7 +111,7 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn flat @click="closeCardCreationDialog()">Passer</v-btn>
-                <v-btn dark color="indigo darken-5" @click="createNewFollowCard()"><v-icon left class="mr-2">mdi-star-outline</v-icon>Créer carte</v-btn>
+                <v-btn dark color="indigo" @click="createNewFollowCard()"><v-icon left class="mr-2">mdi-star-outline</v-icon>Créer carte</v-btn>
               </v-card-actions>
               <v-alert :value="cardCreationAlert" type="error" transition="scale-transition">{{ cardCreationAlertError }}</v-alert>
             </v-card>
@@ -135,7 +135,7 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn flat @click="closeUnfollowDialog()">Annuler</v-btn>
-                <v-btn dark color="indigo darken-5" @click="unfollowEtablissement()">Ne plus suivre</v-btn>
+                <v-btn dark color="indigo" @click="unfollowEtablissement()">Ne plus suivre</v-btn>
               </v-card-actions>
               <v-alert :value="followAlert" type="error" transition="scale-transition">{{ followAlertError }}</v-alert>
             </v-card>
@@ -156,8 +156,8 @@
             </div>
           </v-dialog>
         </v-layout>
-        <v-btn v-if="followed === false" fab fixed bottom right dark color="indigo darken-5" class="mr-2" @click="followDialog = true"><v-icon>mdi-star-outline</v-icon></v-btn>
-        <v-btn v-if="followed === true" fab fixed bottom right outline color="indigo darken-5" class="mr-2" @click="unfollowDialog = true"><v-icon>mdi-star</v-icon></v-btn>
+        <v-btn v-if="followed === false" fab fixed bottom right dark color="indigo" class="mr-2" @click="followDialog = true"><v-icon>mdi-star-outline</v-icon></v-btn>
+        <v-btn v-if="followed === true" fab fixed bottom right outline color="indigo" class="mr-2" @click="unfollowDialog = true"><v-icon>mdi-star</v-icon></v-btn>
       </v-container>
     </div>
   </div>

@@ -9,7 +9,7 @@
     </div>
     <div class="pt-3 pl-3 text-xs-center" v-if="follow.length > 0">
       <span class="intro">Vous suivez {{this.follow.length | pluralizeEtablissement}}.</span>
-      <v-btn outline color="indigo darken-5" @click="download" class="ml-4">
+      <v-btn outline color="indigo" @click="download" class="ml-4">
         <v-icon small class="mr-2">fa-file-download</v-icon>
         Exporter
       </v-btn>

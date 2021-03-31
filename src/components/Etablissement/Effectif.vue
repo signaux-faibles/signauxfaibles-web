@@ -2,7 +2,7 @@
   <div>
     <v-toolbar
       dark
-      color='indigo darken-5'>
+      color='indigo'>
       <v-toolbar-title class="localtoolbar">
         Effectifs
         <span v-if="permDGEFP">

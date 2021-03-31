@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-toolbar dark color="indigo darken-5">
+    <v-toolbar dark color="indigo">
       <v-toolbar-title class="localtoolbar">Informations sociales</v-toolbar-title>
       <v-spacer />
       <Help titre="Informations sociales">
@@ -106,7 +106,7 @@
               sur les 24 derniers mois.
             </v-flex>
             <v-flex md5 shrink>
-              <v-btn outline color="indigo darken-5" @click="toggleHistoriqueEffectif" class="ml-4">
+              <v-btn outline color="indigo" @click="toggleHistoriqueEffectif" class="ml-4">
                 {{
                 showHistoriqueEffectif ? "Masquer" : "Afficher"
                 }}
@@ -140,7 +140,7 @@
             <v-flex md5 shrink>
               <v-btn
                 outline
-                color="indigo darken-5"
+                color="indigo"
                 @click="toggleHistoriqueDetteSociale"
                 class="ml-4"
               >

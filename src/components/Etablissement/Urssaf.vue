@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-toolbar dark color="indigo darken-5">
+    <v-toolbar dark color="indigo">
       <v-toolbar-title class="localtoolbar">Cotisations et impayés Urssaf</v-toolbar-title>
       <v-spacer />
       <Help titre="Cotisations et impayés URSSAF">
