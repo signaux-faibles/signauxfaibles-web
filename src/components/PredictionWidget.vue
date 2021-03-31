@@ -2,6 +2,7 @@
   <div>
     <v-card @click="showEtablissement()" @mouseover="social ? highlightEtablissement() : showRaccourci = true" @mouseout="showRaccourci = false" class="etablissement-card elevation-2 ma-2 pointer">
       <div class="entete">
+        <div v-if="prediction.followed" class="corner-ribbon"><v-icon dark small>mdi-star</v-icon></div>
         <ScoreWidget :prediction="prediction" />
       </div>
       <div class="corps">
@@ -276,5 +277,19 @@ export default {
 }
 .fade-enter, .fade-leave-to {
   opacity: 0;
+}
+.corner-ribbon {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+}
+.corner-ribbon::before {
+  position: absolute;
+  z-index: -1;
+  border-width: 16px;
+  border-style: solid;
+  border-color: #3f51b5 transparent transparent #3f51b5;
+  content: '';
 }
 </style>
