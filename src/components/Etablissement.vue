@@ -67,7 +67,7 @@
               <v-alert :value="followAlert" type="error" transition="scale-transition">{{ followAlertError }}</v-alert>
             </v-card>
           </v-dialog>
-          <v-dialog v-model="cardCreationDialog" @input="closeCardCreationDialog()" max-width="500px">
+          <v-dialog v-model="cardCreationDialog" persistent @input="closeCardCreationDialog()" max-width="600px">
             <v-card>
               <v-card-title>
                 <div>
@@ -76,12 +76,15 @@
                 </div>
               </v-card-title>
               <v-card-text>
-                Pour le moment, aucune carte de suivi n'est rattachée à cet établissement. Répondez aux questions suivantes afin d'en créer une.<br><br>
+                Pour le moment, aucune carte de suivi n’est rattachée à cet établissement.<br>Répondez aux questions suivantes afin d’en créer une.<br><br>
                 Quelles sont les difficultés diagnostiquées pour cet établissement ?
+                <Help titre="Difficultés diagnostiquées" :big="true">
+                  <div v-html="followCardConfig.problemHelpContent" />
+                </Help>
                 <v-select
                   ref="problems"
                   v-model="problems"
-                  :items="problemItems"
+                  :items="followCardConfig.problemItems"
                   :menu-props="{ maxHeight: 400 }"
                   multiple
                   chips
@@ -93,10 +96,13 @@
                   </template>
                 </v-select>
                 Quelles actions ont déjà été menées ou sont envisagées ?
+                <Help titre="Actions menées ou envisagées" :big="true">
+                  <div v-html="followCardConfig.actionHelpContent" />
+                </Help>
                 <v-select
                   ref="actions"
                   v-model="actions"
-                  :items="actionItems"
+                  :items="followCardConfig.actionItems"
                   :menu-props="{ maxHeight: 400 }"
                   multiple
                   chips
@@ -176,6 +182,7 @@ import Entreprise from '@/components/Entreprise.vue'
 import axios from 'axios'
 import fr from 'apexcharts/dist/locales/fr.json'
 import MarkdownIt from 'markdown-it'
+import followCardConfig from '@/assets/follow_card_config.json'
 
 export default {
   props: ['siret', 'batch'],
@@ -201,9 +208,8 @@ export default {
       entrepriseDialog: false,
       cardCreationDialog: false,
       statusItems: ['À définir', 'Veille', 'Suivi en cours', 'Suivi terminé'],
-      problemItems: ['difficulté #1', 'difficulté #2', 'difficulté #3', 'difficulté #4'],
+      followCardConfig,
       problems: [],
-      actionItems: ['action #1', 'action #2', 'action #3', 'action #4'],
       actions: [],
       cardCreationAlert: false,
       cardCreationAlertError: '',
