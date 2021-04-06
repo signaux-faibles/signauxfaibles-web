@@ -279,7 +279,7 @@ export default {
       this.$refs.modelHelp.clickButton()
     },
     onHideEtablissement() {
-      if (this.exclureSuivi && this.followStateChanged) {
+      if (this.followStateChanged) {
         this.getPrediction()
       }
     },
