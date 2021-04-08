@@ -22,7 +22,7 @@
               <h2>Suivi de l'établissement</h2>
               <h3 class="mt-3">Statut du suivi <v-chip class="chip ml-3">{{ this.followCard.status }}</v-chip></h3>
               <div class="description my-3" v-html="followCard.description"></div>
-              <v-btn dark color="indigo" :href="followCard.url" target="_blank" rel="noopener">Voir Carte Suivi</v-btn>
+              <v-btn dark color="indigo" :href="followCard.url" target="_blank" rel="noopener" @click="trackMatomoEvent('etablissement', 'voir_carte_suivi', siret)">Voir Carte Suivi</v-btn>
             </div>
             <Map v-else :longitude="sirene.longitude" :latitude="sirene.latitude" ref="map" />
           </v-flex>
@@ -88,6 +88,7 @@
                   :menu-props="{ maxHeight: 400 }"
                   multiple
                   chips
+                  :disabled="creatingCard"
                 >
                   <template v-slot:append-item>
                     <div class="text-xs-center my-2">
@@ -106,6 +107,7 @@
                   :menu-props="{ maxHeight: 400 }"
                   multiple
                   chips
+                  :disabled="creatingCard"
                 >
                   <template v-slot:append-item>
                     <div class="text-xs-center my-2">
@@ -116,8 +118,8 @@
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn flat @click="closeCardCreationDialog()">Passer</v-btn>
-                <v-btn dark color="indigo" @click="createNewFollowCard()"><v-icon left class="mr-2">mdi-star-outline</v-icon>Créer carte</v-btn>
+                <v-btn flat @click="closeCardCreationDialog()" :disabled="creatingCard">Passer</v-btn>
+                <v-btn dark color="indigo" @click="createNewFollowCard()" :disabled="creatingCard"><v-icon left class="mr-2">mdi-star-outline</v-icon>Créer carte</v-btn>
               </v-card-actions>
               <v-alert :value="cardCreationAlert" type="error" transition="scale-transition">{{ cardCreationAlertError }}</v-alert>
             </v-card>
@@ -216,6 +218,7 @@ export default {
       followCard: null,
       wekanUser: false,
       effectifClass: [10, 20, 50, 100],
+      creatingCard: false,
     }
   },
   methods: {
@@ -479,6 +482,8 @@ export default {
       })
     },
     createNewFollowCard() {
+      this.trackMatomoEvent('etablissement', 'creer_carte_suivi', this.siret)
+      this.creatingCard = true
       const params = {
         description: this.formattedDescription,
       }
@@ -492,6 +497,8 @@ export default {
       }).catch((error) => {
         this.cardCreationAlertError = 'Une erreur est survenue lors de la création de la carte de suivi'
         this.cardCreationAlert = true
+      }).finally(() => {
+        this.creatingCard = false
       })
     },
     closeFollowDialog() {
