@@ -1,6 +1,32 @@
 <template>
   <div>
     <Toolbar title="Suivi d'établissements" drawer />
+    <v-toolbar
+      height="35px"
+      class="toolbar elevation-12"
+      color="#ffffff"
+      extension-height="48px"
+      app
+    >
+      <v-icon
+        @click="openLeftDrawer()"
+        class="fa-rotate-180"
+        v-if="!leftDrawer"
+        color="#ffffff"
+        key="toolbar"
+      >mdi-backburger</v-icon>
+
+      <div
+        style="width: 100%; text-align: center;"
+        class="toolbar_titre"
+      >
+        Suivi d'établissements
+      </div>
+      <v-spacer></v-spacer>
+      <v-btn v-if="roles.includes('wekan')" dark icon :href="wekan_url" target="_blank" rel="noopener">
+        <v-icon>fab fa-trello</v-icon>
+      </v-btn>
+    </v-toolbar>
     <div id="nodata" v-if="!loading && follow.length == 0 && init == false">
       Vous ne suivez pour le moment aucun établissement.<br />Pour ce faire,
       rendez-vous sur la fiche d'un établissement et appuyez sur le bouton
@@ -76,6 +102,10 @@ export default {
         document.body.removeChild(element)
       })
     },
+    openLeftDrawer() {
+      this.trackMatomoEvent('general', 'ouvrir_menu')
+      this.leftDrawer = !this.leftDrawer
+    },
   },
   computed: {
     etablissements() {
@@ -89,13 +119,8 @@ export default {
         this.$store.dispatch('setLeftDrawer', val)
       },
     },
-    rightDrawer: {
-      get() {
-        return this.$store.state.rightDrawer
-      },
-      set(val) {
-        this.$store.dispatch('setRightDrawer', val)
-      },
+    wekan_url() {
+      return process.env.VUE_APP_WEKAN_URL
     },
   },
   filters: {
