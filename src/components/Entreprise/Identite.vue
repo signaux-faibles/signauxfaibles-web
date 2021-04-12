@@ -39,7 +39,7 @@
               </ul>
             </p>
             <p>Nous nous basons sur le code APE déclaré pour le siège. Or celui-ci peut ne pas être le reflet exact de l’activité principale de l'entreprise.</p>
-            <p>Notez également que les secteurs suggérés peuvent évoluer en fonction des mises à jour du <a href="https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000042838412" target="_blank" rel="noopener">décret relatif au fonds de solidarité</a> (version en vigueur au 30/12/2020).</p>
+            <p>Notez également que les secteurs suggérés peuvent évoluer en fonction des mises à jour du <a href="https://www.legifrance.gouv.fr/loda/id/JORFTEXT000041768315/2021-03-27" target="_blank" rel="noopener">décret relatif au fonds de solidarité</a> (version en vigueur au 27/03/20201).</p>
           </Help>
           <v-tooltip bottom v-if="s1">
             <template v-slot:activator="{ on, attrs }">
