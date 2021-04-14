@@ -14,6 +14,7 @@
               :terrind="terrind"
               :creation="creation"
               :visiteFCE="visiteFCE"
+              :statutJuridique="statutJuridique"
             />
             <v-btn v-if="etablissement.siren" dark color="indigo" @click="showEntreprise">Voir Fiche Entreprise</v-btn>
           </v-flex>
@@ -702,6 +703,10 @@ export default {
         }
       }
       return effectifIndex
+    },
+    statutJuridique() {
+      const statutJuridique = ((this.etablissement.entreprise || {}).Sirene || {}).statutJuridiqueN2
+      return statutJuridique
     },
   },
 }

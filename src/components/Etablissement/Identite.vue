@@ -38,7 +38,7 @@
     </h3>
     <hr style="color: #eee;" />
     <div style="padding: 10px; margin: 4px;">
-      <div v-html="activiteHtml" style="font-size: 16px"></div>
+      <div v-html="identiteHtml" style="font-size: 16px"></div>
     </div>
     <h3>adresse postale de l'établissement</h3>
     <hr style="color: #eee;" />
@@ -68,7 +68,7 @@ import Historique from '@/components/Etablissement/Historique.vue'
 
 export default {
   name: 'Identite',
-  props: ['denomination', 'historique', 'siret', 'sirene', 'siege', 'groupe', 'terrind', 'creation', 'visiteFCE'],
+  props: ['denomination', 'historique', 'siret', 'sirene', 'siege', 'groupe', 'terrind', 'creation', 'visiteFCE', 'statutJuridique'],
   components: { Help, Historique },
   data() {
     return {
@@ -128,7 +128,7 @@ export default {
       return this.naf.codeActivite
     },
     nomenActivite() {
-      return (this.naf.nomenActivite && this.naf.nomenActivite !== 'NAFRev2') ? ' (' + this.naf.nomenActivite + ')' : ''
+      return (this.naf.nomenActivite && this.naf.nomenActivite !== 'NAFRev2') ? ' - ' + this.naf.nomenActivite : ''
     },
     followed() {
       return this.$parent.followed
@@ -136,19 +136,21 @@ export default {
     adresse() {
       return ((this.sirene || {}).adresse || '').split('\n').join('<br />')
     },
-    activiteHtml() {
-      return [(this.libelleSecteur ? this.libelleSecteur : ''),
-        (this.libelleActivite ? this.libelleActivite : ''),
-        (this.codeActivite ? 'Code APE&nbsp;: ' + this.codeActivite + this.nomenActivite : ''),
-        (this.ouverture ? 'Date d\'ouverture de l\'établissement&nbsp;: '
+    identiteHtml() {
+      return [(this.libelleSecteur ? 'Secteur d’activité : ' + this.libelleSecteur : ''),
+        ((this.libelleActivite && this.codeActivite) ? 'Activité : '
+          + this.libelleActivite
+          + ' (' + this.codeActivite + this.nomenActivite + ')' : ''),
+        (this.statutJuridique ? 'Statut juridique : ' + this.statutJuridique : ''),
+        (this.ouverture ? 'Date d’ouverture de l’établissement : '
           + this.ouverture.toLocaleDateString('fr', {timeZone: 'Europe/Paris'})
           + ' (' + this.pluralizeAge(this.calculateAge(this.ouverture)) + ')'
           : ''),
-        (this.creation ? 'Date de création de l\'entreprise&nbsp;: '
+        (this.creation ? 'Date de création de l’entreprise : '
           + this.creation.toLocaleDateString('fr', {timeZone: 'Europe/Paris'})
           + ' (' + this.pluralizeAge(this.calculateAge(this.creation)) + ')'
           : ''),
-        (this.groupe ? 'Tête de groupe&nbsp;: ' + this.groupe : '')]
+        (this.groupe ? 'Tête de groupe : ' + this.groupe : '')]
         .filter(Boolean).join('<br>')
     },
     showFCE() {

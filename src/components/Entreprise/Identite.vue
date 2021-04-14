@@ -15,7 +15,7 @@
         <h3>siren {{ siren }}</h3>
         <hr style="color: #eee;" class="mr-4" />
         <div style="padding: 10px; margin: 4px;">
-          <div v-html="activiteHtml" style="font-size: 16px"></div>
+          <div v-html="identiteHtml" style="font-size: 16px"></div>
         </div>
         <div v-if="showSecteursCovid" class="text-uppercase" style="font-size: 18px">
           Secteurs COVID-19
@@ -148,7 +148,7 @@ import axios from 'axios'
 
 export default {
   name: 'EntrepriseIdentite',
-  props: ['denomination', 'siren', 'siege', 'groupe', 'terrind', 'creation'],
+  props: ['denomination', 'siren', 'siege', 'groupe', 'terrind', 'creation', 'statutJuridique'],
   components: { Help },
   data() {
     return {
@@ -198,20 +198,22 @@ export default {
       return this.naf.codeActivite
     },
     nomenActivite() {
-      return (this.naf.nomenActivite && this.naf.nomenActivite !== 'NAFRev2') ? ' (' + this.naf.nomenActivite + ')' : ''
+      return (this.naf.nomenActivite && this.naf.nomenActivite !== 'NAFRev2') ? ' - ' + this.naf.nomenActivite : ''
     },
     adresse() {
       return ((this.siege.sirene || {}).adresse || '').split('\n').join('<br />')
     },
-    activiteHtml() {
-      return [(this.libelleSecteur ? this.libelleSecteur : ''),
-      (this.libelleActivite ? this.libelleActivite : ''),
-      (this.codeActivite ? 'Code APE&nbsp;: ' + this.codeActivite + this.nomenActivite : ''),
-      (this.creation ? 'Date de création de l\'entreprise&nbsp;: '
-        + this.creation.toLocaleDateString('fr', { timeZone: 'Europe/Paris' })
-        + ' (' + this.pluralizeAge(this.calculateAge(this.creation)) + ')'
-        : ''),
-      (this.groupe ? 'Tête de groupe&nbsp;: ' + this.groupe : '')]
+    identiteHtml() {
+      return [(this.libelleSecteur ? 'Secteur d’activité : ' + this.libelleSecteur : ''),
+        ((this.libelleActivite && this.codeActivite) ? 'Activité : '
+          + this.libelleActivite
+          + ' (' + this.codeActivite + this.nomenActivite + ')' : ''),
+        (this.statutJuridique ? 'Statut juridique : ' + this.statutJuridique : ''),
+        (this.creation ? 'Date de création de l’entreprise : '
+          + this.creation.toLocaleDateString('fr', {timeZone: 'Europe/Paris'})
+          + ' (' + this.pluralizeAge(this.calculateAge(this.creation)) + ')'
+          : ''),
+        (this.groupe ? 'Tête de groupe : ' + this.groupe : '')]
         .filter(Boolean).join('<br>')
     },
     showSecteursCovid() {

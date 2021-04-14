@@ -11,6 +11,7 @@
               :groupe="groupe"
               :terrind="terrind"
               :creation="creation"
+              :statutJuridique="statutJuridique"
             />
           </v-flex>
           <v-flex xs12 class="pb-3 pr-1">
@@ -296,6 +297,10 @@ export default {
     },
     paydex() {
       return (this.entreprise || {}).paydex
+    },
+    statutJuridique() {
+      const statutJuridique = this.sirene.statutJuridiqueN2
+      return statutJuridique
     },
   },
 }
