@@ -1,28 +1,24 @@
 <template>
   <div>
-    <v-toolbar dark color="indigo">
-      <v-toolbar-title class="localtoolbar">Liens capitalisques et autres établissements de l'entreprise</v-toolbar-title>
+    <v-toolbar dark color="indigo darken-5">
+      <v-toolbar-title class="localtoolbar">Autres établissements de l’entreprise</v-toolbar-title>
       <v-spacer />
-      <Help titre="Liens capitalisques et autres établissements de l'entreprise">
+      <Help titre="Autres établissements de l’entreprise">
         <template>
-          <b>Liens capitalisques :</b>
-          Les liens capitalistiques ont été obtenus auprès de la société Ellisphere. Sauf cas particulier d'arbitrage, est considérée comme tête de groupe (ou société mère) l'entreprise qui détient de façon directe ou indirecte plus de 50% du capital et qui n’est pas elle-même détenue à plus de 50% par une autre entreprise.
-          <br />
-          <b>Siège social, établissements secondaires :</b>
-          Ces données sont issues du service API entreprises fourni par la DINUM qui redistribue les données de l'INSEE.
+          <b>Siège social, établissements secondaires :</b> ces données sont issues de la base Sirene des entreprises et de leurs établissements produite par l’Insee.
         </template>
       </Help>
     </v-toolbar>
-    <div v-if="etablissementsSummary.length > 0" style="font-weight: normal">
+    <div v-if="etablissementsSummary.length > 0">
       <v-layout align-center class="pt-3 pl-3" style="margin-bottom: 48px">
-        <v-flex><span v-if="siege">Cet établissement (siret {{ this.siret }}) est le siège social de l'entreprise (siren {{ this.siren }}).</span><span v-else>Cet établissement (siret {{this.siret}}) n'est pas le siège social de l'entreprise (siren {{ this.siren }}).</span>
-        Cette entreprise {{ this.groupe ? 'a pour tête de groupe ' + this.groupe + ' et' : '' }} possède {{this.etablissementsSummary.length | pluralizeEtablissement}} en activité.</v-flex>
-        <v-flex md5 shrink v-if="siegeEntreprise || etablissementsDepartement.length > 0 || autresEtablissements.length > 0"><v-btn outline color="indigo" @click="toggle" class="ml-4">{{ show ? 'Masquer' : 'Afficher' }} les autres établissements</v-btn></v-flex>
+        <v-flex style="font-size: 16px"><span v-if="siege">Cet établissement (siret {{ this.siret }}) est le siège social de l’entreprise (siren {{ this.siren }}).</span><span v-else>Cet établissement (siret {{this.siret}}) n’est pas le siège social de l’entreprise (siren {{ this.siren }}).</span>
+        Cette entreprise possède {{this.etablissementsSummary.length | pluralizeEtablissement}} en activité.</v-flex>
+        <v-flex md5 shrink v-if="siegeEntreprise || etablissementsDepartement.length > 0 || autresEtablissements.length > 0"><v-btn outline color="indigo darken-5" @click="toggle" class="ml-4">{{ show ? 'Masquer' : 'Afficher' }} les autres établissements</v-btn></v-flex>
       </v-layout>
       <transition name="fade">
-        <div v-if="show" style="margin-top: -48px">
+        <div v-if="show" style="margin-top: -48px; font-weight: normal">
           <div v-if="siegeEntreprise">
-            <div class="pb-1 pt-2 pl-3 subheading">Siège social de l'entreprise</div>
+            <div class="pb-1 pt-2 pl-3 subheading">Siège social de l’entreprise</div>
             <PredictionWidget
               :key="siegeEntreprise.siret"
               :prediction="siegeEntreprise"
@@ -60,7 +56,6 @@
 <script>
 import PredictionWidget from '@/components/PredictionWidget.vue'
 import Help from '@/components/Help.vue'
-import axios from 'axios'
 
 export default {
   name: 'EtablissementEntreprise',

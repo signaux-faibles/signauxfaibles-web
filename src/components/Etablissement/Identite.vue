@@ -2,12 +2,11 @@
   <div>
     <h1>
       {{ denomination }}
-      <Help style="position: relative; top: -3px; right: 10px" titre="Identité de l'entreprise">
-        <b>Raison Sociale, Coordonnées:</b>
-        Ces données sont issues du service API entreprises fourni par la DINUM qui redistribue les données de l'INSEE.
-        <br />
-        <b>Activité de l'entreprise:</b>
-        Le code activité est issu de la base Sirène produite par l'INSEE et correspond aux données déclaratives fournies par l'entreprise. Il peut être constaté un décalage entre le code déclaré et l'activité réelle de l'entreprise.
+      <Help style="position: relative; top: -3px; right: 10px" titre="Identité de l’entreprise">
+        <p>Les données d’identité de l’entreprise sont principalement issues de la base Sirene des entreprises et de leurs établissements produite par l’Insee.</p>
+        <p>L’<b>activité</b> est une donnée déclarative fournie par l’entreprise lors de sa création. Il peut être constaté un décalage entre le code déclaré et l’activité réelle de l’entreprise.</p>
+        <p>Le <b>statut juridique</b> indiqué correspond à la catégorie juridique de niveau II (37 positions suivant les critères juridiques fondamentaux du droit).</p>
+        <p>Les <b>têtes de groupe</b> ont été obtenues auprès de la société Ellisphere. Sauf cas particulier d’arbitrage, est considérée comme tête de groupe (ou société mère) l’entreprise qui détient de façon directe ou indirecte plus de 50% du capital et qui n’est pas elle-même détenue à plus de 50% par une autre entreprise.</p>
       </Help>
       <v-btn v-if="followed === false" dark color="indigo" @click="showFollowDialog"><v-icon left class="mr-2">mdi-star-outline</v-icon>Suivre</v-btn>
       <v-btn v-if="followed === true" outline color="indigo" @click="showUnfollowDialog"><v-icon left class="mr-2">mdi-star</v-icon>Ne plus suivre</v-btn>
