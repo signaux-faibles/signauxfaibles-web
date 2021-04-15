@@ -59,6 +59,13 @@ export default {
       news: [
         // TODO: externalize
         {
+          date: new Date('2021-04-19'), news: [
+            'Mise à jour du périmètre des secteurs S1 et S1 bis',
+            'Indication (via une étoile dans l\'angle supérieur gauche) des établissements suivis par l\'utilisateur sur les listes',
+            'Expérimentation avec des CRP pilotes d\'un outil de suivi des entreprises en difficultés imbriqué à Signaux Faibles',
+          ],
+        },
+        {
           date: new Date('2021-01-14'), news: [
             'Visites de la Direccte au cours des 24 derniers mois (Fiche Commune Entreprise)',
             'Suggestion d\'appartenance aux secteurs dits COVID-19 (S1, S1 bis, S2)',
