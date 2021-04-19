@@ -2,7 +2,7 @@
   <div>
     <v-toolbar
       dark
-      color='indigo darken-5'>
+      color='indigo'>
       <v-toolbar-title class="localtoolbar">Informations financières</v-toolbar-title>
       <v-spacer/>
       <Help titre="Informations financières">
@@ -697,7 +697,7 @@
               </v-list-group>
             </v-list>
             <div class="pb-3 text-xs-center" v-if="documentsComptablesDisponibles(f.exercice)">
-              <v-btn color="indigo darken-5" @click="getBilansDocuments(index, f.exercice)" :dark="!loading(index)" :loading="loading(index)" :disabled="loading(index)"><v-icon left>mdi-cloud-download</v-icon> Télécharger les documents comptables de {{ f.exercice }}</v-btn>
+              <v-btn color="indigo" @click="getBilansDocuments(index, f.exercice)" :dark="!loading(index)" :loading="loading(index)" :disabled="loading(index)"><v-icon left>mdi-cloud-download</v-icon> Télécharger les documents comptables de {{ f.exercice }}</v-btn>
               <v-alert :value="alert(index)" type="error" transition="scale-transition">Un problème est survenu lors du téléchargement des documents comptables.</v-alert>
             </div>
           </v-card>

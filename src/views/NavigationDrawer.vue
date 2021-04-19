@@ -47,6 +47,15 @@
         </v-list-tile-content>
       </v-list-tile>
 
+      <v-list-tile v-if="roles.includes('wekan')" :href="wekan_url">
+        <v-list-tile-action>
+          <v-icon>fab fa-trello</v-icon>
+        </v-list-tile-action>
+        <v-list-tile-content>
+          <v-list-tile-title>Kanban de suivi</v-list-tile-title>
+        </v-list-tile-content>
+      </v-list-tile>
+
       <v-list-tile :href="fider_url">
         <v-list-tile-action>
           <v-icon>mdi-puzzle</v-icon>
@@ -120,6 +129,9 @@ export default {
     },
     github_url() {
       return process.env.VUE_APP_GITHUB_ORGANIZATION
+    },
+    wekan_url() {
+      return process.env.VUE_APP_WEKAN_URL
     },
     drawer: {
       get() {

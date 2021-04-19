@@ -1,0 +1,28 @@
+{
+  "problemItems": [
+    "Baisse d’activité",
+    "Faiblesses stratégiques",
+    "Faiblesses productives",
+    "Problèmes de financement",
+    "Difficultés liées à l’approvisionnement",
+    "Choc du confinement lié à la pandémie Covid",
+    "Choc exogène",
+    "Contentieux avec des partenaires",
+    "Difficultés d’emploi, RH et GPEC",
+    "Problématiques de transmission ou gouvernance"
+  ],
+  "problemHelpContent": "<b>Baisse d’activité :</b> difficultés liés à clients, dépendance à un donneur d’ordre, perte de marchés/clients, compétitivité coût/hors coût insuffisante<br><b>Faiblesses stratégiques :</b> débouchés insuffisants, difficultés en croissance externe, propriété intellectuelle, stratégie commerciale<br><b>Faiblesses productives :</b> sous-investissement dans les process et équipements, système d’information, gestion des stocks<br><b>Problèmes de financement :</b> mauvaise gestion financière, endettement, tensions de trésorerie, cotation<br><b>Difficultés liées à l’approvisionnement :</b> problèmes avec fournisseurs, coût et disponibilité des intrants<br><b>Choc du confinement lié à la pandémie Covid</b><br><b>Choc exogène :</b> choc géopolitique, mesures d’embargo, désastres industriels et environnementaux, non-conformité réglementaire<br><b>Contentieux avec des partenaires :</b> difficultés légales ou contractuelles, impayés<br><b>Difficultés d’emploi, RH et GPEC :</b> recrutement, sous-effectif ou sureffectif, compétences, absentéisme, dialogue social<br><b>Problématiques de transmission ou gouvernance :</b> management ancien, défaillant ou absent, conflit lié à l’actionnariat",
+  "actionItems": [
+    "Soutien financier public",
+    "Échanges avec les créanciers",
+    "Médiation avec les partenaires",
+    "Appui à une politique d’emploi",
+    "Prise en charge judiciaire",
+    "Recherche et suivi de repreneur",
+    "Repositionnements et restructurations",
+    "Appui à l’installation et gestion immobilière",
+    "Soutien à la croissance et filière",
+    "Coaching, soutien psychologique"
+  ],
+  "actionHelpContent": "<b>Soutien financier public :</b> prêt ou subvention d’investissement, soutien spécifique covid, plan de relance ou comités des financeurs régionaux<br><b>Échanges avec les créanciers :</b> négociation des passifs publics ou privés, garanties bancaires<br><b>Médiation avec les partenaires :</b> médiation du crédit bancaire, médiation des entreprises, négociation avec grands donneurs d’ordre<br><b>Appui à une politique d’emploi :</b> plan de formation, appui au recrutement, GPEC, dialogue social, attractivité, plan social<br><b>Prise en charge judiciaire :</b> entretien en cellule de prévention avec le président du Tribunal de Commerce, procédure amiable ou collective<br><b>Recherche et suivi de repreneur :</b> prise en charge financière ou exonérations, changement de statuts, nouvel actionnaire<br><b>Repositionnements et restructurations :</b> audit financier, stratégique ou de production, manager de transition, transformation et diversification, mise aux normes et labellisation<br><b>Appui à l’installation et gestion immobilière :</b> déménagements, réimplantation de site, relocalisation, cession d’actifs<br><b>Soutien à la croissance et filière :</b> recherche d’investisseurs, mise en relation avec clients & pôle de compétitivité, accompagnement à l’international, assurances export<br><b>Coaching, soutien psychologique :</b> APESA"
+}

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-toolbar dark color="indigo darken-5">
+    <v-toolbar dark color="indigo">
       <v-toolbar-title class="localtoolbar">Comportement de paiement</v-toolbar-title>
       <v-spacer />
     </v-toolbar>

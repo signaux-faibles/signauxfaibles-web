@@ -5,6 +5,7 @@ import Goup from '@/views/Goup.vue'
 import Browse from '@/views/Browse.vue'
 import Follow from '@/views/Follow.vue'
 import PageNotFound from '@/views/PageNotFound.vue'
+import Etablissement from '@/components/Etablissement.vue'
 
 Vue.use(Router)
 
@@ -35,6 +36,12 @@ const router = new Router({
       path: '/follow',
       name: 'follow',
       component: Follow,
+    },
+    {
+      path: '/ets/:siret',
+      name: 'etablissement',
+      component: Etablissement,
+      props: true,
     },
   ],
 })

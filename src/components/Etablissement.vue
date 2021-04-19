@@ -1,9 +1,9 @@
 <template>
-  <div style="background: #fff">
+  <div style="background: #fff; font-weight: 800; font-family: 'Oswald', sans;">
     <div>
       <v-container>
-        <v-layout wrap>
-          <v-flex xs12 md6 class="pa-3" style="font-size: 18px; margin-top: 3em;">
+        <v-layout wrap style="margin-top: 3em">
+          <v-flex xs12 md6 class="pa-3" style="font-size: 18px">
             <Identite
               :denomination="denomination"
               :historique="historique"
@@ -15,10 +15,16 @@
               :creation="creation"
               :visiteFCE="visiteFCE"
             />
-            <v-btn v-if="etablissement.siren" dark color="indigo darken-5" @click="showEntreprise">Voir Fiche Entreprise</v-btn>
+            <v-btn v-if="etablissement.siren" dark color="indigo" @click="showEntreprise">Voir Fiche Entreprise</v-btn>
           </v-flex>
-          <v-flex xs12 md6 class="text-xs-right pa-3" style="margin-top: 3em">
-            <Map :longitude="sirene.longitude" :latitude="sirene.latitude" ref="map" />
+          <v-flex xs12 md6 class="text-xs-left pa-3" style="font-size: 18px">
+            <div v-if="followCard" class="followCard">
+              <h2>Suivi de l'établissement</h2>
+              <h3 class="mt-3">Statut du suivi <v-chip class="chip ml-3">{{ this.followCard.status }}</v-chip></h3>
+              <div class="description my-3" v-html="followCard.description"></div>
+              <v-btn dark color="indigo" :href="followCard.url" target="_blank" rel="noopener" @click="trackMatomoEvent('etablissement', 'voir_carte_suivi', siret)">Voir Carte Suivi</v-btn>
+            </div>
+            <Map v-else :longitude="sirene.longitude" :latitude="sirene.latitude" ref="map" />
           </v-flex>
           <v-flex xs12 md12 class="text-xs-right pa-3">
             <Commentaire :siret="siret" />
@@ -56,9 +62,66 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn flat @click="closeFollowDialog()">Annuler</v-btn>
-                <v-btn dark color="indigo darken-5" @click="followEtablissement()"><v-icon left class="mr-2">mdi-star-outline</v-icon>Suivre</v-btn>
+                <v-btn dark color="indigo" @click="followEtablissement()"><v-icon left class="mr-2">mdi-star-outline</v-icon>Suivre</v-btn>
               </v-card-actions>
               <v-alert :value="followAlert" type="error" transition="scale-transition">{{ followAlertError }}</v-alert>
+            </v-card>
+          </v-dialog>
+          <v-dialog v-model="cardCreationDialog" persistent @input="closeCardCreationDialog()" max-width="600px">
+            <v-card>
+              <v-card-title>
+                <div>
+                  <div class="headline">Créer une carte de suivi ?</div>
+                  <span class="grey--text">(siret {{ siret }})</span>
+                </div>
+              </v-card-title>
+              <v-card-text>
+                Pour le moment, aucune carte de suivi n’est rattachée à cet établissement.<br>Répondez aux questions suivantes afin d’en créer une.<br><br>
+                Quelles sont les difficultés diagnostiquées pour cet établissement ?
+                <Help titre="Difficultés diagnostiquées" :big="true">
+                  <div v-html="followCardConfig.problemHelpContent" />
+                </Help>
+                <v-select
+                  ref="problems"
+                  v-model="problems"
+                  :items="followCardConfig.problemItems"
+                  :menu-props="{ maxHeight: 400 }"
+                  multiple
+                  chips
+                  :disabled="creatingCard"
+                >
+                  <template v-slot:append-item>
+                    <div class="text-xs-center my-2">
+                      <v-btn @click="$refs.problems.isMenuActive = false" color="primary">OK</v-btn>
+                    </div>
+                  </template>
+                </v-select>
+                Quelles actions ont déjà été menées ou sont envisagées ?
+                <Help titre="Actions menées ou envisagées" :big="true">
+                  <div v-html="followCardConfig.actionHelpContent" />
+                </Help>
+                <v-select
+                  ref="actions"
+                  v-model="actions"
+                  :items="followCardConfig.actionItems"
+                  :menu-props="{ maxHeight: 400 }"
+                  multiple
+                  chips
+                  :disabled="creatingCard"
+                >
+                  <template v-slot:append-item>
+                    <div class="text-xs-center my-2">
+                      <v-btn @click="$refs.actions.isMenuActive = false" color="primary">OK</v-btn>
+                    </div>
+                  </template>
+                </v-select>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn flat @click="closeCardCreationDialog()" :disabled="creatingCard">Passer</v-btn>
+                <v-btn dark color="indigo" @click="createNewFollowCard()" :disabled="creatingCard"><v-icon left class="mr-2">mdi-star-outline</v-icon>Créer carte</v-btn>
+              </v-card-actions>
+              <v-alert :value="cardCreationAlert" type="error" transition="scale-transition">{{ cardCreationAlertError }}</v-alert>
             </v-card>
           </v-dialog>
           <v-dialog v-model="unfollowDialog" @input="closeUnfollowDialog()" max-width="500px">
@@ -80,7 +143,7 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn flat @click="closeUnfollowDialog()">Annuler</v-btn>
-                <v-btn dark color="indigo darken-5" @click="unfollowEtablissement()">Ne plus suivre</v-btn>
+                <v-btn dark color="indigo" @click="unfollowEtablissement()">Ne plus suivre</v-btn>
               </v-card-actions>
               <v-alert :value="followAlert" type="error" transition="scale-transition">{{ followAlertError }}</v-alert>
             </v-card>
@@ -101,8 +164,8 @@
             </div>
           </v-dialog>
         </v-layout>
-        <v-btn v-if="followed === false" fab fixed bottom right dark color="indigo darken-5" class="mr-2" @click="followDialog = true"><v-icon>mdi-star-outline</v-icon></v-btn>
-        <v-btn v-if="followed === true" fab fixed bottom right outline color="indigo darken-5" class="mr-2" @click="unfollowDialog = true"><v-icon>mdi-star</v-icon></v-btn>
+        <v-btn v-if="followed === false" fab fixed bottom right dark color="indigo" class="mr-2" @click="followDialog = true"><v-icon>mdi-star-outline</v-icon></v-btn>
+        <v-btn v-if="followed === true" fab fixed bottom right outline color="indigo" class="mr-2" @click="unfollowDialog = true"><v-icon>mdi-star</v-icon></v-btn>
       </v-container>
     </div>
   </div>
@@ -120,6 +183,8 @@ import EtablissementEntreprise from '@/components/Etablissement/Entreprise.vue'
 import Entreprise from '@/components/Entreprise.vue'
 import axios from 'axios'
 import fr from 'apexcharts/dist/locales/fr.json'
+import MarkdownIt from 'markdown-it'
+import followCardConfig from '@/assets/follow_card_config.json'
 
 export default {
   props: ['siret', 'batch'],
@@ -143,6 +208,17 @@ export default {
       unfollowComment: '',
       unfollowCommentPlaceholder: '',
       entrepriseDialog: false,
+      cardCreationDialog: false,
+      statusItems: ['À définir', 'Veille', 'Suivi en cours', 'Suivi terminé'],
+      followCardConfig,
+      problems: [],
+      actions: [],
+      cardCreationAlert: false,
+      cardCreationAlertError: '',
+      followCard: null,
+      wekanUser: false,
+      effectifClass: [10, 20, 50, 100],
+      creatingCard: false,
     }
   },
   methods: {
@@ -345,6 +421,9 @@ export default {
             this.followAlert = false
             this.getEtablissement()
             this.$emit('follow-etablissement')
+            if (!this.followCard && this.inZone && this.wekanUser) {
+              this.cardCreationDialog = true
+            }
           }
         }).catch((error) => {
           this.followAlertError = 'Une erreur est survenue lors du suivi'
@@ -385,6 +464,43 @@ export default {
         this.followAlert = true
       }
     },
+    getFollowCard() {
+      this.$axios.get(`/wekan/cards/${this.siret}`).then((response) => {
+        const card = response.data
+        const md = new MarkdownIt()
+        this.followCard = {
+          status: this.statusItems[card.listIndex],
+          description: md.render(card.cardDescription),
+          url: card.cardURL,
+        }
+        this.wekanUser = true
+      }).catch((error) => {
+        if (error.response.status === 404) {
+          this.wekanUser = true
+        }
+        this.followCard = null
+      })
+    },
+    createNewFollowCard() {
+      this.trackMatomoEvent('etablissement', 'creer_carte_suivi', this.siret)
+      this.creatingCard = true
+      const params = {
+        description: this.formattedDescription,
+      }
+      this.$axios.post(`/wekan/cards/${this.siret}`, params).then((response) => {
+        this.problems = []
+        this.actions = []
+        this.cardCreationDialog = false
+        this.cardCreationAlertError = ''
+        this.cardCreationAlert = false
+        this.getFollowCard()
+      }).catch((error) => {
+        this.cardCreationAlertError = 'Une erreur est survenue lors de la création de la carte de suivi'
+        this.cardCreationAlert = true
+      }).finally(() => {
+        this.creatingCard = false
+      })
+    },
     closeFollowDialog() {
       this.followCategory = ''
       this.followComment = ''
@@ -398,6 +514,13 @@ export default {
       this.unfollowDialog = false
       this.followAlertError = ''
       this.followAlert = false
+    },
+    closeCardCreationDialog() {
+      this.problems = []
+      this.actions = []
+      this.cardCreationDialog = false
+      this.cardCreationAlertError = ''
+      this.cardCreationAlert = false
     },
     showEntreprise() {
       this.trackMatomoEvent('entreprise', 'ouvrir_fiche_entreprise', this.etablissement.siren)
@@ -416,6 +539,7 @@ export default {
   },
   mounted() {
     this.getEtablissement()
+    this.getFollowCard()
   },
   watch: {
     localSiret(val) {
@@ -526,6 +650,59 @@ export default {
     visiteFCE() {
       return this.etablissement.visiteFCE ||  false
     },
+    formattedDescription() {
+      let formattedDescription = '**Difficultés :**\n'
+      this.problems.forEach((p, i) => {
+        formattedDescription += '- ' + p + '\n'
+      })
+      formattedDescription += '\n'
+      formattedDescription += '**Actions :**\n'
+      this.actions.forEach((a, i) => {
+        formattedDescription += '- ' + a + '\n'
+      })
+      return formattedDescription
+    },
+    libelleActivite() {
+      return this.naf.libelleActivite
+    },
+    codeActivite() {
+      return this.naf.codeActivite
+    },
+    activiteField() {
+      let activite = ''
+      if (this.libelleActivite && this.codeActivite) {
+        activite += this.libelleActivite + ' (' + this.codeActivite + ')'
+      }
+      return activite
+    },
+    ficheEntrepriseField() {
+      return process.env.VUE_APP_WEB_BASE_URL + 'ets/' + this.siret
+    },
+    username() {
+      const username = this.jwt.preferred_username
+      return username
+    },
+    codeDepartement() {
+      return this.sirene.codeDepartement
+    },
+    region() {
+      return this.sirene.region
+    },
+    inZone() {
+      return (this.etablissement || {}).inZone || false
+    },
+    effectifIndex() {
+      let effectifIndex = null
+      const summary = this.etablissementsSummary.filter((es) => es.siret === this.siret)[0]
+      const dernierEffectif = summary.dernier_effectif
+      for (let i = this.effectifClass.length - 1; i >= 0; i--) {
+        if (dernierEffectif >= this.effectifClass[i]) {
+          effectifIndex = i
+          break
+        }
+      }
+      return effectifIndex
+    },
   },
 }
 </script>
@@ -536,5 +713,8 @@ export default {
 }
 .down {
   color: rgb(244, 67, 54);
+}
+::v-deep .followCard .description p {
+  margin: 8px 0;
 }
 </style>

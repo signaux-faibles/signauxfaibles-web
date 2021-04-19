@@ -199,6 +199,34 @@
     {
       "codeActivite": "7312Z",
       "libelleActivite": "Régie publicitaire de médias"
+    },
+    {
+      "codeActivite": "0127Z",
+      "libelleActivite": "Culture de plantes à boissons"
+    },
+    {
+      "codeActivite": "0121Z",
+      "libelleActivite": "Culture de la vigne"
+    },
+    {
+      "codeActivite": "1101Z",
+      "libelleActivite": "Production de boissons alcooliques distillées"
+    },
+    {
+      "codeActivite": "1102A",
+      "libelleActivite": "Fabrication de vins effervescents"
+    },
+    {
+      "codeActivite": "1102B",
+      "libelleActivite": "Vinification"
+    },
+    {
+      "codeActivite": "1103Z",
+      "libelleActivite": "Fabrication de cidre et de vins de fruits"
+    },
+    {
+      "codeActivite": "1104Z",
+      "libelleActivite": "Production d'autres boissons fermentées non distillées"
     }
   ],
   "s1Possible": [
@@ -245,14 +273,6 @@
   ],
   "s1bis": [
     {
-      "codeActivite": "0127Z",
-      "libelleActivite": "Culture de plantes à boissons"
-    },
-    {
-      "codeActivite": "0121Z",
-      "libelleActivite": "Culture de la vigne"
-    },
-    {
       "codeActivite": "0311Z",
       "libelleActivite": "Pêche en mer"
     },
@@ -267,26 +287,6 @@
     {
       "codeActivite": "0322Z",
       "libelleActivite": "Aquaculture en eau douce"
-    },
-    {
-      "codeActivite": "1101Z",
-      "libelleActivite": "Production de boissons alcooliques distillées"
-    },
-    {
-      "codeActivite": "1102A",
-      "libelleActivite": "Fabrication de vins effervescents"
-    },
-    {
-      "codeActivite": "1102B",
-      "libelleActivite": "Vinification"
-    },
-    {
-      "codeActivite": "1103Z",
-      "libelleActivite": "Fabrication de cidre et de vins de fruits"
-    },
-    {
-      "codeActivite": "1104Z",
-      "libelleActivite": "Production d'autres boissons fermentées non distillées"
     },
     {
       "codeActivite": "1105Z",
@@ -569,6 +569,10 @@
     {
       "codeActivite": "3230Z",
       "libelleActivite": "Fabrication de skis, fixations et bâtons pour skis, chaussures de ski"
+    },
+    {
+      "codeActivite": "2591Z",
+      "libelleActivite": "Fabrication de bidons de bière métalliques, tonnelets de bière métalliques, fûts de bière métalliques"
     }
   ],
   "s2": [
