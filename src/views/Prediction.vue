@@ -355,7 +355,8 @@ export default {
               this.predictionWarnings = response.data.nbF2
               this.predictionAlerts = response.data.nbF1
               const p = response.data.page ? response.data.page : 0
-              if (p === response.data.pageMax) {
+              const pageMax = response.data.pageMax ? response.data.pageMax : 0
+              if (p === pageMax) {
                 this.complete = true
               }
             } else if (response.status === 204) {
