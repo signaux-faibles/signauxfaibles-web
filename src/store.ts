@@ -29,6 +29,7 @@ const localStore = new Vuex.Store({
     newsRead: new Date('1970-01-01'),
     securityConsent: new Date('1970-01-01'),
     procol: ['In bonis', 'In bonis (plan de continuation)', 'Sauvegarde', 'Plan de sauvegarde'],
+    expiredSession: false,
   },
   mutations: {
     setsiegeUniquement(state, val: boolean) { state.siegeUniquement = val },
@@ -40,6 +41,7 @@ const localStore = new Vuex.Store({
     setminEffectif(state, val) { state.minEffectif = val },
     setNewsRead(state, val) { state.newsRead = val },
     setSecurityConsent(state, value) { state.securityConsent = value },
+    setExpiredSession(state, value) { state.expiredSession = value },
   },
 })
 
