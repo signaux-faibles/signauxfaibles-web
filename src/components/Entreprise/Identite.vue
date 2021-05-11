@@ -99,10 +99,7 @@
                   <b>une forte identité et un savoir-faire industriel</b> et l’ensemble de leurs acteurs, notamment les entreprises et les collectivités territoriales, sont mobilisés pour le développement de l’industrie.
                   <br />
                   <br />Pour en savoir davantage :
-                  <a
-                    href="https://agence-cohesion-territoires.gouv.fr/territoires-dindustrie-44"
-                    target="_blank"
-                  >https://agence-cohesion-territoires.gouv.fr/territoires-dindustrie-44</a>
+                  <a href="https://agence-cohesion-territoires.gouv.fr/territoires-dindustrie-44" target="_blank" rel="noopener">https://agence-cohesion-territoires.gouv.fr/territoires-dindustrie-44</a>
                 </Help>
               </div>
             </v-flex>
@@ -115,22 +112,23 @@
                 height="64"
                 src="../../assets/france-relance.png"
               />
-                Lauréat {{ relance }}
+              Lauréat {{ relance }}
               <Help
                 style="position: relative; top: -3px; right: 10px"
                 titre="Plan de relance"
               >
-                  Pour faire face aux impacts de la crise sanitaire, le Gouvernement mobilise en 2020, 2021 et 2022, des moyens exceptionnels dédiés au soutien à l’investissement et à la modernisation de l’industrie.<br />
-                  Dans ce cadre, la DGE et Bpifrance mettent en place des appels à projets visant à soutenir des <em>projets d’investissement industriel au bénéfice de secteurs stratégiques et des territoires</em> :<br />
-                  <ul>
-                    <li><strong>Territoires d'industrie</strong> - Accélération des investissements dans les territoires d'industrie</li>
-                    <li><strong>Automobile</strong> - Modernisation de la filière automobile</li>
-                    <li><strong>Aéronautique</strong> - Modernisation de la filière aéronautique</li>
-                    <li><strong>Relocalisation</strong> - (Re)localisation dans les secteurs critiques</li>
-                    <li><strong>Efficacité énergétique</strong> - Efficacité énergétique dans l’industrie</li>
-                    <li><strong>Décarbonation</strong> - Décarbonation dans l'industrie</li>
-                  </ul><br />
-                  <em>Source : portail des données ouvertes du Ministère de l'Economie, des Finances, et de la Relance.</em>
+                Pour faire face aux impacts de la crise sanitaire, le Gouvernement mobilise en 2020, 2021 et 2022, des moyens exceptionnels dédiés au <a href="https://www.economie.gouv.fr/plan-de-relance/profils/entreprises/soutien-investissement-modernisation-industrie" target="_blank" rel="noopener">soutien à l’investissement et à la modernisation de l’industrie</a>.<br />
+                Dans ce cadre, le ministère de l’Économie, des Finances et de la Relance (DGE) et Bpifrance, en lien avec les Conseils régionaux, mettent en place des appels à projets visant à soutenir des <em>projets d’investissement industriel au bénéfice de secteurs stratégiques et des territoires</em> :<br />
+                <ul>
+                  <li><strong>Projets territoriaux</strong> - Soutien à l’investissement industriel dans les territoires</li>
+                  <li><strong>Automobile</strong> - Modernisation de la filière automobile</li>
+                  <li><strong>Aéronautique</strong> - Modernisation de la filière aéronautique</li>
+                  <li><strong>Relocalisation</strong> - (Re)localisation dans les secteurs critiques</li>
+                  <li><strong>Efficacité énergétique</strong> - Efficacité énergétique et évolution des procédés dans l’industrie</li>
+                  <li><strong>Soutien à la chaleur bas carbone</strong></li>
+                  <li><strong>Santé - Capacités Covid</strong> - AMI Capacity, portant sur des capacités de production de produits thérapeutiques liés au COVID-19</li>
+                </ul><br />
+                <em>Source : portail des données ouvertes du Ministère de l'Economie, des Finances, et de la Relance.</em>
               </Help>
             </div>
           </v-layout>
