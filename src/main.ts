@@ -61,8 +61,11 @@ Vue.use(VueKeyCloak, {
       keycloak.login()
     } else {
       Vue.prototype.$localStore.commit('setExpiredSession', false)
-      if ((window as any)._paq) {
-        (window as any)._paq.push(['setUserId', Vue.prototype.$keycloak.tokenParsed.preferred_username])
+      const _paq: any[] = (window as any)._paq
+      if (_paq) {
+        const jwt = Vue.prototype.$keycloak.tokenParsed
+        _paq.push(['setUserId', jwt.preferred_username])
+        _paq.push(['setCustomVariable', '1', 'segment', jwt.segment || ''])
       }
       tokenInterceptor()
       responseInterceptor()
