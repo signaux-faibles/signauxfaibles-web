@@ -15,6 +15,7 @@
               :creation="creation"
               :visiteFCE="visiteFCE"
               :statutJuridique="statutJuridique"
+              :summary="summary"
             />
             <v-btn v-if="etablissement.siren" dark color="indigo" @click="showEntreprise">Voir Fiche Entreprise</v-btn>
           </v-flex>
@@ -454,6 +455,9 @@ export default {
     etablissementsSummary() {
       return (this.etablissement.entreprise || {}).etablissementsSummary || []
     },
+    summary() {
+      return this.etablissementsSummary.filter((es) => es.siret === this.siret)[0]
+    },
     perms() {
       return {
         permDGEFP: (this.etablissement || {}).permDGEFP || false,
@@ -473,8 +477,7 @@ export default {
       return (!isNaN(creation.getTime())) ? creation : null
     },
     commune() {
-      const summary = this.etablissementsSummary.filter((es) => es.siret === this.siret)[0]
-      return (summary || {}).commune || ''
+      return (this.summary || {}).commune || ''
     },
     visiteFCE() {
       return this.etablissement.visiteFCE ||  false

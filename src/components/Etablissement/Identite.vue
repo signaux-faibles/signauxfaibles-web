@@ -12,10 +12,12 @@
       <v-btn v-if="followed === true" outline color="indigo" @click="showUnfollowDialog"><v-icon left class="mr-2">mdi-star</v-icon>Ne plus suivre</v-btn>
     </h1>
     <v-layout ma-2 wrap>
-      <v-flex v-if="historique.length > 0" md6 xs12>
-        <Historique :historique="historique" />
+      <v-flex>
+        <Historique v-if="summary" :historique="historique" :summary="summary" />
       </v-flex>
-      <v-flex md4 xs12 v-if="showFCE && visiteFCE">
+    </v-layout>
+    <v-layout ma-2 wrap>
+      <v-flex xl5 lg12 v-if="showFCE && visiteFCE">
         <h2>
           Visites de la Direccte
           <Help titre="Visites de la Direccte">
@@ -67,7 +69,7 @@ import Historique from '@/components/Etablissement/Historique.vue'
 
 export default {
   name: 'Identite',
-  props: ['denomination', 'historique', 'siret', 'sirene', 'siege', 'groupe', 'terrind', 'creation', 'visiteFCE', 'statutJuridique'],
+  props: ['denomination', 'historique', 'siret', 'sirene', 'siege', 'groupe', 'terrind', 'creation', 'visiteFCE', 'statutJuridique', 'summary'],
   components: { Help, Historique },
   data() {
     return {
