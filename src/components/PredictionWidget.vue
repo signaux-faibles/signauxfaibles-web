@@ -3,7 +3,7 @@
     <v-card @click="showEtablissement()" @mouseover="social ? highlightEtablissement() : showRaccourci = true" @mouseout="showRaccourci = false" class="etablissement-card elevation-2 ma-2 pointer">
       <div class="entete">
         <div v-if="prediction.followed" class="corner-ribbon"><v-icon dark small>mdi-star</v-icon></div>
-        <ScoreWidget :prediction="prediction" />
+        <ScoreWidget :prediction="prediction" :tooltip="true" />
       </div>
       <div class="corps">
         <div class="mr-2 ml-2">

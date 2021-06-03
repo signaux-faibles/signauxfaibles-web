@@ -15,7 +15,7 @@
     <v-layout wrap>
       <v-flex xl6 lg12 mb-2>
         <div class="mb-3">
-          <span class="mr-2"><ScoreWidget size="25px" :prediction="summary" /> {{ dernierBatch.text }}</span>
+          <span class="mr-2"><ScoreWidget size="25px" :prediction="summary" class="mr-1" /> {{ dernierBatch.text }}</span>
           <v-tooltip bottom v-if="summary.firstAlert === true">
             <template v-slot:activator="{ on, attrs }">
               <v-chip v-bind="attrs" v-on="on" class="ma-0 chip" small color="primary" text-color="white">1re alerte</v-chip>
@@ -73,7 +73,7 @@
                   :key="h.idListe"
                 >
                   <template v-slot:header>
-                    <div><ScoreWidget size="25px" :prediction="h"/> {{ h.idListe }}</div>
+                    <div><ScoreWidget size="25px" :prediction="h" class="mr-1" /> {{ h.idListe }}</div>
                   </template>
                   <v-card>
                     <v-card-text>

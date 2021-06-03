@@ -1,12 +1,11 @@
 <template>
-  <v-tooltip right>
+  <v-tooltip right :disabled="disabled">
     <template v-slot:activator="{ on, attrs }">
-      <span style="position: relative;" v-bind="attrs" v-on="on">
+      <span v-bind="attrs" v-on="on">
         <v-icon
           :size="iconSize"
-          style="position: relative; right: 1px"
           :color="logo.alert[1]"
-        >{{logo.alert[0]}}</v-icon>
+        >{{ logo.alert[0] }}</v-icon>
       </span>
     </template>
     <span>{{ detection.tooltip }}</span>
@@ -16,8 +15,11 @@
 <script>
 export default {
   name: 'ScoreWidget',
-  props: ['prediction', 'size'],
+  props: ['prediction', 'size', 'tooltip'],
   computed: {
+    disabled() {
+      return !this.tooltip
+    },
     iconSize() {
       return this.size || '35px'
     },
