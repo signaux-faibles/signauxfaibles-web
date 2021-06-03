@@ -3,19 +3,27 @@
     <v-toolbar dark color="indigo">
       <v-toolbar-title class="localtoolbar">Comportement de paiement</v-toolbar-title>
       <v-spacer />
+      <Help titre="Comportement de paiement">
+        <template>
+          <p>Les données de comportement de paiement sont des informations exclusives de la société <em>Altarès D&B</em>, qui construit depuis des années une base intitulée « Paydex ».<p>
+          <p>La base est constituée grâce des informations liées à la comptabilité client de sociétés participantes au partenariat « DunTrade » qui s’appuie sur un tissu large et étendu de partenaires en France et à l’international.</p>
+          <p>Si, à l’échelle de la France, ce sont ainsi des millions d’éléments de facturation qui sont annuellement pris en compte, le nombre de fournisseurs reportés est toutefois un sous-ensemble du nombre de fournisseurs total de l’entreprise.</p>
+          <p>Par définition, il pourrait ne pas être représentatif de l’ensemble des relations clients-fournisseurs d’une entreprise. Néanmoins, l’objectif est de donner une représentation fidèle du comportement de paiement plus que du niveau exact de retard réel de l’entreprise étudiée.</p>
+        </template>
+      </Help>
     </v-toolbar>
     <div>
-      <v-layout mt-4 wrap>
+      <v-layout mt-4 wrap style="font-size: 16px">
         <v-flex md6 xs12>
-          <div v-html="introPaiement" class="px-3" style="font-size: 16px"></div>
+          <div v-html="introPaiement" class="px-3" ></div>
           <apexchart width="100%" heigth="100%" type="line" :options="options" :series="series"></apexchart>
         </v-flex>
         <v-flex md6 xs12>
           <v-layout fill-height align-center justify-center>
-            <v-flex md6 xs12 style="text-align: justify; font-weight: 400; font-family: 'Roboto', sans-serif">
-              <p>Ce graphique illustre le comportement de paiement de l’entreprise vis à vis de ses créanciers à partir du nombre de jours de retard mensuel sur les 24 derniers mois.</p>
+            <v-flex md6 xs12 style="text-align: justify; font-weight: 400; font-family: 'Abel', sans-serif">
+              <p>Ce graphique illustre le comportement de paiement de l’entreprise vis à vis de ses créanciers (fournisseurs) à partir du nombre de jours de retard mensuel sur les 24 derniers mois.</p>
+              <p>Un retard de paiement en détérioration – soit la hausse du retard moyen d’une entreprise dans le règlement de ses factures fournisseurs – constitue un signal avant-coureur de tensions de trésorerie ou d’un changement de politique relation client-fournisseur susceptible de déstabiliser l’entreprise.</p>
               <p>Le retard moyen des entreprises référencées par Signaux Faibles (plus de 10 salariés) et couvertes par les données (56% des entreprises) est de l’ordre de 12 jours. Celui-ci peut néanmoins varier de 10 à 28 jours selon le secteur d’activité.</p>
-              <em>Fournisseur : Altares D&B.</em>
             </v-flex>
           </v-layout>
         </v-flex>
