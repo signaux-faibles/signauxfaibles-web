@@ -1,5 +1,5 @@
 <template>
-  <div style="background: #fff">
+  <div style="min-height: 100%; background: #fff">
     <div>
       <v-container>
         <v-layout wrap>

@@ -1,5 +1,5 @@
 <template>
-  <div style="background: #fff; font-weight: 800; font-family: 'Oswald', sans;">
+  <div style="min-height: 100%; background: #fff; font-weight: 800; font-family: 'Oswald', sans;">
     <div>
       <v-container>
         <v-layout wrap style="margin-top: 3em">
