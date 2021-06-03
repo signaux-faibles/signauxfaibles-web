@@ -17,6 +17,86 @@
               :statutJuridique="statutJuridique"
               :summary="summary"
             />
+            <v-flex xs12 md6 class="pb-3">
+              <h2>
+                Procédure collective
+                  <Help titre="Procédure collective">
+                    <template>
+                      <p>La dernière procédure collective (ou plan issu d'une procédure collective) connue de l'Urssaf est ici mise en avant.<br />
+                      Vous avez également la possibilité de consulter l’historique des principaux jugements groupés par type de procédure collective : sauvegarde, redressement, liquidation judiciaire.<br />
+                      Pour plus de détails encore, vous serez redirigés vers les annonces publiées au bulletin officiel (BODACC) pour cette entreprise.</p>
+                      <p>Veuillez noter que les plans de cession lors d'un redressement judiciaire ne sont pas indiqués.</p>
+                    </template>
+                </Help>
+              </h2>
+              <div v-if="summary && summary.etat_procol !== 'in_bonis'" style="font-size: 16px">
+                <div>
+                  Cet établissement fait l’objet d’une procédure collective :<br/>
+                  <v-chip class="my-2 chip" outline small text-color="red darken-1">{{ summary.etat_procol }}</v-chip>
+                </div>
+                <v-btn outline dark color="indigo darken-5" @click="jugementsDialog = true">Voir historique des jugements</v-btn>
+                <v-dialog v-model="jugementsDialog" @input="jugementsDialog = false" max-width="500px">
+                  <div>
+                    <v-card>
+                      <v-card-title class="headline">
+                        Jugements de procédure collective
+                      </v-card-title>
+                      <v-card-text style="font-size: 16px">
+                        <v-expansion-panel v-model="jugementsPanel" expand style="font-weight: 800; font-family: 'Oswald', sans;">
+                          <v-expansion-panel-content v-if="liquidationJugements.length > 0">
+                            <template v-slot:header>
+                              <div>Liquidation</div>
+                            </template>
+                            <v-card>
+                              <v-card-text>
+                                <ul style="list-style-type: disc">
+                                  <li v-for="j in liquidationJugements" :key="j">{{ j }}</li>
+                                </ul>
+                              </v-card-text>
+                            </v-card>
+                          </v-expansion-panel-content>
+                          <v-expansion-panel-content v-if="redressementJugements.length > 0">
+                            <template v-slot:header>
+                              <div>Redressement</div>
+                            </template>
+                            <v-card>
+                              <v-card-text>
+                                <ul style="list-style-type: disc">
+                                  <li v-for="j in redressementJugements" :key="j">{{ j }}</li>
+                                </ul>
+                              </v-card-text>
+                            </v-card>
+                          </v-expansion-panel-content>
+                          <v-expansion-panel-content v-if="sauvegardeJugements.length > 0">
+                            <template v-slot:header>
+                              <div>Sauvegarde</div>
+                            </template>
+                            <v-card>
+                              <v-card-text>
+                                <ul style="list-style-type: disc">
+                                  <li v-for="j in sauvegardeJugements" :key="j">{{ j }}</li>
+                                </ul>
+                              </v-card-text>
+                            </v-card>
+                          </v-expansion-panel-content>
+                        </v-expansion-panel>
+                        <div class="mt-4" style="font-size: 16px; font-weight: 400; font-family: 'Abel', sans-serif">
+                          Vous pouvez consulter les annonces publiées au bulletin officiel.
+                          <v-btn class="my-2" small outline color="indigo" :href="lienBODACC" target="_blank" rel="noopener"><v-icon small left class="mr-2">open_in_new</v-icon>Voir annonces BODACC</v-btn>
+                        </div>
+                      </v-card-text>
+                      <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn flat color="primary" @click="jugementsDialog = false">Fermer</v-btn>
+                      </v-card-actions>
+                    </v-card>
+                  </div>
+                </v-dialog>
+              </div>
+              <div v-else style="font-size: 16px">
+                  Cet établissement ne fait, à notre connaissance, pas l’objet d’une procédure collective.
+              </div>
+            </v-flex>
             <v-btn v-if="etablissement.siren" dark color="indigo" @click="showEntreprise">Voir Fiche Entreprise</v-btn>
           </v-flex>
           <v-flex xs12 md6 class="text-xs-left pa-3" style="font-size: 18px">
@@ -217,6 +297,11 @@ export default {
       wekanUser: false,
       effectifClass: [10, 20, 50, 100],
       creatingCard: false,
+      jugementsPanel: 0,
+      jugementsDialog: false,
+      sauvegardeJugements: [],
+      redressementJugements: [],
+      liquidationJugements: [],
     }
   },
   methods: {
@@ -363,6 +448,41 @@ export default {
       this.trackMatomoEvent('entreprise', 'fermer_fiche_entreprise', this.etablissement.siren)
       this.entrepriseDialog = false
     },
+    processProcol(p) {
+      const date = new Date(p.dateEffet).toLocaleDateString('fr', {timeZone: 'Europe/Paris'})
+      let intitule = null
+      if (p.action === 'sauvegarde') {
+        if (p.stade === 'ouverture') {
+          intitule = 'Jugement d\'ouverture d\'une procédure de sauvegarde'
+        } else if (p.stade === 'plan_continuation') {
+          intitule = 'Jugement arrêtant le plan de sauvegarde'
+        }
+        if (intitule) {
+          const jugement = date + ' : ' + intitule
+          this.sauvegardeJugements.push(jugement)
+        }
+      } else if (p.action === 'redressement') {
+        if (p.stade === 'ouverture') {
+          intitule = 'Jugement d\'ouverture d\'une procédure de redressement judiciaire'
+        } else if (p.stade === 'plan_continuation') {
+          intitule = 'Jugement de plan de continuation après un redressement judiciaire'
+        }
+        if (intitule) {
+          const jugement = date + ' : ' + intitule
+          this.redressementJugements.push(jugement)
+        }
+      } else if (p.action === 'liquidation') {
+        if (p.stade === 'ouverture') {
+          intitule = 'Jugement d\'ouverture de liquidation judiciaire'
+        } else if (p.stade === 'cloture_insuffisance_actif') {
+          intitule = 'Jugement de clôture pour insuffisance d\'actif'
+        }
+        if (intitule) {
+          const jugement = date + ' : ' + intitule
+          this.liquidationJugements.push(jugement)
+        }
+      }
+    },
   },
   created() {
     Apex.chart = {
@@ -383,6 +503,15 @@ export default {
         this.unfollowCommentPlaceholder = 'Précisez la nature des actions si nécessaire'
       } else {
         this.unfollowCommentPlaceholder = 'Dites-nous pourquoi ; en particulier, s\'il s\'agissait selon vous d\'une erreur de détection'
+      }
+    },
+    etablissement(val) {
+      if (val.procol) {
+        val.procol.concat().sort((p1, p2) => {
+          return (p2.dateEffet > p1.dateEffet ? 1 : -1)
+        }).forEach((p) => {
+          this.processProcol(p)
+        })
       }
     },
   },
@@ -539,6 +668,10 @@ export default {
       const statutJuridique = ((this.etablissement.entreprise || {}).Sirene || {}).statutJuridiqueN2
       return statutJuridique
     },
+    lienBODACC() {
+      const lienBODACC = `https://www.bodacc.fr/annonce/liste/${this.etablissement.siren}/pcl`
+      return lienBODACC
+    },
   },
 }
 </script>
@@ -552,5 +685,11 @@ export default {
 }
 ::v-deep .followCard .description p {
   margin: 8px 0;
+}
+.chip {
+  font-family: "Roboto";
+  font-size: 13px;
+  font-weight: 400;
+  vertical-align: text-bottom;
 }
 </style>

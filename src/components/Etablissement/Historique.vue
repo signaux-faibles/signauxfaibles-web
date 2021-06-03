@@ -22,12 +22,6 @@
             </template>
             <span>Cet établissement est pour la première fois en alerte sur une liste de détection</span>
           </v-tooltip>
-          <v-tooltip bottom v-if="summary.etat_procol !== 'in_bonis'">
-            <template v-slot:activator="{ on, attrs }">
-            <v-chip v-bind="attrs" v-on="on" class="ma-0 chip" outline small text-color="red darken-1">{{ summary.etat_procol }}</v-chip>
-            </template>
-            <span>Cette entreprise est placée dans la procédure collective : {{ summary.etat_procol }}</span>
-          </v-tooltip>
         </div>
         <div style="font-size: 16px">
           <div v-if="permScore">

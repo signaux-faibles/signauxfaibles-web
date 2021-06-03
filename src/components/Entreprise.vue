@@ -119,7 +119,8 @@ export default {
       // Soldes Intermédiaires de Gestion (SIG) restants
       const va = f.diane.valeur_ajoutee ? f.diane.valeur_ajoutee : null
       const ebe = f.diane.excedent_brut_d_exploitation ? f.diane.excedent_brut_d_exploitation : null
-      const caf = f.diane.capacite_autofinancement ? Math.round(f.diane.capacite_autofinancement / 100 * (f.diane.ca + f.diane.subventions_d_exploitation)) : null
+      const caf = f.diane.capacite_autofinancement ?
+        Math.round(f.diane.capacite_autofinancement / 100 * (f.diane.ca + f.diane.subventions_d_exploitation)) : null
 
       // État de la trésorerie
       const frng = f.diane.couverture_ca_fdr ?
