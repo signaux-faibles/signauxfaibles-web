@@ -28,7 +28,7 @@ const localStore = new Vuex.Store({
     minEffectif: 20,
     newsRead: new Date('1970-01-01'),
     securityConsent: new Date('1970-01-01'),
-    procol: ['In bonis', 'In bonis (plan de continuation)', 'Sauvegarde', 'Plan de sauvegarde'],
+    procol: ['In bonis', 'Sauvegarde', 'Plan de sauvegarde'],
     expiredSession: false,
   },
   mutations: {

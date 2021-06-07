@@ -17,9 +17,9 @@
           </v-tooltip>
           <v-tooltip bottom v-if="prediction.etat_procol !== 'in_bonis'">
             <template v-slot:activator="{ on, attrs }">
-            <v-chip v-bind="attrs" v-on="on" class="ma-0 chip" outline small text-color="red darken-1">{{ prediction.etat_procol }}</v-chip>
+            <v-chip v-bind="attrs" v-on="on" class="ma-0 chip" outline small text-color="red darken-1">{{ libellesProcols[prediction.etat_procol] }}</v-chip>
             </template>
-            <span>Cette entreprise est placée dans la procédure collective : {{ prediction.etat_procol }}</span>
+            <span>Cette entreprise fait l’objet d’une procédure collective : {{ libellesProcols[prediction.etat_procol] }}</span>
           </v-tooltip>
           <img class="ml-2" v-if="prediction.connu === true" height="20" src="../assets/crp.png" />
           <div class="identite">
@@ -126,6 +126,8 @@
 
 <script>
 import ScoreWidget from '@/components/ScoreWidget'
+import libellesProcols from '@/assets/libelles_procols.json'
+
 export default {
   name: 'PredictionWidget',
   props: ['prediction', 'social', 'activitePartielle', 'detteSociale'],
@@ -139,6 +141,7 @@ export default {
       dialog: false,
       entrepriseDialog: false,
       showRaccourci: false,
+      libellesProcols,
     }
   },
   computed: {

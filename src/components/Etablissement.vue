@@ -32,7 +32,7 @@
               <div v-if="summary && summary.etat_procol !== 'in_bonis'" style="font-size: 16px">
                 <div>
                   Cet établissement fait l’objet d’une procédure collective :<br/>
-                  <v-chip class="my-2 chip" outline small text-color="red darken-1">{{ summary.etat_procol }}</v-chip>
+                  <v-chip class="my-2 chip" outline small text-color="red darken-1">{{ libellesProcols[summary.etat_procol] }}</v-chip>
                 </div>
                 <v-btn outline dark color="indigo darken-5" @click="jugementsDialog = true">Voir historique des jugements</v-btn>
                 <v-dialog v-model="jugementsDialog" @input="jugementsDialog = false" max-width="500px">
@@ -263,6 +263,8 @@ import axios from 'axios'
 import fr from 'apexcharts/dist/locales/fr.json'
 import MarkdownIt from 'markdown-it'
 import followCardConfig from '@/assets/follow_card_config.json'
+import libellesProcols from '@/assets/libelles_procols.json'
+
 
 export default {
   props: ['siret', 'batch'],
@@ -302,6 +304,7 @@ export default {
       sauvegardeJugements: [],
       redressementJugements: [],
       liquidationJugements: [],
+      libellesProcols,
     }
   },
   methods: {

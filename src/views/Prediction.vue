@@ -243,6 +243,7 @@ import Spinner from '@/components/Spinner'
 import PredictionWidget from '@/components/PredictionWidget'
 import Help from '@/components/Help'
 import axios from 'axios'
+import libellesProcols from '@/assets/libelles_procols.json'
 
 export default {
   // TODO: right drawer in component
@@ -263,8 +264,8 @@ export default {
       errorOccured: false,
       followStateChanged: false,
       snackbar: true,
-      procolItems: ['In bonis', 'In bonis (plan de continuation)', 'Sauvegarde', 'Plan de sauvegarde', 'Redressement judiciaire', 'Liquidation judiciaire'],
-      procolParams: [['in_bonis'], ['continuation'], ['sauvegarde'], ['plan_sauvegarde'], ['redressement', 'plan_redressement'], ['liquidation']],
+      procolItems: Object.values(libellesProcols),
+      procolParams: Object.keys(libellesProcols),
       source: axios.CancelToken.source(),
     }
   },
@@ -439,7 +440,7 @@ export default {
       params.procol = []
       this.procolItems.forEach((p, i) => {
         if (this.procol.includes(p)) {
-          params.procol = params.procol.concat(this.procolParams[i])
+          params.procol.push(this.procolParams[i])
         }
       })
       if (this.exclureSuivi) {
