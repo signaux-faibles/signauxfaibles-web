@@ -20,7 +20,7 @@
         </v-flex>
         <v-flex md6 xs12>
           <v-layout fill-height align-center justify-center>
-            <v-flex md6 xs12 style="text-align: justify; font-weight: 400; font-family: 'Abel', sans-serif">
+            <v-flex md6 xs12 style="text-align: justify; font-size: 14px; font-weight: 400; font-family: 'Roboto', sans-serif">
               <p>Ce graphique illustre le comportement de paiement de l’entreprise vis à vis de ses créanciers (fournisseurs) à partir du nombre de jours de retard mensuel sur les 24 derniers mois.</p>
               <p>Un retard de paiement en détérioration – soit la hausse du retard moyen d’une entreprise dans le règlement de ses factures fournisseurs – constitue un signal avant-coureur de tensions de trésorerie ou d’un changement de politique relation client-fournisseur susceptible de déstabiliser l’entreprise.</p>
               <p>Le retard moyen des entreprises référencées par Signaux Faibles (plus de 10 salariés) et couvertes par les données (56% des entreprises) est de l’ordre de 12 jours. Celui-ci peut néanmoins varier de 10 à 28 jours selon le secteur d’activité.</p>

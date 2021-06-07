@@ -80,7 +80,7 @@
                             </v-card>
                           </v-expansion-panel-content>
                         </v-expansion-panel>
-                        <div class="mt-4" style="font-size: 16px; font-weight: 400; font-family: 'Abel', sans-serif">
+                        <div class="mt-4" style="font-size: 14px; font-weight: 400; font-family: 'Roboto', sans-serif">
                           Vous pouvez consulter les annonces publiées au bulletin officiel.
                           <v-btn class="my-2" small outline color="indigo" :href="lienBODACC" target="_blank" rel="noopener"><v-icon small left class="mr-2">open_in_new</v-icon>Voir annonces BODACC</v-btn>
                         </div>

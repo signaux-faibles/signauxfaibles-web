@@ -52,7 +52,7 @@
       </v-flex>
       <v-flex xl6 lg12 mt-2>
         <apexchart
-          v-if="permScore && dernierScore.macroRadar && (summary.alert === 'Alerte seuil F1' || summary.alert === 'Alerte seuil F2')"
+          v-if="permScore && dernierScore && dernierScore.macroRadar && (summary.alert === 'Alerte seuil F1' || summary.alert === 'Alerte seuil F2')"
           type="radar"
           height="200"
           :options="options"
