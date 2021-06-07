@@ -117,6 +117,9 @@
           <v-flex md6 xs12 class="pr-1">
             <Urssaf :debit="debit" :cotisation="cotisation" :permUrssaf="perms.permUrssaf" />
           </v-flex>
+          <v-flex xs12 class="pr-1">
+            <Finance :siren="etablissement.siren" />
+          </v-flex>
           <v-flex xs12 class="pr-1 pt-3">
             <EtablissementEntreprise :siret="siret" :siege="etablissement.siege" :codeDepartement="sirene.codeDepartement" :etablissementsSummary="etablissementsSummary" v-on="$listeners" />
           </v-flex>
@@ -256,6 +259,7 @@ import Urssaf from '@/components/Etablissement/Urssaf.vue'
 import Help from '@/components/Help.vue'
 import Identite from '@/components/Etablissement/Identite.vue'
 import Map from '@/components/Etablissement/Map.vue'
+import Finance from '@/components/Etablissement/Finance.vue'
 import Commentaire from '@/components/Etablissement/Commentaire.vue'
 import EtablissementEntreprise from '@/components/Etablissement/Entreprise.vue'
 import Entreprise from '@/components/Entreprise.vue'
@@ -269,7 +273,7 @@ import libellesProcols from '@/assets/libelles_procols.json'
 export default {
   props: ['siret', 'batch'],
   name: 'Etablissement',
-  components: { Effectif, Urssaf, Help, Identite, Map, Commentaire, EtablissementEntreprise, Entreprise },
+  components: { Effectif, Urssaf, Help, Finance, Identite, Map, Commentaire, EtablissementEntreprise, Entreprise },
   data() {
     return {
       axios: axios.create(),
