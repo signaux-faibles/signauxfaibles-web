@@ -17,96 +17,125 @@
               :statutJuridique="statutJuridique"
               :summary="summary"
             />
-            <v-flex xs12 md6 class="pb-3">
-              <h2>
-                Procédure collective
-                  <Help titre="Procédure collective">
-                    <template>
-                      <p>La dernière procédure collective (ou plan issu d'une procédure collective) connue de l'Urssaf est ici mise en avant.<br />
-                      Vous avez également la possibilité de consulter l’historique des principaux jugements groupés par type de procédure collective : sauvegarde, redressement, liquidation judiciaire.<br />
-                      Pour plus de détails encore, vous serez redirigés vers les annonces publiées au bulletin officiel (BODACC) pour cette entreprise.</p>
-                      <p>Veuillez noter que les plans de cession lors d'un redressement judiciaire ne sont pas indiqués.</p>
-                    </template>
-                </Help>
-              </h2>
-              <div v-if="summary && summary.etat_procol !== 'in_bonis'" style="font-size: 16px">
-                <div>
-                  Cet établissement fait l’objet d’une procédure collective :<br/>
-                  <v-chip class="my-2 chip" outline small text-color="red darken-1">{{ libellesProcols[summary.etat_procol] }}</v-chip>
-                </div>
-                <v-btn outline dark color="indigo darken-5" @click="jugementsDialog = true">Voir historique des jugements</v-btn>
-                <v-dialog v-model="jugementsDialog" @input="jugementsDialog = false" max-width="500px">
-                  <div>
-                    <v-card>
-                      <v-card-title class="headline">
-                        Jugements de procédure collective
-                      </v-card-title>
-                      <v-card-text style="font-size: 16px">
-                        <v-expansion-panel v-model="jugementsPanel" expand style="font-weight: 800; font-family: 'Oswald', sans;">
-                          <v-expansion-panel-content v-if="liquidationJugements.length > 0">
-                            <template v-slot:header>
-                              <div>Liquidation</div>
-                            </template>
-                            <v-card>
-                              <v-card-text>
-                                <ul style="list-style-type: disc">
-                                  <li v-for="j in liquidationJugements" :key="j">{{ j }}</li>
-                                </ul>
-                              </v-card-text>
-                            </v-card>
-                          </v-expansion-panel-content>
-                          <v-expansion-panel-content v-if="redressementJugements.length > 0">
-                            <template v-slot:header>
-                              <div>Redressement</div>
-                            </template>
-                            <v-card>
-                              <v-card-text>
-                                <ul style="list-style-type: disc">
-                                  <li v-for="j in redressementJugements" :key="j">{{ j }}</li>
-                                </ul>
-                              </v-card-text>
-                            </v-card>
-                          </v-expansion-panel-content>
-                          <v-expansion-panel-content v-if="sauvegardeJugements.length > 0">
-                            <template v-slot:header>
-                              <div>Sauvegarde</div>
-                            </template>
-                            <v-card>
-                              <v-card-text>
-                                <ul style="list-style-type: disc">
-                                  <li v-for="j in sauvegardeJugements" :key="j">{{ j }}</li>
-                                </ul>
-                              </v-card-text>
-                            </v-card>
-                          </v-expansion-panel-content>
-                        </v-expansion-panel>
-                        <div class="mt-4" style="font-size: 14px; font-weight: 400; font-family: 'Roboto', sans-serif">
-                          Vous pouvez consulter les annonces publiées au bulletin officiel.
-                          <v-btn class="my-2" small outline color="indigo" :href="lienBODACC" target="_blank" rel="noopener"><v-icon small left class="mr-2">open_in_new</v-icon>Voir annonces BODACC</v-btn>
-                        </div>
-                      </v-card-text>
-                      <v-card-actions>
-                        <v-spacer></v-spacer>
-                        <v-btn flat color="primary" @click="jugementsDialog = false">Fermer</v-btn>
-                      </v-card-actions>
-                    </v-card>
-                  </div>
-                </v-dialog>
-              </div>
-              <div v-else style="font-size: 16px">
-                  Cet établissement ne fait, à notre connaissance, pas l’objet d’une procédure collective.
-              </div>
-            </v-flex>
             <v-btn v-if="etablissement.siren" dark color="indigo" @click="showEntreprise">Voir Fiche Entreprise</v-btn>
           </v-flex>
-          <v-flex xs12 md6 class="text-xs-left pa-3" style="font-size: 18px">
-            <div v-if="followCard" class="followCard">
-              <h2>Suivi de l'établissement</h2>
-              <h3 class="mt-3">Statut du suivi <v-chip class="chip ml-3">{{ this.followCard.status }}</v-chip></h3>
-              <div class="description my-3" v-html="followCard.description"></div>
-              <v-btn dark color="indigo" :href="followCard.url" target="_blank" rel="noopener" @click="trackMatomoEvent('etablissement', 'voir_carte_suivi', siret)">Voir Carte Suivi</v-btn>
-            </div>
-            <Map v-else :longitude="sirene.longitude" :latitude="sirene.latitude" ref="map" />
+          <v-flex xs12 md6 class="text-xs-left pa-3" style="font-size: 16px">
+            <v-layout fill-height align-center>
+              <v-flex>
+                <v-layout wrap>
+                  <v-flex>
+                    <Historique v-if="summary" :historique="historique" :summary="summary" />
+                  </v-flex>
+                </v-layout>
+                <v-layout wrap>
+                    <v-flex xl6 lg12>
+                      <h2>
+                        Procédure collective
+                          <Help titre="Procédure collective">
+                            <template>
+                              <p>La dernière procédure collective (ou plan issu d'une procédure collective) connue de l'Urssaf est ici mise en avant.<br />
+                              Vous avez également la possibilité de consulter l’historique des principaux jugements groupés par type de procédure collective : sauvegarde, redressement, liquidation judiciaire.<br />
+                              Pour plus de détails encore, vous serez redirigés vers les annonces publiées au bulletin officiel (BODACC) pour cette entreprise.</p>
+                              <p>Veuillez noter que les plans de cession lors d'un redressement judiciaire ne sont pas indiqués.</p>
+                            </template>
+                        </Help>
+                      </h2>
+                      <div v-if="summary && summary.etat_procol !== 'in_bonis'">
+                        <div>
+                          Cet établissement fait l’objet d’une procédure collective :<br/>
+                          <v-chip class="my-2 chip" outline small text-color="red darken-1">{{ libellesProcols[summary.etat_procol] }}</v-chip>
+                        </div>
+                        <v-btn outline small dark color="indigo" @click="jugementsDialog = true">Voir historique des jugements</v-btn>
+                        <v-dialog v-model="jugementsDialog" @input="jugementsDialog = false" max-width="500px">
+                          <div>
+                            <v-card>
+                              <v-card-title class="headline">
+                                Jugements de procédure collective
+                              </v-card-title>
+                              <v-card-text style="font-size: 16px">
+                                <v-expansion-panel v-model="jugementsPanel" expand style="font-weight: 800; font-family: 'Oswald', sans;">
+                                  <v-expansion-panel-content v-if="liquidationJugements.length > 0">
+                                    <template v-slot:header>
+                                      <div>Liquidation</div>
+                                    </template>
+                                    <v-card>
+                                      <v-card-text>
+                                        <ul style="list-style-type: disc">
+                                          <li v-for="j in liquidationJugements" :key="j">{{ j }}</li>
+                                        </ul>
+                                      </v-card-text>
+                                    </v-card>
+                                  </v-expansion-panel-content>
+                                  <v-expansion-panel-content v-if="redressementJugements.length > 0">
+                                    <template v-slot:header>
+                                      <div>Redressement</div>
+                                    </template>
+                                    <v-card>
+                                      <v-card-text>
+                                        <ul style="list-style-type: disc">
+                                          <li v-for="j in redressementJugements" :key="j">{{ j }}</li>
+                                        </ul>
+                                      </v-card-text>
+                                    </v-card>
+                                  </v-expansion-panel-content>
+                                  <v-expansion-panel-content v-if="sauvegardeJugements.length > 0">
+                                    <template v-slot:header>
+                                      <div>Sauvegarde</div>
+                                    </template>
+                                    <v-card>
+                                      <v-card-text>
+                                        <ul style="list-style-type: disc">
+                                          <li v-for="j in sauvegardeJugements" :key="j">{{ j }}</li>
+                                        </ul>
+                                      </v-card-text>
+                                    </v-card>
+                                  </v-expansion-panel-content>
+                                </v-expansion-panel>
+                                <div class="mt-4" style="font-size: 14px; font-weight: 400; font-family: 'Roboto', sans-serif">
+                                  Vous pouvez consulter les annonces publiées au bulletin officiel.
+                                  <v-btn class="my-2" small outline color="indigo" :href="lienBODACC" target="_blank" rel="noopener"><v-icon small left>open_in_new</v-icon>Voir annonces BODACC</v-btn>
+                                </div>
+                              </v-card-text>
+                              <v-card-actions>
+                                <v-spacer></v-spacer>
+                                <v-btn flat color="primary" @click="jugementsDialog = false">Fermer</v-btn>
+                              </v-card-actions>
+                            </v-card>
+                          </div>
+                        </v-dialog>
+                      </div>
+                      <div v-else>
+                          Cet établissement ne fait, à notre connaissance, pas l’objet d’une procédure collective.
+                      </div>
+                    </v-flex>
+                    <v-flex xl6 lg12 v-if="showFCE">
+                      <h2>
+                        Visites de la Direccte
+                        <Help titre="Visites de la Direccte">
+                          <template>
+                            Cette information est fournie par <a href="https://fce.fabrique.social.gouv.fr/a-propos" target="_blank" rel="noopener">Fiche Commune Entreprise</a>.<br>
+                            Vous pouvez consulter ce service édité par l’incubateur des ministères sociaux pour en savoir davantage sur la date et la nature des visites.<br>
+                            Un compte Fiche Commune Entreprise avec une adresse email spécifique est nécessaire.
+                          </template>
+                        </Help>
+                      </h2>
+                      <div v-if="visiteFCE">
+                        <div class="mb-2">Cet établissement a reçu la visite de la Direccte au cours des 24 derniers mois.</div>
+                        <v-btn v-if="showLienVisiteFCE" small outline color="indigo" :href="lienVisiteFCE" target="_blank" rel="noopener" @click="getLienVisiteFCE()"><v-icon small left>open_in_new</v-icon>Fiche Commune Entreprise</v-btn>
+                      </div>
+                      <div v-else>
+                        <div class="mb-2">Cet établissement n’a pas reçu la visite de la Direccte au cours des 24 derniers mois.</div>
+                      </div>
+                    </v-flex>
+                </v-layout>
+                <div v-if="followCard" class="followCard">
+                  <h2>Suivi de l'établissement</h2>
+                  <h3 class="mt-2">Statut du suivi <v-chip small class="chip ml-3">{{ this.followCard.status }}</v-chip></h3>
+                  <div class="description my-3" v-html="followCard.description"></div>
+                  <v-btn dark color="indigo" :href="followCard.url" target="_blank" rel="noopener" @click="trackMatomoEvent('etablissement', 'voir_carte_suivi', siret)">Voir Carte Suivi</v-btn>
+                </div>
+              </v-flex>
+            </v-layout>
           </v-flex>
           <v-flex xs12 md12 class="text-xs-right pa-3">
             <Commentaire :siret="siret" />
@@ -263,6 +292,7 @@ import Finance from '@/components/Etablissement/Finance.vue'
 import Commentaire from '@/components/Etablissement/Commentaire.vue'
 import EtablissementEntreprise from '@/components/Etablissement/Entreprise.vue'
 import Entreprise from '@/components/Entreprise.vue'
+import Historique from '@/components/Etablissement/Historique.vue'
 import axios from 'axios'
 import fr from 'apexcharts/dist/locales/fr.json'
 import MarkdownIt from 'markdown-it'
@@ -273,7 +303,8 @@ import libellesProcols from '@/assets/libelles_procols.json'
 export default {
   props: ['siret', 'batch'],
   name: 'Etablissement',
-  components: { Effectif, Urssaf, Help, Finance, Identite, Map, Commentaire, EtablissementEntreprise, Entreprise },
+  components: { Effectif, Urssaf, Help, Finance, Identite, Map,
+    Commentaire, EtablissementEntreprise, Entreprise, Historique },
   data() {
     return {
       axios: axios.create(),
@@ -309,6 +340,7 @@ export default {
       redressementJugements: [],
       liquidationJugements: [],
       libellesProcols,
+      lienVisiteFCE: '',
     }
   },
   methods: {
@@ -490,6 +522,14 @@ export default {
         }
       }
     },
+    getLienVisiteFCE() {
+      const lienVisiteFCE = `https://fce.fabrique.social.gouv.fr/establishment/${this.siret}`
+      this.$axios.get(`/fce/${this.siret}`).then((response) => {
+        this.lienVisiteFCE = response.data || lienVisiteFCE
+      }).catch((error) => {
+        this.lienVisiteFCE = lienVisiteFCE
+      })
+    },
   },
   created() {
     Apex.chart = {
@@ -499,6 +539,7 @@ export default {
   },
   mounted() {
     this.getEtablissement()
+    this.getLienVisiteFCE()
     this.getFollowCard()
   },
   watch: {
@@ -678,6 +719,13 @@ export default {
     lienBODACC() {
       const lienBODACC = `https://www.bodacc.fr/annonce/liste/${this.etablissement.siren}/pcl`
       return lienBODACC
+    },
+    showFCE() {
+      return process.env.VUE_APP_FCE_ENABLED && !!JSON.parse(process.env.VUE_APP_FCE_ENABLED)
+    },
+    showLienVisiteFCE() {
+      const emailDomain = this.jwt.email.split('@').pop()
+      return process.env.VUE_APP_FCE_DOMAIN_LIST.split(',').includes(emailDomain)
     },
   },
 }

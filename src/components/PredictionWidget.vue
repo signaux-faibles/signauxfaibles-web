@@ -29,7 +29,7 @@
         </div>
         <transition name="fade">
           <div v-show="showRaccourci" style="position: absolute; right: 0">
-            <v-btn v-if="prediction.siren" dark color="indigo darken-5" @click="showEntreprise">Voir Fiche Entreprise</v-btn>
+            <v-btn v-if="prediction.siren" dark color="indigo" @click="showEntreprise">Voir Fiche Entreprise</v-btn>
           </div>
         </transition>
         <template v-if="social">

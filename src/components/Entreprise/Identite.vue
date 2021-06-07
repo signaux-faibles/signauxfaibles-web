@@ -2,7 +2,7 @@
   <div>
     <h1>
       {{ denomination }}
-      <Help style="position: relative; top: -3px; right: 10px" titre="Identité de l’entreprise">
+      <Help titre="Identité de l’entreprise">
         <p>Les données d’identité de l’entreprise sont principalement issues de la base Sirene des entreprises et de leurs établissements produite par l’Insee.</p>
         <p>L’<b>activité</b> est une donnée déclarative fournie par l’entreprise lors de sa création. Il peut être constaté un décalage entre le code déclaré et l’activité réelle de l’entreprise.</p>
         <p>Le <b>statut juridique</b> indiqué correspond à la catégorie juridique de niveau II (37 positions suivant les critères juridiques fondamentaux du droit).</p>

@@ -59,7 +59,7 @@
           :series="series(dernierScore)"
         ></apexchart>
       </v-flex>
-      <v-btn v-if="permScore && historique.length > 1" outline dark color="indigo darken-5" @click="historiqueDialog = true">Voir historique des alertes</v-btn>
+      <v-btn v-if="permScore && historique.length > 1" outline small dark color="indigo" @click="historiqueDialog = true">Voir historique des alertes</v-btn>
       <v-dialog v-model="historiqueDialog" @input="historiqueDialog = false" max-width="500px">
         <div>
           <v-card>
