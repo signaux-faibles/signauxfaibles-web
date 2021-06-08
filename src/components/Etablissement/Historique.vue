@@ -52,10 +52,10 @@
       </v-flex>
       <v-flex xl6 lg12 mt-2>
         <apexchart
-          v-if="permScore && dernierScore && dernierScore.macroRadar && (summary.alert === 'Alerte seuil F1' || summary.alert === 'Alerte seuil F2')"
+          v-if="permScore && dernierScore && dernierScore.macroRadar && Object.keys(dernierScore.macroRadar).length > 2 && (summary.alert === 'Alerte seuil F1' || summary.alert === 'Alerte seuil F2')"
           type="radar"
           height="200"
-          :options="options"
+          :options="macroOptions(dernierScore)"
           :series="series(dernierScore)"
         ></apexchart>
       </v-flex>
@@ -97,10 +97,10 @@
                       </div>
                       <div class="mt-4">
                         <apexchart
-                          v-if="h.macroRadar && (h.alert === 'Alerte seuil F1' || h.alert === 'Alerte seuil F2')"
+                          v-if="h.macroRadar && Object.keys(h.macroRadar).length > 2 && (h.alert === 'Alerte seuil F1' || h.alert === 'Alerte seuil F2')"
                           type="radar"
                           height="200"
-                          :options="options"
+                          :options="macroOptions(h)"
                           :series="series(h)"
                         ></apexchart>
                       </div>
@@ -144,8 +144,26 @@ export default {
     },
     series(h) {
       return [{
-        data: this.variablesMacro.map((v) => h.macroRadar[v]),
+        data: this.variablesMacro.reduce((data, v) => {
+          if (h.macroRadar.hasOwnProperty(v)) {
+            data.push(h.macroRadar[v])
+          }
+          return data
+        }, []),
       }]
+    },
+    macroOptions(h) {
+      const xaxis = {
+        xaxis: {
+          categories: this.variablesMacro.reduce((categories, v) => {
+            if (h.macroRadar.hasOwnProperty(v)) {
+              categories.push(this.libelleMacro(v))
+            }
+            return categories
+          }, []),
+        },
+      }
+      return {...this.options, ...xaxis}
     },
     selectConcerning(h) {
       return ((h || {}).explSelection || {}).selectConcerning
@@ -174,9 +192,6 @@ export default {
         },
         markers: {
           size: 0,
-        },
-        xaxis: {
-          categories: this.variablesMacro.map((v) => this.libelleMacro(v)),
         },
         yaxis: {
           show: false,
