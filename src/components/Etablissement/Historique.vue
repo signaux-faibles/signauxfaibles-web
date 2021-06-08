@@ -5,6 +5,7 @@
       <Help titre="Détection Signaux Faibles">
         <template>
           <p>En premier lieu, c’est le risque de défaillance à 18 mois estimé lors de la production de la dernière liste de détection qui vous est présenté.<br />
+          Son calcul est basé sur des éléments structurels non affectés par la crise et sur des règles métier conjoncturelles.<br />
           Lorsque ce risque existe, nous l’expliquons par les données ayant le plus influencé ce résultat.<br />
           Un graphique sous la forme d’un radar vous permettra de rapidement juger du positionnement (risque élevé rouge en périphérie) de l’établissement pour chaque thématique de données.<br />
           Vous avez également la possibilité de consulter l’historique des alertes qui synthétise toutes les listes de détection sur lesquelles l’établissement est apparu.</p>
@@ -43,6 +44,7 @@
                 <li v-for="c in selectConcerning(dernierScore)" :key="c[1]"><em>{{ libelleMicro(c[1]) }}</em> ({{ libelleMacro(c[0]) }})</li>
               </ul>
             </div>
+            <div v-if="dernierScore.alertPreRedressements != summary.alert && (dernierScore.redressements || []).includes('detteUrssaf')">Ce risque a été réévalué à la hausse car l’établissement présente une augmentation significative de la dette Urssaf entre juillet 2020 et janvier 2021.</div>
           </div>
           <div v-else>
             <div v-if="roles.includes('score')">Veuillez suivre cet établissement pour consulter ses données de détection.</div>
