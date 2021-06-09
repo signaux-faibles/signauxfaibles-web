@@ -59,6 +59,21 @@ export default {
       news: [
         // TODO: externalize
         {
+          date: new Date('2021-06-10'), news: [
+            'Explicabilité des détections (données individuelles influentes, radar thématique, historique)',
+            'Redressement du niveau d\'alerte a posteriori en fonction de l\'évolution de la dette Urssaf',
+            'Recherche avancée des établissements (filtrage par secteur d\'activité, zone géographique et effectif)',
+            'Intégration des procédures collectives et de leur historique sur la fiche établissement',
+            'Affichage du statut juridique sur les fiches établissement et entreprise',
+            'Refonte de l\'entête de la fiche établissement',
+            'Amélioration de la réactivité du filtrage des listes de détection',
+            'Renvoi vers la fiche entreprise pour les informations financières et le comportement de paiement',
+            'Redirection vers la page de connexion en cas de perte de session',
+            'Calcul de la capacité d\'autofinancement en valeur absolue pour le graphique des SIG',
+            'Mise à jour des données et de la description du plan de relance',
+          ],
+        },
+        {
           date: new Date('2021-04-19'), news: [
             'Mise à jour du périmètre des secteurs S1 et S1 bis',
             'Indication (via une étoile dans l\'angle supérieur gauche) des établissements suivis par l\'utilisateur sur les listes',
