@@ -1,5 +1,19 @@
 <template>
   <v-app id="app">
+    <v-dialog v-model="expiredSession" persistent max-width="500px">
+      <v-card>
+        <v-card-title class="headline">Votre session a expiré</v-card-title>
+        <v-card-text>
+          Vous avez été inactif pendant une trop longue période.
+          <br />Veuillez vous reconnecter pour accéder de nouveau au service.
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="primary" flat @click="reconnect()">Se reconnecter</v-btn>
+          <v-spacer></v-spacer>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <Security v-if="!securityConsent" />
     <v-content v-if="securityConsent">
       <NavigationDrawer v-if="login && leftDrawer" />
@@ -23,6 +37,9 @@ export default {
     },
     handleScrolling(event) {
       this.scrollTop = event.pageY || window.scrollY
+    },
+    reconnect() {
+      this.$keycloak.login()
     },
   },
   computed: {
@@ -57,6 +74,9 @@ export default {
       set(val) {
         this.$store.dispatch('setLeftDrawer', val)
       },
+    },
+    expiredSession() {
+      return this.$localStore.state.expiredSession
     },
   },
   mounted() {

@@ -1,22 +1,24 @@
 <template>
-  <span style="position: relative;">
-    <v-icon
-      :size="iconSize"
-      style="position: relative; right: 1px"
-      :color="logo.alert[1]"
-    >{{logo.alert[0]}}</v-icon>
-    
-  </span>
-  
+  <v-tooltip right :disabled="disabled">
+    <template v-slot:activator="{ on, attrs }">
+      <span v-bind="attrs" v-on="on">
+        <v-icon
+          :size="iconSize"
+          :color="logo.alert[1]"
+        >{{ logo.alert[0] }}</v-icon>
+      </span>
+    </template>
+    <span>{{ detection.tooltip }}</span>
+  </v-tooltip>
 </template>
 
 <script>
 export default {
   name: 'ScoreWidget',
-  props: ['prediction', 'size'],
+  props: ['prediction', 'size', 'tooltip'],
   computed: {
-    alert() {
-      return this.prediction
+    disabled() {
+      return !this.tooltip
     },
     iconSize() {
       return this.size || '35px'
@@ -37,21 +39,28 @@ export default {
       }
     },
     detection() {
-      const alert = this.alert.alert
+      const alert = this.prediction.alert
       let probClass = ''
+      let tooltip = ''
       if (!this.permScore) {
         probClass = 'forbidden'
+        tooltip = 'Non autorisé'
       } else if (this.permScore && alert == null) {
         probClass = 'absent'
+        tooltip = 'Hors périmètre'
       } else if (alert === 'Pas d\'alerte') {
         probClass = 'none'
+        tooltip = 'Pas de risque de défaillance à 18 mois identifié'
       } else if (alert === 'Alerte seuil F2') {
         probClass = 'low'
+        tooltip = 'Risque modéré de défaillance à 18 mois'
       } else {
         probClass = 'high'
+        tooltip = 'Risque élevé de défaillance à 18 mois'
       }
       return {
         prob: probClass,
+        tooltip,
       }
     },
   },

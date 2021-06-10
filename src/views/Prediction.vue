@@ -37,7 +37,7 @@
     <div style="width:100%">
       <div
         id="nodata"
-        v-if="!loading && prediction.length == 0 && init==false"
+        v-if="complete && prediction.length == 0"
       >Les paramètres de filtrage ne font ressortir aucune des entreprises pour lesquelles vous êtes habilité(e).</div>
       <v-navigation-drawer
         :class="(rightDrawer?'elevation-6':'') + ' rightDrawer'"
@@ -52,7 +52,6 @@
         <div class="mt-2" style="width: 100%; padding: 0 15px;">
           <v-select
             :items="batches"
-            :disabled="loading"
             v-model="currentBatchKey"
             @change="getPrediction"
             label="Liste de détection"
@@ -83,7 +82,6 @@
               <v-btn
                 light
                 color="rgba(0,0,0,0.74)"
-                :disabled="loading"
                 v-on="on"
                 @click="copyNaf()"
                 outline
@@ -134,7 +132,6 @@
           <v-icon style="margin-right: 10px;">fa-map</v-icon>
           <v-select
             :items="subzones"
-            :disabled="loading"
             v-model="zone"
             label="Zone Géographique"
             @change="getPrediction()"
@@ -145,7 +142,6 @@
           <v-icon style="margin-right: 10px;">fa-users</v-icon>
           <v-combobox
             v-model="minEffectif"
-            :disabled="loading"
             :items="effectifClass"
             label="Effectif minimum"
             @change="getPrediction()"
@@ -164,7 +160,6 @@
             v-model="procol"
             :items="procolItems"
             :menu-props="{ maxHeight: 400 }"
-            :disabled="loading"
             multiple
             chips
             @blur="getPrediction()"
@@ -179,7 +174,7 @@
         <v-list three-line>
           <v-list-group>
             <v-subheader slot="activator">Filtres avancés</v-subheader>
-            <v-list-tile :disabled="loading">
+            <v-list-tile>
               <v-list-tile-action>
                 <v-checkbox v-model="ignorezone" @change="getPrediction()"></v-checkbox>
               </v-list-tile-action>
@@ -188,7 +183,7 @@
                 <v-list-tile-sub-title>Inclure tous les établissements des entreprises de ma zone</v-list-tile-sub-title>
               </v-list-tile-content>
             </v-list-tile>
-            <v-list-tile :disabled="loading">
+            <v-list-tile>
               <v-list-tile-action>
                 <v-checkbox v-model="siegeUniquement" @change="getPrediction()"></v-checkbox>
               </v-list-tile-action>
@@ -197,7 +192,7 @@
                 <v-list-tile-sub-title>Exclure les établissements secondaires</v-list-tile-sub-title>
               </v-list-tile-content>
             </v-list-tile>
-            <v-list-tile :disabled="loading">
+            <v-list-tile>
               <v-list-tile-action>
                 <v-checkbox v-model="exclureSuivi" @change="getPrediction()"></v-checkbox>
               </v-list-tile-action>
@@ -217,7 +212,7 @@
       <v-container style="position: relative; top: -10px">
         <v-layout row>
           <v-flex xs12 md6>
-            <v-text-field v-model="filter" @input="getPrediction" solo label="Filtre rapide par raison sociale ou SIRET" />
+            <v-text-field v-model="filter" @input="getPrediction" solo label="Filtre rapide par raison sociale ou SIRET" clearable />
           </v-flex>
           <v-flex xs12 md6 style="line-height: 53px;">
             <v-icon color="red">fa-exclamation-triangle</v-icon>
@@ -247,6 +242,8 @@
 import Spinner from '@/components/Spinner'
 import PredictionWidget from '@/components/PredictionWidget'
 import Help from '@/components/Help'
+import axios from 'axios'
+import libellesProcols from '@/assets/libelles_procols.json'
 
 export default {
   // TODO: right drawer in component
@@ -267,8 +264,9 @@ export default {
       errorOccured: false,
       followStateChanged: false,
       snackbar: true,
-      procolItems: ['In bonis', 'In bonis (plan de continuation)', 'Sauvegarde', 'Plan de sauvegarde', 'Redressement judiciaire', 'Liquidation judiciaire'],
-      procolParams: [['in_bonis'], ['continuation'], ['sauvegarde'], ['plan_sauvegarde'], ['redressement', 'plan_redressement'], ['liquidation']],
+      procolItems: Object.values(libellesProcols),
+      procolParams: Object.keys(libellesProcols),
+      source: axios.CancelToken.source(),
     }
   },
   mounted() {
@@ -343,31 +341,41 @@ export default {
         this.page = 0
         this.complete = false
         this.trackMatomoEvent('listes', 'charger_liste', this.eventName)
+        this.cancel()
         this.getPredictionPage()
       }, 500)
     },
     getPredictionPage() {
-        if (!this.loading && this.currentBatchKey) {
+        if (this.currentBatchKey) {
           this.loading = true
           this.errorOccured = false
-          this.$axios.post(`/scores/liste/${this.currentBatchKey}`, this.params).then((response) => {
+          this.$axios.post(`/scores/liste/${this.currentBatchKey}`,
+            this.params, {cancelToken: this.source.token}).then((response) => {
             if (response.status === 200) {
               this.prediction = this.prediction.concat(response.data.scores)
               this.predictionWarnings = response.data.nbF2
               this.predictionAlerts = response.data.nbF1
+              const p = response.data.page ? response.data.page : 0
+              const pageMax = response.data.pageMax ? response.data.pageMax : 0
+              if (p === pageMax) {
+                this.complete = true
+              }
             } else if (response.status === 204) {
               this.complete = true
             } else {
               this.errorOccured = true
             }
+            this.loading = false
           }).catch((error) => {
-            this.errorOccured = true
+            if (!axios.isCancel(error)) {
+              this.errorOccured = true
+              this.loading = false
+            }
           }).finally(() => {
             this.init = false
-            this.loading = false
-            this.page += 1
             this.followStateChanged = false
           })
+          this.page += 1
         }
     },
     openLeftDrawer() {
@@ -393,6 +401,10 @@ export default {
     toggleExclureSuivi() {
       this.exclureSuivi = !this.exclureSuivi
       this.getPrediction()
+    },
+    cancel() {
+      this.source.cancel()
+      this.source = axios.CancelToken.source()
     },
   },
   watch: {
@@ -428,7 +440,7 @@ export default {
       params.procol = []
       this.procolItems.forEach((p, i) => {
         if (this.procol.includes(p)) {
-          params.procol = params.procol.concat(this.procolParams[i])
+          params.procol.push(this.procolParams[i])
         }
       })
       if (this.exclureSuivi) {

@@ -1,5 +1,5 @@
 <template>
-  <div id='map' style="position: relative; width: 100%; height: 100%; border: 1px solid black"></div>
+  <div id='map' style="position: relative; width: 100%; min-height: 425px; height: 100%; border: 1px solid black"></div>
 </template>
 
 <script>

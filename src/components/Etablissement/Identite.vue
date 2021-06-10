@@ -2,43 +2,23 @@
   <div>
     <h1>
       {{ denomination }}
-      <Help style="position: relative; top: -3px; right: 10px" titre="Identité de l'entreprise">
-        <b>Raison Sociale, Coordonnées:</b>
-        Ces données sont issues du service API entreprises fourni par la DINUM qui redistribue les données de l'INSEE.
-        <br />
-        <b>Activité de l'entreprise:</b>
-        Le code activité est issu de la base Sirène produite par l'INSEE et correspond aux données déclaratives fournies par l'entreprise. Il peut être constaté un décalage entre le code déclaré et l'activité réelle de l'entreprise.
+      <Help titre="Identité de l’entreprise">
+        <p>Les données d’identité de l’entreprise sont principalement issues de la base Sirene des entreprises et de leurs établissements produite par l’Insee.</p>
+        <p>L’<b>activité</b> est une donnée déclarative fournie par l’entreprise lors de sa création. Il peut être constaté un décalage entre le code déclaré et l’activité réelle de l’entreprise.</p>
+        <p>Le <b>statut juridique</b> indiqué correspond à la catégorie juridique de niveau II (37 positions suivant les critères juridiques fondamentaux du droit).</p>
+        <p>Les <b>têtes de groupe</b> ont été obtenues auprès de la société Ellisphere. Sauf cas particulier d’arbitrage, est considérée comme tête de groupe (ou société mère) l’entreprise qui détient de façon directe ou indirecte plus de 50% du capital et qui n’est pas elle-même détenue à plus de 50% par une autre entreprise.</p>
       </Help>
       <v-btn v-if="followed === false" dark color="indigo" @click="showFollowDialog"><v-icon left class="mr-2">mdi-star-outline</v-icon>Suivre</v-btn>
       <v-btn v-if="followed === true" outline color="indigo" @click="showUnfollowDialog"><v-icon left class="mr-2">mdi-star</v-icon>Ne plus suivre</v-btn>
     </h1>
-    <v-layout ma-2 wrap>
-      <v-flex v-if="historique.length > 0" md6 xs12>
-        <Historique :historique="historique" />
-      </v-flex>
-      <v-flex md4 xs12 v-if="showFCE && visiteFCE">
-        <h2>
-          Visites de la Direccte
-          <Help titre="Visites de la Direccte">
-            <template>
-              Cette information est fournie par <a href="https://fce.fabrique.social.gouv.fr/a-propos" target="_blank" rel="noopener">Fiche Commune Entreprise</a>.<br>
-              Vous pouvez consulter ce service édité par l’incubateur des ministères sociaux pour en savoir davantage sur la date et la nature des visites.<br>
-              Un compte Fiche Commune Entreprise avec une adresse email spécifique est nécessaire.
-            </template>
-          </Help>
-        </h2>
-        Cet établissement a reçu la visite de la Direccte au cours des 24 derniers mois.
-        <v-btn v-if="showLienVisiteFCE" class="ma-3" small outline color="indigo" :href="lienVisiteFCE" target="_blank" rel="noopener" @click="getLienVisiteFCE()"><v-icon small left class="mr-2">open_in_new</v-icon>Fiche Commune Entreprise</v-btn>
-      </v-flex>
-    </v-layout>
-    <h3>
+    <h3 class="mt-3">
       siren {{ siret.slice(0,9) }}
       <span style="color: #999">{{ siret.slice(9,14) }} siret</span>
       {{ siege ? ' (siège)' : '' }}
     </h3>
     <hr style="color: #eee;" />
     <div style="padding: 10px; margin: 4px;">
-      <div v-html="activiteHtml" style="font-size: 16px"></div>
+      <div v-html="identiteHtml" style="font-size: 16px"></div>
     </div>
     <h3>adresse postale de l'établissement</h3>
     <hr style="color: #eee;" />
@@ -50,7 +30,7 @@
         <v-flex grow>
           <div v-if="terrind" class="text-uppercase" style="font-size: 18px">
             <img class="mr-3 mb-3" style="vertical-align: middle" height="45" src="../../assets/terrind.png" />{{ terrind }}
-            <Help style="position: relative; top: -3px; right: 10px" titre="Territoires d’industrie">
+            <Help titre="Territoires d’industrie">
               Les Territoires d’industrie sont des <b>intercommunalités ou des groupes d’intercommunalités</b> situés dans les campagnes, les espaces périurbains, les villes petites et moyennes.<br />
               Elles présentent <b>une forte identité et un savoir-faire industriel</b> et l’ensemble de leurs acteurs, notamment les entreprises et les collectivités territoriales, sont mobilisés pour le développement de l’industrie.<br /><br />
               Pour en savoir davantage : <a href="https://agence-cohesion-territoires.gouv.fr/territoires-dindustrie-44" target="_blank" rel="noopener">https://agence-cohesion-territoires.gouv.fr/territoires-dindustrie-44</a>
@@ -64,20 +44,11 @@
 
 <script>
 import Help from '@/components/Help.vue'
-import Historique from '@/components/Etablissement/Historique.vue'
 
 export default {
   name: 'Identite',
-  props: ['denomination', 'historique', 'siret', 'sirene', 'siege', 'groupe', 'terrind', 'creation', 'visiteFCE'],
-  components: { Help, Historique },
-  data() {
-    return {
-      lienVisiteFCE: '',
-    }
-  },
-  mounted() {
-    this.getLienVisiteFCE()
-  },
+  props: ['denomination', 'siret', 'sirene', 'siege', 'groupe', 'terrind', 'creation', 'statutJuridique', 'summary'],
+  components: { Help},
   methods: {
     showFollowDialog() {
       this.$parent.followDialog = true
@@ -97,14 +68,6 @@ export default {
       } else {
         return count + ' ans'
       }
-    },
-    getLienVisiteFCE() {
-      const lienVisiteFCE = `https://fce.fabrique.social.gouv.fr/establishment/${this.siret}`
-      this.$axios.get(`/fce/${this.siret}`).then((response) => {
-        this.lienVisiteFCE = response.data || lienVisiteFCE
-      }).catch((error) => {
-        this.lienVisiteFCE = lienVisiteFCE
-      })
     },
   },
   computed: {
@@ -128,7 +91,7 @@ export default {
       return this.naf.codeActivite
     },
     nomenActivite() {
-      return (this.naf.nomenActivite && this.naf.nomenActivite !== 'NAFRev2') ? ' (' + this.naf.nomenActivite + ')' : ''
+      return (this.naf.nomenActivite && this.naf.nomenActivite !== 'NAFRev2') ? ' - ' + this.naf.nomenActivite : ''
     },
     followed() {
       return this.$parent.followed
@@ -136,27 +99,22 @@ export default {
     adresse() {
       return ((this.sirene || {}).adresse || '').split('\n').join('<br />')
     },
-    activiteHtml() {
-      return [(this.libelleSecteur ? this.libelleSecteur : ''),
-        (this.libelleActivite ? this.libelleActivite : ''),
-        (this.codeActivite ? 'Code APE&nbsp;: ' + this.codeActivite + this.nomenActivite : ''),
-        (this.ouverture ? 'Date d\'ouverture de l\'établissement&nbsp;: '
+    identiteHtml() {
+      return [(this.libelleSecteur ? 'Secteur d’activité : ' + this.libelleSecteur : ''),
+        ((this.libelleActivite && this.codeActivite) ? 'Activité : '
+          + this.libelleActivite
+          + ' (' + this.codeActivite + this.nomenActivite + ')' : ''),
+        (this.statutJuridique ? 'Statut juridique : ' + this.statutJuridique : ''),
+        (this.ouverture ? 'Date d’ouverture de l’établissement : '
           + this.ouverture.toLocaleDateString('fr', {timeZone: 'Europe/Paris'})
           + ' (' + this.pluralizeAge(this.calculateAge(this.ouverture)) + ')'
           : ''),
-        (this.creation ? 'Date de création de l\'entreprise&nbsp;: '
+        (this.creation ? 'Date de création de l’entreprise : '
           + this.creation.toLocaleDateString('fr', {timeZone: 'Europe/Paris'})
           + ' (' + this.pluralizeAge(this.calculateAge(this.creation)) + ')'
           : ''),
-        (this.groupe ? 'Tête de groupe&nbsp;: ' + this.groupe : '')]
+        (this.groupe ? 'Tête de groupe : ' + this.groupe : '')]
         .filter(Boolean).join('<br>')
-    },
-    showFCE() {
-      return process.env.VUE_APP_FCE_ENABLED && !!JSON.parse(process.env.VUE_APP_FCE_ENABLED)
-    },
-    showLienVisiteFCE() {
-      const emailDomain = this.jwt.email.split('@').pop()
-      return process.env.VUE_APP_FCE_DOMAIN_LIST.split(',').includes(emailDomain)
     },
   },
 }

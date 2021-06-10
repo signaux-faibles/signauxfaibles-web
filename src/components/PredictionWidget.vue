@@ -3,7 +3,7 @@
     <v-card @click="showEtablissement()" @mouseover="social ? highlightEtablissement() : showRaccourci = true" @mouseout="showRaccourci = false" class="etablissement-card elevation-2 ma-2 pointer">
       <div class="entete">
         <div v-if="prediction.followed" class="corner-ribbon"><v-icon dark small>mdi-star</v-icon></div>
-        <ScoreWidget :prediction="prediction" />
+        <ScoreWidget :prediction="prediction" :tooltip="true" />
       </div>
       <div class="corps">
         <div class="mr-2 ml-2">
@@ -17,9 +17,9 @@
           </v-tooltip>
           <v-tooltip bottom v-if="prediction.etat_procol !== 'in_bonis'">
             <template v-slot:activator="{ on, attrs }">
-            <v-chip v-bind="attrs" v-on="on" class="ma-0 chip" outline small text-color="red darken-1">{{ prediction.etat_procol }}</v-chip>
+            <v-chip v-bind="attrs" v-on="on" class="ma-0 chip" outline small text-color="red darken-1">{{ libellesProcols[prediction.etat_procol] }}</v-chip>
             </template>
-            <span>Cette entreprise est placée dans la procédure collective : {{ prediction.etat_procol }}</span>
+            <span>Cette entreprise fait l’objet d’une procédure collective : {{ libellesProcols[prediction.etat_procol] }}</span>
           </v-tooltip>
           <img class="ml-2" v-if="prediction.connu === true" height="20" src="../assets/crp.png" />
           <div class="identite">
@@ -29,7 +29,7 @@
         </div>
         <transition name="fade">
           <div v-show="showRaccourci" style="position: absolute; right: 0">
-            <v-btn v-if="prediction.siren" dark color="indigo darken-5" @click="showEntreprise">Voir Fiche Entreprise</v-btn>
+            <v-btn v-if="prediction.siren" dark color="indigo" @click="showEntreprise">Voir Fiche Entreprise</v-btn>
           </div>
         </transition>
         <template v-if="social">
@@ -126,6 +126,8 @@
 
 <script>
 import ScoreWidget from '@/components/ScoreWidget'
+import libellesProcols from '@/assets/libelles_procols.json'
+
 export default {
   name: 'PredictionWidget',
   props: ['prediction', 'social', 'activitePartielle', 'detteSociale'],
@@ -139,6 +141,7 @@ export default {
       dialog: false,
       entrepriseDialog: false,
       showRaccourci: false,
+      libellesProcols,
     }
   },
   computed: {

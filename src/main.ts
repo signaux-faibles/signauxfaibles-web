@@ -24,11 +24,18 @@ function tokenInterceptor() {
   })
 }
 
+function responseInterceptor() {
+  Vue.prototype.$axios.interceptors.response.use((response: any) => {
+    return Promise.resolve(response)
+  }, (error: any) => {
+    if (error.response.status === 401) {
+      Vue.prototype.$localStore.commit('setExpiredSession', true)
+    }
+    return Promise.reject(error)
+  })
+}
+
 Vue.component('apexchart', VueApexCharts)
-
-const redirectURI = window.location.pathname
-
-const bdf = (redirectURI.slice(-3) === 'bdf')
 
 if (process.env.VUE_APP_MATOMO_ENABLED && !!JSON.parse(process.env.VUE_APP_MATOMO_ENABLED)) {
   Vue.use(VueMatomo, {
@@ -51,14 +58,17 @@ Vue.use(VueKeyCloak, {
   },
   onReady: (keycloak: any) => {
     if (!keycloak.authenticated) {
-      keycloak.login({
-        idpHint: (bdf) ? 'bdfidp' : undefined,
-      })
+      keycloak.login()
     } else {
-      if ((window as any)._paq) {
-        (window as any)._paq.push(['setUserId', Vue.prototype.$keycloak.tokenParsed.preferred_username])
+      Vue.prototype.$localStore.commit('setExpiredSession', false)
+      const _paq: any[] = (window as any)._paq
+      if (_paq) {
+        const jwt = Vue.prototype.$keycloak.tokenParsed
+        _paq.push(['setUserId', jwt.preferred_username])
+        _paq.push(['setCustomVariable', '1', 'segment', jwt.segment || ''])
       }
       tokenInterceptor()
+      responseInterceptor()
       const tslintCantBeDisabledSorryForThis = new Vue({
         el: '#app',
         router,
@@ -66,6 +76,9 @@ Vue.use(VueKeyCloak, {
         render: (h) => h(App),
       })
     }
+  },
+  onAuthRefreshError: (keycloak: any) => {
+    Vue.prototype.$localStore.commit('setExpiredSession', true)
   },
 })
 

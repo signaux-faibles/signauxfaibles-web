@@ -1,0 +1,26 @@
+{
+  "micro": {
+    "financier_court_terme": "Poids du financement court terme",
+    "interets": "Intérêts et charges assimilées",
+    "ca": "Chiffre d’affaires",
+    "equilibre_financier": "Équilibre financier",
+    "endettement": "Endettement",
+    "degre_immo_corporelle": "Degré d’amortissements des immobilisations corporelles",
+    "liquidite_reduite": "Liquidité réduite",
+    "poids_bfr_exploitation": "Poids des besoins en fonds de roulement d’exploitation",
+    "productivite_capital_investi": "Productivité du capital investi",
+    "rentabilite_economique": "Rentabilité économique",
+    "rentabilite_nette": "Rentabilité nette",
+    "apart_heures_consommees_cumulees": "Heures consommées en activité partielle cumulées",
+    "apart_heures_consommees": "Heures consommées en activité partielle",
+    "retards_paiement": "Retards de paiement des fournisseurs",
+    "ratio_dette": "Poids de la dette Urssaf",
+    "avg_delta_dette_par_effectif": "Tendance d’évolution de la dette par effectif"
+  },
+  "macro": {
+    "activite_partielle": "Activité partielle",
+    "dette_urssaf": "Dette Urssaf",
+    "retards_paiement": "Retards fournisseurs",
+    "sante_financiere": "Santé financière"
+  }
+}

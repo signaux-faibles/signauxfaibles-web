@@ -2,12 +2,11 @@
   <div>
     <h1>
       {{ denomination }}
-      <Help style="position: relative; top: -3px; right: 10px" titre="Identité de l'entreprise">
-        <b>Raison Sociale, Coordonnées:</b>
-        Ces données sont issues du service API entreprises fourni par la DINUM qui redistribue les données de l'INSEE.
-        <br />
-        <b>Activité de l'entreprise:</b>
-        Le code activité est issu de la base Sirène produite par l'INSEE et correspond aux données déclaratives fournies par l'entreprise. Il peut être constaté un décalage entre le code déclaré et l'activité réelle de l'entreprise.
+      <Help titre="Identité de l’entreprise">
+        <p>Les données d’identité de l’entreprise sont principalement issues de la base Sirene des entreprises et de leurs établissements produite par l’Insee.</p>
+        <p>L’<b>activité</b> est une donnée déclarative fournie par l’entreprise lors de sa création. Il peut être constaté un décalage entre le code déclaré et l’activité réelle de l’entreprise.</p>
+        <p>Le <b>statut juridique</b> indiqué correspond à la catégorie juridique de niveau II (37 positions suivant les critères juridiques fondamentaux du droit).</p>
+        <p>Les <b>têtes de groupe</b> ont été obtenues auprès de la société Ellisphere. Sauf cas particulier d’arbitrage, est considérée comme tête de groupe (ou société mère) l’entreprise qui détient de façon directe ou indirecte plus de 50% du capital et qui n’est pas elle-même détenue à plus de 50% par une autre entreprise.</p>
       </Help>
     </h1>
     <v-layout wrap>
@@ -15,7 +14,7 @@
         <h3>siren {{ siren }}</h3>
         <hr style="color: #eee;" class="mr-4" />
         <div style="padding: 10px; margin: 4px;">
-          <div v-html="activiteHtml" style="font-size: 16px"></div>
+          <div v-html="identiteHtml" style="font-size: 16px"></div>
         </div>
         <div v-if="showSecteursCovid" class="text-uppercase" style="font-size: 18px">
           Secteurs COVID-19
@@ -100,10 +99,7 @@
                   <b>une forte identité et un savoir-faire industriel</b> et l’ensemble de leurs acteurs, notamment les entreprises et les collectivités territoriales, sont mobilisés pour le développement de l’industrie.
                   <br />
                   <br />Pour en savoir davantage :
-                  <a
-                    href="https://agence-cohesion-territoires.gouv.fr/territoires-dindustrie-44"
-                    target="_blank"
-                  >https://agence-cohesion-territoires.gouv.fr/territoires-dindustrie-44</a>
+                  <a href="https://agence-cohesion-territoires.gouv.fr/territoires-dindustrie-44" target="_blank" rel="noopener">https://agence-cohesion-territoires.gouv.fr/territoires-dindustrie-44</a>
                 </Help>
               </div>
             </v-flex>
@@ -116,22 +112,23 @@
                 height="64"
                 src="../../assets/france-relance.png"
               />
-                Lauréat {{ relance }}
+              Lauréat {{ relance }}
               <Help
                 style="position: relative; top: -3px; right: 10px"
                 titre="Plan de relance"
               >
-                  Pour faire face aux impacts de la crise sanitaire, le Gouvernement mobilise en 2020, 2021 et 2022, des moyens exceptionnels dédiés au soutien à l’investissement et à la modernisation de l’industrie.<br />
-                  Dans ce cadre, la DGE et Bpifrance mettent en place des appels à projets visant à soutenir des <em>projets d’investissement industriel au bénéfice de secteurs stratégiques et des territoires</em> :<br />
-                  <ul>
-                    <li><strong>Territoires d'industrie</strong> - Accélération des investissements dans les territoires d'industrie</li>
-                    <li><strong>Automobile</strong> - Modernisation de la filière automobile</li>
-                    <li><strong>Aéronautique</strong> - Modernisation de la filière aéronautique</li>
-                    <li><strong>Relocalisation</strong> - (Re)localisation dans les secteurs critiques</li>
-                    <li><strong>Efficacité énergétique</strong> - Efficacité énergétique dans l’industrie</li>
-                    <li><strong>Décarbonation</strong> - Décarbonation dans l'industrie</li>
-                  </ul><br />
-                  <em>Source : portail des données ouvertes du Ministère de l'Economie, des Finances, et de la Relance.</em>
+                Pour faire face aux impacts de la crise sanitaire, le Gouvernement mobilise en 2020, 2021 et 2022, des moyens exceptionnels dédiés au <a href="https://www.economie.gouv.fr/plan-de-relance/profils/entreprises/soutien-investissement-modernisation-industrie" target="_blank" rel="noopener">soutien à l’investissement et à la modernisation de l’industrie</a>.<br />
+                Dans ce cadre, le ministère de l’Économie, des Finances et de la Relance (DGE) et Bpifrance, en lien avec les Conseils régionaux, mettent en place des appels à projets visant à soutenir des <em>projets d’investissement industriel au bénéfice de secteurs stratégiques et des territoires</em> :<br />
+                <ul>
+                  <li><strong>Projets territoriaux</strong> - Soutien à l’investissement industriel dans les territoires</li>
+                  <li><strong>Automobile</strong> - Modernisation de la filière automobile</li>
+                  <li><strong>Aéronautique</strong> - Modernisation de la filière aéronautique</li>
+                  <li><strong>Relocalisation</strong> - (Re)localisation dans les secteurs critiques</li>
+                  <li><strong>Efficacité énergétique</strong> - Efficacité énergétique et évolution des procédés dans l’industrie</li>
+                  <li><strong>Soutien à la chaleur bas carbone</strong></li>
+                  <li><strong>Santé - Capacités Covid</strong> - AMI Capacity, portant sur des capacités de production de produits thérapeutiques liés au COVID-19</li>
+                </ul><br />
+                <em>Source : portail des données ouvertes du Ministère de l'Economie, des Finances, et de la Relance.</em>
               </Help>
             </div>
           </v-layout>
@@ -148,7 +145,7 @@ import axios from 'axios'
 
 export default {
   name: 'EntrepriseIdentite',
-  props: ['denomination', 'siren', 'siege', 'groupe', 'terrind', 'creation'],
+  props: ['denomination', 'siren', 'siege', 'groupe', 'terrind', 'creation', 'statutJuridique'],
   components: { Help },
   data() {
     return {
@@ -198,20 +195,22 @@ export default {
       return this.naf.codeActivite
     },
     nomenActivite() {
-      return (this.naf.nomenActivite && this.naf.nomenActivite !== 'NAFRev2') ? ' (' + this.naf.nomenActivite + ')' : ''
+      return (this.naf.nomenActivite && this.naf.nomenActivite !== 'NAFRev2') ? ' - ' + this.naf.nomenActivite : ''
     },
     adresse() {
       return ((this.siege.sirene || {}).adresse || '').split('\n').join('<br />')
     },
-    activiteHtml() {
-      return [(this.libelleSecteur ? this.libelleSecteur : ''),
-      (this.libelleActivite ? this.libelleActivite : ''),
-      (this.codeActivite ? 'Code APE&nbsp;: ' + this.codeActivite + this.nomenActivite : ''),
-      (this.creation ? 'Date de création de l\'entreprise&nbsp;: '
-        + this.creation.toLocaleDateString('fr', { timeZone: 'Europe/Paris' })
-        + ' (' + this.pluralizeAge(this.calculateAge(this.creation)) + ')'
-        : ''),
-      (this.groupe ? 'Tête de groupe&nbsp;: ' + this.groupe : '')]
+    identiteHtml() {
+      return [(this.libelleSecteur ? 'Secteur d’activité : ' + this.libelleSecteur : ''),
+        ((this.libelleActivite && this.codeActivite) ? 'Activité : '
+          + this.libelleActivite
+          + ' (' + this.codeActivite + this.nomenActivite + ')' : ''),
+        (this.statutJuridique ? 'Statut juridique : ' + this.statutJuridique : ''),
+        (this.creation ? 'Date de création de l’entreprise : '
+          + this.creation.toLocaleDateString('fr', {timeZone: 'Europe/Paris'})
+          + ' (' + this.pluralizeAge(this.calculateAge(this.creation)) + ')'
+          : ''),
+        (this.groupe ? 'Tête de groupe : ' + this.groupe : '')]
         .filter(Boolean).join('<br>')
     },
     showSecteursCovid() {

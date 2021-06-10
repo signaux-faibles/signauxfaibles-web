@@ -1,5 +1,5 @@
 <template>
-  <div style="background: #fff; font-weight: 800; font-family: 'Oswald', sans;">
+  <div style="min-height: 100%; background: #fff; font-weight: 800; font-family: 'Oswald', sans;">
     <div>
       <v-container>
         <v-layout wrap style="margin-top: 3em">
@@ -14,17 +14,128 @@
               :terrind="terrind"
               :creation="creation"
               :visiteFCE="visiteFCE"
+              :statutJuridique="statutJuridique"
+              :summary="summary"
             />
             <v-btn v-if="etablissement.siren" dark color="indigo" @click="showEntreprise">Voir Fiche Entreprise</v-btn>
           </v-flex>
-          <v-flex xs12 md6 class="text-xs-left pa-3" style="font-size: 18px">
-            <div v-if="followCard" class="followCard">
-              <h2>Suivi de l'établissement</h2>
-              <h3 class="mt-3">Statut du suivi <v-chip class="chip ml-3">{{ this.followCard.status }}</v-chip></h3>
-              <div class="description my-3" v-html="followCard.description"></div>
-              <v-btn dark color="indigo" :href="followCard.url" target="_blank" rel="noopener" @click="trackMatomoEvent('etablissement', 'voir_carte_suivi', siret)">Voir Carte Suivi</v-btn>
-            </div>
-            <Map v-else :longitude="sirene.longitude" :latitude="sirene.latitude" ref="map" />
+          <v-flex xs12 md6 class="text-xs-left pa-3" style="font-size: 16px">
+            <v-layout fill-height align-center>
+              <v-flex>
+                <v-layout wrap>
+                  <v-flex>
+                    <Historique v-if="summary" :historique="historique" :summary="summary" />
+                  </v-flex>
+                </v-layout>
+                <v-layout wrap>
+                    <v-flex xl6 lg12>
+                      <h2>
+                        Procédure collective
+                          <Help titre="Procédure collective">
+                            <template>
+                              <p>La dernière procédure collective (ou plan issu d'une procédure collective) connue de l'Urssaf est ici mise en avant.<br />
+                              Vous avez également la possibilité de consulter l’historique des principaux jugements groupés par type de procédure collective : sauvegarde, redressement, liquidation judiciaire.<br />
+                              Pour plus de détails encore, vous serez redirigés vers les annonces publiées au bulletin officiel (BODACC) pour cette entreprise.</p>
+                              <p>Veuillez noter que les plans de cession lors d'un redressement judiciaire ne sont pas indiqués.</p>
+                            </template>
+                        </Help>
+                      </h2>
+                      <div v-if="summary && summary.etat_procol !== 'in_bonis'">
+                        <div>
+                          Cet établissement fait l’objet d’une procédure collective :<br/>
+                          <v-chip class="my-2 chip" outline small text-color="red darken-1">{{ libellesProcols[summary.etat_procol] }}</v-chip>
+                        </div>
+                        <v-btn outline small dark color="indigo" @click="jugementsDialog = true">Voir historique des jugements</v-btn>
+                        <v-dialog v-model="jugementsDialog" @input="jugementsDialog = false" max-width="500px">
+                          <div>
+                            <v-card>
+                              <v-card-title class="headline">
+                                Jugements de procédure collective
+                              </v-card-title>
+                              <v-card-text style="font-size: 16px">
+                                <v-expansion-panel v-model="jugementsPanel" expand style="font-weight: 800; font-family: 'Oswald', sans;">
+                                  <v-expansion-panel-content v-if="liquidationJugements.length > 0">
+                                    <template v-slot:header>
+                                      <div>Liquidation</div>
+                                    </template>
+                                    <v-card>
+                                      <v-card-text>
+                                        <ul style="list-style-type: disc">
+                                          <li v-for="j in liquidationJugements" :key="j">{{ j }}</li>
+                                        </ul>
+                                      </v-card-text>
+                                    </v-card>
+                                  </v-expansion-panel-content>
+                                  <v-expansion-panel-content v-if="redressementJugements.length > 0">
+                                    <template v-slot:header>
+                                      <div>Redressement</div>
+                                    </template>
+                                    <v-card>
+                                      <v-card-text>
+                                        <ul style="list-style-type: disc">
+                                          <li v-for="j in redressementJugements" :key="j">{{ j }}</li>
+                                        </ul>
+                                      </v-card-text>
+                                    </v-card>
+                                  </v-expansion-panel-content>
+                                  <v-expansion-panel-content v-if="sauvegardeJugements.length > 0">
+                                    <template v-slot:header>
+                                      <div>Sauvegarde</div>
+                                    </template>
+                                    <v-card>
+                                      <v-card-text>
+                                        <ul style="list-style-type: disc">
+                                          <li v-for="j in sauvegardeJugements" :key="j">{{ j }}</li>
+                                        </ul>
+                                      </v-card-text>
+                                    </v-card>
+                                  </v-expansion-panel-content>
+                                </v-expansion-panel>
+                                <div class="mt-4" style="font-size: 14px; font-weight: 400; font-family: 'Roboto', sans-serif">
+                                  Vous pouvez consulter les annonces publiées au bulletin officiel.
+                                  <v-btn class="my-2" small outline color="indigo" :href="lienBODACC" target="_blank" rel="noopener"><v-icon small left>open_in_new</v-icon>Voir annonces BODACC</v-btn>
+                                </div>
+                              </v-card-text>
+                              <v-card-actions>
+                                <v-spacer></v-spacer>
+                                <v-btn flat color="primary" @click="jugementsDialog = false">Fermer</v-btn>
+                              </v-card-actions>
+                            </v-card>
+                          </div>
+                        </v-dialog>
+                      </div>
+                      <div v-else>
+                          Cet établissement ne fait, à notre connaissance, pas l’objet d’une procédure collective.
+                      </div>
+                    </v-flex>
+                    <v-flex xl6 lg12 v-if="showFCE">
+                      <h2>
+                        Visites de la Direccte
+                        <Help titre="Visites de la Direccte">
+                          <template>
+                            Cette information est fournie par <a href="https://fce.fabrique.social.gouv.fr/a-propos" target="_blank" rel="noopener">Fiche Commune Entreprise</a>.<br>
+                            Vous pouvez consulter ce service édité par l’incubateur des ministères sociaux pour en savoir davantage sur la date et la nature des visites.<br>
+                            Un compte Fiche Commune Entreprise avec une adresse email spécifique est nécessaire.
+                          </template>
+                        </Help>
+                      </h2>
+                      <div v-if="visiteFCE">
+                        <div class="mb-2">Cet établissement a reçu la visite de la Direccte au cours des 24 derniers mois.</div>
+                        <v-btn v-if="showLienVisiteFCE" small outline color="indigo" :href="lienVisiteFCE" target="_blank" rel="noopener" @click="getLienVisiteFCE()"><v-icon small left>open_in_new</v-icon>Fiche Commune Entreprise</v-btn>
+                      </div>
+                      <div v-else>
+                        <div class="mb-2">Cet établissement n’a pas reçu la visite de la Direccte au cours des 24 derniers mois.</div>
+                      </div>
+                    </v-flex>
+                </v-layout>
+                <div v-if="followCard" class="followCard">
+                  <h2>Suivi de l'établissement</h2>
+                  <h3 class="mt-2">Statut du suivi <v-chip small class="chip ml-3">{{ this.followCard.status }}</v-chip></h3>
+                  <div class="description my-3" v-html="followCard.description"></div>
+                  <v-btn dark color="indigo" :href="followCard.url" target="_blank" rel="noopener" @click="trackMatomoEvent('etablissement', 'voir_carte_suivi', siret)">Voir Carte Suivi</v-btn>
+                </div>
+              </v-flex>
+            </v-layout>
           </v-flex>
           <v-flex xs12 md12 class="text-xs-right pa-3">
             <Commentaire :siret="siret" />
@@ -36,10 +147,10 @@
             <Urssaf :debit="debit" :cotisation="cotisation" :permUrssaf="perms.permUrssaf" />
           </v-flex>
           <v-flex xs12 class="pr-1">
-            <Finance :finance="finance" :siret="siret" />
+            <Finance :siren="etablissement.siren" />
           </v-flex>
           <v-flex xs12 class="pr-1 pt-3">
-            <EtablissementEntreprise :siret="siret" :siege="etablissement.siege" :groupe="groupe" :codeDepartement="sirene.codeDepartement" :etablissementsSummary="etablissementsSummary" v-on="$listeners" />
+            <EtablissementEntreprise :siret="siret" :siege="etablissement.siege" :codeDepartement="sirene.codeDepartement" :etablissementsSummary="etablissementsSummary" v-on="$listeners" />
           </v-flex>
           <v-dialog v-model="followDialog" @input="closeFollowDialog()" max-width="500px">
             <v-card>
@@ -181,15 +292,19 @@ import Finance from '@/components/Etablissement/Finance.vue'
 import Commentaire from '@/components/Etablissement/Commentaire.vue'
 import EtablissementEntreprise from '@/components/Etablissement/Entreprise.vue'
 import Entreprise from '@/components/Entreprise.vue'
+import Historique from '@/components/Etablissement/Historique.vue'
 import axios from 'axios'
 import fr from 'apexcharts/dist/locales/fr.json'
 import MarkdownIt from 'markdown-it'
 import followCardConfig from '@/assets/follow_card_config.json'
+import libellesProcols from '@/assets/libelles_procols.json'
+
 
 export default {
   props: ['siret', 'batch'],
   name: 'Etablissement',
-  components: { Effectif, Urssaf, Help, Finance, Identite, Map, Commentaire, EtablissementEntreprise, Entreprise },
+  components: { Effectif, Urssaf, Help, Finance, Identite, Map,
+    Commentaire, EtablissementEntreprise, Entreprise, Historique },
   data() {
     return {
       axios: axios.create(),
@@ -219,174 +334,16 @@ export default {
       wekanUser: false,
       effectifClass: [10, 20, 50, 100],
       creatingCard: false,
+      jugementsPanel: 0,
+      jugementsDialog: false,
+      sauvegardeJugements: [],
+      redressementJugements: [],
+      liquidationJugements: [],
+      libellesProcols,
+      lienVisiteFCE: '',
     }
   },
   methods: {
-    computeFinance(f) {
-      // TODO: integration in component
-      const annee = f.annee
-
-      const ca = f.diane.ca ? f.diane.ca + '\u00A0k€' : 'n/c'
-      const caClass = (!f.diane.ca) ? 'gray' : ''
-      const resultatExpl = f.diane.resultat_expl ? f.diane.resultat_expl + '\u00A0k€' : 'n/c'
-      let margeOpe = f.diane.resultat_expl / f.diane.ca
-      const margeOpeClass = (!margeOpe) ? 'gray' : (margeOpe < 0) ? 'down' : ''
-      margeOpe = margeOpe ? (Math.floor(margeOpe * 1000) / 10) + ' %' : 'n/c'
-
-      const beneficeOuPerte = f.diane.benefice_ou_perte ? f.diane.benefice_ou_perte + '\u00A0k€' : 'n/c'
-      let margeNette = f.diane.benefice_ou_perte / f.diane.ca
-      const margeNetteClass = !(margeNette) ? 'gray' : (margeNette < 0) ? 'down' : ''
-      margeNette = margeNette ? (Math.floor(margeNette * 1000) / 10) + ' %' : 'n/c'
-
-      const delaiFournisseur = f.bdf.delai_fournisseur ? Math.round(f.bdf.delai_fournisseur) + ' jours' : 'n/c'
-      const delaiFournisseurClass = !(f.bdf.delai_fournisseur) ? 'gray' : ''
-      let delaiClient = Math.round(f.diane.credit_client / f.diane.ca * 360)
-      const delaiClientClass = !(delaiClient) ? 'gray' : ''
-
-      delaiClient = delaiClient ? delaiClient + ' jours' : 'n/c'
-
-      const poidsFrng = f.bdf.poids_frng ? Math.round(f.bdf.poids_frng * 10) / 10 + ' %' : 'n/c'
-      const poidsFrngClass = !(f.bdf.poids_frng) ? 'gray' : ''
-
-      const financierCourtTerme = f.bdf.financier_court_terme ?
-        Math.round(f.bdf.financier_court_terme * 10) / 10 + ' %' : 'n/c'
-
-      const financierCourtTermeClass = !(f.bdf.financier_court_terme) ? 'gray' : ''
-
-      const exercice = f.diane.exercice_diane
-      const nombreMois = f.diane.nombre_mois
-
-      // Soldes Intermédiaires de Gestion (SIG) restants
-      const va = f.diane.valeur_ajoutee ? f.diane.valeur_ajoutee.toFixed(2) : null
-      const ebe = f.diane.excedent_brut_d_exploitation ? f.diane.excedent_brut_d_exploitation.toFixed(2) : null
-      const caf = f.diane.capacite_autofinancement ? f.diane.capacite_autofinancement.toFixed(2) : null
-
-      // État de la trésorerie
-      const frng = f.diane.couverture_ca_fdr ?
-        Math.round(f.diane.couverture_ca_fdr * f.diane.ca / 360) : null
-      const bfr = f.diane.couverture_ca_besoin_fdr ?
-        Math.round(f.diane.couverture_ca_besoin_fdr * f.diane.ca / 360) : null
-      const tresorerie = (frng && bfr) ? frng - bfr : null
-
-      // Ratios
-      const ratios = {}
-      // A - Structure et liquidité
-      ratios.structureLiquidite = {}
-      ratios.structureLiquidite.equilibreFinancier = f.diane.equilibre_financier ?
-        f.diane.equilibre_financier.toLocaleString() : 'n/c'
-      ratios.structureLiquidite.independanceFinanciere = f.diane.independance_financiere ?
-        f.diane.independance_financiere.toLocaleString() + '\u00A0%' : 'n/c'
-      ratios.structureLiquidite.endettement = f.diane.endettement ?
-        f.diane.endettement.toLocaleString() + '\u00A0%' : 'n/c'
-      ratios.structureLiquidite.autonomieFinanciere = f.diane.autonomie_financiere ?
-        f.diane.autonomie_financiere.toLocaleString() + '\u00A0%' : 'n/c'
-      ratios.structureLiquidite.degreImmoCorporelle = f.diane.degre_immo_corporelle ?
-        f.diane.degre_immo_corporelle.toLocaleString() + '\u00A0%' : 'n/c'
-      ratios.structureLiquidite.financementActifCirculant = f.diane.financement_actif_circulant ?
-        f.diane.financement_actif_circulant.toLocaleString() : 'n/c'
-      ratios.structureLiquidite.liquiditeGenerale = f.diane.liquidite_generale ?
-        f.diane.liquidite_generale.toLocaleString() : 'n/c'
-      ratios.structureLiquidite.liquiditeReduite = f.diane.liquidite_reduite ?
-        f.diane.liquidite_reduite.toLocaleString() : 'n/c'
-      // B - Gestion
-      ratios.gestion = {}
-      ratios.gestion.rotationStocks = f.diane.rotation_stocks ?
-        f.diane.rotation_stocks.toLocaleString() + '\u00A0jours' : 'n/c'
-      ratios.gestion.creditClient = f.diane.credit_client ?
-        f.diane.credit_client.toLocaleString() + '\u00A0jours' : 'n/c'
-      ratios.gestion.creditFournisseur = f.diane.credit_fournisseur ?
-        f.diane.credit_fournisseur.toLocaleString() + '\u00A0jours' : 'n/c'
-      ratios.gestion.caParEffectif = f.diane.ca_par_effectif ?
-        f.diane.ca_par_effectif.toLocaleString() + '\u00A0k€/emploi' : 'n/c'
-      ratios.gestion.tauxInteretFinancier = f.diane.taux_interet_financier ?
-        f.diane.taux_interet_financier.toLocaleString() + '\u00A0%' : 'n/c'
-      ratios.gestion.tauxInteretSurCa = f.diane.taux_interet_sur_ca ?
-        f.diane.taux_interet_sur_ca.toLocaleString() + '\u00A0%' : 'n/c'
-      ratios.gestion.endettementGlobal = f.diane.endettement_global ?
-        f.diane.endettement_global.toLocaleString() + '\u00A0jours' : 'n/c'
-      ratios.gestion.tauxEndettement = f.diane.taux_endettement ?
-        f.diane.taux_endettement.toLocaleString() + '\u00A0%' : 'n/c'
-      ratios.gestion.capaciteRemboursement = f.diane.capacite_remboursement ?
-        f.diane.capacite_remboursement.toLocaleString() : 'n/c'
-      ratios.gestion.capaciteAutofinancement = f.diane.capacite_autofinancement ?
-        f.diane.capacite_autofinancement.toLocaleString() + '\u00A0%' : 'n/c'
-      ratios.gestion.couvertureCaFdr = f.diane.couverture_ca_fdr ?
-        f.diane.couverture_ca_fdr.toLocaleString() + '\u00A0jours' : 'n/c'
-      ratios.gestion.couvertureCaBesoinFdr = f.diane.couverture_ca_besoin_fdr ?
-        f.diane.couverture_ca_besoin_fdr.toLocaleString() + '\u00A0jours' : 'n/c'
-      ratios.gestion.poidsBfrExploitation = f.diane.poids_bfr_exploitation ?
-        f.diane.poids_bfr_exploitation.toLocaleString() + '\u00A0%' : 'n/c'
-      ratios.gestion.exportation = f.diane.exportation ?
-        f.diane.exportation.toLocaleString() + '\u00A0%' : 'n/c'
-      // C - Productivité et rentabilité
-      ratios.productiviteRentabilite = {}
-      ratios.productiviteRentabilite.efficaciteEconomique = f.diane.efficacite_economique ?
-        f.diane.efficacite_economique.toLocaleString() + '\u00A0k€/emploi' : 'n/c'
-      ratios.productiviteRentabilite.productivitePotentielProduction = f.diane.productivite_potentiel_production ?
-        f.diane.productivite_potentiel_production.toLocaleString() : 'n/c'
-      ratios.productiviteRentabilite.productiviteCapitalFinancier = f.diane.productivite_capital_financier ?
-        f.diane.productivite_capital_financier.toLocaleString() : 'n/c'
-      ratios.productiviteRentabilite.productiviteCapitalInvesti = f.diane.productivite_capital_investi ?
-        f.diane.productivite_capital_investi.toLocaleString() : 'n/c'
-      ratios.productiviteRentabilite.tauxDInvestissementProductif = f.diane.taux_d_investissement_productif ?
-        f.diane.taux_d_investissement_productif.toLocaleString() + '\u00A0%' : 'n/c'
-      ratios.productiviteRentabilite.rentabiliteEconomique = f.diane.rentabilite_economique ?
-        f.diane.rentabilite_economique.toLocaleString() + '\u00A0%' : 'n/c'
-      ratios.productiviteRentabilite.performance = f.diane.performance ?
-        f.diane.performance.toLocaleString() + '\u00A0%' : 'n/c'
-      ratios.productiviteRentabilite.rendementBrutFondsPropres = f.diane.rendement_brut_fonds_propres ?
-        f.diane.rendement_brut_fonds_propres.toLocaleString() + '\u00A0%' : 'n/c'
-      ratios.productiviteRentabilite.rentabiliteNette = f.diane.rentabilite_nette ?
-        f.diane.rentabilite_nette.toLocaleString() + '\u00A0%' : 'n/c'
-      ratios.productiviteRentabilite.rendementCapitauxPropres = f.diane.rendement_capitaux_propres ?
-        f.diane.rendement_capitaux_propres.toLocaleString() + '\u00A0%' : 'n/c'
-      ratios.productiviteRentabilite.rendementRessourcesDurables = f.diane.rendement_ressources_durables ?
-        f.diane.rendement_ressources_durables.toLocaleString() + '\u00A0%' : 'n/c'
-      // D - Marge et valeur ajoutée
-      ratios.margeValeurAjoutee = {}
-      ratios.margeValeurAjoutee.tauxMargeCommerciale = f.diane.taux_marge_commerciale ?
-        f.diane.taux_marge_commerciale.toLocaleString() + '\u00A0%' : 'n/c'
-      ratios.margeValeurAjoutee.tauxValeurAjoutee = f.diane.taux_valeur_ajoutee ?
-        f.diane.taux_valeur_ajoutee.toLocaleString() + '\u00A0%' : 'n/c'
-      ratios.margeValeurAjoutee.partSalaries = f.diane.part_salaries ?
-        f.diane.part_salaries.toLocaleString() + '\u00A0%' : 'n/c'
-      ratios.margeValeurAjoutee.partEtat = f.diane.part_etat ?
-        f.diane.part_etat.toLocaleString() + '\u00A0%' : 'n/c'
-      ratios.margeValeurAjoutee.partPreteur = f.diane.part_preteur ?
-        f.diane.part_preteur.toLocaleString() + '\u00A0%' : 'n/c'
-      ratios.margeValeurAjoutee.partAutofinancement = f.diane.part_autofinancement ?
-        f.diane.part_autofinancement.toLocaleString() + '\u00A0%' : 'n/c'
-
-      return {
-        annee,
-        ca,
-        caClass,
-        resultatExpl,
-        margeOpe,
-        margeOpeClass,
-        beneficeOuPerte,
-        margeNette,
-        margeNetteClass,
-        delaiFournisseur,
-        delaiFournisseurClass,
-        delaiClient,
-        delaiClientClass,
-        poidsFrng,
-        poidsFrngClass,
-        financierCourtTerme,
-        financierCourtTermeClass,
-        frng,
-        bfr,
-        tresorerie,
-        ebe,
-        va,
-        caf,
-        exercice,
-        nombreMois,
-        ratios,
-        axios: axios.create(),
-      }
-    },
     getEtablissement() {
       this.$axios.get(`/etablissement/get/${this.siret}`).then((response) => {
         this.etablissement = response.data
@@ -530,6 +487,49 @@ export default {
       this.trackMatomoEvent('entreprise', 'fermer_fiche_entreprise', this.etablissement.siren)
       this.entrepriseDialog = false
     },
+    processProcol(p) {
+      const date = new Date(p.dateEffet).toLocaleDateString('fr', {timeZone: 'Europe/Paris'})
+      let intitule = null
+      if (p.action === 'sauvegarde') {
+        if (p.stade === 'ouverture') {
+          intitule = 'Jugement d\'ouverture d\'une procédure de sauvegarde'
+        } else if (p.stade === 'plan_continuation') {
+          intitule = 'Jugement arrêtant le plan de sauvegarde'
+        }
+        if (intitule) {
+          const jugement = date + ' : ' + intitule
+          this.sauvegardeJugements.push(jugement)
+        }
+      } else if (p.action === 'redressement') {
+        if (p.stade === 'ouverture') {
+          intitule = 'Jugement d\'ouverture d\'une procédure de redressement judiciaire'
+        } else if (p.stade === 'plan_continuation') {
+          intitule = 'Jugement de plan de continuation après un redressement judiciaire'
+        }
+        if (intitule) {
+          const jugement = date + ' : ' + intitule
+          this.redressementJugements.push(jugement)
+        }
+      } else if (p.action === 'liquidation') {
+        if (p.stade === 'ouverture') {
+          intitule = 'Jugement d\'ouverture de liquidation judiciaire'
+        } else if (p.stade === 'cloture_insuffisance_actif') {
+          intitule = 'Jugement de clôture pour insuffisance d\'actif'
+        }
+        if (intitule) {
+          const jugement = date + ' : ' + intitule
+          this.liquidationJugements.push(jugement)
+        }
+      }
+    },
+    getLienVisiteFCE() {
+      const lienVisiteFCE = `https://fce.fabrique.social.gouv.fr/establishment/${this.siret}`
+      this.$axios.get(`/fce/${this.siret}`).then((response) => {
+        this.lienVisiteFCE = response.data || lienVisiteFCE
+      }).catch((error) => {
+        this.lienVisiteFCE = lienVisiteFCE
+      })
+    },
   },
   created() {
     Apex.chart = {
@@ -539,6 +539,7 @@ export default {
   },
   mounted() {
     this.getEtablissement()
+    this.getLienVisiteFCE()
     this.getFollowCard()
   },
   watch: {
@@ -552,14 +553,20 @@ export default {
         this.unfollowCommentPlaceholder = 'Dites-nous pourquoi ; en particulier, s\'il s\'agissait selon vous d\'une erreur de détection'
       }
     },
+    etablissement(val) {
+      if (val.procol) {
+        val.procol.concat().sort((p1, p2) => {
+          return (p2.dateEffet > p1.dateEffet ? 1 : -1)
+        }).forEach((p) => {
+          this.processProcol(p)
+        })
+      }
+    },
   },
   computed: {
     denomination() {
       const entreprise = (this.etablissement || {}).entreprise || {}
       return (entreprise.Sirene || {}).raisonSociale
-    },
-    finance() {
-      return this.zipDianeBDF.map((z) => this.computeFinance(z))
     },
     naf() {
       return ((this.etablissement || {}).sirene || {}).naf || {}
@@ -625,6 +632,9 @@ export default {
     etablissementsSummary() {
       return (this.etablissement.entreprise || {}).etablissementsSummary || []
     },
+    summary() {
+      return this.etablissementsSummary.filter((es) => es.siret === this.siret)[0]
+    },
     perms() {
       return {
         permDGEFP: (this.etablissement || {}).permDGEFP || false,
@@ -644,8 +654,7 @@ export default {
       return (!isNaN(creation.getTime())) ? creation : null
     },
     commune() {
-      const summary = this.etablissementsSummary.filter((es) => es.siret === this.siret)[0]
-      return (summary || {}).commune || ''
+      return (this.summary || {}).commune || ''
     },
     visiteFCE() {
       return this.etablissement.visiteFCE ||  false
@@ -703,6 +712,21 @@ export default {
       }
       return effectifIndex
     },
+    statutJuridique() {
+      const statutJuridique = ((this.etablissement.entreprise || {}).Sirene || {}).statutJuridiqueN2
+      return statutJuridique
+    },
+    lienBODACC() {
+      const lienBODACC = `https://www.bodacc.fr/annonce/liste/${this.etablissement.siren}/pcl`
+      return lienBODACC
+    },
+    showFCE() {
+      return process.env.VUE_APP_FCE_ENABLED && !!JSON.parse(process.env.VUE_APP_FCE_ENABLED)
+    },
+    showLienVisiteFCE() {
+      const emailDomain = this.jwt.email.split('@').pop()
+      return process.env.VUE_APP_FCE_DOMAIN_LIST.split(',').includes(emailDomain)
+    },
   },
 }
 </script>
@@ -716,5 +740,11 @@ export default {
 }
 ::v-deep .followCard .description p {
   margin: 8px 0;
+}
+.chip {
+  font-family: "Roboto";
+  font-size: 13px;
+  font-weight: 400;
+  vertical-align: text-bottom;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div style="background: #fff">
+  <div style="min-height: 100%; background: #fff">
     <div>
       <v-container>
         <v-layout wrap>
@@ -11,6 +11,7 @@
               :groupe="groupe"
               :terrind="terrind"
               :creation="creation"
+              :statutJuridique="statutJuridique"
             />
           </v-flex>
           <v-flex xs12 class="pb-3 pr-1">
@@ -116,9 +117,10 @@ export default {
       const nombreMois = f.diane.nombre_mois
 
       // Soldes Intermédiaires de Gestion (SIG) restants
-      const va = f.diane.valeur_ajoutee ? f.diane.valeur_ajoutee.toFixed(2) : null
-      const ebe = f.diane.excedent_brut_d_exploitation ? f.diane.excedent_brut_d_exploitation.toFixed(2) : null
-      const caf = f.diane.capacite_autofinancement ? f.diane.capacite_autofinancement.toFixed(2) : null
+      const va = f.diane.valeur_ajoutee ? f.diane.valeur_ajoutee : null
+      const ebe = f.diane.excedent_brut_d_exploitation ? f.diane.excedent_brut_d_exploitation : null
+      const caf = f.diane.capacite_autofinancement ?
+        Math.round(f.diane.capacite_autofinancement / 100 * (f.diane.ca + f.diane.subventions_d_exploitation)) : null
 
       // État de la trésorerie
       const frng = f.diane.couverture_ca_fdr ?
@@ -296,6 +298,10 @@ export default {
     },
     paydex() {
       return (this.entreprise || {}).paydex
+    },
+    statutJuridique() {
+      const statutJuridique = this.sirene.statutJuridiqueN2
+      return statutJuridique
     },
   },
 }
