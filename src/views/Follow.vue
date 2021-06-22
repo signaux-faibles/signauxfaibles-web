@@ -104,7 +104,7 @@ export default {
       this.alertExport = false
       this.$axios(
         {
-          url: '/follow/xls',
+          url: '/export/xlsx/follow',
           method: 'get',
           responseType: 'arraybuffer',
         },
@@ -123,7 +123,7 @@ export default {
       this.alertExport = false
       this.$axios(
         {
-          url: '/follow/xls',
+          url: '/export/docx/follow',
           method: 'get',
           responseType: 'arraybuffer',
         },

@@ -549,7 +549,7 @@ export default {
       this.alertExport = false
       this.$axios(
         {
-          url: '/follow/xls',
+          url: '/export/docx/siret/' + this.siret,
           method: 'get',
           responseType: 'arraybuffer',
         },
