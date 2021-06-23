@@ -59,6 +59,13 @@ export default {
       news: [
         // TODO: externalize
         {
+          date: new Date('2021-06-23'), news: [
+            'Enrichissement du contenu de l\'export de la liste de suivi au format XLSX (Excel)',
+            'Export de la liste de suivi au format DOCX (Word)',
+            'Export de la fiche établissement au format DOCX (Word)',
+          ],
+        },
+        {
           date: new Date('2021-06-10'), news: [
             'Explicabilité des détections (données individuelles influentes, radar thématique, historique)',
             'Redressement du niveau d\'alerte a posteriori en fonction de l\'évolution de la dette Urssaf',
