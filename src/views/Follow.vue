@@ -89,28 +89,25 @@ export default {
       this.trackMatomoEvent('general', 'ouvrir_menu')
       this.leftDrawer = !this.leftDrawer
     },
-    download(url, filename) {
-      const element = document.createElement('a')
-      element.setAttribute('href', url)
-      element.setAttribute('download', filename)
-      element.style.display = 'none'
-      document.body.appendChild(element)
-      element.click()
-      document.body.removeChild(element)
+    download(response, defaultFilename) {
+      const blob = new Blob([response.data])
+      const link = document.createElement('a')
+      link.href = URL.createObjectURL(blob)
+      const filename = response.headers['content-disposition'].split('filename=')[1]
+      if (filename) {
+        link.setAttribute('download', filename)
+      } else {
+        link.setAttribute('download', defaultFilename)
+      }
+      link.click()
+      link.remove()
     },
     exportXSLX() {
       this.trackMatomoEvent('suivi', 'extraire', 'xlsx')
       this.exportXSLXLoading = true
       this.alertExport = false
-      this.$axios(
-        {
-          url: '/export/xlsx/follow',
-          method: 'get',
-          responseType: 'arraybuffer',
-        },
-      ).then((r) => {
-        const url = window.URL.createObjectURL(new Blob([r.data]))
-        this.download(url, 'export-suivi.xlsx')
+      this.$axios.get('/export/xlsx/follow', {responseType: 'blob'}).then((response) => {
+        this.download(response, 'export-suivi.xlsx')
         this.exportXSLXLoading = false
       }).catch((error) => {
         this.exportXSLXLoading = false
@@ -121,15 +118,8 @@ export default {
       this.trackMatomoEvent('suivi', 'extraire', 'docx')
       this.exportDOCXLoading = true
       this.alertExport = false
-      this.$axios(
-        {
-          url: '/export/docx/follow',
-          method: 'get',
-          responseType: 'arraybuffer',
-        },
-      ).then((r) => {
-        const url = window.URL.createObjectURL(new Blob([r.data]))
-        this.download(url, 'export-suivi.docx')
+      this.$axios.get('/export/docx/follow', {responseType: 'blob'}).then((response) => {
+        this.download(response, 'export-suivi.docx')
         this.exportDOCXLoading = false
       }).catch((error) => {
         this.exportDOCXLoading = false
