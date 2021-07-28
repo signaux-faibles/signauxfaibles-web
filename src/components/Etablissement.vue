@@ -18,6 +18,8 @@
               :summary="summary"
             />
             <v-btn v-if="etablissement.siren" dark color="indigo" @click="showEntreprise">Voir Fiche Entreprise</v-btn>
+            <v-btn outline color="indigo" class="ml-4" @click="exportDOCX" :dark="!exportDOCXLoading" :loading="exportDOCXLoading" :disabled="exportDOCXLoading"><v-icon small class="mr-2">fa-file-word</v-icon>Exporter en DOCX (Word)</v-btn>
+            <v-alert :value="alertExport" type="error" transition="scale-transition" dismissible>Un problème est survenu lors de l'export de l’établissement.</v-alert>
           </v-flex>
           <v-flex xs12 md6 class="text-xs-left pa-3" style="font-size: 16px">
             <v-layout fill-height align-center>
@@ -341,6 +343,8 @@ export default {
       liquidationJugements: [],
       libellesProcols,
       lienVisiteFCE: '',
+      exportDOCXLoading: false,
+      alertExport: false,
     }
   },
   methods: {
@@ -528,6 +532,31 @@ export default {
         this.lienVisiteFCE = response.data || lienVisiteFCE
       }).catch((error) => {
         this.lienVisiteFCE = lienVisiteFCE
+      })
+    },
+    download(response, defaultFilename) {
+      const blob = new Blob([response.data])
+      const link = document.createElement('a')
+      link.href = URL.createObjectURL(blob)
+      const filename = response.headers['content-disposition'].split('filename=')[1]
+      if (filename) {
+        link.setAttribute('download', filename)
+      } else {
+        link.setAttribute('download', defaultFilename)
+      }
+      link.click()
+      link.remove()
+    },
+    exportDOCX() {
+      this.trackMatomoEvent('etablissement', 'extraire', 'docx')
+      this.exportDOCXLoading = true
+      this.alertExport = false
+      this.$axios.get(`/export/docx/siret/${this.siret}`, {responseType: 'blob'}).then((response) => {
+        this.download(response, 'export-' + this.siret + '.docx')
+        this.exportDOCXLoading = false
+      }).catch((error) => {
+        this.exportDOCXLoading = false
+        this.alertExport = true
       })
     },
   },

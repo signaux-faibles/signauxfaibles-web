@@ -33,12 +33,11 @@
       Suivre.<br />Pour un import massif d'établissements, contactez-nous par email :<br />
       <a href="mailto:contact@signaux-faibles.beta.gouv.fr?subject=Import massif d'établissements" target="_blank"><code>contact@signaux-faibles.beta.gouv.fr</code></a>
     </div>
-    <div class="pt-3 pl-3 text-xs-center" v-if="follow.length > 0">
+    <div class="pt-3 px-3 text-xs-center" v-if="follow.length > 0">
       <span class="intro">Vous suivez {{this.follow.length | pluralizeEtablissement}}.</span>
-      <v-btn outline color="indigo" @click="download" class="ml-4">
-        <v-icon small class="mr-2">fa-file-download</v-icon>
-        Exporter
-      </v-btn>
+      <v-btn outline color="indigo" @click="exportXSLX" :dark="!exportXSLXLoading" :loading="exportXSLXLoading" :disabled="loading || exportXSLXLoading" class="ml-4"><v-icon small class="mr-2">fa-file-excel</v-icon>Exporter en XLSX (Excel)</v-btn>
+      <v-btn outline color="indigo" @click="exportDOCX" :dark="!exportDOCXLoading" :loading="exportDOCXLoading" :disabled="loading || exportDOCXLoading"><v-icon small class="mr-2">fa-file-word</v-icon>Exporter en DOCX (Word)</v-btn>
+      <v-alert :value="alertExport" type="error" transition="scale-transition" dismissible>Un problème est survenu lors de l’export des établissements suivis.</v-alert>
     </div>
     <PredictionWidget
       v-for="e in etablissements"
@@ -66,6 +65,9 @@ export default {
       loading: false,
       follow: [],
       snackbar: true,
+      exportXSLXLoading: false,
+      exportDOCXLoading: false,
+      alertExport: false,
     }
   },
   mounted() {
@@ -83,28 +85,46 @@ export default {
         this.init = false
       })
     },
-    download() {
-      this.trackMatomoEvent('suivi', 'extraire')
-      this.$axios(
-        {
-          url: `/follow/xls`,
-          method: 'get',
-          responseType: 'arraybuffer',
-        },
-      ).then((r) => {
-        const url = window.URL.createObjectURL(new Blob([r.data]))
-        const element = document.createElement('a')
-        element.setAttribute('href',  url)
-        element.setAttribute('download', 'extract-suivi.xlsx')
-        element.style.display = 'none'
-        document.body.appendChild(element)
-        element.click()
-        document.body.removeChild(element)
-      })
-    },
     openLeftDrawer() {
       this.trackMatomoEvent('general', 'ouvrir_menu')
       this.leftDrawer = !this.leftDrawer
+    },
+    download(response, defaultFilename) {
+      const blob = new Blob([response.data])
+      const link = document.createElement('a')
+      link.href = URL.createObjectURL(blob)
+      const filename = response.headers['content-disposition'].split('filename=')[1]
+      if (filename) {
+        link.setAttribute('download', filename)
+      } else {
+        link.setAttribute('download', defaultFilename)
+      }
+      link.click()
+      link.remove()
+    },
+    exportXSLX() {
+      this.trackMatomoEvent('suivi', 'extraire', 'xlsx')
+      this.exportXSLXLoading = true
+      this.alertExport = false
+      this.$axios.get('/export/xlsx/follow', {responseType: 'blob'}).then((response) => {
+        this.download(response, 'export-suivi.xlsx')
+        this.exportXSLXLoading = false
+      }).catch((error) => {
+        this.exportXSLXLoading = false
+        this.alertExport = true
+      })
+    },
+    exportDOCX() {
+      this.trackMatomoEvent('suivi', 'extraire', 'docx')
+      this.exportDOCXLoading = true
+      this.alertExport = false
+      this.$axios.get('/export/docx/follow', {responseType: 'blob'}).then((response) => {
+        this.download(response, 'export-suivi.docx')
+        this.exportDOCXLoading = false
+      }).catch((error) => {
+        this.exportDOCXLoading = false
+        this.alertExport = true
+      })
     },
   },
   computed: {
