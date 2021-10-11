@@ -46,11 +46,6 @@
       @follow-etablissement="getFollowedEtablissements"
       @unfollow-etablissement="getFollowedEtablissements"
     />
-    <v-snackbar v-model="snackbar" :bottom="true" :timeout="0" v-if="follow.length > 0">
-      <v-icon dark class="mr-2">move_to_inbox</v-icon>Besoin d'un import massif ?
-      <v-btn color="primary" flat href="mailto:contact@signaux-faibles.beta.gouv.fr?subject=Import massif d'établissements" target="_blank" rel="noopener">Contactez-nous</v-btn>
-      <v-btn icon @click="snackbar = false"><v-icon>clear</v-icon></v-btn> 
-    </v-snackbar>
   </div>
 </template>
 <script>
