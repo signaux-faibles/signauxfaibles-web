@@ -549,7 +549,7 @@ export default {
       this.trackMatomoEvent('etablissement', 'extraire', 'docx')
       this.exportDOCXLoading = true
       this.alertExport = false
-      this.$axios.get(`/export/docx/siret/${this.siret}`, {responseType: 'blob'}).then((response) => {
+      this.$axios.get(`/export/docx/siret/${this.siret}`, {responseType: 'blob', timeout: 120000}).then((response) => {
         this.download(response, 'export-' + this.siret + '.docx')
         this.exportDOCXLoading = false
       }).catch((error) => {

@@ -104,7 +104,7 @@ export default {
       this.trackMatomoEvent('suivi', 'extraire', 'xlsx')
       this.exportXSLXLoading = true
       this.alertExport = false
-      this.$axios.get('/export/xlsx/follow', {responseType: 'blob'}).then((response) => {
+      this.$axios.get('/export/xlsx/follow', {responseType: 'blob', timeout: 120000}).then((response) => {
         this.download(response, 'export-suivi.xlsx')
         this.exportXSLXLoading = false
       }).catch((error) => {
@@ -116,7 +116,7 @@ export default {
       this.trackMatomoEvent('suivi', 'extraire', 'docx')
       this.exportDOCXLoading = true
       this.alertExport = false
-      this.$axios.get('/export/docx/follow', {responseType: 'blob'}).then((response) => {
+      this.$axios.get('/export/docx/follow', {responseType: 'blob', timeout: 120000}).then((response) => {
         this.download(response, 'export-suivi.docx')
         this.exportDOCXLoading = false
       }).catch((error) => {
