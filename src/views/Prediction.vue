@@ -222,7 +222,7 @@
       <v-container style="position: relative; top: -10px">
         <v-layout row>
           <v-flex xs12 md6>
-            <v-text-field v-model="filter" @input="getPrediction" solo label="Filtre rapide par raison sociale ou SIRET" clearable />
+            <v-text-field v-model="filter" @input="getPrediction" solo label="Filtre rapide par raison sociale ou SIREN" clearable />
           </v-flex>
           <v-flex xs12 md6 style="line-height: 53px;">
             <v-icon color="red">fa-exclamation-triangle</v-icon>

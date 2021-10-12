@@ -10,7 +10,7 @@
         </div>
         <v-text-field
           solo
-          placeholder="Raison sociale ou SIRET"
+          placeholder="Raison sociale ou SIREN"
           v-model="search"
           :disabled="loading"
         ></v-text-field>
