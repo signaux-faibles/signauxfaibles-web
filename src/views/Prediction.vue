@@ -85,7 +85,7 @@
                 v-on="on"
                 @click="copyNaf()"
                 outline
-                class="ma-3"
+                class="mt-3 mx-3"
               >
                 <v-icon>mdi-filter</v-icon>selection des secteurs
               </v-btn>
@@ -127,6 +127,17 @@
             </v-card>
           </v-dialog>
         </div>
+        <v-list three-line>
+          <v-list-tile>
+            <v-list-tile-action>
+              <v-checkbox v-model="excludeSecteursCovid" @change="getPrediction()"></v-checkbox>
+            </v-list-tile-action>
+            <v-list-tile-content @click="toggleExcludeSecteursCovid()">
+              <v-list-tile-title>Hors secteurs COVID-19</v-list-tile-title>
+              <v-list-tile-sub-title>Exclure les entreprises appartenants aux secteurs dits COVID-19 </v-list-tile-sub-title>
+            </v-list-tile-content>
+          </v-list-tile>
+        </v-list>
         <v-divider class="mb-3" />
         <div style="display: flex; flex-direction: row; vertical-align: middle; padding: 0 15px;">
           <v-icon style="width: 30px; margin-right: 10px;">fa-map</v-icon>
@@ -260,6 +271,7 @@ export default {
   data() {
     return {
       effectifClass: [10, 20, 50, 100],
+      secteursCovid: ['s1', 's1bis', 's2'],
       init: true,
       filter: '',
       prediction: [],
@@ -400,6 +412,10 @@ export default {
       this.trackMatomoEvent('general', 'fermer_volet_filtrage')
       this.rightDrawer = !this.rightDrawer
     },
+    toggleExcludeSecteursCovid() {
+      this.excludeSecteursCovid = !this.excludeSecteursCovid
+      this.getPrediction()
+    },
     toggleIgnoreZone() {
       this.ignorezone = !this.ignorezone
       this.getPrediction()
@@ -440,6 +456,9 @@ export default {
       if (!this.currentNaf.includes('NON')) {
         params.activite = this.currentNaf
       }
+      if (this.excludeSecteursCovid) {
+        params.excludeSecteursCovid = this.secteursCovid
+      }
       if (this.zone.length > 0) {
         params.zone = this.zone
       }
@@ -467,6 +486,10 @@ export default {
       }
       params.page = this.page
       return params
+    },
+    excludeSecteursCovid: {
+      get() { return this.$localStore.state.excludeSecteursCovid },
+      set(value) { this.$localStore.commit('setexcludeSecteursCovid', value) },
     },
     siegeUniquement: {
       get() { return this.$localStore.state.siegeUniquement },
