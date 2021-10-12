@@ -84,6 +84,11 @@
             <v-icon small v-if="diane.ca_arrow">{{ diane.ca_arrow }}</v-icon>
           </div>
           <div class="rex mr-2 text-xs-right">
+            EBE
+            <br />
+            <span class="valeur" :class="diane.excedent_brut_d_exploitation_color">{{ diane.excedent_brut_d_exploitation }}</span>
+          </div>
+          <div class="rex mr-2 text-xs-right">
             REX
             <br />
             <span class="valeur" :class="diane.resultat_expl_color">{{ diane.resultat_expl }}</span>
@@ -154,6 +159,10 @@ export default {
         ca_arrow: (this.prediction.variation_ca || 1) > 1.05 ? 'mdi-arrow-top-right' :
           (this.prediction.variation_ca || 1) < 0.95 ? 'mdi-arrow-bottom-right' : null,
         ca_color: this.prediction.ca ? '' : 'unknown',
+        excedent_brut_d_exploitation: this.prediction.excedent_brut_d_exploitation ?
+          this.prediction.excedent_brut_d_exploitation + ' k€' : 'n/c',
+        excedent_brut_d_exploitation_color: this.prediction.excedent_brut_d_exploitation ?
+          (this.prediction.excedent_brut_d_exploitation < 0 ? 'down' : null) : 'unknown',
         resultat_expl: this.prediction.resultat_expl ? this.prediction.resultat_expl + ' k€' : 'n/c',
         resultat_expl_color: this.prediction.resultat_expl ?
           (this.prediction.resultat_expl < 0 ? 'down' : null) : 'unknown',
