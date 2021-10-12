@@ -19,9 +19,15 @@
           <span class="mr-2"><ScoreWidget size="25px" :prediction="summary" class="mr-1" /> {{ dernierBatch.text }}</span>
           <v-tooltip bottom v-if="summary.firstAlert === true">
             <template v-slot:activator="{ on, attrs }">
-              <v-chip v-bind="attrs" v-on="on" class="ma-0 chip" small color="primary" text-color="white">1re alerte</v-chip>
+              <v-chip v-bind="attrs" v-on="on" class="ma-0 mr-1 chip" small color="primary" text-color="white">1re alerte</v-chip>
             </template>
             <span>Cet établissement est pour la première fois en alerte sur une liste de détection</span>
+          </v-tooltip>
+          <v-tooltip bottom v-if="summary.etatAdministratif == 'F'">
+            <template v-slot:activator="{ on, attrs }">
+              <v-chip v-bind="attrs" v-on="on" class="ma-0 mr-1 chip" small color="grey darken-4" text-color="white">Fermé</v-chip>
+            </template>
+            <span>Cet établissement est fermé ou l’activité de l’entreprise a cessé</span>
           </v-tooltip>
         </div>
         <div style="font-size: 16px">
