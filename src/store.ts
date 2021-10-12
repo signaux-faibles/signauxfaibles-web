@@ -21,7 +21,7 @@ const localStore = new Vuex.Store({
   plugins: [createPersistedState({ storage: window.localStorage })],
   state: {
     excludeSecteursCovid: false,
-    siegeUniquement: false,
+    inclureEtablissementsFermes: false,
     exclureSuivi: false,
     ignorezone: false,
     currentNaf: 'C',
@@ -35,7 +35,7 @@ const localStore = new Vuex.Store({
   },
   mutations: {
     setexcludeSecteursCovid(state, val: boolean) { state.excludeSecteursCovid = val },
-    setsiegeUniquement(state, val: boolean) { state.siegeUniquement = val },
+    setinclureEtablissementsFermes(state, val: boolean) { state.inclureEtablissementsFermes = val },
     setexclureSuivi(state, val: boolean) { state.exclureSuivi = val },
     setignorezone(state, val: boolean) { state.ignorezone = val },
     setprocol(state, val) { state.procol = val },

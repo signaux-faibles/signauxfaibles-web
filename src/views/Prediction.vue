@@ -206,11 +206,11 @@
             </v-list-tile>
             <v-list-tile>
               <v-list-tile-action>
-                <v-checkbox v-model="siegeUniquement" @change="getPrediction()"></v-checkbox>
+                <v-checkbox v-model="inclureEtablissementsFermes" @change="getPrediction()"></v-checkbox>
               </v-list-tile-action>
-              <v-list-tile-content @click="toggleSiegeUniquement()">
-                <v-list-tile-title>Sièges uniquement</v-list-tile-title>
-                <v-list-tile-sub-title>Exclure les établissements secondaires</v-list-tile-sub-title>
+              <v-list-tile-content @click="toggleInclureEtablissementsFermes()">
+                <v-list-tile-title>Établissements fermés</v-list-tile-title>
+                <v-list-tile-sub-title>Inclure les établissements fermés</v-list-tile-sub-title>
               </v-list-tile-content>
             </v-list-tile>
             <v-list-tile>
@@ -420,8 +420,8 @@ export default {
       this.ignorezone = !this.ignorezone
       this.getPrediction()
     },
-    toggleSiegeUniquement() {
-      this.siegeUniquement = !this.siegeUniquement
+    toggleInclureEtablissementsFermes() {
+      this.inclureEtablissementsFermes = !this.inclureEtablissementsFermes
       this.getPrediction()
     },
     toggleExclureSuivi() {
@@ -478,8 +478,8 @@ export default {
       if (this.exclureSuivi) {
         params.exclureSuivi = this.exclureSuivi
       }
-      if (this.siegeUniquement) {
-        params.siegeUniquement = this.siegeUniquement
+      if (!this.inclureEtablissementsFermes) {
+        params.etatAdministratif = 'A'
       }
       if (this.filter || '' !== '') {
         params.filter = this.filter
@@ -491,9 +491,9 @@ export default {
       get() { return this.$localStore.state.excludeSecteursCovid },
       set(value) { this.$localStore.commit('setexcludeSecteursCovid', value) },
     },
-    siegeUniquement: {
-      get() { return this.$localStore.state.siegeUniquement },
-      set(value) { this.$localStore.commit('setsiegeUniquement', value) },
+    inclureEtablissementsFermes: {
+      get() { return this.$localStore.state.inclureEtablissementsFermes },
+      set(value) { this.$localStore.commit('setinclureEtablissementsFermes', value) },
     },
     exclureSuivi: {
       get() { return this.$localStore.state.exclureSuivi },
