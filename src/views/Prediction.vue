@@ -193,7 +193,7 @@
           </v-select>
         </div>
         <v-list three-line>
-          <v-list-group>
+          <v-list-group value="true">
             <v-subheader slot="activator">Filtres avancés</v-subheader>
             <v-list-tile>
               <v-list-tile-action>
