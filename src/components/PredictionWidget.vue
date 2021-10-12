@@ -51,32 +51,34 @@
           </div>
         </template>
         <template v-else>
-          <div class="mr-2 text-xs-right">
+          <div class="social mr-2 text-xs-right">
+            <div class="mt-2">
+              <img
+                class="mr-2"
+                height="22"
+                v-if="prediction.activite_partielle && permDGEFP"
+                src="../assets/red_apart.svg"
+              />
+              <img
+                class="mr-2"
+                height="22"
+                v-if="!prediction.activite_partielle && permDGEFP"
+                src="../assets/gray_apart.svg"
+              />
             <img
-              class="d-block mt-2 mb-2"
-              width="70"
-              v-if="!prediction.urssaf && permUrssaf"
-              src="../assets/gray_urssaf.svg"
-            />
-            <img
-              class="d-block mt-2 mb-2"
-              width="70"
-              v-if="prediction.urssaf && permUrssaf"
-              src="../assets/red_urssaf.svg"
-            />
-            <img
-              class="activite-partielle mt-1 mr-1"
-              height="24"
-              v-if="prediction.activite_partielle && permDGEFP"
-              src="../assets/red_apart.svg"
-            />
-            <img
-              class="activite-partielle mt-1 mr-1"
-              height="24"
-              v-if="!prediction.activite_partielle && permDGEFP"
-              src="../assets/gray_apart.svg"
-            />
-            <span class="effectif">{{ prediction.dernier_effectif || 'n/c' }}</span>
+                class="ml-2"
+                width="70"
+                v-if="!prediction.urssaf && permUrssaf"
+                src="../assets/gray_urssaf.svg"
+              />
+              <img
+                class="ml-2"
+                width="70"
+                v-if="prediction.urssaf && permUrssaf"
+                src="../assets/red_urssaf.svg"
+              />
+            </div>
+            <div class="effectif">{{ this.libelleEffectif }}</div>
           </div>
           <div class="ca mr-2 text-xs-right">
             CA {{prediction.exerciceDiane}}
@@ -175,6 +177,10 @@ export default {
     permDGEFP() {
       return this.prediction.permDGEFP || false
     },
+    libelleEffectif() {
+      return (this.prediction.dernier_effectif || 'n/c')
+        + (this.prediction.dernier_effectif_entreprise  ? ' / ' + this.prediction.dernier_effectif_entreprise : '')
+    },
   },
   methods: {
     showEtablissement() {
@@ -253,9 +259,7 @@ export default {
 }
 .effectif {
   font-size: 25px;
-}
-.activite-partielle {
-  float: left;
+  line-height: 34px;
 }
 .ca, .rex,
 .eff, .ap, .ds {

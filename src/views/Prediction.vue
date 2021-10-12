@@ -153,7 +153,7 @@
           <v-combobox
             v-model="minEffectif"
             :items="effectifClass"
-            label="Effectif minimum"
+            label="Effectif min de l'entreprise"
             @change="getPrediction()"
           ></v-combobox>
         </div>
@@ -446,7 +446,7 @@ export default {
       if (this.caMin) {
         params.caMin = parseInt(this.caMin, 10)
       }
-      params.effectifMin = parseInt(this.minEffectif, 10)
+      params.effectifMinEntreprise = parseInt(this.minEffectif, 10)
       if (this.ignorezone) {
         params.ignorezone = this.ignorezone
       }
