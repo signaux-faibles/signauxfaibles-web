@@ -59,7 +59,7 @@
         </div>
         <v-divider class="mb-3" />
         <div style="vertical-align: middle; padding: 0 15px;">
-          <v-icon style="margin-right: 10px;">fa-industry</v-icon>
+          <v-icon style="width: 30px; margin-right: 10px;">fa-industry</v-icon>
           <span style="color: rgba(0,0,0,0.54); font-size: 13px;">Secteur d'activité</span>
           <p />
           <span
@@ -129,7 +129,7 @@
         </div>
         <v-divider class="mb-3" />
         <div style="display: flex; flex-direction: row; vertical-align: middle; padding: 0 15px;">
-          <v-icon style="margin-right: 10px;">fa-map</v-icon>
+          <v-icon style="width: 30px; margin-right: 10px;">fa-map</v-icon>
           <v-select
             :items="subzones"
             v-model="zone"
@@ -139,7 +139,17 @@
         </div>
         <v-divider class="mb-3" />
         <div style="display: flex; flex-direction: row; vertical-align: middle; padding: 0 15px;">
-          <v-icon style="margin-right: 10px;">fa-users</v-icon>
+          <v-icon style="width: 30px; margin-right: 10px;">fa-coins</v-icon>
+          <v-text-field
+            v-model="caMin"
+            label="Chiffre d'affaires min"
+            suffix="k€"
+            @change="getPrediction()"
+          ></v-text-field>
+        </div>
+        <v-divider class="mb-3" />
+        <div style="display: flex; flex-direction: row; vertical-align: middle; padding: 0 15px;">
+          <v-icon style="width: 30px; margin-right: 10px;">fa-users</v-icon>
           <v-combobox
             v-model="minEffectif"
             :items="effectifClass"
@@ -433,6 +443,9 @@ export default {
       if (this.zone.length > 0) {
         params.zone = this.zone
       }
+      if (this.caMin) {
+        params.caMin = parseInt(this.caMin, 10)
+      }
       params.effectifMin = parseInt(this.minEffectif, 10)
       if (this.ignorezone) {
         params.ignorezone = this.ignorezone
@@ -495,6 +508,10 @@ export default {
     zone: {
       get() { return this.$localStore.state.zone },
       set(value) { this.$localStore.commit('setzone', value) },
+    },
+    caMin: {
+      get() { return this.$localStore.state.caMin },
+      set(value) { this.$localStore.commit('setcaMin', value) },
     },
     minEffectif: {
       get() { return this.$localStore.state.minEffectif },
