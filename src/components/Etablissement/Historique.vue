@@ -36,16 +36,19 @@
               Cet établissement ne faisait pas partie du périmètre de Signaux Faibles au moment de la production de cette liste de détection.
             </div>
             <div v-if="summary.alert === 'Pas d\'alerte'">
-              Cet établissement n’a pas été identifié par l’algorithme comme étant à risque de défaillance à 18 mois.
+              <span v-if="this.crash">Cet établissement est fermé ou est en situation de défaillance</span>
+              <span v-else>Cet établissement n’a pas été identifié par l’algorithme comme étant à risque de défaillance à 18 mois.</span>
             </div>
             <div v-if="summary.alert === 'Alerte seuil F2'">
-              Cet établissement a été identifié par l’algorithme comme étant à risque modéré de défaillance à 18 mois{{ alertSuffix(dernierScore) }}
+              <span v-if="this.crash">Cet établissement est fermé ou est en situation de défaillance</span>
+              <span v-else>Cet établissement a été identifié par l’algorithme comme étant à risque modéré de défaillance à 18 mois</span>{{ alertSuffix(dernierScore) }}
               <ul v-if="selectConcerning(dernierScore)">
                 <li v-for="c in selectConcerning(dernierScore)" :key="c[1]"><em>{{ libelleMicro(c[1]) }}</em> ({{ libelleMacro(c[0]) }})</li>
               </ul>
             </div>
             <div v-if="summary.alert === 'Alerte seuil F1'">
-              Cet établissement a été identifié par l’algorithme comme étant à risque élevé de défaillance à 18 mois{{ alertSuffix(dernierScore) }}
+              <span v-if="this.crash">Cet établissement est fermé ou est en situation de défaillance</span>
+              <span v-else>Cet établissement a été identifié par l’algorithme comme étant à risque élevé de défaillance à 18 mois</span>{{ alertSuffix(dernierScore) }}
               <ul v-if="selectConcerning(dernierScore)">
                 <li v-for="c in selectConcerning(dernierScore)" :key="c[1]"><em>{{ libelleMicro(c[1]) }}</em> ({{ libelleMacro(c[0]) }})</li>
               </ul>
@@ -67,7 +70,7 @@
           :series="series(dernierScore)"
         ></apexchart>
       </v-flex>
-      <v-btn v-if="permScore && historique.length > 1" outline small dark color="indigo" @click="historiqueDialog = true">Voir historique des alertes</v-btn>
+      <v-btn v-if="permScore && !this.crash && historique.length > 1" outline small dark color="indigo" @click="historiqueDialog = true">Voir historique des alertes</v-btn>
       <v-dialog v-model="historiqueDialog" @input="historiqueDialog = false" max-width="500px">
         <div>
           <v-card>
@@ -234,6 +237,10 @@ export default {
     },
     dernierBatch() {
       return this.batches[0]
+    },
+    crash() {
+      return this.summary.etatAdministratif === 'F'
+        || this.summary.etat_procol === 'redressement' || this.summary.etat_procol === 'liquidation'
     },
   },
 }
