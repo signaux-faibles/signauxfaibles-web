@@ -90,15 +90,11 @@
     },
     {
       "codeActivite": "9003A",
-      "libelleActivite": "Création artistique relevant des arts plastiques"
-    },
-    {
-      "codeActivite": "9003A",
-      "libelleActivite": "Artistes auteurs"
+      "libelleActivite": "Artistes auteurs ; Création artistique relevant des arts plastiques"
     },
     {
       "codeActivite": "9003B",
-      "libelleActivite": "Artistes auteurs"
+      "libelleActivite": "Artistes auteurs ; Autre création artistique"
     },
     {
       "codeActivite": "9004Z",
@@ -465,10 +461,6 @@
       "libelleActivite": "Activités spécialisées, scientifiques et techniques diverses"
     },
     {
-      "codeActivite": "9003B",
-      "libelleActivite": "Autre création artistique"
-    },
-    {
       "codeActivite": "9601B",
       "libelleActivite": "Blanchisserie-teinturerie de détail"
     },
@@ -486,7 +478,7 @@
     },
     {
       "codeActivite": "1413Z",
-      "libelleActivite": "Couturiers"
+      "libelleActivite": "Couturiers ; Fabricants de vêtements de dessus et fabrication de vêtements de dessous ; Fabrication d'articles à mailles"
     },
     {
       "codeActivite": "9523Z",
