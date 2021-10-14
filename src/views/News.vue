@@ -59,6 +59,19 @@ export default {
       news: [
         // TODO: externalize
         {
+          date: new Date('2021-10-15'), news: [
+            'Filtrage des listes de détection par chiffre d\'affaires',
+            'Filtrage par effectif de l\'entreprise et révision de l\'affichage des informations sociales',
+            'Option d\'exclusion des secteurs dits COVID-19 (S1, S1 bis, S2) dans les listes de détection',
+            'Dernière mise à jour (décret du 15/09/2021) du périmètre des secteurs S1 et S1 bis',
+            'Option pour inclure les établissements fermés sur les listes de détection',
+            'Identification des établissements fermés sur liste et fiche établissement',
+            'Alerte noire lors de fermeture ou défaillance (redressement ou liquidation judiciaire)',
+            'Ajout de l\'Excédent Brut d\'Exploitation sur les listes',
+            'Modification des réglages par défaut de la consultation : toute zone géographique et effectif minimum à 0',
+          ],
+        },
+        {
           date: new Date('2021-06-23'), news: [
             'Enrichissement du contenu de l\'export de la liste de suivi au format XLSX (Excel)',
             'Export de la liste de suivi au format DOCX (Word)',
