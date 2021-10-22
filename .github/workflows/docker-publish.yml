@@ -1,0 +1,71 @@
+name: Build sfweb as containair and publish it to ghcr.io
+
+# Run workflow on tags starting with v (eg. v2, v1.2.0)
+on:
+  push:
+    branches: [ try_to_push_to_registry ]
+
+env:
+  # Use docker.io for Docker Hub if empty
+  REGISTRY: ghcr.io
+  # github.repository as <account>/<repo>
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  build_and_deploy:
+    strategy:
+      fail-fast: true
+      matrix:
+        env: [ development, preprod, production ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Setup node tools
+        uses: actions/setup-node@v2
+
+      - name: Login to GitHub Container Registry
+        id: login
+        uses: docker/login-action@v1
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build binary
+        shell: bash
+        run: |
+          npm install
+          npx vue-cli-service build --mode=${{ matrix.env }}
+          cp -r ./dist ./build-container
+
+      - name: Build container image
+        shell: bash
+        run: |
+          docker build --tag sfweb --build-arg app="." ./build-container
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images: ghcr.io/${{ github.repository }}
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=ref,event=tag
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
+            type=sha
+          flavor: |
+            latest=false
+            suffix=-${{ matrix.env }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: ./build-container
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
