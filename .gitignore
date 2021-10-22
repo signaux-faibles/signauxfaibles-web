@@ -24,3 +24,5 @@ yarn-error.log*
 *.sw?
 dist.tar.gz
 
+.actrc
+
