@@ -1,4 +1,4 @@
-name: Build sfweb as containair and publish it to ghcr.io
+name: Publish sfweb container to ghcr.io
 
 # Run workflow on tags starting with v (eg. v2, v1.2.0)
 on:
@@ -12,7 +12,7 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  build_and_deploy:
+  build_and_publish:
     strategy:
       fail-fast: true
       matrix:
