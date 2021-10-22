@@ -46,7 +46,7 @@ jobs:
 #          cp -r ./dist ./build-container
 
       - run: yarn install
-      - run: npx vue-cli-service build --mode=${{ matrix.env }}
+      - run: npx vue-cli-service build --mode=${{ matrix.env }} --quiet
       - run: cp -r ./dist ./build-container
 
       - name: Build container image
