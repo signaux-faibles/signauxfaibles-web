@@ -27,6 +27,8 @@ jobs:
 
       - name: Setup node tools
         uses: actions/setup-node@v2
+        with:
+          node-version: '14.x'
 
       - name: Login to GitHub Container Registry
         id: login
@@ -36,12 +38,16 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build binary
-        shell: bash
-        run: |
-          npm install
-          npx vue-cli-service build --mode=${{ matrix.env }}
-          cp -r ./dist ./build-container
+#      - name: Build binary
+#        shell: bash
+#        run: |
+#          yarn install --silent
+#          npx vue-cli-service build --mode=${{ matrix.env }} --quiet
+#          cp -r ./dist ./build-container
+
+      - run: yarn install
+      - run: npx vue-cli-service build --mode=${{ matrix.env }}
+      - run: cp -r ./dist ./build-container
 
       - name: Build container image
         shell: bash
