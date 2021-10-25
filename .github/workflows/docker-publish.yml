@@ -3,7 +3,6 @@ name: Publish sfweb container to ghcr.io
 # Run workflow on tags starting with v (eg. v2, v1.2.0)
 on:
   push:
-    branches: [ master ]
     tags:
       - '*'
   workflow_dispatch: # pour être lancé à la main
@@ -22,8 +21,6 @@ jobs:
         env: [ development, preprod, production ]
     runs-on: ubuntu-latest
     steps:
-      - uses: hmarr/debug-action@v2
-
       - name: Checkout Code
         uses: actions/checkout@v2
 
@@ -40,14 +37,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-#      - name: Build binary
-#        shell: bash
-#        run: |
-#          yarn install --silent
-#          npx vue-cli-service build --mode=${{ matrix.env }} --quiet
-#          cp -r ./dist ./build-container
-
-      - run: npm install --global yarn
+#      - run: npm install --global yarn # mandatory with act
       - run: yarn install
       - run: npx vue-cli-service build --mode=${{ matrix.env }} --quiet
       - run: cp -r ./dist ./build-container
@@ -64,12 +54,8 @@ jobs:
           images: ghcr.io/${{ github.repository }}
           tags: |
             type=ref,event=branch
-            type=ref,event=pr
             type=ref,event=tag
             type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
-            type=semver,pattern={{major}}
-            type=sha
           flavor: |
             latest=false
             suffix=-${{ matrix.env }}
