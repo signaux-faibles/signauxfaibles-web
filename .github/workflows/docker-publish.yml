@@ -22,6 +22,8 @@ jobs:
         env: [ development, preprod, production ]
     runs-on: ubuntu-latest
     steps:
+      - uses: hmarr/debug-action@v2
+
       - name: Checkout Code
         uses: actions/checkout@v2
 
@@ -45,6 +47,7 @@ jobs:
 #          npx vue-cli-service build --mode=${{ matrix.env }} --quiet
 #          cp -r ./dist ./build-container
 
+      - run: npm install --global yarn
       - run: yarn install
       - run: npx vue-cli-service build --mode=${{ matrix.env }} --quiet
       - run: cp -r ./dist ./build-container
