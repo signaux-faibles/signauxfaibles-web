@@ -11,13 +11,19 @@
           <span v-else class="mr-2 raison-sociale">{{ prediction.raison_sociale }}</span>
           <v-tooltip bottom v-if="prediction.firstAlert === true">
             <template v-slot:activator="{ on, attrs }">
-              <v-chip v-bind="attrs" v-on="on"  class="ma-0 chip" small color="primary" text-color="white">1re alerte</v-chip>
+              <v-chip v-bind="attrs" v-on="on"  class="ma-0 mr-1 chip" small color="primary" text-color="white">1re alerte</v-chip>
             </template>
             <span>Cet établissement est pour la première fois en alerte sur une liste de détection</span>
           </v-tooltip>
+          <v-tooltip bottom v-if="prediction.etatAdministratif == 'F'">
+            <template v-slot:activator="{ on, attrs }">
+              <v-chip v-bind="attrs" v-on="on" class="ma-0 mr-1 chip" small color="grey darken-4" text-color="white">Fermé</v-chip>
+            </template>
+            <span>Cet établissement est fermé ou l’activité de l’entreprise a cessé</span>
+          </v-tooltip>
           <v-tooltip bottom v-if="prediction.etat_procol !== 'in_bonis'">
             <template v-slot:activator="{ on, attrs }">
-            <v-chip v-bind="attrs" v-on="on" class="ma-0 chip" outline small text-color="red darken-1">{{ libellesProcols[prediction.etat_procol] }}</v-chip>
+            <v-chip v-bind="attrs" v-on="on" class="ma-0 mr-1 chip" outline small text-color="red darken-1">{{ libellesProcols[prediction.etat_procol] }}</v-chip>
             </template>
             <span>Cette entreprise fait l’objet d’une procédure collective : {{ libellesProcols[prediction.etat_procol] }}</span>
           </v-tooltip>
@@ -29,6 +35,7 @@
         </div>
         <transition name="fade">
           <div v-show="showRaccourci" style="position: absolute; right: 0">
+            <v-btn dark color="indigo" @click="showEtablissement">Voir Fiche Etablissement</v-btn>
             <v-btn v-if="prediction.siren" dark color="indigo" @click="showEntreprise">Voir Fiche Entreprise</v-btn>
           </div>
         </transition>
@@ -50,38 +57,45 @@
           </div>
         </template>
         <template v-else>
-          <div class="mr-2 text-xs-right">
+          <div class="social mr-2 text-xs-right">
+            <div class="mt-2">
+              <img
+                class="mr-2"
+                height="22"
+                v-if="prediction.activite_partielle && permDGEFP"
+                src="../assets/red_apart.svg"
+              />
+              <img
+                class="mr-2"
+                height="22"
+                v-if="!prediction.activite_partielle && permDGEFP"
+                src="../assets/gray_apart.svg"
+              />
             <img
-              class="d-block mt-2 mb-2"
-              width="70"
-              v-if="!prediction.urssaf && permUrssaf"
-              src="../assets/gray_urssaf.svg"
-            />
-            <img
-              class="d-block mt-2 mb-2"
-              width="70"
-              v-if="prediction.urssaf && permUrssaf"
-              src="../assets/red_urssaf.svg"
-            />
-            <img
-              class="activite-partielle mt-1 mr-1"
-              height="24"
-              v-if="prediction.activite_partielle && permDGEFP"
-              src="../assets/red_apart.svg"
-            />
-            <img
-              class="activite-partielle mt-1 mr-1"
-              height="24"
-              v-if="!prediction.activite_partielle && permDGEFP"
-              src="../assets/gray_apart.svg"
-            />
-            <span class="effectif">{{ prediction.dernier_effectif || 'n/c' }}</span>
+                class="ml-2"
+                width="70"
+                v-if="!prediction.urssaf && permUrssaf"
+                src="../assets/gray_urssaf.svg"
+              />
+              <img
+                class="ml-2"
+                width="70"
+                v-if="prediction.urssaf && permUrssaf"
+                src="../assets/red_urssaf.svg"
+              />
+            </div>
+            <div class="effectif">{{ this.libelleEffectif }}</div>
           </div>
           <div class="ca mr-2 text-xs-right">
             CA {{prediction.exerciceDiane}}
             <br />
             <span class="valeur" :class="diane.ca_color">{{ diane.ca || 'n/c' }}</span>
             <v-icon small v-if="diane.ca_arrow">{{ diane.ca_arrow }}</v-icon>
+          </div>
+          <div class="rex mr-2 text-xs-right">
+            EBE
+            <br />
+            <span class="valeur" :class="diane.excedent_brut_d_exploitation_color">{{ diane.excedent_brut_d_exploitation }}</span>
           </div>
           <div class="rex mr-2 text-xs-right">
             REX
@@ -154,6 +168,10 @@ export default {
         ca_arrow: (this.prediction.variation_ca || 1) > 1.05 ? 'mdi-arrow-top-right' :
           (this.prediction.variation_ca || 1) < 0.95 ? 'mdi-arrow-bottom-right' : null,
         ca_color: this.prediction.ca ? '' : 'unknown',
+        excedent_brut_d_exploitation: this.prediction.excedent_brut_d_exploitation ?
+          this.prediction.excedent_brut_d_exploitation + ' k€' : 'n/c',
+        excedent_brut_d_exploitation_color: this.prediction.excedent_brut_d_exploitation ?
+          (this.prediction.excedent_brut_d_exploitation < 0 ? 'down' : null) : 'unknown',
         resultat_expl: this.prediction.resultat_expl ? this.prediction.resultat_expl + ' k€' : 'n/c',
         resultat_expl_color: this.prediction.resultat_expl ?
           (this.prediction.resultat_expl < 0 ? 'down' : null) : 'unknown',
@@ -164,6 +182,10 @@ export default {
     },
     permDGEFP() {
       return this.prediction.permDGEFP || false
+    },
+    libelleEffectif() {
+      return (this.prediction.dernier_effectif || 'n/c')
+        + (this.prediction.dernier_effectif_entreprise  ? ' / ' + this.prediction.dernier_effectif_entreprise : '')
     },
   },
   methods: {
@@ -243,9 +265,7 @@ export default {
 }
 .effectif {
   font-size: 25px;
-}
-.activite-partielle {
-  float: left;
+  line-height: 34px;
 }
 .ca, .rex,
 .eff, .ap, .ds {

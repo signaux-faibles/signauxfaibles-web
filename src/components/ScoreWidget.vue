@@ -28,6 +28,7 @@ export default {
     },
     logo() {
       const alerts = {
+        crash: ['fa-balance-scale', 'grey darken-4'],
         high: ['fa-exclamation-triangle', 'red accent-2'],
         low: ['fa-exclamation-triangle', 'amber'],
         none: ['fa-check-circle', 'green'],
@@ -45,9 +46,12 @@ export default {
       if (!this.permScore) {
         probClass = 'forbidden'
         tooltip = 'Non autorisé'
-      } else if (this.permScore && alert == null) {
+      } else if (alert == null) {
         probClass = 'absent'
         tooltip = 'Hors périmètre'
+      } else if (this.crash) {
+        probClass = 'crash'
+        tooltip = 'Fermé ou en situation de défaillance'
       } else if (alert === 'Pas d\'alerte') {
         probClass = 'none'
         tooltip = 'Pas de risque de défaillance à 18 mois identifié'
@@ -62,6 +66,10 @@ export default {
         prob: probClass,
         tooltip,
       }
+    },
+    crash() {
+      return this.prediction.etatAdministratif === 'F'
+        || this.prediction.etat_procol === 'redressement' || this.prediction.etat_procol === 'liquidation'
     },
   },
 }

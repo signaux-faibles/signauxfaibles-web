@@ -112,8 +112,8 @@
                     </v-flex>
                     <v-flex xl6 lg12 v-if="showFCE">
                       <h2>
-                        Visites de la Direccte
-                        <Help titre="Visites de la Direccte">
+                        Visites de la Dreets
+                        <Help titre="Visites de la Dreets">
                           <template>
                             Cette information est fournie par <a href="https://fce.fabrique.social.gouv.fr/a-propos" target="_blank" rel="noopener">Fiche Commune Entreprise</a>.<br>
                             Vous pouvez consulter ce service édité par l’incubateur des ministères sociaux pour en savoir davantage sur la date et la nature des visites.<br>
@@ -122,11 +122,11 @@
                         </Help>
                       </h2>
                       <div v-if="visiteFCE">
-                        <div class="mb-2">Cet établissement a reçu la visite de la Direccte au cours des 24 derniers mois.</div>
+                        <div class="mb-2">Cet établissement a reçu la visite de la Dreets (ex-Direccte) au cours des 24 derniers mois.</div>
                         <v-btn v-if="showLienVisiteFCE" small outline color="indigo" :href="lienVisiteFCE" target="_blank" rel="noopener" @click="getLienVisiteFCE()"><v-icon small left>open_in_new</v-icon>Fiche Commune Entreprise</v-btn>
                       </div>
                       <div v-else>
-                        <div class="mb-2">Cet établissement n’a pas reçu la visite de la Direccte au cours des 24 derniers mois.</div>
+                        <div class="mb-2">Cet établissement n’a pas reçu la visite de la Dreets (ex-Direccte) au cours des 24 derniers mois.</div>
                       </div>
                     </v-flex>
                 </v-layout>
@@ -538,11 +538,9 @@ export default {
       const blob = new Blob([response.data])
       const link = document.createElement('a')
       link.href = URL.createObjectURL(blob)
-      const filename = response.headers['content-disposition'].split('filename=')[1]
+      const filename = response.headers['content-disposition'] ? response.headers['content-disposition'].split('filename=')[1] : defaultFilename
       if (filename) {
         link.setAttribute('download', filename)
-      } else {
-        link.setAttribute('download', defaultFilename)
       }
       link.click()
       link.remove()
@@ -551,7 +549,7 @@ export default {
       this.trackMatomoEvent('etablissement', 'extraire', 'docx')
       this.exportDOCXLoading = true
       this.alertExport = false
-      this.$axios.get(`/export/docx/siret/${this.siret}`, {responseType: 'blob'}).then((response) => {
+      this.$axios.get(`/export/docx/siret/${this.siret}`, {responseType: 'blob', timeout: 120000}).then((response) => {
         this.download(response, 'export-' + this.siret + '.docx')
         this.exportDOCXLoading = false
       }).catch((error) => {

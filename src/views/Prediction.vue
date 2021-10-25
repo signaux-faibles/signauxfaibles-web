@@ -59,7 +59,7 @@
         </div>
         <v-divider class="mb-3" />
         <div style="vertical-align: middle; padding: 0 15px;">
-          <v-icon style="margin-right: 10px;">fa-industry</v-icon>
+          <v-icon style="width: 30px; margin-right: 10px;">fa-industry</v-icon>
           <span style="color: rgba(0,0,0,0.54); font-size: 13px;">Secteur d'activité</span>
           <p />
           <span
@@ -85,7 +85,7 @@
                 v-on="on"
                 @click="copyNaf()"
                 outline
-                class="ma-3"
+                class="mt-3 mx-3"
               >
                 <v-icon>mdi-filter</v-icon>selection des secteurs
               </v-btn>
@@ -127,9 +127,20 @@
             </v-card>
           </v-dialog>
         </div>
+        <v-list three-line>
+          <v-list-tile>
+            <v-list-tile-action>
+              <v-checkbox v-model="excludeSecteursCovid" @change="getPrediction()"></v-checkbox>
+            </v-list-tile-action>
+            <v-list-tile-content @click="toggleExcludeSecteursCovid()">
+              <v-list-tile-title>Hors secteurs COVID-19</v-list-tile-title>
+              <v-list-tile-sub-title>Exclure les entreprises appartenants aux secteurs dits COVID-19 </v-list-tile-sub-title>
+            </v-list-tile-content>
+          </v-list-tile>
+        </v-list>
         <v-divider class="mb-3" />
         <div style="display: flex; flex-direction: row; vertical-align: middle; padding: 0 15px;">
-          <v-icon style="margin-right: 10px;">fa-map</v-icon>
+          <v-icon style="width: 30px; margin-right: 10px;">fa-map</v-icon>
           <v-select
             :items="subzones"
             v-model="zone"
@@ -139,11 +150,21 @@
         </div>
         <v-divider class="mb-3" />
         <div style="display: flex; flex-direction: row; vertical-align: middle; padding: 0 15px;">
-          <v-icon style="margin-right: 10px;">fa-users</v-icon>
+          <v-icon style="width: 30px; margin-right: 10px;">fa-coins</v-icon>
+          <v-text-field
+            v-model="caMin"
+            label="Chiffre d'affaires min"
+            suffix="k€"
+            @change="getPrediction()"
+          ></v-text-field>
+        </div>
+        <v-divider class="mb-3" />
+        <div style="display: flex; flex-direction: row; vertical-align: middle; padding: 0 15px;">
+          <v-icon style="width: 30px; margin-right: 10px;">fa-users</v-icon>
           <v-combobox
             v-model="minEffectif"
             :items="effectifClass"
-            label="Effectif minimum"
+            label="Effectif min de l'entreprise"
             @change="getPrediction()"
           ></v-combobox>
         </div>
@@ -172,7 +193,7 @@
           </v-select>
         </div>
         <v-list three-line>
-          <v-list-group>
+          <v-list-group value="true">
             <v-subheader slot="activator">Filtres avancés</v-subheader>
             <v-list-tile>
               <v-list-tile-action>
@@ -185,11 +206,11 @@
             </v-list-tile>
             <v-list-tile>
               <v-list-tile-action>
-                <v-checkbox v-model="siegeUniquement" @change="getPrediction()"></v-checkbox>
+                <v-checkbox v-model="inclureEtablissementsFermes" @change="getPrediction()"></v-checkbox>
               </v-list-tile-action>
-              <v-list-tile-content @click="toggleSiegeUniquement()">
-                <v-list-tile-title>Sièges uniquement</v-list-tile-title>
-                <v-list-tile-sub-title>Exclure les établissements secondaires</v-list-tile-sub-title>
+              <v-list-tile-content @click="toggleInclureEtablissementsFermes()">
+                <v-list-tile-title>Établissements fermés</v-list-tile-title>
+                <v-list-tile-sub-title>Inclure les établissements fermés</v-list-tile-sub-title>
               </v-list-tile-content>
             </v-list-tile>
             <v-list-tile>
@@ -212,7 +233,7 @@
       <v-container style="position: relative; top: -10px">
         <v-layout row>
           <v-flex xs12 md6>
-            <v-text-field v-model="filter" @input="getPrediction" solo label="Filtre rapide par raison sociale ou SIRET" clearable />
+            <v-text-field v-model="filter" @input="getPrediction" solo label="Filtre rapide par raison sociale ou SIREN" clearable />
           </v-flex>
           <v-flex xs12 md6 style="line-height: 53px;">
             <v-icon color="red">fa-exclamation-triangle</v-icon>
@@ -250,6 +271,7 @@ export default {
   data() {
     return {
       effectifClass: [10, 20, 50, 100],
+      secteursCovid: ['s1', 's1bis', 's2'],
       init: true,
       filter: '',
       prediction: [],
@@ -390,12 +412,16 @@ export default {
       this.trackMatomoEvent('general', 'fermer_volet_filtrage')
       this.rightDrawer = !this.rightDrawer
     },
+    toggleExcludeSecteursCovid() {
+      this.excludeSecteursCovid = !this.excludeSecteursCovid
+      this.getPrediction()
+    },
     toggleIgnoreZone() {
       this.ignorezone = !this.ignorezone
       this.getPrediction()
     },
-    toggleSiegeUniquement() {
-      this.siegeUniquement = !this.siegeUniquement
+    toggleInclureEtablissementsFermes() {
+      this.inclureEtablissementsFermes = !this.inclureEtablissementsFermes
       this.getPrediction()
     },
     toggleExclureSuivi() {
@@ -430,10 +456,16 @@ export default {
       if (!this.currentNaf.includes('NON')) {
         params.activite = this.currentNaf
       }
+      if (this.excludeSecteursCovid) {
+        params.excludeSecteursCovid = this.secteursCovid
+      }
       if (this.zone.length > 0) {
         params.zone = this.zone
       }
-      params.effectifMin = parseInt(this.minEffectif, 10)
+      if (this.caMin) {
+        params.caMin = parseInt(this.caMin, 10)
+      }
+      params.effectifMinEntreprise = parseInt(this.minEffectif, 10)
       if (this.ignorezone) {
         params.ignorezone = this.ignorezone
       }
@@ -446,8 +478,8 @@ export default {
       if (this.exclureSuivi) {
         params.exclureSuivi = this.exclureSuivi
       }
-      if (this.siegeUniquement) {
-        params.siegeUniquement = this.siegeUniquement
+      if (!this.inclureEtablissementsFermes) {
+        params.etatAdministratif = 'A'
       }
       if (this.filter || '' !== '') {
         params.filter = this.filter
@@ -455,9 +487,13 @@ export default {
       params.page = this.page
       return params
     },
-    siegeUniquement: {
-      get() { return this.$localStore.state.siegeUniquement },
-      set(value) { this.$localStore.commit('setsiegeUniquement', value) },
+    excludeSecteursCovid: {
+      get() { return this.$localStore.state.excludeSecteursCovid },
+      set(value) { this.$localStore.commit('setexcludeSecteursCovid', value) },
+    },
+    inclureEtablissementsFermes: {
+      get() { return this.$localStore.state.inclureEtablissementsFermes },
+      set(value) { this.$localStore.commit('setinclureEtablissementsFermes', value) },
     },
     exclureSuivi: {
       get() { return this.$localStore.state.exclureSuivi },
@@ -495,6 +531,10 @@ export default {
     zone: {
       get() { return this.$localStore.state.zone },
       set(value) { this.$localStore.commit('setzone', value) },
+    },
+    caMin: {
+      get() { return this.$localStore.state.caMin },
+      set(value) { this.$localStore.commit('setcaMin', value) },
     },
     minEffectif: {
       get() { return this.$localStore.state.minEffectif },

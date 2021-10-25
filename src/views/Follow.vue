@@ -46,11 +46,6 @@
       @follow-etablissement="getFollowedEtablissements"
       @unfollow-etablissement="getFollowedEtablissements"
     />
-    <v-snackbar v-model="snackbar" :bottom="true" :timeout="0" v-if="follow.length > 0">
-      <v-icon dark class="mr-2">move_to_inbox</v-icon>Besoin d'un import massif ?
-      <v-btn color="primary" flat href="mailto:contact@signaux-faibles.beta.gouv.fr?subject=Import massif d'établissements" target="_blank" rel="noopener">Contactez-nous</v-btn>
-      <v-btn icon @click="snackbar = false"><v-icon>clear</v-icon></v-btn> 
-    </v-snackbar>
   </div>
 </template>
 <script>
@@ -93,11 +88,9 @@ export default {
       const blob = new Blob([response.data])
       const link = document.createElement('a')
       link.href = URL.createObjectURL(blob)
-      const filename = response.headers['content-disposition'].split('filename=')[1]
+      const filename = response.headers['content-disposition'] ? response.headers['content-disposition'].split('filename=')[1] : defaultFilename
       if (filename) {
         link.setAttribute('download', filename)
-      } else {
-        link.setAttribute('download', defaultFilename)
       }
       link.click()
       link.remove()
@@ -106,7 +99,7 @@ export default {
       this.trackMatomoEvent('suivi', 'extraire', 'xlsx')
       this.exportXSLXLoading = true
       this.alertExport = false
-      this.$axios.get('/export/xlsx/follow', {responseType: 'blob'}).then((response) => {
+      this.$axios.get('/export/xlsx/follow', {responseType: 'blob', timeout: 120000}).then((response) => {
         this.download(response, 'export-suivi.xlsx')
         this.exportXSLXLoading = false
       }).catch((error) => {
@@ -118,7 +111,7 @@ export default {
       this.trackMatomoEvent('suivi', 'extraire', 'docx')
       this.exportDOCXLoading = true
       this.alertExport = false
-      this.$axios.get('/export/docx/follow', {responseType: 'blob'}).then((response) => {
+      this.$axios.get('/export/docx/follow', {responseType: 'blob', timeout: 120000}).then((response) => {
         this.download(response, 'export-suivi.docx')
         this.exportDOCXLoading = false
       }).catch((error) => {

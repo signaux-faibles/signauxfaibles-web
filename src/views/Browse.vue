@@ -10,7 +10,7 @@
         </div>
         <v-text-field
           solo
-          placeholder="Raison sociale ou SIRET"
+          placeholder="Raison sociale ou SIREN"
           v-model="search"
           :disabled="loading"
         ></v-text-field>
@@ -144,10 +144,10 @@ export default {
       currentNaf: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
         'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U'],
       zone: {
-        text: 'Ma zone géographique',
-        value: 'Ma zone géographique',
+        text: 'Toute zone',
+        value: 'Toute zone',
       },
-      effectifMin: 10,
+      effectifMin: 0,
     }
   },
   methods: {

@@ -862,11 +862,12 @@ export default {
       this.trackMatomoEvent('etablissement', 'telecharger_documents_comptables', this.siren, exercice)
       this['loading' + l] = true
       this['alert' + l] = false
-      this.$axios.get('/bilans/130006018/2018', {responseType: 'blob'}).then((response) => {
+      this.$axios.get('/bilans/130006018/2018', {responseType: 'blob', timeout: 120000}).then((response) => {
         const blob = new Blob([response.data])
         const link = document.createElement('a')
         link.href = URL.createObjectURL(blob)
-        const filename = response.headers['content-disposition'].split('filename=')[1]
+        const defaultFilename = 'documents_comptable.pdf'
+        const filename = response.headers['content-disposition'] ? response.headers['content-disposition'].split('filename=')[1] : defaultFilename
         if (filename) {
           link.setAttribute('download', filename)
         }
