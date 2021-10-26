@@ -162,17 +162,28 @@ export default {
     },
     getFollowedEtablissements() {
       this.loading = true
-      this.$axios.post('/follow', this.params).then((response) => {
-        if (response.status === 200) {
-          this.follow = response.data
-        } else {
-          this.follow = []
-        }
-      }).finally(() => {
-        this.init = false
-        this.loading = false
-        this.followStateChanged = false
-      })
+      if (this.wekanUser) {
+        this.$axios.post('/follow', this.params).then((response) => {
+          if (response.status === 200) {
+            this.follow = response.data
+          } else {
+            this.follow = []
+          }
+        }).finally(() => {
+          this.init = false
+          this.loading = false
+          this.followStateChanged = false
+      }) } else {
+        this.$axios.get('/follow').then((response) => {
+          if (response.status === 200) {
+            this.follow = response.data
+          } else {
+            this.follow = []
+          }
+        }).finally(() => {
+          this.init = false
+        })
+      }
     },
     openLeftDrawer() {
       this.trackMatomoEvent('general', 'ouvrir_menu')
