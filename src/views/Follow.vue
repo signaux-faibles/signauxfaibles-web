@@ -67,6 +67,7 @@
               v-model="statut"
               :items="statutItems"
               :menu-props="{ maxHeight: 400 }"
+              v-on:change="getFollowedEtablissements"
               multiple
               chips
             >
@@ -81,6 +82,7 @@
         <div style="display: flex; flex-direction: row; vertical-align: middle; padding: 0 15px;">
           <v-select
           :items="subzones"
+          v-on:change="getFollowedEtablissements"
           v-model="zone"
           label="Zone Géographique"
           ></v-select>
@@ -90,7 +92,7 @@
     </div>
     <v-layout column fill-height style="font-weight: normal">
       <v-flex v-if="wekanUser" pt-3 text-xs-center shrink>
-        <v-btn-toggle mandatory v-model="type">
+        <v-btn-toggle mandatory v-model="type" v-on:change="getFollowedEtablissements">
           <v-btn flat value="my-cards">Mes cartes de suivi</v-btn>
           <v-btn flat value="all-cards">Toutes les cartes</v-btn>
           <v-btn flat value="no-card">Mon suivi sans carte</v-btn>
@@ -148,7 +150,7 @@ export default {
       exportXSLXLoading: false,
       exportDOCXLoading: false,
       alertExport: false,
-      statutItems: ['À définir', 'Veille', 'Suivi en cours', 'Suivi terminé'],
+      statutItems: ['A définir', 'Veille', 'Suivi en cours', 'Suivi terminé'],
     }
   },
   mounted() {
@@ -159,28 +161,18 @@ export default {
       this.$refs.followHelp.clickButton()
     },
     getFollowedEtablissements() {
-      this.$axios.get('/follow').then((response) => {
-        if (response.status === 200) {
-          this.follow = response.data
-        } else {
-          this.follow = []
-        }
-      }).finally(() => {
-        this.init = false
-      })
-      /*this.loading = true
+      this.loading = true
       this.$axios.post('/follow', this.params).then((response) => {
         if (response.status === 200) {
           this.follow = response.data
         } else {
           this.follow = []
         }
-      }).catch((error) => {
       }).finally(() => {
         this.init = false
         this.loading = false
         this.followStateChanged = false
-      })*/
+      })
     },
     openLeftDrawer() {
       this.trackMatomoEvent('general', 'ouvrir_menu')
@@ -232,7 +224,7 @@ export default {
     params() {
       const params = {}
       if (this.wekanUser) {
-        params.statut = this.type
+        params.type = this.type
         if (this.statut.length < this.statutItems.length) {
           params.statut = this.statut
         }
