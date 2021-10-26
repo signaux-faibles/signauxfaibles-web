@@ -452,6 +452,9 @@ export default {
         this.followAlert = true
       }
     },
+    joinCard() {
+      this.$axios.get(`/wekan/join/${this.siret}`)
+    },
     getFollowCard() {
       this.$axios.get(`/wekan/cards/${this.siret}`).then((response) => {
         const card = response.data

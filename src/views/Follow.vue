@@ -109,10 +109,10 @@
           <a href="mailto:contact@signaux-faibles.beta.gouv.fr?subject=Import massif d'établissements" target="_blank"><code>contact@signaux-faibles.beta.gouv.fr</code></a></div>
         </div>
         <div class="pt-3 px-3 text-xs-center" v-if="follow.length > 0">
-          <span v-if="wekanUser && type=='my-cards'" class="intro">Vous suivez {{this.follow.length | pluralizeEtablissement}} associés à des cartes dont vous êtes le créateur ou un des participants.</span>
-          <span v-if="wekanUser && type=='all-cards'" class="intro">Vous suivez {{this.follow.length | pluralizeEtablissement}} associés à toutes les cartes des tableaux régionaux dont vous êtes utilisateur.</span>
+          <span v-if="wekanUser && type=='my-cards'" class="intro">Vous suivez {{this.follow.length | pluralizeEtablissement}} associés à des cartes dont vous êtes le créateur ou un des participants selon les filtres sélectionnés.</span>
+          <span v-if="wekanUser && type=='all-cards'" class="intro">Le ou les tableaux régionaux auquels vous êtes habilités référencent {{this.follow.length | pluralizeEtablissement}} selon les filtres sélectionnés.</span>
           <span v-if="wekanUser && type=='no-card'" class="intro">Vous suivez {{this.follow.length | pluralizeEtablissement}} associés à aucune carte de suivi ou à une carte inaccessible.</span>
-          <span v-if="!wekanUser" class="intro">Vous suivez {{this.follow.length | pluralizeEtablissement}}.</span>
+          <span v-if="!wekanUser" class="intro">Vous suivez {{this.follow.length | pluralizeEtablissement}}.</span><br/>
           <v-btn outline color="indigo" @click="exportXSLX" :dark="!exportXSLXLoading" :loading="exportXSLXLoading" :disabled="loading || exportXSLXLoading" class="ml-4"><v-icon small class="mr-2">fa-file-excel</v-icon>Exporter en XLSX (Excel)</v-btn>
           <v-btn outline color="indigo" @click="exportDOCX" :dark="!exportDOCXLoading" :loading="exportDOCXLoading" :disabled="loading || exportDOCXLoading"><v-icon small class="mr-2">fa-file-word</v-icon>Exporter en DOCX (Word)</v-btn>
           <v-alert :value="alertExport" type="error" transition="scale-transition" dismissible>Un problème est survenu lors de l’export des établissements suivis.</v-alert>
