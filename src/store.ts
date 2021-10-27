@@ -32,6 +32,9 @@ const localStore = new Vuex.Store({
     securityConsent: new Date('1970-01-01'),
     procol: ['In bonis', 'Sauvegarde', 'Plan de sauvegarde'],
     expiredSession: false,
+    typeSuivi: 'my-cards',
+    statutSuivi: ['Suivi en cours'],
+    zoneSuivi: [],
   },
   mutations: {
     setexcludeSecteursCovid(state, val: boolean) { state.excludeSecteursCovid = val },
@@ -46,6 +49,9 @@ const localStore = new Vuex.Store({
     setNewsRead(state, val) { state.newsRead = val },
     setSecurityConsent(state, value) { state.securityConsent = value },
     setExpiredSession(state, value) { state.expiredSession = value },
+    setTypeSuivi(state, value) { state.typeSuivi = value },
+    setStatutSuivi(state, value) { state.statutSuivi = value },
+    setZoneSuivi(state, value) { state.zoneSuivi = value },
   },
 })
 
@@ -55,6 +61,7 @@ const sessionStore = new Vuex.Store({
     currentBatchKey: null as unknown as string,
     leftDrawer: true,
     rightDrawer: true,
+    followRightDrawer: true,
     naf: [] as any[],
     batches: [] as any[],
     departements: [] as any[],
@@ -74,6 +81,9 @@ const sessionStore = new Vuex.Store({
     },
     rightDrawer(state, val) {
       state.rightDrawer = val
+    },
+    followRightDrawer(state, val) {
+      state.followRightDrawer = val
     },
     updateReference(state, reference) {
       state.batches = reference.listes
@@ -132,6 +142,9 @@ const sessionStore = new Vuex.Store({
     },
     setRightDrawer(context, val) {
       context.commit('rightDrawer', val)
+    },
+    setFollowRightDrawer(context, val) {
+      context.commit('followRightDrawer', val)
     },
   },
 })

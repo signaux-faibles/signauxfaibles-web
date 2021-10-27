@@ -237,6 +237,25 @@
               <v-alert :value="cardCreationAlert" type="error" transition="scale-transition">{{ cardCreationAlertError }}</v-alert>
             </v-card>
           </v-dialog>
+          <v-dialog v-model="joinCardDialog" persistent @input="closeJoinCardDialog()" max-width="600px">
+            <v-card>
+              <v-card-title>
+                <div>
+                  <div class="headline">Participer à la carte de suivi existante ?</div>
+                  <span class="grey--text">(siret {{ siret }})</span>
+                </div>
+              </v-card-title>
+              <v-card-text>
+                Une carte de suivi est déjà rattachée à cet établissement.
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn flat @click="closeJoinCardDialog()" :disabled="joiningCard">Passer</v-btn>
+                <v-btn dark color="indigo" @click="joinCard()" :disabled="joiningCard"><v-icon left class="mr-2">mdi-star-outline</v-icon>Rejoindre</v-btn>
+              </v-card-actions>
+              <v-alert :value="joinCardAlert" type="error" transition="scale-transition">{{ joinCardAlertError }}</v-alert>
+            </v-card>
+          </v-dialog>
           <v-dialog v-model="unfollowDialog" @input="closeUnfollowDialog()" max-width="500px">
             <v-card>
               <v-card-title>
@@ -345,6 +364,10 @@ export default {
       lienVisiteFCE: '',
       exportDOCXLoading: false,
       alertExport: false,
+      joinCardDialog: false,
+      joiningCard: false,
+      joinCardAlert: false,
+      joinCardAlertError: '',
     }
   },
   methods: {
@@ -382,8 +405,12 @@ export default {
             this.followAlert = false
             this.getEtablissement()
             this.$emit('follow-etablissement')
-            if (!this.followCard && this.inZone && this.wekanUser) {
-              this.cardCreationDialog = true
+            if (this.inZone && this.wekanUser) {
+              if (!this.followCard) {
+                this.cardCreationDialog = true
+              } else {
+                this.joinCardDialog = true
+              }
             }
           }
         }).catch((error) => {
@@ -425,11 +452,17 @@ export default {
         this.followAlert = true
       }
     },
+    joinCard() {
+      this.$axios.get(`/wekan/join/${this.followCard.cardId}`).then((response) => {
+        this.closeJoinCardDialog()
+      })
+    },
     getFollowCard() {
       this.$axios.get(`/wekan/cards/${this.siret}`).then((response) => {
         const card = response.data
         const md = new MarkdownIt()
         this.followCard = {
+          cardId: card.cardId,
           status: this.statusItems[card.listIndex],
           description: md.render(card.cardDescription),
           url: card.cardURL,
@@ -482,6 +515,11 @@ export default {
       this.cardCreationDialog = false
       this.cardCreationAlertError = ''
       this.cardCreationAlert = false
+    },
+    closeJoinCardDialog() {
+      this.joinCardDialog = false
+      this.joinCardAlertError = ''
+      this.joinCardAlert = false
     },
     showEntreprise() {
       this.trackMatomoEvent('entreprise', 'ouvrir_fiche_entreprise', this.etablissement.siren)
