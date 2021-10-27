@@ -453,13 +453,16 @@ export default {
       }
     },
     joinCard() {
-      this.$axios.get(`/wekan/join/${this.siret}`)
+      this.$axios.get(`/wekan/join/${this.followCard.cardId}`).then((response) => {
+        this.closeJoinCardDialog()
+      })
     },
     getFollowCard() {
       this.$axios.get(`/wekan/cards/${this.siret}`).then((response) => {
         const card = response.data
         const md = new MarkdownIt()
         this.followCard = {
+          cardId: card.cardId,
           status: this.statusItems[card.listIndex],
           description: md.render(card.cardDescription),
           url: card.cardURL,

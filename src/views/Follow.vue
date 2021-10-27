@@ -110,7 +110,7 @@
         </div>
         <div class="pt-3 px-3 text-xs-center" v-if="follow.length > 0">
           <span v-if="wekanUser && type=='my-cards'" class="intro">Vous suivez {{this.follow.length | pluralizeEtablissement}} associés à des cartes dont vous êtes le créateur ou un des participants selon les filtres sélectionnés.</span>
-          <span v-if="wekanUser && type=='all-cards'" class="intro">Le ou les tableaux régionaux auquels vous êtes habilités référencent {{this.follow.length | pluralizeEtablissement}} selon les filtres sélectionnés.</span>
+          <span v-if="wekanUser && type=='all-cards'" class="intro">Le ou les tableaux régionaux auxquels vous êtes habilités référencent {{this.follow.length | pluralizeEtablissement}} selon les filtres sélectionnés.</span>
           <span v-if="wekanUser && type=='no-card'" class="intro">Vous suivez {{this.follow.length | pluralizeEtablissement}} associés à aucune carte de suivi ou à une carte inaccessible.</span>
           <span v-if="!wekanUser" class="intro">Vous suivez {{this.follow.length | pluralizeEtablissement}}.</span><br/>
           <v-btn outline color="indigo" @click="exportXSLX" :dark="!exportXSLXLoading" :loading="exportXSLXLoading" :disabled="loading || exportXSLXLoading" class="ml-4"><v-icon small class="mr-2">fa-file-excel</v-icon>Exporter en XLSX (Excel)</v-btn>
@@ -182,6 +182,8 @@ export default {
           }
         }).finally(() => {
           this.init = false
+          this.loading = false
+          this.followStateChanged = false
         })
       }
     },
@@ -210,7 +212,7 @@ export default {
       this.trackMatomoEvent('suivi', 'extraire', 'xlsx')
       this.exportXSLXLoading = true
       this.alertExport = false
-      this.$axios.get('/export/xlsx/follow', {responseType: 'blob', timeout: 120000}).then((response) => {
+      this.$axios.post('/export/xlsx/follow', this.params, {responseType: 'blob', timeout: 120000}).then((response) => {
         this.download(response, 'export-suivi.xlsx')
         this.exportXSLXLoading = false
       }).catch((error) => {
@@ -222,8 +224,8 @@ export default {
       this.trackMatomoEvent('suivi', 'extraire', 'docx')
       this.exportDOCXLoading = true
       this.alertExport = false
-      this.$axios.get('/export/docx/follow', {responseType: 'blob', timeout: 120000}).then((response) => {
-        this.download(response, 'export-suivi.docx')
+      this.$axios.post('/export/docx/follow', this.params, {responseType: 'blob', timeout: 120000}).then((response) => {
+        this.download(response, 'export-suivi.zip')
         this.exportDOCXLoading = false
       }).catch((error) => {
         this.exportDOCXLoading = false
