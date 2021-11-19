@@ -345,16 +345,19 @@ export default {
       return this.roles.includes('wekan')
     },
     labelsItems() {
-      let boards = this.$store.state.wekanConfig.boards
-      let labels = Object.keys(boards).reduce((m, b) => {
-        boards[b].labels.forEach(l => {
-          if (l.name != "") {
-            m[l.name] = true
-          }
-        })
-        return m
-      }, {})
-      return Object.keys(labels)
+        if (this.wekanUser) {
+        let boards = this.$store.state.wekanConfig.boards
+        let labels = Object.keys(boards).reduce((m, b) => {
+          boards[b].labels.forEach(l => {
+            if (l.name != "") {
+              m[l.name] = true
+            }
+          })
+          return m
+        }, {})
+        return Object.keys(labels)
+      }
+      return [] 
     },
   },
   filters: {

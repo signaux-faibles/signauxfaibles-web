@@ -88,9 +88,9 @@ export default {
     )
     this.$store.dispatch('updateReference')
     if (this.roles.includes('wekan')) {
-      this.$store.dispatch('updateWekan')
+      this.$store.dispatch('updateWekanConfig')
     } else {
-      this.$store.commit('updateWekan', {})
+      this.$store.commit('updateWekanConfig', {})
     }
   },
   name: 'App',
