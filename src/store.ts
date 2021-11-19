@@ -133,9 +133,6 @@ const sessionStore = new Vuex.Store({
       const getNaf = axiosClient.get('/reference/naf')
       const getRegions = axiosClient.get('/reference/regions')
       const getDepartements = axiosClient.get('/reference/departements')
-      axiosClient.get('/wekan/config').then(response => {
-        context.commit('updateWekanConfig', response.data)
-      }).catch();
       axios.all([getListes, getNaf, getRegions, getDepartements]).then(axios.spread((...responses) => {
         const reference = {
           listes: responses[0].data,
@@ -145,7 +142,11 @@ const sessionStore = new Vuex.Store({
         }
         context.commit('updateReference', reference)
       }))
-
+    },
+    updateWekanConfig(context) {
+      axiosClient.get('/wekan/config').then(response => {
+        context.commit('updateWekanConfig', response.data)
+      });
     },
     setLeftDrawer(context, val) {
       context.commit('leftDrawer', val)
