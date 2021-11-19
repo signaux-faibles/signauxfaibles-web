@@ -62,21 +62,42 @@
         </v-toolbar>
         <div class="mt-2" style="display: flex; flex-direction: column; vertical-align: middle; padding: 0 15px;">
           <span style="font-size: 15px;">Statut du suivi</span>
-            <v-select
-              ref="statut" 
-              v-model="statut"
-              :items="statutItems"
-              :menu-props="{ maxHeight: 400 }"
-              v-on:change="getFollowedEtablissements"
-              multiple
-              chips
-            >
-              <template v-slot:append-item>
-                <div class="text-xs-center my-2">
-                  <v-btn @click="$refs.statut.isMenuActive = false" color="primary">OK</v-btn>
-                </div>
-              </template>
-            </v-select>
+          <v-select
+            :disabled="type == 'no-card'"
+            ref="statut" 
+            v-model="statut"
+            :items="statutItems"
+            :menu-props="{ maxHeight: 400 }"
+            v-on:change="getFollowedEtablissements"
+            multiple
+            chips
+          >
+            <template v-slot:append-item>
+              <div class="text-xs-center my-2">
+                <v-btn @click="$refs.statut.isMenuActive = false" color="primary">OK</v-btn>
+              </div>
+            </template>
+          </v-select>
+        </div>
+        <v-divider class="mb-3" />
+        <div class="mt-2" style="display: flex; flex-direction: column; vertical-align: middle; padding: 0 15px;">
+          <span style="font-size: 15px;">Étiquettes</span>
+          <v-select
+            :disabled="type == 'no-card'"
+            ref="statut" 
+            v-model="labels"
+            :items="labelsItems"
+            :menu-props="{ maxHeight: 400 }"
+            v-on:change="getFollowedEtablissements"
+            multiple
+            chips
+          >
+            <template v-slot:append-item>
+              <div class="text-xs-center my-2">
+                <v-btn @click="$refs.statut.isMenuActive = false" color="primary">OK</v-btn>
+              </div>
+            </template>
+          </v-select>
         </div>
         <v-divider class="mb-3" />
         <div style="display: flex; flex-direction: row; vertical-align: middle; padding: 0 15px;">
@@ -118,12 +139,21 @@
           <v-alert :value="alertExport" type="error" transition="scale-transition" dismissible>Un problème est survenu lors de l’export des établissements suivis.</v-alert>
         </div>
         <PredictionWidget
-          v-for="e in etablissements"
+          v-for="e in etablissements.slice(0,100)"
           :key="e.siret"
           :prediction="e"
           @follow-etablissement="getFollowedEtablissements"
           @unfollow-etablissement="getFollowedEtablissements"
         />
+        <div v-if="etablissements.length >= 100">
+          <v-alert
+            :value="true"
+            color="warning"
+            icon="info"
+          >
+            La sélection a été tronquée à 100 établissements pour des raisons de performance d'affichage, utilisez <a @click="openRightDrawer()">les filtres</a> pour affiner votre sélection.
+          </v-alert>
+        </div>
       </v-flex>
     </v-layout>
     <v-snackbar v-if="wekanUser" v-model="snackbar" :bottom="true" :timeout="0">
@@ -192,10 +222,10 @@ export default {
       this.leftDrawer = !this.leftDrawer
     },
     openRightDrawer() {
-      this.rightDrawer = !this.rightDrawer
+      this.rightDrawer = true
     },
     closeRightDrawer() {
-      this.rightDrawer = !this.rightDrawer
+      this.rightDrawer = false
     },
     download(response, defaultFilename) {
       const blob = new Blob([response.data])
@@ -244,6 +274,9 @@ export default {
         if (this.zone.length > 0) {
           params.zone = this.zone
         }
+        if (this.labels.length > 0) {
+          params.labels = this.labels
+        }
       }
       return params
     },
@@ -281,6 +314,10 @@ export default {
       get() { return this.$localStore.state.zoneSuivi },
       set(value) { this.$localStore.commit('setZoneSuivi', value) },
     },
+    labels: {
+      get() { return this.$localStore.state.labelsSuivi },
+      set(value) { this.$localStore.commit('setLabelsSuivi', value) },
+    },    
     subzones() {
       let all = [
         {
@@ -306,6 +343,18 @@ export default {
     },
     wekanUser() {
       return this.roles.includes('wekan')
+    },
+    labelsItems() {
+      let boards = this.$store.state.wekanConfig.boards
+      let labels = Object.keys(boards).reduce((m, b) => {
+        boards[b].labels.forEach(l => {
+          if (l.name != "") {
+            m[l.name] = true
+          }
+        })
+        return m
+      }, {})
+      return Object.keys(labels)
     },
   },
   filters: {

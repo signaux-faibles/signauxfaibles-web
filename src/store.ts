@@ -35,6 +35,7 @@ const localStore = new Vuex.Store({
     typeSuivi: 'my-cards',
     statutSuivi: ['Suivi en cours'],
     zoneSuivi: [],
+    labelsSuivi: [],
   },
   mutations: {
     setexcludeSecteursCovid(state, val: boolean) { state.excludeSecteursCovid = val },
@@ -52,6 +53,7 @@ const localStore = new Vuex.Store({
     setTypeSuivi(state, value) { state.typeSuivi = value },
     setStatutSuivi(state, value) { state.statutSuivi = value },
     setZoneSuivi(state, value) { state.zoneSuivi = value },
+    setLabelsSuivi(state, value) { state.labelsSuivi = value },
   },
 })
 
@@ -66,6 +68,7 @@ const sessionStore = new Vuex.Store({
     batches: [] as any[],
     departements: [] as any[],
     region: [] as any[],
+    wekanConfig: {} as any,
     zone: {},
     height: 0,
     scrollTop: 0,
@@ -91,6 +94,9 @@ const sessionStore = new Vuex.Store({
       state.naf = reference.naf
       state.region = reference.regions
       state.departements = reference.departements
+    },
+    updateWekanConfig(state, wekanConfig) {
+      state.wekanConfig = wekanConfig
     },
     setHeight(state, height) {
       state.height = height
@@ -127,6 +133,9 @@ const sessionStore = new Vuex.Store({
       const getNaf = axiosClient.get('/reference/naf')
       const getRegions = axiosClient.get('/reference/regions')
       const getDepartements = axiosClient.get('/reference/departements')
+      axiosClient.get('/wekan/config').then(response => {
+        context.commit('updateWekanConfig', response.data)
+      })
       axios.all([getListes, getNaf, getRegions, getDepartements]).then(axios.spread((...responses) => {
         const reference = {
           listes: responses[0].data,
@@ -136,6 +145,7 @@ const sessionStore = new Vuex.Store({
         }
         context.commit('updateReference', reference)
       }))
+
     },
     setLeftDrawer(context, val) {
       context.commit('leftDrawer', val)
