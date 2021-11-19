@@ -355,7 +355,7 @@ export default {
           })
           return m
         }, {})
-        return Object.keys(labels)
+        return Object.keys(labels).sort()
       }
       return [] 
     },
