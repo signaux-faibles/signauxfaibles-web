@@ -135,7 +135,7 @@ const sessionStore = new Vuex.Store({
       const getDepartements = axiosClient.get('/reference/departements')
       axiosClient.get('/wekan/config').then(response => {
         context.commit('updateWekanConfig', response.data)
-      })
+      }).catch();
       axios.all([getListes, getNaf, getRegions, getDepartements]).then(axios.spread((...responses) => {
         const reference = {
           listes: responses[0].data,
