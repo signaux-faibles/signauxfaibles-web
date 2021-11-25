@@ -53,7 +53,7 @@
                 <li v-for="c in selectConcerning(dernierScore)" :key="c[1]"><em>{{ libelleMicro(c[1]) }}</em> ({{ libelleMacro(c[0]) }})</li>
               </ul>
             </div>
-            <div v-if="dernierScore.hasOwnProperty('alertPreRedressements') && (dernierScore.redressements || []).includes('detteUrssaf')">Ce risque a été réévalué à la hausse car l’établissement présente une augmentation significative de la dette Urssaf entre juillet 2020 et janvier 2021.</div>
+            <div v-if="dernierScore.hasOwnProperty('alertPreRedressements') && dernierScore.alertPreRedressements != summary.alert && (dernierScore.redressements || []).includes('detteUrssaf')">Ce risque a été réévalué à la hausse car l’établissement présente une augmentation significative de la dette Urssaf entre juillet 2020 et janvier 2021.</div>
           </div>
           <div v-else>
             <div v-if="roles.includes('score')">Veuillez suivre cet établissement pour consulter ses données de détection.</div>
