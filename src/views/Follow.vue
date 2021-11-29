@@ -317,7 +317,7 @@ export default {
     labels: {
       get() { return this.$localStore.state.labelsSuivi },
       set(value) { this.$localStore.commit('setLabelsSuivi', value) },
-    },    
+    },
     subzones() {
       let all = [
         {
@@ -345,11 +345,11 @@ export default {
       return this.roles.includes('wekan')
     },
     labelsItems() {
-        if (this.wekanUser) {
-        let boards = this.$store.state.wekanConfig.boards
-        let labels = Object.keys(boards).reduce((m, b) => {
-          boards[b].labels.forEach(l => {
-            if (l.name != "") {
+      if (this.wekanUser) {
+        const boards = this.$store.state.wekanConfig.boards
+        const labels = Object.keys(boards).reduce((m, b) => {
+          boards[b].labels.forEach((l) => {
+            if (l.name !== '') {
               m[l.name] = true
             }
           })
@@ -357,7 +357,7 @@ export default {
         }, {})
         return Object.keys(labels).sort()
       }
-      return [] 
+      return []
     },
   },
   filters: {
