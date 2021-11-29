@@ -144,9 +144,9 @@ const sessionStore = new Vuex.Store({
       }))
     },
     updateWekanConfig(context) {
-      axiosClient.get('/wekan/config').then(response => {
+      axiosClient.get('/wekan/config').then((response) => {
         context.commit('updateWekanConfig', response.data)
-      });
+      })
     },
     setLeftDrawer(context, val) {
       context.commit('leftDrawer', val)
