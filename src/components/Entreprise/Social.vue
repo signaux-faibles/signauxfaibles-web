@@ -338,7 +338,10 @@ export default {
   computed: {
     effectifEntreprise() {
       return this.etablissementsSummary.reduce((effectifEntreprise, e) => {
-        return effectifEntreprise + e.dernier_effectif
+        if (e.etatAdministratif === 'A') {
+          effectifEntreprise += e.dernier_effectif || 0
+        }
+        return effectifEntreprise
       }, 0) || 'n/c'
     },
     activitePartielleEntreprise() {
