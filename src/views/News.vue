@@ -64,7 +64,7 @@ export default {
             'Exclusion des établissements fermés dans le calcul des établissements actifs',
             'Ajout du champ procédure collective dans l\'export excel des listes de détection',
             'Ajout du champ date de cloture du bilan comptable dans l\'export excel des listes des détection',
-            'Ajout de la date de l\'effectif dans l\'export excel des listes de détection',
+            'Ajout du champ tête de groupe dans l\'export excel des listes de détection',
             'Transformation du libellé d\'alerte de l\'export excel des listes de détection',
             'Exclusion des établissements fermés dans le total effectif de l\'export excel des listes de détection',
           ],
