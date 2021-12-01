@@ -21,7 +21,7 @@
             <v-flex shrink>
               <v-layout row align-center class="resume">
                 <v-flex text-xs-left class="valeur" style="line-height: 1.2em">
-                  {{ etablissementsSummary.length | pluralizeEtablissement }} en activité
+                  {{ etablissementActif() | pluralizeEtablissement }} en activité
                 </v-flex>
                 <v-flex text-xs-right shrink ml-3>
                   EFFECTIF
@@ -270,6 +270,9 @@ export default {
     },
   },
   methods: {
+    etablissementActif() {
+      return this.etablissementsSummary.filter((e) => {return e.etatAdministratif === 'A'}).length
+    },
     refreshMap() {
       this.map.resize()
       if (this.etablissements.length > 1) {

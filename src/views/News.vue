@@ -59,6 +59,19 @@ export default {
       news: [
         // TODO: externalize
         {
+          date: new Date('2021-12-01'), news: [
+            'Exclusion des établissements fermés dans le calcul des effectifs entreprise',
+            'Exclusion des établissements fermés dans le calcul des établissements actifs',
+            'Ajout du champ procédure collective dans l\'export excel des listes de détection',
+            'Transformation du libellé d\'alerte de l\'export excel des listes de détection',
+            'Exclusion des établissements fermés dans le total effectif de l\'export excel des listes de détection',
+          ],
+        },
+        { date: new Date('2121-11-15'), news: [
+            'Ajout de champs financiers dans l\'export excel des listes de détection',
+          ]
+        },
+        {
           date: new Date('2021-10-15'), news: [
             'Filtrage des listes de détection par chiffre d\'affaires',
             'Filtrage par effectif de l\'entreprise et révision de l\'affichage des informations sociales',
