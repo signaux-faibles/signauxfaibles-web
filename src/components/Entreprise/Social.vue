@@ -271,7 +271,7 @@ export default {
   },
   methods: {
     etablissementActif() {
-      return this.etablissementsSummary.filter((e) => {return e.etatAdministratif === 'A'}).length
+      return this.etablissementsSummary.filter((e) => e.etatAdministratif === 'A').length
     },
     refreshMap() {
       this.map.resize()

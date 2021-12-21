@@ -75,7 +75,7 @@ export default {
         },
         { date: new Date('2021-11-15'), news: [
             'Ajout de champs financiers dans l\'export excel des listes de détection',
-          ]
+          ],
         },
         {
           date: new Date('2021-10-15'), news: [
