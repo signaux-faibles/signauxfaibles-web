@@ -61,6 +61,7 @@ export default {
         {
           date: new Date('2021-12-21'), news: [
             'Le champ effectif des exports de listes Excel passe au format numérique pour faciliter le tri',
+            'Gestion plus économique du chargement du résultat des recherches',
           ],
           date: new Date('2021-12-01'), news: [
             'Exclusion des établissements fermés dans le calcul des effectifs entreprise',
