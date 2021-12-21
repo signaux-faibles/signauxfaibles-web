@@ -59,6 +59,9 @@ export default {
       news: [
         // TODO: externalize
         {
+          date: new Date('2021-12-21'), news: [
+            'Le champ effectif des exports de listes Excel passe au format numérique pour faciliter le tri',
+          ],
           date: new Date('2021-12-01'), news: [
             'Exclusion des établissements fermés dans le calcul des effectifs entreprise',
             'Exclusion des établissements fermés dans le calcul des établissements actifs',
@@ -69,7 +72,7 @@ export default {
             'Exclusion des établissements fermés dans le total effectif de l\'export excel des listes de détection',
           ],
         },
-        { date: new Date('2121-11-15'), news: [
+        { date: new Date('2021-11-15'), news: [
             'Ajout de champs financiers dans l\'export excel des listes de détection',
           ]
         },
