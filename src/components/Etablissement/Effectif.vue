@@ -91,23 +91,27 @@ export default {
       if (this.effectif.length > 0
         || this.apdemandeSeries.conso.length > 0
         || this.apdemandeSeries.demande.length > 0) {
-        return [{
-          name: 'effectifs',
-          data: (this.effectif || []).map((e) => {
-            return [
-              new Date(e.periode),
-              e.effectif,
-            ]
-          }),
-        }, {
-          name: 'consommation activité partielle',
-          data: this.apdemandeSeries.conso,
-          type: 'area',
-        }, {
-          name: 'autorisation activité partielle',
-          data: this.apdemandeSeries.demande,
-          type: 'area',
-        }]
+        return [
+          {
+            name: 'autorisation activité partielle',
+            data: this.apdemandeSeries.demande,
+            type: 'area',
+          }, 
+            {
+              name: 'consommation activité partielle',
+            data: this.apdemandeSeries.conso,
+            type: 'area',
+            }, 
+          {
+            name: 'effectifs',
+            data: (this.effectif || []).map((e) => {
+              return [
+                new Date(e.periode),
+                e.effectif,
+              ]
+            }),
+          }, 
+        ]
       } else {
         return []
       }
@@ -118,7 +122,7 @@ export default {
           show: true,
           showForSingleSeries: true,
           showForNullSeries: false,
-          showForZeroSeries: false,
+          showForZeroSeries: true,
         },
         tooltip: {
           enabled: true,
@@ -138,11 +142,11 @@ export default {
         },
         theme: {
           mode: 'light',
-          palette: 'palette7',
+          palette: 'palette6',
         },
         chart: {
           toolbar: {
-            show: false,
+            show: true,
           },
           zoom: {
             enabled: false,
@@ -160,14 +164,15 @@ export default {
             },
           },
         },
-        colors: ['#4f8a83', '#e76278', '#fac699'],
+        colors: [ '#fac699', '#4f8a83', '#e76278'],
         fill: {
-          type: [ 'solid', 'solid', 'solid'],
-          colors: ['#4f8a83', '#e76278', '#fac699'],
+          type: ['solid', 'solid', 'solid'],
+          colors: [ '#fac699', '#e76278', '#4f8a83' ],
+          opacity: [1, 1, 1],
         },
         stroke: {
-          curve: ['smooth', 'stepline', 'stepline'],
-          width: [5, 0, 0],
+          curve: ['stepline', 'stepline', 'smooth'],
+          width: [0, 0, 5],
         },
         noData: {
           text: 'Il n\'y a pas de données associées',
