@@ -1,6 +1,6 @@
 {
   "name": "signauxfaibles-web",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -31,14 +31,14 @@
     "vue-apexcharts": "^1.5.0",
     "vue-class-component": "^7.0.2",
     "vue-mapbox": "^0.4.1",
+    "vue-matomo": "^3.14.0-0",
     "vue-native-websocket": "^2.0.13",
     "vue-property-decorator": "^8.1.0",
     "vue-router": "^3.0.3",
     "vuetify": "^1.5.24",
     "vuex": "^3.0.1",
     "vuex-persistedstate": "^2.5.4",
-    "webpack": "^4.30.0",
-    "vue-matomo": "^3.14.0-0"
+    "webpack": "^4.30.0"
   },
   "devDependencies": {
     "@types/jest": "^23.1.4",
