@@ -238,6 +238,17 @@ export default {
     searchURL() {
       return `/etablissement/search`
     },
+    scrollTop() {
+      return this.$store.state.scrollTop
+    },
+    height: {
+      get() {
+        return this.$store.state.height
+      },
+      set(height) {
+        this.$store.dispatch('setHeight', height)
+      },
+    },
     params() {
       const p = {
         search: this.search,
