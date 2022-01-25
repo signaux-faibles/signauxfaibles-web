@@ -464,16 +464,6 @@ export default {
     effectifSeries() {
       if (Object.keys(this.historiqueEffectif).length > 0 || Object.keys(this.historiqueActivitePartielle).length > 0) {
         return [{
-          name: 'effectifs',
-          data: Object.keys(this.historiqueEffectif).sort((d1, d2) => {
-            return (d2 > d1 ? -1 : 1)
-          }).map((p) => {
-            return [
-              new Date(p),
-              this.historiqueEffectif[p],
-            ]
-          }),
-        }, {
           name: 'consommation activité partielle',
           data: Object.keys(this.historiqueActivitePartielle).sort((d1, d2) => {
             return (d2 > d1 ? -1 : 1)
@@ -484,7 +474,17 @@ export default {
             ]
           }),
           type: 'area',
-        }]
+        }, {
+          name: 'effectifs',
+          data: Object.keys(this.historiqueEffectif).sort((d1, d2) => {
+            return (d2 > d1 ? -1 : 1)
+          }).map((p) => {
+            return [
+              new Date(p),
+              this.historiqueEffectif[p],
+            ]
+          }),
+        }, ]
       } else {
         return []
       }
@@ -537,14 +537,14 @@ export default {
             },
           },
         },
-        colors: ['#4f8a83', '#e76278', '#fac699'],
+        colors: ['#e76278', '#4f8a83'],
         fill: {
-          type: ['solid', 'solid', 'solid'],
-          colors: ['#4f8a83', '#e76278', '#fac699'],
+          type: ['solid', 'solid'],
+          colors: ['#e76278', '#4f8a83'],
         },
         stroke: {
-          curve: ['smooth', 'stepline', 'stepline'],
-          width: [5, 0, 0],
+          curve: ['stepline', 'smooth'],
+          width: [0, 5],
         },
         noData: {
           text: 'Il n\'y a pas de données associées',
