@@ -25,7 +25,7 @@
               v-on="$listeners"
             />
           </div>
-          <div v-if="etablissementsDepartement.length > 0">
+          <div v-if="etablissementsDepartement.length > 0">
             <div class="pb-1 pt-2 pl-3 subheading">
               Établissements secondaires du département {{ this.codeDepartement }} ({{this.etablissementsDepartement.length | pluralizeEtablissement}})
             </div>
