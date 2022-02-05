@@ -172,12 +172,12 @@
 import PredictionWidget from '@/components/PredictionWidget.vue'
 import Map from '@/components/Etablissement/Map.vue'
 import Help from '@/components/Help.vue'
-import axios from 'axios'
+import Popup from '@/components/Popup.vue'
 
 export default {
   name: 'EntrepriseSocial',
   props: ['siren', 'etablissementsSummary', 'etablissements'],
-  components: { Help, Map, PredictionWidget },
+  components: { Help, Popup, Map, PredictionWidget },
   data() {
     return {
       sort: 'effectif',
@@ -484,7 +484,7 @@ export default {
               this.historiqueEffectif[p],
             ]
           }),
-        }, ]
+        }]
       } else {
         return []
       }

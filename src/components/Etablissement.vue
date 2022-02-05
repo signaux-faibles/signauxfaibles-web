@@ -26,7 +26,7 @@
               <v-flex>
                 <v-layout wrap>
                   <v-flex>
-                    <Historique v-if="summary" :historique="historique" :summary="summary" />
+                    <Historique v-if="summary" :historique="historique || []" :summary="summary" />
                   </v-flex>
                 </v-layout>
                 <v-layout wrap>
@@ -130,12 +130,13 @@
                       </div>
                     </v-flex>
                 </v-layout>
-                <div v-if="followCard" class="followCard">
+                <Follow :cards="followCards" />
+                <!-- <div v-if="followCard" class="followCard">
                   <h2>Suivi de l'établissement</h2>
                   <h3 class="mt-2">Statut du suivi <v-chip small class="chip ml-3">{{ this.followCard.status }}</v-chip></h3>
                   <div class="description my-3" v-html="followCard.description"></div>
                   <v-btn dark color="indigo" :href="followCard.url" target="_blank" rel="noopener" @click="trackMatomoEvent('etablissement', 'voir_carte_suivi', siret)">Voir Carte Suivi</v-btn>
-                </div>
+                </div> -->
               </v-flex>
             </v-layout>
           </v-flex>
@@ -319,13 +320,14 @@ import fr from 'apexcharts/dist/locales/fr.json'
 import MarkdownIt from 'markdown-it'
 import followCardConfig from '@/assets/follow_card_config.json'
 import libellesProcols from '@/assets/libelles_procols.json'
+import Follow from '@/components/Etablissement/Follow.vue'
 
 
 export default {
   props: ['siret', 'batch'],
   name: 'Etablissement',
   components: { Effectif, Urssaf, Help, Finance, Identite, Map,
-    Commentaire, EtablissementEntreprise, Entreprise, Historique },
+    Commentaire, EtablissementEntreprise, Entreprise, Historique, Follow },
   data() {
     return {
       axios: axios.create(),
@@ -351,7 +353,7 @@ export default {
       actions: [],
       cardCreationAlert: false,
       cardCreationAlertError: '',
-      followCard: null,
+      followCards: null,
       wekanUser: false,
       effectifClass: [10, 20, 50, 100],
       creatingCard: false,
@@ -452,22 +454,23 @@ export default {
         this.followAlert = true
       }
     },
-    joinCard() {
-      this.$axios.get(`/wekan/join/${this.followCard.cardId}`).then((response) => {
-        this.closeJoinCardDialog()
-      })
-    },
+    // joinCard() {
+    //   this.$axios.get(`/wekan/join/${this.followCard.cardId}`).then((response) => {
+    //     this.closeJoinCardDialog()
+    //   })
+    // },
     getFollowCard() {
       this.$axios.get(`/wekan/cards/${this.siret}`).then((response) => {
         const card = response.data
         const md = new MarkdownIt()
-        this.followCard = {
-          cardId: card.cardId,
-          status: this.statusItems[card.listIndex],
-          description: md.render(card.cardDescription),
-          url: card.cardURL,
-        }
-        this.wekanUser = true
+        this.followCards = card.map(c => {
+          if (c.cardDescription) {
+            c.cardDescription = md.render(c.cardDescription)
+          }
+          return c
+        })
+        // console.log(this.followCards)
+        // this.wekanUser = true
       }).catch((error) => {
         if (error.response.status === 404) {
           this.wekanUser = true

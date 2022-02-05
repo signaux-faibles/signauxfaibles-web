@@ -229,7 +229,7 @@ export default {
       return this.summary.hasOwnProperty('permScore') ? this.summary.permScore : true
     },
     dernierScore() {
-      return this.historique[0]
+      return this.historique[0] || {}
     },
     batches() {
       const batches = this.$store.getters.batches
