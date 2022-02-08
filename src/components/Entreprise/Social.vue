@@ -172,12 +172,11 @@
 import PredictionWidget from '@/components/PredictionWidget.vue'
 import Map from '@/components/Etablissement/Map.vue'
 import Help from '@/components/Help.vue'
-import Popup from '@/components/Popup.vue'
 
 export default {
   name: 'EntrepriseSocial',
   props: ['siren', 'etablissementsSummary', 'etablissements'],
-  components: { Help, Popup, Map, PredictionWidget },
+  components: { Help, Map, PredictionWidget },
   data() {
     return {
       sort: 'effectif',
