@@ -69,8 +69,10 @@
           </v-btn>
         </v-list-tile-action>
       </v-list-tile>
-      <v-list-tile v-if="boards.filter(c => !c.card && c.isMember).length > 0">
-        <v-list-tile-action style="text-align:left">
+      <v-list-tile v-if="boards.filter(c => !c.card && c.isMember).length > 0" :style="{
+          'align-items':'left'
+        }">
+        <v-list-tile-action>
           <span v-if="boards.filter(b=>b.card).length==0">
             Cet établissement ne fait l'objet d'aucune carte de suivi.
           </span><br/>
