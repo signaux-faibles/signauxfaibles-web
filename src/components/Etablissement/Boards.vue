@@ -72,7 +72,7 @@
       <v-list-tile v-if="boards.filter(c => !c.card && c.isMember).length > 0" :style="{
           'align-items':'left'
         }">
-        <v-list-tile-action>
+        <v-list-tile-content>
           <span v-if="boards.filter(b=>b.card).length==0">
             Cet établissement ne fait l'objet d'aucune carte de suivi.
           </span><br/>
@@ -83,7 +83,7 @@
           <span v-if="!followed">
             Pour créer une carte de suivi, veuillez suivre cet établissement.
           </span> 
-        </v-list-tile-action>
+        </v-list-tile-content>
       </v-list-tile>
     </v-list>
   </div>
