@@ -70,13 +70,13 @@
         </v-list-tile-action>
       </v-list-tile>
       <v-list-tile v-if="boards.filter(c => !c.card && c.isMember).length > 0">
-        <v-list-tile-action>
+        <v-list-tile-action style="text-align:left">
           <span v-if="boards.filter(b=>b.card).length==0">
-              Cet établissement ne fait l'objet d'aucune carte de suivi.
+            Cet établissement ne fait l'objet d'aucune carte de suivi.
           </span><br/>
           <v-btn v-if="followed" outline color="indigo" class="pa-2" @click="showBoardDialog()">
             <v-icon>edit</v-icon>
-            créer une carte sur un autre tableau<br/>
+            créer une carte de suivi<br/>
           </v-btn>
           <span v-if="!followed">
             Pour créer une carte de suivi, veuillez suivre cet établissement.
