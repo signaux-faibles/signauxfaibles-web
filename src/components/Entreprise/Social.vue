@@ -172,7 +172,6 @@
 import PredictionWidget from '@/components/PredictionWidget.vue'
 import Map from '@/components/Etablissement/Map.vue'
 import Help from '@/components/Help.vue'
-import axios from 'axios'
 
 export default {
   name: 'EntrepriseSocial',
@@ -484,7 +483,7 @@ export default {
               this.historiqueEffectif[p],
             ]
           }),
-        }, ]
+        }]
       } else {
         return []
       }

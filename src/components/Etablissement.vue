@@ -26,20 +26,20 @@
               <v-flex>
                 <v-layout wrap>
                   <v-flex>
-                    <Historique v-if="summary" :historique="historique" :summary="summary" />
+                    <Historique v-if="summary" :historique="historique || []" :summary="summary" />
                   </v-flex>
                 </v-layout>
                 <v-layout wrap>
                     <v-flex xl6 lg12>
                       <h2>
                         Procédure collective
-                          <Help titre="Procédure collective">
-                            <template>
-                              <p>La dernière procédure collective (ou plan issu d'une procédure collective) connue de l'Urssaf est ici mise en avant.<br />
-                              Vous avez également la possibilité de consulter l’historique des principaux jugements groupés par type de procédure collective : sauvegarde, redressement, liquidation judiciaire.<br />
-                              Pour plus de détails encore, vous serez redirigés vers les annonces publiées au bulletin officiel (BODACC) pour cette entreprise.</p>
-                              <p>Veuillez noter que les plans de cession lors d'un redressement judiciaire ne sont pas indiqués.</p>
-                            </template>
+                        <Help titre="Procédure collective">
+                          <template>
+                            <p>La dernière procédure collective (ou plan issu d'une procédure collective) connue de l'Urssaf est ici mise en avant.<br />
+                            Vous avez également la possibilité de consulter l’historique des principaux jugements groupés par type de procédure collective : sauvegarde, redressement, liquidation judiciaire.<br />
+                            Pour plus de détails encore, vous serez redirigés vers les annonces publiées au bulletin officiel (BODACC) pour cette entreprise.</p>
+                            <p>Veuillez noter que les plans de cession lors d'un redressement judiciaire ne sont pas indiqués.</p>
+                          </template>
                         </Help>
                       </h2>
                       <div v-if="summary && summary.etat_procol !== 'in_bonis'">
@@ -130,19 +130,14 @@
                       </div>
                     </v-flex>
                 </v-layout>
-                <div v-if="followCard" class="followCard">
-                  <h2>Suivi de l'établissement</h2>
-                  <h3 class="mt-2">Statut du suivi <v-chip small class="chip ml-3">{{ this.followCard.status }}</v-chip></h3>
-                  <div class="description my-3" v-html="followCard.description"></div>
-                  <v-btn dark color="indigo" :href="followCard.url" target="_blank" rel="noopener" @click="trackMatomoEvent('etablissement', 'voir_carte_suivi', siret)">Voir Carte Suivi</v-btn>
-                </div>
+                <Boards v-if="wekanUser" :boards="boards"/>
               </v-flex>
             </v-layout>
           </v-flex>
           <v-flex xs12 md12 class="text-xs-right pa-3">
             <Commentaire :siret="siret" />
           </v-flex>
-          <v-flex md6 xs12 class="pr-1" style="min-height: 200px">
+          <v-flex md6 xs12 class="pr-1" style="min-height: 200px">    
             <Effectif :effectif="effectif" :apconso="apconso" :apdemande="apdemande" :permDGEFP="perms.permDGEFP" />
           </v-flex>
           <v-flex md6 xs12 class="pr-1">
@@ -154,132 +149,11 @@
           <v-flex xs12 class="pr-1 pt-3">
             <EtablissementEntreprise :siret="siret" :siege="etablissement.siege" :codeDepartement="sirene.codeDepartement" :etablissementsSummary="etablissementsSummary" v-on="$listeners" />
           </v-flex>
-          <v-dialog v-model="followDialog" @input="closeFollowDialog()" max-width="500px">
-            <v-card>
-              <v-card-title>
-                <div>
-                  <div class="headline">Suivre {{ denomination }} {{ commune }} ?</div>
-                  <span class="grey--text">(siret {{ siret }})</span>
-                </div>
-              </v-card-title>
-              <v-card-text>
-                Pour quel motif souhaitez-vous suivre cet établissement ?
-                <v-radio-group v-model="followCategory" :mandatory="true">
-                  <v-radio key="detection" value="detection"><template slot="label"><span class="text-pre-wrap">L'établissement fait partie d'une <strong>liste de détection</strong></span></template></v-radio>
-                  <v-radio key="source_externe" value="source_externe"><template slot="label"><span class="text-pre-wrap">J'ai eu connaissance de difficultés par l'<strong>ecosystème local</strong> ou <strong>la presse</strong></span></template></v-radio>
-                  <v-radio key="source_interne" value="source_interne"><template slot="label"><span class="text-pre-wrap">J'ai été contacté par l'<strong>entreprise</strong> ou un <strong>partenaire direct</strong>  (expert comptable, client, fournisseur, etc.)</span></template></v-radio>
-                  <v-radio key="autre" value="autre"><template slot="label"><span class="text-pre-wrap">Je souhaite suivre cet établissement pour un <strong>autre motif</strong></span></template></v-radio>
-                </v-radio-group>
-                <v-textarea v-show="followCategory === 'autre'" v-model="followComment" solo placeholder="Résumez en une phrase vos motivations"></v-textarea>
-              </v-card-text>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn flat @click="closeFollowDialog()">Annuler</v-btn>
-                <v-btn dark color="indigo" @click="followEtablissement()"><v-icon left class="mr-2">mdi-star-outline</v-icon>Suivre</v-btn>
-              </v-card-actions>
-              <v-alert :value="followAlert" type="error" transition="scale-transition">{{ followAlertError }}</v-alert>
-            </v-card>
-          </v-dialog>
-          <v-dialog v-model="cardCreationDialog" persistent @input="closeCardCreationDialog()" max-width="600px">
-            <v-card>
-              <v-card-title>
-                <div>
-                  <div class="headline">Créer une carte de suivi ?</div>
-                  <span class="grey--text">(siret {{ siret }})</span>
-                </div>
-              </v-card-title>
-              <v-card-text>
-                Pour le moment, aucune carte de suivi n’est rattachée à cet établissement.<br>Répondez aux questions suivantes afin d’en créer une.<br><br>
-                Quelles sont les difficultés diagnostiquées pour cet établissement ?
-                <Help titre="Difficultés diagnostiquées" :big="true">
-                  <div v-html="followCardConfig.problemHelpContent" />
-                </Help>
-                <v-select
-                  ref="problems"
-                  v-model="problems"
-                  :items="followCardConfig.problemItems"
-                  :menu-props="{ maxHeight: 400 }"
-                  multiple
-                  chips
-                  :disabled="creatingCard"
-                >
-                  <template v-slot:append-item>
-                    <div class="text-xs-center my-2">
-                      <v-btn @click="$refs.problems.isMenuActive = false" color="primary">OK</v-btn>
-                    </div>
-                  </template>
-                </v-select>
-                Quelles actions ont déjà été menées ou sont envisagées ?
-                <Help titre="Actions menées ou envisagées" :big="true">
-                  <div v-html="followCardConfig.actionHelpContent" />
-                </Help>
-                <v-select
-                  ref="actions"
-                  v-model="actions"
-                  :items="followCardConfig.actionItems"
-                  :menu-props="{ maxHeight: 400 }"
-                  multiple
-                  chips
-                  :disabled="creatingCard"
-                >
-                  <template v-slot:append-item>
-                    <div class="text-xs-center my-2">
-                      <v-btn @click="$refs.actions.isMenuActive = false" color="primary">OK</v-btn>
-                    </div>
-                  </template>
-                </v-select>
-              </v-card-text>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn flat @click="closeCardCreationDialog()" :disabled="creatingCard">Passer</v-btn>
-                <v-btn dark color="indigo" @click="createNewFollowCard()" :disabled="creatingCard"><v-icon left class="mr-2">mdi-star-outline</v-icon>Créer carte</v-btn>
-              </v-card-actions>
-              <v-alert :value="cardCreationAlert" type="error" transition="scale-transition">{{ cardCreationAlertError }}</v-alert>
-            </v-card>
-          </v-dialog>
-          <v-dialog v-model="joinCardDialog" persistent @input="closeJoinCardDialog()" max-width="600px">
-            <v-card>
-              <v-card-title>
-                <div>
-                  <div class="headline">Participer à la carte de suivi existante ?</div>
-                  <span class="grey--text">(siret {{ siret }})</span>
-                </div>
-              </v-card-title>
-              <v-card-text>
-                Une carte de suivi est déjà rattachée à cet établissement.
-              </v-card-text>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn flat @click="closeJoinCardDialog()" :disabled="joiningCard">Passer</v-btn>
-                <v-btn dark color="indigo" @click="joinCard()" :disabled="joiningCard"><v-icon left class="mr-2">mdi-star-outline</v-icon>Rejoindre</v-btn>
-              </v-card-actions>
-              <v-alert :value="joinCardAlert" type="error" transition="scale-transition">{{ joinCardAlertError }}</v-alert>
-            </v-card>
-          </v-dialog>
-          <v-dialog v-model="unfollowDialog" @input="closeUnfollowDialog()" max-width="500px">
-            <v-card>
-              <v-card-title>
-                <div>
-                  <div class="headline">Ne plus suivre {{ denomination }} {{ commune }} ?</div>
-                  <span class="grey--text">(siret {{ siret }})</span>
-                </div>
-              </v-card-title>
-              <v-card-text>
-                Des actions ont-elles été menées auprès de cet établissement ?
-                <v-radio-group v-model="unfollowCategory" :mandatory="true">
-                  <v-radio key="actions" value="actions"><template slot="label"><span class="text-pre-wrap"><strong>OUI</strong>, une ou plusieurs actions</span></template></v-radio>
-                  <v-radio key="aucune-action" value="aucune_action"><template slot="label"><span class="text-pre-wrap"><strong>NON</strong>, aucune</span></template></v-radio>
-                </v-radio-group>
-                <v-textarea v-show="unfollowCategory" v-model="unfollowComment" solo :placeholder="unfollowCommentPlaceholder"></v-textarea>
-              </v-card-text>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn flat @click="closeUnfollowDialog()">Annuler</v-btn>
-                <v-btn dark color="indigo" @click="unfollowEtablissement()">Ne plus suivre</v-btn>
-              </v-card-actions>
-              <v-alert :value="followAlert" type="error" transition="scale-transition">{{ followAlertError }}</v-alert>
-            </v-card>
-          </v-dialog>
+          <FollowDialog lazy/>
+          <UnfollowDialog lazy/>
+          <BoardDialog v-if="wekanUser" lazy/>
+
+
           <v-dialog lazy fullscreen v-model="entrepriseDialog">
             <div style="height: 100%; width: 100%; font-weight: 800; font-family: 'Oswald', sans;">
               <v-toolbar
@@ -306,7 +180,6 @@
 <script>
 import Effectif from '@/components/Etablissement/Effectif.vue'
 import Urssaf from '@/components/Etablissement/Urssaf.vue'
-import Help from '@/components/Help.vue'
 import Identite from '@/components/Etablissement/Identite.vue'
 import Map from '@/components/Etablissement/Map.vue'
 import Finance from '@/components/Etablissement/Finance.vue'
@@ -317,15 +190,19 @@ import Historique from '@/components/Etablissement/Historique.vue'
 import axios from 'axios'
 import fr from 'apexcharts/dist/locales/fr.json'
 import MarkdownIt from 'markdown-it'
-import followCardConfig from '@/assets/follow_card_config.json'
 import libellesProcols from '@/assets/libelles_procols.json'
-
+import Boards from '@/components/Etablissement/Boards.vue'
+import FollowDialog from '@/components/Etablissement/FollowDialog.vue'
+import UnfollowDialog from '@/components/Etablissement/UnfollowDialog.vue'
+import BoardDialog from '@/components/Etablissement/BoardDialog.vue'
+import Help from '@/components/Help.vue'
 
 export default {
   props: ['siret', 'batch'],
   name: 'Etablissement',
   components: { Effectif, Urssaf, Help, Finance, Identite, Map,
-    Commentaire, EtablissementEntreprise, Entreprise, Historique },
+    Commentaire, EtablissementEntreprise, Entreprise, Historique,
+    Boards, FollowDialog, UnfollowDialog, BoardDialog },
   data() {
     return {
       axios: axios.create(),
@@ -334,25 +211,11 @@ export default {
       historique: [],
       adresse: '',
       followed: null,
-      followDialog: false,
-      followCategory: '',
-      followComment: '',
-      followAlert: false,
-      followAlertError: '',
       unfollowDialog: false,
-      unfollowCategory: '',
-      unfollowComment: '',
-      unfollowCommentPlaceholder: '',
       entrepriseDialog: false,
-      cardCreationDialog: false,
-      statusItems: ['À définir', 'Veille', 'Suivi en cours', 'Suivi terminé'],
-      followCardConfig,
-      problems: [],
-      actions: [],
-      cardCreationAlert: false,
-      cardCreationAlertError: '',
-      followCard: null,
-      wekanUser: false,
+      followDialog: false,
+      boardDialog: false,
+      boards: [],
       effectifClass: [10, 20, 50, 100],
       creatingCard: false,
       jugementsPanel: 0,
@@ -368,6 +231,8 @@ export default {
       joiningCard: false,
       joinCardAlert: false,
       joinCardAlertError: '',
+      followSwimlane: '',
+      currentBoard: '',
     }
   },
   methods: {
@@ -383,138 +248,24 @@ export default {
         this.sirene = {}
       })
     },
-    isFollowValid() {
-      return this.followCategory === 'detection'
-        || this.followCategory === 'source_externe'
-        || this.followCategory === 'source_interne'
-        || (this.followCategory === 'autre' && this.followComment.trim().length > 0)
-    },
-    followEtablissement() {
-      this.trackMatomoEvent('etablissement', 'suivre', this.siret)
-      if (this.isFollowValid()) {
-        const params = {}
-        params.category = this.followCategory
-        params.comment = this.followComment
-        this.$axios.post(`/follow/${this.siret}`, params).then((response) => {
-          if (response.status === 201 || response.status === 204) {
-            this.followed = true
-            this.followCategory = ''
-            this.followComment = ''
-            this.followDialog = false
-            this.followAlertError = ''
-            this.followAlert = false
-            this.getEtablissement()
-            this.$emit('follow-etablissement')
-            if (this.inZone && this.wekanUser) {
-              if (!this.followCard) {
-                this.cardCreationDialog = true
-              } else {
-                this.joinCardDialog = true
-              }
+    getBoards() {
+      if (this.wekanUser) {
+        this.$axios.get(`/wekan/cards/${this.siret}`).then((response) => {
+          const card = response.data
+          const md = new MarkdownIt()
+          this.boards = card.map((c) => {
+            if (c.card && c.card.cardDescription) {
+              c.card.cardDescription = md.render(c.card.cardDescription)
             }
+            return c
+          })
+          if (this.boards.filter(b => !b.card && b.isMember).length>0) {
+            this.currentBoard = this.boards.filter(b => b.id && !b.card)[0].id
           }
-        }).catch((error) => {
-          this.followAlertError = 'Une erreur est survenue lors du suivi'
-          this.followAlert = true
+        }).catch((_) => {
+          this.boards = []
         })
-      } else {
-        this.followAlertError = 'Un motif de suivi doit être indiqué'
-        this.followAlert = true
       }
-    },
-    isUnfollowValid() {
-      return this.unfollowCategory === 'actions'
-        || this.unfollowCategory === 'aucune_action'
-    },
-    unfollowEtablissement() {
-      this.trackMatomoEvent('etablissement', 'ne_plus_suivre', this.siret)
-      if (this.isUnfollowValid()) {
-        const params = {}
-        params.unfollowCategory = this.unfollowCategory
-        params.unfollowComment = this.unfollowComment
-        this.$axios.delete(`/follow/${this.siret}`, { data: params }).then((response) => {
-          if (response.status === 200 ) {
-            this.followed = false
-            this.unfollowCategory = ''
-            this.unfollowComment = ''
-            this.unfollowDialog = false
-            this.followAlertError = ''
-            this.followAlert = false
-            this.getEtablissement()
-            this.$emit('unfollow-etablissement')
-          }
-        }).catch((error) => {
-          this.followAlertError = 'Une erreur est survenue lors du suivi'
-          this.followAlert = true
-        })
-      } else {
-        this.followAlertError = 'Veuillez indiquer si des actions ont été menées'
-        this.followAlert = true
-      }
-    },
-    joinCard() {
-      this.$axios.get(`/wekan/join/${this.followCard.cardId}`).then((response) => {
-        this.closeJoinCardDialog()
-      })
-    },
-    getFollowCard() {
-      this.$axios.get(`/wekan/cards/${this.siret}`).then((response) => {
-        const card = response.data
-        const md = new MarkdownIt()
-        this.followCard = {
-          cardId: card.cardId,
-          status: this.statusItems[card.listIndex],
-          description: md.render(card.cardDescription),
-          url: card.cardURL,
-        }
-        this.wekanUser = true
-      }).catch((error) => {
-        if (error.response.status === 404) {
-          this.wekanUser = true
-        }
-        this.followCard = null
-      })
-    },
-    createNewFollowCard() {
-      this.trackMatomoEvent('etablissement', 'creer_carte_suivi', this.siret)
-      this.creatingCard = true
-      const params = {
-        description: this.formattedDescription,
-      }
-      this.$axios.post(`/wekan/cards/${this.siret}`, params).then((response) => {
-        this.problems = []
-        this.actions = []
-        this.cardCreationDialog = false
-        this.cardCreationAlertError = ''
-        this.cardCreationAlert = false
-        this.getFollowCard()
-      }).catch((error) => {
-        this.cardCreationAlertError = 'Une erreur est survenue lors de la création de la carte de suivi'
-        this.cardCreationAlert = true
-      }).finally(() => {
-        this.creatingCard = false
-      })
-    },
-    closeFollowDialog() {
-      this.followCategory = ''
-      this.followComment = ''
-      this.followDialog = false
-      this.followAlertError = ''
-      this.followAlert = false
-    },
-    closeUnfollowDialog() {
-      this.unfollowCategory = ''
-      this.unfollowComment = ''
-      this.unfollowDialog = false
-      this.followAlertError = ''
-      this.followAlert = false
-    },
-    closeCardCreationDialog() {
-      this.problems = []
-      this.actions = []
-      this.cardCreationDialog = false
-      this.cardCreationAlertError = ''
-      this.cardCreationAlert = false
     },
     closeJoinCardDialog() {
       this.joinCardDialog = false
@@ -605,18 +356,11 @@ export default {
   mounted() {
     this.getEtablissement()
     this.getLienVisiteFCE()
-    this.getFollowCard()
+    this.getBoards()
   },
   watch: {
     localSiret(val) {
       this.getEtablissement()
-    },
-    unfollowCategory(val) {
-      if (this.unfollowCategory === 'actions') {
-        this.unfollowCommentPlaceholder = 'Précisez la nature des actions si nécessaire'
-      } else {
-        this.unfollowCommentPlaceholder = 'Dites-nous pourquoi ; en particulier, s\'il s\'agissait selon vous d\'une erreur de détection'
-      }
     },
     etablissement(val) {
       if (val.procol) {
@@ -629,9 +373,12 @@ export default {
     },
   },
   computed: {
+    wekanUser() {
+      return this.roles.includes('wekan')
+    },
     denomination() {
       const entreprise = (this.etablissement || {}).entreprise || {}
-      return (entreprise.Sirene || {}).raisonSociale
+      return (entreprise.Sirene || {}).raisonSociale || ''
     },
     naf() {
       return ((this.etablissement || {}).sirene || {}).naf || {}
@@ -723,18 +470,6 @@ export default {
     },
     visiteFCE() {
       return this.etablissement.visiteFCE ||  false
-    },
-    formattedDescription() {
-      let formattedDescription = '**Difficultés :**\n'
-      this.problems.forEach((p, i) => {
-        formattedDescription += '- ' + p + '\n'
-      })
-      formattedDescription += '\n'
-      formattedDescription += '**Actions :**\n'
-      this.actions.forEach((a, i) => {
-        formattedDescription += '- ' + a + '\n'
-      })
-      return formattedDescription
     },
     libelleActivite() {
       return this.naf.libelleActivite

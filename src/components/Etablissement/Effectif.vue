@@ -96,12 +96,12 @@ export default {
             name: 'autorisation activité partielle',
             data: this.apdemandeSeries.demande,
             type: 'area',
-          }, 
+          },
             {
               name: 'consommation activité partielle',
             data: this.apdemandeSeries.conso,
             type: 'area',
-            }, 
+            },
           {
             name: 'effectifs',
             data: (this.effectif || []).map((e) => {
@@ -110,7 +110,7 @@ export default {
                 e.effectif,
               ]
             }),
-          }, 
+          },
         ]
       } else {
         return []

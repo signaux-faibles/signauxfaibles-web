@@ -64,7 +64,7 @@
           <span style="font-size: 15px;">Statut du suivi</span>
           <v-select
             :disabled="type == 'no-card'"
-            ref="statut" 
+            ref="statutMenu" 
             v-model="statut"
             :items="statutItems"
             :menu-props="{ maxHeight: 400 }"
@@ -74,7 +74,7 @@
           >
             <template v-slot:append-item>
               <div class="text-xs-center my-2">
-                <v-btn @click="$refs.statut.isMenuActive = false" color="primary">OK</v-btn>
+                <v-btn @click="$refs.statutMenu.isMenuActive = false" color="primary">OK</v-btn>
               </div>
             </template>
           </v-select>
@@ -84,7 +84,7 @@
           <span style="font-size: 15px;">Étiquettes</span>
           <v-select
             :disabled="type == 'no-card'"
-            ref="statut" 
+            ref="labelMenu" 
             v-model="labels"
             :items="labelsItems"
             :menu-props="{ maxHeight: 400 }"
@@ -94,7 +94,7 @@
           >
             <template v-slot:append-item>
               <div class="text-xs-center my-2">
-                <v-btn @click="$refs.statut.isMenuActive = false" color="primary">OK</v-btn>
+                <v-btn @click="$refs.labelMenu.isMenuActive = false" color="primary">OK</v-btn>
               </div>
             </template>
           </v-select>
@@ -181,6 +181,7 @@ export default {
       exportDOCXLoading: false,
       alertExport: false,
       statutItems: ['A définir', 'Veille', 'Suivi en cours', 'Suivi terminé'],
+
     }
   },
   mounted() {
