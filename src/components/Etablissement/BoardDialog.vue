@@ -18,8 +18,8 @@
             :value="board.id"
           ></v-radio>
         </v-radio-group>
-        Quelles difficultés avez vous diagnostiquées à ce stade ?
-        <Help titre="Difficultés diagnostiquées" :big="true">
+        Quelles problématiques avez vous identifiées à ce stade ?
+        <Help titre="Problématiques identifiées" :big="true">
           <div v-html="followCardConfig.problemHelpContent" />
         </Help>
         <v-select
