@@ -32,7 +32,7 @@
           chips
         >
           <template v-slot:append-item>
-            <div class="text-xs-center my-2">
+            <div class="text-center my-2">
               <v-btn @click="$refs.problems.isMenuActive = false" color="primary">OK</v-btn>
             </div>
           </template>
@@ -51,7 +51,7 @@
           :disabled="currentBoard=='' || creatingCard"
         >
           <template v-slot:append-item>
-            <div class="text-xs-center my-2">
+            <div class="text-center my-2">
               <v-btn @click="$refs.actions.isMenuActive = false" color="primary">OK</v-btn>
             </div>    
           </template>
@@ -59,7 +59,7 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn flat @click="closeBoardDialog()" :disabled="creatingCard">Passer la création</v-btn>
+        <v-btn text @click="closeBoardDialog()" :disabled="creatingCard">Passer la création</v-btn>
         <v-btn dark color="indigo" @click="createNewFollowCard()" :disabled="currentBoard == '' || creatingCard"><v-icon left class="mr-2">mdi-star-outline</v-icon>Créer carte</v-btn>
       </v-card-actions>
       <v-alert :value="boardAlert" type="error" transition="scale-transition">{{ boardError }}</v-alert>

@@ -23,7 +23,7 @@
           </v-tooltip>
           <v-tooltip bottom v-if="prediction.etat_procol !== 'in_bonis'">
             <template v-slot:activator="{ on, attrs }">
-            <v-chip v-bind="attrs" v-on="on" class="ma-0 mr-1 chip" outline small text-color="red darken-1">{{ libellesProcols[prediction.etat_procol] }}</v-chip>
+            <v-chip v-bind="attrs" v-on="on" class="ma-0 mr-1 chip" outlined small text-color="red darken-1">{{ libellesProcols[prediction.etat_procol] }}</v-chip>
             </template>
             <span>Cette entreprise fait l’objet d’une procédure collective : {{ libellesProcols[prediction.etat_procol] }}</span>
           </v-tooltip>
@@ -34,9 +34,9 @@
           </div>
         </div>
         <transition name="fade">
-          <div v-show="showRaccourci" style="position: absolute; right: 0">
-            <v-btn dark color="indigo" @click="showEtablissement">Voir Fiche Etablissement</v-btn>
-            <v-btn v-if="prediction.siren" dark color="indigo" @click="showEntreprise">Voir Fiche Entreprise</v-btn>
+          <div  v-show="showRaccourci" style="position: absolute; right: 0">
+            <v-btn class="mx-2" dark color="indigo" @click="showEtablissement">Voir Fiche Etablissement</v-btn>
+            <v-btn class="mx-2" v-if="prediction.siren" dark color="indigo" @click="showEntreprise">Voir Fiche Entreprise</v-btn>
           </div>
         </transition>
         <template v-if="social">
@@ -103,7 +103,7 @@
             <span class="valeur" :class="diane.resultat_expl_color">{{ diane.resultat_expl }}</span>
           </div>
         </template>
-        <v-dialog lazy fullscreen v-model="dialog">
+        <v-dialog fullscreen v-model="dialog">
           <div style="height: 100%; width: 100%; font-weight: 800; font-family: 'Oswald', sans;">
             <v-toolbar
               fixed
@@ -118,7 +118,7 @@
             <Etablissement v-if="dialog" :siret="prediction.siret" :batch="currentBatchKey" v-on="$listeners"></Etablissement>
           </div>
         </v-dialog>
-        <v-dialog lazy fullscreen v-model="entrepriseDialog">
+        <v-dialog fullscreen v-model="entrepriseDialog">
           <div style="height: 100%; width: 100%; font-weight: 800; font-family: 'Oswald', sans;">
             <v-toolbar
               fixed

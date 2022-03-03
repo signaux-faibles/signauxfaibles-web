@@ -1,11 +1,10 @@
 <template>
   <div id="#detection" ref="detection">
-    <v-toolbar
+    <v-app-bar app
       height="35px"
       class="toolbar elevation-12"
       color="#ffffff"
       extension-height="48px"
-      app
     >
       <v-icon
         @click="openLeftDrawer()"
@@ -33,8 +32,8 @@
         v-if="!rightDrawer"
         @click="openRightDrawer()"
       >mdi-target</v-icon>
-    </v-toolbar>
-    <div style="width:100%">
+    </v-app-bar>
+    <div class="mt-6">
       <div
         id="nodata"
         v-if="complete && prediction.length == 0"
@@ -42,6 +41,7 @@
       <v-navigation-drawer
         :class="(rightDrawer?'elevation-6':'') + ' rightDrawer'"
         transition="no-transition"
+        width="330"
         v-model="rightDrawer"
         right
         app
@@ -49,7 +49,7 @@
         <v-toolbar flat class="transparent" height="40">
           <v-icon :class="loading?'rotate':''" @click="closeRightDrawer()">mdi-target</v-icon>
         </v-toolbar>
-        <div class="mt-2" style="width: 100%; padding: 0 15px;">
+        <div class="mt-2" style="padding: 0 15px;">
           <v-select
             :items="batches"
             v-model="currentBatchKey"
@@ -84,7 +84,7 @@
                 color="rgba(0,0,0,0.74)"
                 v-on="on"
                 @click="copyNaf()"
-                outline
+                outlined
                 class="mt-3 mx-3"
               >
                 <v-icon>mdi-filter</v-icon>selection des secteurs
@@ -96,27 +96,27 @@
               </v-toolbar>
               <v-card-text>
                 <v-list>
-                  <v-list-tile>
-                    <v-list-tile-action>
+                  <v-list-item>
+                    <v-list-item-action>
                       <v-icon
                         style="cursor: pointer"
                         @click="selectAllNaf()"
-                      >{{ allNextNaf ? 'mdi-close-box' : someNextNaf ? 'mdi-minus-box' : 'mdi-checkbox-blank-outline' }}</v-icon>
-                    </v-list-tile-action>{{ !allNextNaf ? 'Tout sélectionner' : 'Tout désélectionner' }}
-                    <v-list-tile-content></v-list-tile-content>
-                  </v-list-tile>
+                      >{{ allNextNaf ? 'mdi-close-box' : 'mdi-plus-box' }}</v-icon>
+                    </v-list-item-action>{{ !allNextNaf ? 'Tout sélectionner' : 'Tout désélectionner' }}
+                    <v-list-item-content></v-list-item-content>
+                  </v-list-item>
                   <v-divider />
-                  <v-list-tile v-for="n in naf1" :key="n.value">
-                    <v-list-tile-action @click="toggleNaf(n.value)">
+                  <v-list-item v-for="n in naf1" :key="n.value">
+                    <v-list-item-action @click="toggleNaf(n.value)">
                       <v-icon style="cursor: pointer;">
                         {{ nextNaf.includes(n.value) ?
                         'mdi-checkbox-marked' :
                         'mdi-checkbox-blank-outline'
                         }}
                       </v-icon>
-                    </v-list-tile-action>
-                    <v-list-tile-content>{{ n.text }}</v-list-tile-content>
-                  </v-list-tile>
+                    </v-list-item-action>
+                    <v-list-item-content>{{ n.text }}</v-list-item-content>
+                  </v-list-item>
                 </v-list>
               </v-card-text>
               <v-card-actions style>
@@ -128,15 +128,15 @@
           </v-dialog>
         </div>
         <v-list three-line>
-          <v-list-tile>
-            <v-list-tile-action>
+          <v-list-item>
+            <v-list-item-action>
               <v-checkbox v-model="excludeSecteursCovid" @change="getPrediction()"></v-checkbox>
-            </v-list-tile-action>
-            <v-list-tile-content @click="toggleExcludeSecteursCovid()">
-              <v-list-tile-title>Hors secteurs COVID-19</v-list-tile-title>
-              <v-list-tile-sub-title>Exclure les entreprises appartenants aux secteurs dits COVID-19 </v-list-tile-sub-title>
-            </v-list-tile-content>
-          </v-list-tile>
+            </v-list-item-action>
+            <v-list-item-content @click="toggleExcludeSecteursCovid()">
+              <v-list-item-title>Hors secteurs COVID-19</v-list-item-title>
+              <v-list-item-subtitle>Exclure les entreprises appartenants aux secteurs dits COVID-19 </v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
         </v-list>
         <v-divider class="mb-3" />
         <div style="display: flex; flex-direction: row; vertical-align: middle; padding: 0 15px;">
@@ -195,33 +195,33 @@
         <v-list three-line>
           <v-list-group value="true">
             <v-subheader slot="activator">Filtres avancés</v-subheader>
-            <v-list-tile>
-              <v-list-tile-action>
+            <v-list-item>
+              <v-list-item-action>
                 <v-checkbox v-model="ignorezone" @change="getPrediction()"></v-checkbox>
-              </v-list-tile-action>
-              <v-list-tile-content @click="toggleIgnoreZone()">
-                <v-list-tile-title>Tous les établissements</v-list-tile-title>
-                <v-list-tile-sub-title>Inclure tous les établissements des entreprises de ma zone</v-list-tile-sub-title>
-              </v-list-tile-content>
-            </v-list-tile>
-            <v-list-tile>
-              <v-list-tile-action>
+              </v-list-item-action>
+              <v-list-item-content @click="toggleIgnoreZone()">
+                <v-list-item-title>Tous les établissements</v-list-item-title>
+                <v-list-item-subtitle>Inclure tous les établissements des entreprises de ma zone</v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item>
+              <v-list-item-action>
                 <v-checkbox v-model="inclureEtablissementsFermes" @change="getPrediction()"></v-checkbox>
-              </v-list-tile-action>
-              <v-list-tile-content @click="toggleInclureEtablissementsFermes()">
-                <v-list-tile-title>Établissements fermés</v-list-tile-title>
-                <v-list-tile-sub-title>Inclure les établissements fermés</v-list-tile-sub-title>
-              </v-list-tile-content>
-            </v-list-tile>
-            <v-list-tile>
-              <v-list-tile-action>
+              </v-list-item-action>
+              <v-list-item-content @click="toggleInclureEtablissementsFermes()">
+                <v-list-item-title>Établissements fermés</v-list-item-title>
+                <v-list-item-subtitle>Inclure les établissements fermés</v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item>
+              <v-list-item-action>
                 <v-checkbox v-model="exclureSuivi" @change="getPrediction()"></v-checkbox>
-              </v-list-tile-action>
-              <v-list-tile-content @click="toggleExclureSuivi()">
-                <v-list-tile-title>Établissements non suivis</v-list-tile-title>
-                <v-list-tile-sub-title>Exclure mes établissements suivis</v-list-tile-sub-title>
-              </v-list-tile-content>
-            </v-list-tile>
+              </v-list-item-action>
+              <v-list-item-content @click="toggleExclureSuivi()">
+                <v-list-item-title>Établissements non suivis</v-list-item-title>
+                <v-list-item-subtitle>Exclure mes établissements suivis</v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
           </v-list-group>
         </v-list>
       </v-navigation-drawer>
@@ -230,7 +230,7 @@
       style="height: 80px; text-align: center; vertical-align: top; background-color: #FFF0; position:"
       class="elevation-0 ma-2 pointer"
     >
-      <v-container style="position: relative; top: -10px">
+      <v-container style="position: relative">
         <v-layout row>
           <v-flex xs12 md6>
             <v-text-field v-model="filter" @input="getPrediction" solo label="Filtre rapide par raison sociale ou SIREN" clearable />
@@ -241,7 +241,7 @@
             <span style="width: 100px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
             <v-icon color="amber">fa-exclamation-triangle</v-icon>
             <span style="font-size: 25px;">{{ predictionWarnings }}</span>
-            <v-btn outline color="indigo" @click="download" class="ml-4 mb-3">
+            <v-btn outlined color="indigo" @click="download" class="ml-4 mb-3">
               <v-icon small class="mr-2">fa-file-download</v-icon>
               Exporter
             </v-btn>
@@ -253,7 +253,7 @@
     <Spinner v-if="loading" />
     <v-snackbar v-if="currentBatchDescription" v-model="snackbar" :bottom="true">
       Le modèle de détection a évolué !
-      <v-btn color="primary" flat @click="showModelHelp()">En savoir plus</v-btn>
+      <v-btn color="primary" text @click="showModelHelp()">En savoir plus</v-btn>
       <v-btn icon @click="snackbar = false"><v-icon>clear</v-icon></v-btn> 
     </v-snackbar>
   </div>

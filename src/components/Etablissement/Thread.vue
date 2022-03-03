@@ -15,7 +15,7 @@
         {{ thread.comments.length }} réponse{{ thread.comments.length > 1 ? 's distinctes' : ''}}
         <v-btn 
           fab
-          flat
+          text
           small
           @click="viewChild=!viewChild; viewComment=false;"
           >

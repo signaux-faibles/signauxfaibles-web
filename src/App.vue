@@ -1,5 +1,5 @@
 <template>
-  <v-app id="app">
+  <v-app id="base">
     <v-dialog v-model="expiredSession" persistent max-width="500px">
       <v-card>
         <v-card-title class="headline">Votre session a expiré</v-card-title>
@@ -9,16 +9,16 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="primary" flat @click="reconnect()">Se reconnecter</v-btn>
+          <v-btn color="primary" text @click="reconnect()">Se reconnecter</v-btn>
           <v-spacer></v-spacer>
         </v-card-actions>
       </v-card>
     </v-dialog>
     <Security v-if="!securityConsent" />
-    <v-content v-if="securityConsent">
+    <v-main v-if="securityConsent">
       <NavigationDrawer v-if="login && leftDrawer" />
       <router-view />
-    </v-content>
+    </v-main>
   </v-app>
 </template>
 
@@ -97,9 +97,27 @@ export default {
 }
 </script>
 <style>
-@import url("https://fonts.googleapis.com/css?family=Abel");
-@import url("https://fonts.googleapis.com/css?family=Oswald");
-@import url("https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap");
+/* @import url("https://fonts.googleapis.com/css?family=Abel"); */
+/* @import url("https://fonts.googleapis.com/css?family=Oswald"); */
+
+@font-face {
+  font-family: "Roboto";
+  src: local("Roboto"),
+   url(./fonts/Roboto.woff2) format("woff2");
+}
+
+@font-face {
+  font-family: "Oswald";
+  font-style: normal;
+  src: local("Oswald"),
+    url(./fonts/Oswald-Regular.ttf) format("truetype");
+}
+
+@font-face {
+  font-family: "Abel";
+  src: local("Abel"),
+    url(./fonts/Abel-Regular.ttf) format("truetype");
+}
 
 body {
   font-family: "Roboto", sans-serif;
@@ -123,7 +141,7 @@ body {
   font-weight: 800;
   font-size: 22px;
 }
-#app {
+#base {
   background: radial-gradient(
     circle at center,
     rgb(255, 255, 255),

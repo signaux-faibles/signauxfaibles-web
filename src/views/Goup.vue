@@ -12,7 +12,7 @@
                 cloud_upload
               </v-icon><br/>
               <span>Déposez vos fichiers ici ou</span><br/>
-              <v-btn round dark color="indigo darken-4" @click="triggerForm">sélectionnez les fichiers</v-btn>
+              <v-btn rounded dark color="indigo darken-4" @click="triggerForm">sélectionnez les fichiers</v-btn>
               <input
                 ref="uploadForm"
                 type="file"
@@ -47,12 +47,12 @@
             </v-card-text>
             <v-card-actions>
               <v-spacer/>
-              <v-btn flat color="red darken-2" @click="files=[]" :disabled="files.length == 0 || uploading || error">vider la liste</v-btn>
-              <v-btn v-if="!uploading" style="width: 250px" flat :color="paused ? 'indigo darken-2' : 'green darken-2'" :disabled="files.length == 0 || error" @click="runUpload">
+              <v-btn text color="red darken-2" @click="files=[]" :disabled="files.length == 0 || uploading || error">vider la liste</v-btn>
+              <v-btn v-if="!uploading" style="width: 250px" text :color="paused ? 'indigo darken-2' : 'green darken-2'" :disabled="files.length == 0 || error" @click="runUpload">
                 <v-icon>play_arrow</v-icon>
                 {{ paused ? 'Reprendre' : 'Procéder à' }} l'envoi
               </v-btn>
-              <v-btn v-if="uploading" style="width: 250px" flat color="indigo darken-2" :disabled="files.length == 0 || error" @click="stopUpload">
+              <v-btn v-if="uploading" style="width: 250px" text color="indigo darken-2" :disabled="files.length == 0 || error" @click="stopUpload">
                 <v-icon>pause</v-icon>
                 Interrompre l'envoi
               </v-btn> 

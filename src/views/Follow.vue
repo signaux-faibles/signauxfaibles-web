@@ -1,12 +1,10 @@
 <template>
   <div>
-    <Toolbar title="Suivi d'établissements" drawer />
-    <v-toolbar
+    <v-app-bar app
       height="35px"
       class="toolbar elevation-12"
       color="#ffffff"
       extension-height="48px"
-      app
     >
       <v-icon
         @click="openLeftDrawer()"
@@ -31,10 +29,11 @@
                 <li><strong>Mon suivi sans carte</strong> regroupe les établissements associés à aucune carte de suivi ou à une carte inaccessible.</li>
               </ul>
             </p>
-            <p>Deux critères supplémentaires permettent de filtrer la liste de suivi affichée :</p>
+            <p>Trois critères supplémentaires permettent de filtrer la liste de suivi affichée :</p>
             <p>
               <ul>
                 <li><strong>Statut du suivi</strong> correspond aux listes (colonne) de votre ou de vos kanbans de suivi.</li>
+                <li><strong>Étiquettes</strong> permet de sélectionner les cartes qui ont toutes les étiquettes choisies.</li>
                 <li><strong>Zone Géographique</strong> correspond aux tableaux pour les régions ou aux couloirs (lignes) des tableaux pour les départements.</li>
               </ul>
             </p>
@@ -48,7 +47,7 @@
         v-if="wekanUser && !rightDrawer"
         @click="openRightDrawer()"
       >mdi-target</v-icon>
-    </v-toolbar>
+    </v-app-bar>
     <div style="width:100%">
       <v-navigation-drawer
         :class="((rightDrawer)?'elevation-6':'') + ' rightDrawer'"
@@ -112,11 +111,11 @@
       </v-navigation-drawer>
     </div>
     <v-layout column fill-height style="font-weight: normal">
-      <v-flex v-if="wekanUser" pt-3 text-xs-center shrink>
+      <v-flex v-if="wekanUser" pt-3 text-center shrink>
         <v-btn-toggle mandatory v-model="type" v-on:change="getFollowedEtablissements">
-          <v-btn flat value="my-cards">Mes cartes de suivi</v-btn>
-          <v-btn flat value="all-cards">Toutes les cartes</v-btn>
-          <v-btn flat value="no-card">Mon suivi sans carte</v-btn>
+          <v-btn text value="my-cards">Mes cartes de suivi</v-btn>
+          <v-btn text value="all-cards">Toutes les cartes</v-btn>
+          <v-btn text value="no-card">Mon suivi sans carte</v-btn>
         </v-btn-toggle>
       </v-flex>
       <v-flex px-2 grow>
@@ -129,13 +128,13 @@
           Suivre.<br />Pour un import massif d'établissements, contactez-nous par email :<br />
           <a href="mailto:contact@signaux-faibles.beta.gouv.fr?subject=Import massif d'établissements" target="_blank"><code>contact@signaux-faibles.beta.gouv.fr</code></a></div>
         </div>
-        <div class="pt-3 px-3 text-xs-center" v-if="follow.length > 0">
+        <div class="py-3 px-3 text-center" v-if="follow.length > 0">
           <span v-if="wekanUser && type=='my-cards'" class="intro">Vous suivez {{this.follow.length | pluralizeEtablissement}} associés à des cartes dont vous êtes le créateur ou un des participants selon les filtres sélectionnés.</span>
           <span v-if="wekanUser && type=='all-cards'" class="intro">Le ou les tableaux régionaux auxquels vous êtes habilités référencent {{this.follow.length | pluralizeEtablissement}} selon les filtres sélectionnés.</span>
           <span v-if="wekanUser && type=='no-card'" class="intro">Vous suivez {{this.follow.length | pluralizeEtablissement}} associés à aucune carte de suivi ou à une carte inaccessible.</span>
           <span v-if="!wekanUser" class="intro">Vous suivez {{this.follow.length | pluralizeEtablissement}}.</span><br/>
-          <v-btn outline color="indigo" @click="exportXSLX" :dark="!exportXSLXLoading" :loading="exportXSLXLoading" :disabled="loading || exportXSLXLoading" class="ml-4"><v-icon small class="mr-2">fa-file-excel</v-icon>Exporter en XLSX (Excel)</v-btn>
-          <v-btn outline color="indigo" @click="exportDOCX" :dark="!exportDOCXLoading" :loading="exportDOCXLoading" :disabled="loading || exportDOCXLoading"><v-icon small class="mr-2">fa-file-word</v-icon>Exporter en DOCX (Word)</v-btn>
+          <v-btn outlined color="indigo" @click="exportXSLX" :dark="!exportXSLXLoading" :loading="exportXSLXLoading" :disabled="loading || exportXSLXLoading" class="ml-4"><v-icon small class="mr-2">fa-file-excel</v-icon>Exporter en XLSX (Excel)</v-btn>
+          <v-btn outlined color="indigo" @click="exportDOCX" :dark="!exportDOCXLoading" :loading="exportDOCXLoading" :disabled="loading || exportDOCXLoading"><v-icon small class="mr-2">fa-file-word</v-icon>Exporter en DOCX (Word)</v-btn>
           <v-alert :value="alertExport" type="error" transition="scale-transition" dismissible>Un problème est survenu lors de l’export des établissements suivis.</v-alert>
         </div>
         <PredictionWidget
@@ -156,9 +155,9 @@
         </div>
       </v-flex>
     </v-layout>
-    <v-snackbar v-if="wekanUser" v-model="snackbar" :bottom="true" :timeout="0">
+    <v-snackbar v-if="wekanUser" v-model="snackbar" :bottom="true" :timeout="-1">
       Le suivi d'établissements a beaucoup évolué !
-      <v-btn color="primary" flat @click="showFollowHelp()">En savoir plus</v-btn>
+      <v-btn color="primary" text @click="showFollowHelp()">En savoir plus</v-btn>
       <v-btn icon @click="snackbar = false"><v-icon>clear</v-icon></v-btn>
     </v-snackbar>
   </div>

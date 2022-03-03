@@ -49,9 +49,9 @@
           <v-layout column fill-height style="font-weight: normal">
             <v-flex v-if="permDGEFP || permUrssaf" py-3 text-xs-center shrink>
               <v-btn-toggle mandatory v-model="sort">
-                <v-btn flat value="effectif">Trié par effectif</v-btn>
-                <v-btn v-if="permDGEFP" flat value="activite-partielle">Par activité partielle</v-btn>
-                <v-btn v-if="permUrssaf" flat value="dette-sociale">Par dette sociale</v-btn>
+                <v-btn text value="effectif">Trié par effectif</v-btn>
+                <v-btn v-if="permDGEFP" text value="activite-partielle">Par activité partielle</v-btn>
+                <v-btn v-if="permUrssaf" text value="dette-sociale">Par dette sociale</v-btn>
               </v-btn-toggle>
             </v-flex>
             <v-flex px-2 grow>
@@ -106,7 +106,7 @@
               sur les 24 derniers mois.
             </v-flex>
             <v-flex md5 shrink>
-              <v-btn outline color="indigo" @click="toggleHistoriqueEffectif" class="ml-4">
+              <v-btn outlined color="indigo" @click="toggleHistoriqueEffectif" class="ml-4">
                 {{
                 showHistoriqueEffectif ? "Masquer" : "Afficher"
                 }}
@@ -139,7 +139,7 @@
             </v-flex>
             <v-flex md5 shrink>
               <v-btn
-                outline
+                outlined
                 color="indigo"
                 @click="toggleHistoriqueDetteSociale"
                 class="ml-4"

@@ -1,8 +1,8 @@
 // @ts-ignore
 import VueKeyCloak from '@dsb-norge/vue-keycloak-js'
 import Vue from 'vue'
-import './plugins/vuetify'
 import App from './App.vue'
+import vuetify from './plugins/vuetify'
 import router from './router'
 import store from './store'
 import VueApexCharts from 'vue-apexcharts'
@@ -46,6 +46,7 @@ if (process.env.VUE_APP_MATOMO_ENABLED && !!JSON.parse(process.env.VUE_APP_MATOM
   })
 }
 
+
 Vue.use(VueKeyCloak, {
   init: {
     onLoad: 'check-sso',
@@ -70,6 +71,7 @@ Vue.use(VueKeyCloak, {
       tokenInterceptor()
       responseInterceptor()
       const tslintCantBeDisabledSorryForThis = new Vue({
+        vuetify,
         el: '#app',
         router,
         template: '<App/>',

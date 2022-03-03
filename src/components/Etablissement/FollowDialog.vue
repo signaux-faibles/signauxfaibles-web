@@ -19,7 +19,7 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn flat @click="closeFollowDialog()">Annuler</v-btn>
+        <v-btn text @click="closeFollowDialog()">Annuler</v-btn>
         <v-btn dark color="indigo" @click="followEtablissement()"><v-icon left class="mr-2">mdi-star-outline</v-icon>Suivre</v-btn>
       </v-card-actions>
       <v-alert :value="followAlert" type="error" transition="scale-transition">{{ followAlertError }}</v-alert>
@@ -63,7 +63,7 @@ export default {
             this.followAlertError = ''
             this.followAlert = false
             this.$parent.getEtablissement()
-            if (this.$parent.boards.filter(b => !b.card && b.isMember).length > 0) {
+            if (this.$parent.boards.filter((b) => !b.card && b.isMember).length > 0) {
                 this.$parent.boardDialog = true
             }
           }

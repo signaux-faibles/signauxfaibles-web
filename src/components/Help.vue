@@ -1,6 +1,8 @@
 <template>
-  <v-menu :max-width="big ? '600px' : '400px'" offset-y>                 
-    <v-btn ref="btn" slot="activator" icon :dark="dark" @click="trackMatomoEvent('general', 'ouvrir_aide', titre)"><v-icon>help</v-icon></v-btn>
+  <v-menu :max-width="big ? '600px' : '400px'" offset-y>
+    <template v-slot:activator="{ on, attrs }">
+      <v-btn v-bind="attrs" icon v-on="on" ref="btn" :dark="dark" @click="trackMatomoEvent('general', 'ouvrir_aide', titre)"><v-icon>help</v-icon></v-btn>
+    </template>
     <v-card>
       <v-card-title class="headline">
         {{ titre }}
@@ -10,7 +12,7 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer/>
-        <v-btn flat color="primary">OK</v-btn>
+        <v-btn text color="primary">OK</v-btn>
       </v-card-actions>
     </v-card>
   </v-menu>

@@ -1,19 +1,19 @@
 <template>
-  <v-list-tile >
+  <v-list-item >
     <v-progress-linear v-if="file.progress % 100 != 0 || file.uploading" style="position: absolute;top: 25px; width: 600px" height=2 :value="file.progress"/>
 
-    <v-list-tile-action>
+    <v-list-item-action>
       <v-icon :color="activity_color">{{ activity }}</v-icon>
-    </v-list-tile-action>
+    </v-list-item-action>
     
-    <v-list-tile-content style="font-size: 12px">
+    <v-list-item-content style="font-size: 12px">
       {{ file.file.name }} ({{ (file.error) ? file.retries + ' essais restants' : filesize(file.file.size) }})
-    </v-list-tile-content>
+    </v-list-item-content>
 
-    <v-list-tile-action>
+    <v-list-item-action>
       <v-btn @click="deleteFile" :disabled="file.uploading" icon><v-icon small color="grey">cancel</v-icon></v-btn>  
-    </v-list-tile-action>
-  </v-list-tile>
+    </v-list-item-action>
+  </v-list-item>
 </template>
 
 <script>

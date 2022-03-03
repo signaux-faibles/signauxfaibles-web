@@ -3,8 +3,8 @@
     <template v-slot:activator="{ on }">
       <v-btn
         :class="(newsToRead>0)?'pulse':'inerte'"
-        flat
-        round
+        text
+        rounded
         v-on="on"
         @click="trackMatomoEvent('general', 'ouvrir_nouveautes')"
       >Nouveautés ({{ newsToRead }})</v-btn>
