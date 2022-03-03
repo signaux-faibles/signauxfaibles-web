@@ -5,20 +5,20 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint",
+    "test:unit": "vue-cli-service test:unit",
     "test:e2e": "vue-cli-service test:e2e",
-    "test:unit": "vue-cli-service test:unit"
+    "lint": "vue-cli-service lint"
   },
   "dependencies": {
     "@babel/core": "^7.4.3",
     "@dsb-norge/vue-keycloak-js": "^1.3.2",
     "@types/jwt-decode": "^2.2.1",
     "apexcharts": "^3.8.6",
-    "axios": "^0.18.0",
-    "core-js": "^2.6.5",
+    "axios": "^0.26.0",
+    "core-js": "^3.8.3",
     "filesize": "^4.1.2",
     "identicon.js": "^2.3.3",
-    "jest": ">=22 <24",
+    "jest": "^27.5.1",
     "js-md5": "^0.7.3",
     "jwt-decode": "^2.2.0",
     "mapbox-gl": "^1.4.1",
@@ -40,22 +40,24 @@
     "vuetify": "2.6.3",
     "vuex": "^3.0.1",
     "vuex-persistedstate": "^2.5.4",
-    "webpack": "^4.30.0"
+    "webpack": "^5.70.0"
   },
   "devDependencies": {
     "@types/jest": "^23.1.4",
-    "@vue/cli-plugin-babel": "^3.6.0",
-    "@vue/cli-plugin-e2e-nightwatch": "^3.6.0",
-    "@vue/cli-plugin-typescript": "^3.6.0",
-    "@vue/cli-plugin-unit-jest": "^3.6.0",
-    "@vue/cli-service": "^3.6.0",
+    "@vue/cli-plugin-babel": "~5.0.1",
+    "@vue/cli-plugin-e2e-nightwatch": "~5.0.1",
+    "@vue/cli-plugin-typescript": "~5.0.1",
+    "@vue/cli-plugin-unit-jest": "~5.0.1",
+    "@vue/cli-service": "~5.0.1",
     "@vue/test-utils": "1.0.0-beta.29",
+    "@vue/vue2-jest": "^27.0.0-alpha.3",
     "babel-core": "7.0.0-bridge.0",
+    "jest": "^27.1.0",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.1",
     "ts-jest": "^23.0.0",
-    "typescript": "^3.4.3",
-    "vue-cli-plugin-vuetify": "^0.5.0",
+    "typescript": "~4.5.5",
+    "vue-cli-plugin-vuetify": "~2.4.7",
     "vue-template-compiler": "^2.5.21",
     "vuetify-loader": "^1.7.3"
   }
