@@ -40,24 +40,24 @@
           </div>
         </transition>
         <template v-if="social">
-          <div class="eff mr-2 text-xs-right">
+          <div class="eff mr-2 text-right">
             EFFECTIF
             <br />
             <span class="valeur" >{{ prediction.dernier_effectif || 'n/c' }}</span>
           </div>
-          <div v-if="permDGEFP" class="ap mr-2 text-xs-right">
+          <div v-if="permDGEFP" class="ap mr-2 text-right">
             ACT. PARTIELLE
             <br />
             <span class="valeur" :class="prediction.apHeureConsommeAVG12m > 0 ? 'down' : ''" >{{ this.$parent.formatActivitePartielle(this.$parent.equivalentTempsPlein(prediction.apHeureConsommeAVG12m || 0)) }}</span>
           </div>
-          <div v-if="permUrssaf" class="ds mr-2 text-xs-right">
+          <div v-if="permUrssaf" class="ds mr-2 text-right">
             DETTE SOC.
             <br />
             <span class="valeur" :class="prediction.detteUrssaf > 0 ? 'down' : ''">{{ prediction.detteUrssaf != null ? this.$parent.formatDetteSociale(prediction.detteUrssaf) : 'n/c'}}</span>
           </div>
         </template>
         <template v-else>
-          <div class="social mr-2 text-xs-right">
+          <div class="social mr-2 text-right">
             <div class="mt-2">
               <img
                 class="mr-2"
@@ -86,18 +86,18 @@
             </div>
             <div class="effectif">{{ this.libelleEffectif }}</div>
           </div>
-          <div class="ca mr-2 text-xs-right">
+          <div class="ca mr-2 text-right">
             CA {{prediction.exerciceDiane}}
             <br />
             <span class="valeur" :class="diane.ca_color">{{ diane.ca || 'n/c' }}</span>
             <v-icon small v-if="diane.ca_arrow">{{ diane.ca_arrow }}</v-icon>
           </div>
-          <div class="rex mr-2 text-xs-right">
+          <div class="rex mr-2 text-right">
             EBE
             <br />
             <span class="valeur" :class="diane.excedent_brut_d_exploitation_color">{{ diane.excedent_brut_d_exploitation }}</span>
           </div>
-          <div class="rex mr-2 text-xs-right">
+          <div class="rex mr-2 text-right">
             REX
             <br />
             <span class="valeur" :class="diane.resultat_expl_color">{{ diane.resultat_expl }}</span>

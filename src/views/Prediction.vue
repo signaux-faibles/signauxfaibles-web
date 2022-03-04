@@ -186,7 +186,7 @@
             @blur="getPrediction()"
           >
             <template v-slot:append-item>
-              <div class="text-xs-center my-2">
+              <div class="text-center my-2">
                 <v-btn @click="$refs.procol.isMenuActive = false" color="primary">OK</v-btn>
               </div>
             </template>

@@ -21,7 +21,7 @@
             <v-btn outlined color="indigo" class="ml-4" @click="exportDOCX" :dark="!exportDOCXLoading" :loading="exportDOCXLoading" :disabled="exportDOCXLoading"><v-icon small class="mr-2">fa-file-word</v-icon>Exporter en DOCX (Word)</v-btn>
             <v-alert :value="alertExport" type="error" transition="scale-transition" dismissible>Un problème est survenu lors de l'export de l’établissement.</v-alert>
           </v-flex>
-          <v-flex xs12 md6 class="text-xs-left pa-3" style="font-size: 16px">
+          <v-flex xs12 md6 class="text-left pa-3" style="font-size: 16px">
             <v-layout fill-height align-center>
               <v-flex>
                 <v-layout wrap>
@@ -134,7 +134,7 @@
               </v-flex>
             </v-layout>
           </v-flex>
-          <v-flex xs12 md12 class="text-xs-right pa-3">
+          <v-flex xs12 md12 class="text-right pa-3">
             <Commentaire :siret="siret" />
           </v-flex>
           <v-flex md6 xs12 class="pr-1" style="min-height: 200px">    

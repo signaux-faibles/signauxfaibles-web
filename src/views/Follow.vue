@@ -72,7 +72,7 @@
             chips
           >
             <template v-slot:append-item>
-              <div class="text-xs-center my-2">
+              <div class="text-center my-2">
                 <v-btn @click="$refs.statutMenu.isMenuActive = false" color="primary">OK</v-btn>
               </div>
             </template>
@@ -92,7 +92,7 @@
             chips
           >
             <template v-slot:append-item>
-              <div class="text-xs-center my-2">
+              <div class="text-center my-2">
                 <v-btn @click="$refs.labelMenu.isMenuActive = false" color="primary">OK</v-btn>
               </div>
             </template>
@@ -133,7 +133,7 @@
           <span v-if="wekanUser && type=='all-cards'" class="intro">Le ou les tableaux régionaux auxquels vous êtes habilités référencent {{this.follow.length | pluralizeEtablissement}} selon les filtres sélectionnés.</span>
           <span v-if="wekanUser && type=='no-card'" class="intro">Vous suivez {{this.follow.length | pluralizeEtablissement}} associés à aucune carte de suivi ou à une carte inaccessible.</span>
           <span v-if="!wekanUser" class="intro">Vous suivez {{this.follow.length | pluralizeEtablissement}}.</span><br/>
-          <v-btn outlined color="indigo" @click="exportXSLX" :dark="!exportXSLXLoading" :loading="exportXSLXLoading" :disabled="loading || exportXSLXLoading" class="ml-4"><v-icon small class="mr-2">fa-file-excel</v-icon>Exporter en XLSX (Excel)</v-btn>
+          <v-btn outlined color="indigo" @click="exportXSLX" :dark="!exportXSLXLoading" :loading="exportXSLXLoading" :disabled="loading || exportXSLXLoading" class="mr-4"><v-icon small class="mr-2">fa-file-excel</v-icon>Exporter en XLSX (Excel)</v-btn>
           <v-btn outlined color="indigo" @click="exportDOCX" :dark="!exportDOCXLoading" :loading="exportDOCXLoading" :disabled="loading || exportDOCXLoading"><v-icon small class="mr-2">fa-file-word</v-icon>Exporter en DOCX (Word)</v-btn>
           <v-alert :value="alertExport" type="error" transition="scale-transition" dismissible>Un problème est survenu lors de l’export des établissements suivis.</v-alert>
         </div>

@@ -59,6 +59,12 @@ export default {
       news: [
         // TODO: externalize
         {
+          date: new Date('2022-03-03'), news: [
+            'Migration vuetify 1.5 -> 2.6',
+            'Mise à jour de sécurité des dépendances',
+          ],
+        },
+        {
           date: new Date('2021-12-21'), news: [
             'Le champ effectif des exports de listes Excel passe au format numérique pour faciliter le tri',
             'Gestion plus économique du chargement du résultat des recherches',

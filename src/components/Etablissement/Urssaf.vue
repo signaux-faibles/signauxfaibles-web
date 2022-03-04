@@ -26,7 +26,7 @@
       :options="options"
       :series="series"
     ></apexchart>
-    <v-layout align-center justify-center text-xs-center style="min-height: 500px" v-if="!permUrssaf">
+    <v-layout align-center justify-center text-center style="min-height: 500px" v-if="!permUrssaf">
       <v-flex xs5>
         <v-icon size="100">fa-lock</v-icon>
         <div v-if="roles.includes('urssaf')" class="lock-urssaf mt-2">Veuillez suivre cet établissement pour consulter ses données de cotisations et d’impayés Urssaf</div>
