@@ -30,7 +30,7 @@
             <span>Cet établissement est fermé ou l’activité de l’entreprise a cessé</span>
           </v-tooltip>
         </div>
-        <div style="font-size: 16px">
+        <div style="font-size: 17px">
           <div v-if="permScore">
             <div v-if="summary.alert == null">
               Cet établissement ne faisait pas partie du périmètre de Signaux Faibles au moment de la production de cette liste de détection.
@@ -77,7 +77,7 @@
             <v-card-title class="headline">
               Historique des alertes
             </v-card-title>
-            <v-card-text style="font-size: 16px; font-weight: 800; font-family: 'Oswald', sans;">
+            <v-card-text style="font-size: 17px; font-weight: 800; font-family: 'Oswald', sans;">
               <v-expansion-panels accordion>
                 <v-expansion-panel
                   v-for="h in historique"

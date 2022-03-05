@@ -100,15 +100,21 @@ export default {
 
 @font-face {
   font-family: "Roboto";
-  src: local("Roboto"),
-   url(./fonts/Roboto.woff2) format("woff2");
+  font-weight: 300;
+  src: url(./fonts/Roboto-Medium.ttf) format("truetype");
+}
+
+@font-face {
+  font-family: "Roboto Mono";
+  src: url(./fonts/RobotoMono-Regular.ttf) format("truetype");
 }
 
 @font-face {
   font-family: "Oswald";
   font-style: normal;
+  font-weight: 350;
   src: local("Oswald"),
-    url(./fonts/Oswald-Regular.ttf) format("truetype");
+    url(./fonts/SairaCondensed-Medium.ttf) format("truetype");
 }
 
 @font-face {
@@ -154,12 +160,12 @@ body {
 .span {
   max-height: 10px;
 }
-span.fblue {
+/* span.fblue {
   font-family: "Quicksand", sans-serif;
   color: #20459a;
 }
 span.fred {
   font-family: "Quicksand", sans-serif;
   color: #e9222e;
-}
+} */
 </style>

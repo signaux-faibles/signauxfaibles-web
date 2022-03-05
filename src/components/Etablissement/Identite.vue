@@ -18,11 +18,11 @@
     </h3>
     <hr style="color: #eee;" />
     <div style="padding: 10px; margin: 4px;">
-      <div v-html="identiteHtml" style="font-size: 16px"></div>
+      <div v-html="identiteHtml" style="font-size: 17px"></div>
     </div>
     <h3>adresse postale de l'établissement</h3>
     <hr style="color: #eee;" />
-    <div style="padding: 10px; margin: 4px; font-size: 16px">
+    <div style="padding: 10px; margin: 4px; font-size: 17px">
       <v-layout wrap>
         <v-flex shrink>
           <div v-html="adresse" class="mb-3 mr-5"></div>

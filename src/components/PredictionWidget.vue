@@ -250,12 +250,12 @@ export default {
 }
 .commune {
   font-family: "Oswald";
-  font-size: 20px;
+  font-size: 21px;
   color: #333;
 }
 .raison-sociale {
   font-family: "Oswald";
-  font-size: 24px;
+  font-size: 25px;
   color: #333;
 }
 .identite {

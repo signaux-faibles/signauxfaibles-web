@@ -96,7 +96,7 @@
       <v-layout mt-4 wrap>
         <v-flex v-if="ecartEffectif >= 0" md6 xs12>
           <v-layout px-3 align-center style="min-height: 80px">
-            <v-flex style="font-size: 16px">
+            <v-flex style="font-size: 17px">
               L'effectif de cette entreprise {{ introEffectif }}
               <span v-if="permDGEFP">
                 et elle
@@ -128,7 +128,7 @@
         </v-flex>
         <v-flex v-if="permUrssaf" md6 xs12>
           <v-layout px-3 align-center style="min-height: 80px">
-            <v-flex style="font-size: 16px">
+            <v-flex style="font-size: 17px">
               Cette entreprise
               {{
               hasDetteSociale

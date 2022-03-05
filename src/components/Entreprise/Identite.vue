@@ -14,7 +14,7 @@
         <h3>siren {{ siren }}</h3>
         <hr style="color: #eee;" class="mr-4" />
         <div style="padding: 10px; margin: 4px;">
-          <div v-html="identiteHtml" style="font-size: 16px"></div>
+          <div v-html="identiteHtml" style="font-size: 17px"></div>
         </div>
         <div v-if="showSecteursCovid" class="text-uppercase" style="font-size: 18px">
           Secteurs COVID-19
@@ -75,7 +75,7 @@
       <v-flex xs12 md6>
         <h3>adresse postale du siège</h3>
         <hr style="color: #eee;" class="mr-4" />
-        <div style="padding: 10px; margin: 4px; font-size: 16px">
+        <div style="padding: 10px; margin: 4px; font-size: 17px">
           <v-layout wrap>
             <v-flex shrink>
               <div v-html="adresse" class="mb-3 mr-5"></div>
