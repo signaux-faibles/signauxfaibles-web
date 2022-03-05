@@ -6,7 +6,7 @@
           commentaires ({{ count(thread) }})
           <a
             fab
-            flat
+            text
             small
             @click="toggleComments()"
           >

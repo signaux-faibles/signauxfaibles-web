@@ -3,8 +3,8 @@
     <template v-slot:activator="{ on }">
       <v-btn
         :class="(newsToRead>0)?'pulse':'inerte'"
-        flat
-        round
+        text
+        rounded
         v-on="on"
         @click="trackMatomoEvent('general', 'ouvrir_nouveautes')"
       >Nouveautés ({{ newsToRead }})</v-btn>
@@ -58,6 +58,12 @@ export default {
       dialog: false,
       news: [
         // TODO: externalize
+        {
+          date: new Date('2022-03-03'), news: [
+            'Migration vuetify 1.5 -> 2.6',
+            'Mise à jour de sécurité des dépendances',
+          ],
+        },
         {
           date: new Date('2021-12-21'), news: [
             'Le champ effectif des exports de listes Excel passe au format numérique pour faciliter le tri',

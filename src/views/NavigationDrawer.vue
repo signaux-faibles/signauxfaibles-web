@@ -1,93 +1,93 @@
 <template>
-  <v-navigation-drawer class="elevation-6" v-model="drawer" app>
+  <v-navigation-drawer class="elevation-6" width="280" v-model="drawer" app>
     <v-toolbar flat class="transparent">
       <v-list class="pa-0">
-        <v-list-tile avatar>
-          <v-list-tile-avatar>
+        <v-list-item>
+          <v-list-item-avatar>
             <img src="../assets/logo_signaux_faibles_cercle.svg" />
-          </v-list-tile-avatar>
-          <v-list-tile-content>
-            <v-list-tile-title>
+          </v-list-item-avatar>
+          <v-list-item-content>
+            <v-list-item-title>
               <img height="20" src="../assets/text_signaux_faibles.svg" />
-            </v-list-tile-title>
-          </v-list-tile-content>
-          <v-list-tile-avatar>
+            </v-list-item-title>
+          </v-list-item-content>
+          <v-list-item-avatar>
             <v-icon @click="closeDrawer()">mdi-backburger</v-icon>
-          </v-list-tile-avatar>
-        </v-list-tile>
+          </v-list-item-avatar>
+        </v-list-item>
       </v-list>
     </v-toolbar>
     <v-list class="pt-0" dense>
       <v-divider></v-divider>
 
-      <v-list-tile to="/">
-        <v-list-tile-action>
+      <v-list-item to="/">
+        <v-list-item-action>
           <v-icon>search</v-icon>
-        </v-list-tile-action>
-        <v-list-tile-content>
-          <v-list-tile-title>Consultation</v-list-tile-title>
-        </v-list-tile-content>
-      </v-list-tile>
+        </v-list-item-action>
+        <v-list-item-content>
+          <v-list-item-title>Consultation</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
 
-      <v-list-tile to="/prediction">
-        <v-list-tile-action>
+      <v-list-item to="/prediction">
+        <v-list-item-action>
           <v-icon>mdi-target</v-icon>
-        </v-list-tile-action>
-        <v-list-tile-content>
-          <v-list-tile-title>Listes de détection</v-list-tile-title>
-        </v-list-tile-content>
-      </v-list-tile>
+        </v-list-item-action>
+        <v-list-item-content>
+          <v-list-item-title>Listes de détection</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
 
-      <v-list-tile to="/follow">
-        <v-list-tile-action>
+      <v-list-item to="/follow">
+        <v-list-item-action>
           <v-icon>mdi-star</v-icon>
-        </v-list-tile-action>
-        <v-list-tile-content>
-          <v-list-tile-title>Suivi d'établissements</v-list-tile-title>
-        </v-list-tile-content>
-      </v-list-tile>
+        </v-list-item-action>
+        <v-list-item-content>
+          <v-list-item-title>Suivi d'établissements</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
 
-      <v-list-tile v-if="roles.includes('wekan')" :href="wekan_url">
-        <v-list-tile-action>
+      <v-list-item v-if="roles.includes('wekan')" :href="wekan_url">
+        <v-list-item-action>
           <v-icon>fab fa-trello</v-icon>
-        </v-list-tile-action>
-        <v-list-tile-content>
-          <v-list-tile-title>Kanban de suivi</v-list-tile-title>
-        </v-list-tile-content>
-      </v-list-tile>
+        </v-list-item-action>
+        <v-list-item-content>
+          <v-list-item-title>Kanban de suivi</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
 
-      <v-list-tile :href="fider_url">
-        <v-list-tile-action>
+      <v-list-item :href="fider_url">
+        <v-list-item-action>
           <v-icon>mdi-puzzle</v-icon>
-        </v-list-tile-action>
-        <v-list-tile-content>
-          <v-list-tile-title>Contribuer</v-list-tile-title>
-        </v-list-tile-content>
-      </v-list-tile>
+        </v-list-item-action>
+        <v-list-item-content>
+          <v-list-item-title>Contribuer</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
 
-      <v-list-tile to="/goup" v-if="jwt.goup_path">
-        <v-list-tile-action>
+      <v-list-item to="/goup" v-if="jwt.goup_path">
+        <v-list-item-action>
           <v-icon>cloud_upload</v-icon>
-        </v-list-tile-action>
-        <v-list-tile-content>
-          <v-list-tile-title>Envoi de données manuel</v-list-tile-title>
-        </v-list-tile-content>
-      </v-list-tile>
+        </v-list-item-action>
+        <v-list-item-content>
+          <v-list-item-title>Envoi de données manuel</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
 
       <v-divider></v-divider>
 
-      <v-list-tile @click="logout()">
-        <v-list-tile-action>
+      <v-list-item @click="logout()">
+        <v-list-item-action>
           <v-icon>logout</v-icon>
-        </v-list-tile-action>
-        <v-list-tile-content>
-          <v-list-tile-title>Se déconnecter</v-list-tile-title>
-        </v-list-tile-content>
-      </v-list-tile>
+        </v-list-item-action>
+        <v-list-item-content>
+          <v-list-item-title>Se déconnecter</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
     </v-list>
 
     <v-footer class="elevation-6" style="color: blue; width:100%; position: fixed; bottom: 0px;">
-      <v-btn flat icon color="blue" :href="github_url">
+      <v-btn text icon color="blue" :href="github_url">
         <v-icon>fab fa-github</v-icon>
       </v-btn>
       <v-spacer />

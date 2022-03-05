@@ -13,7 +13,7 @@
       </Help>
     </v-toolbar>
     <div>
-      <v-layout mt-4 wrap style="font-size: 16px">
+      <v-layout mt-4 wrap style="font-size: 17px">
         <v-flex md6 xs12>
           <div v-html="introPaiement" class="px-3" ></div>
           <apexchart width="100%" heigth="100%" type="line" :options="options" :series="series"></apexchart>

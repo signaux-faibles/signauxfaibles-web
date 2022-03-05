@@ -52,7 +52,7 @@
                   :disabled="loading"
                   v-on="on"
                   @click="copyNaf()"
-                  outline
+                  outlined
                   class="ma-3"
                 >
                   <v-icon>mdi-filter</v-icon>selection des secteurs
@@ -62,32 +62,31 @@
                 <v-toolbar dark dense color="indigo">
                   <v-toolbar-title>Sélectionner les secteurs d'activité</v-toolbar-title>
                 </v-toolbar>
-                <v-card-text>
-                  <v-list>
-                    <v-list-tile>
-                      <v-list-tile-action>
-                        <v-icon
-                          style="cursor: pointer"
-                          @click="selectAllNaf()"
-                        >{{ allNextNaf ? 'mdi-close-box' : someNextNaf ? 'mdi-minus-box' : 'mdi-checkbox-blank-outline' }}</v-icon>
-                      </v-list-tile-action>
-                      {{ !allNextNaf ? 'Tout sélectionner' : 'Tout désélectionner' }}
-                      <v-list-tile-content></v-list-tile-content>
-                    </v-list-tile>
-                    <v-divider />
-                    <v-list-tile v-for="n in naf1" :key="n.value">
-                      <v-list-tile-action @click="toggleNaf(n.value)">
-                        <v-icon style="cursor: pointer;">
-                          {{ nextNaf.includes(n.value) ?
-                          'mdi-checkbox-marked' :
-                          'mdi-checkbox-blank-outline'
-                          }}
-                        </v-icon>
-                      </v-list-tile-action>
-                      <v-list-tile-content>{{ n.text }}</v-list-tile-content>
-                    </v-list-tile>
-                  </v-list>
-                </v-card-text>
+               <v-card-text>
+                <v-list>
+                  <v-list-item>
+                    <v-list-item-action>
+                      <v-icon
+                        style="cursor: pointer"
+                        @click="selectAllNaf()"
+                      >{{ allNextNaf ? 'mdi-close-box' : 'mdi-plus-box' }}</v-icon>
+                    </v-list-item-action>{{ !allNextNaf ? 'Tout sélectionner' : 'Tout désélectionner' }}
+                    <v-list-item-content></v-list-item-content>
+                  </v-list-item>
+                  <v-divider />
+                  <v-list-item v-for="n in naf1" :key="n.value">
+                    <v-list-item-action @click="toggleNaf(n.value)">
+                      <v-icon style="cursor: pointer;">
+                        {{ nextNaf.includes(n.value) ?
+                        'mdi-checkbox-marked' :
+                        'mdi-checkbox-blank-outline'
+                        }}
+                      </v-icon>
+                    </v-list-item-action>
+                    <v-list-item-content>{{ n.text }}</v-list-item-content>
+                  </v-list-item>
+                </v-list>
+              </v-card-text>
                 <v-card-actions style>
                   <v-spacer />
                   <v-btn light color="error" @click="nafDialog=false">annuler</v-btn>

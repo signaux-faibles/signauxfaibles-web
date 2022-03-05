@@ -11,7 +11,7 @@
                   <v-btn
                     fab
                     small
-                    flat
+                    text
                     class="menubar__button"
                     :class="{ 'is-active': isActive.bold() }"
                     @click="commands.bold"
@@ -22,7 +22,7 @@
                   <v-btn
                     fab
                     small
-                    flat
+                    text
                     class="menubar__button"
                     :class="{ 'is-active': isActive.italic() }"
                     @click="commands.italic"
@@ -33,7 +33,7 @@
                   <v-btn
                     fab
                     small
-                    flat
+                    text
                     class="menubar__button"
                     :class="{ 'is-active': isActive.bullet_list() }"
                     @click="commands.bullet_list"
@@ -41,15 +41,15 @@
                     <v-icon>mdi-format-list-bulleted</v-icon>
                   </v-btn>
 
-                  <v-btn fab small flat class="menubar__button" @click="commands.undo">
+                  <v-btn fab small text class="menubar__button" @click="commands.undo">
                     <v-icon>mdi-undo</v-icon>
                   </v-btn>
 
-                  <v-btn fab small flat class="menubar__button" @click="commands.redo">
+                  <v-btn fab small text class="menubar__button" @click="commands.redo">
                     <v-icon>mdi-redo</v-icon>
                   </v-btn>
                   <v-spacer />
-                  <v-btn fab flat small class="menubar__button" :disabled="dataSend" @click="send">
+                  <v-btn fab text small class="menubar__button" :disabled="dataSend" @click="send">
                     <v-icon>mdi-send</v-icon>
                   </v-btn>
                 </v-toolbar>

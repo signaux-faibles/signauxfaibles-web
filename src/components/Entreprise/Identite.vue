@@ -14,7 +14,7 @@
         <h3>siren {{ siren }}</h3>
         <hr style="color: #eee;" class="mr-4" />
         <div style="padding: 10px; margin: 4px;">
-          <div v-html="identiteHtml" style="font-size: 16px"></div>
+          <div v-html="identiteHtml" style="font-size: 17px"></div>
         </div>
         <div v-if="showSecteursCovid" class="text-uppercase" style="font-size: 18px">
           Secteurs COVID-19
@@ -42,31 +42,31 @@
           </Help>
           <v-tooltip bottom v-if="s1">
             <template v-slot:activator="{ on, attrs }">
-            <v-chip v-bind="attrs" v-on="on" class="ma-2" label outline text-color="grey darken-3">S1 : très probable</v-chip>
+            <v-chip v-bind="attrs" v-on="on" class="ma-2" label outlined text-color="grey darken-3">S1 : très probable</v-chip>
             </template>
             <span>Cette entreprise fait très probablement partie du secteur S1 au titre de l'activité :<br>{{ s1.libelleActivite }}</span>
           </v-tooltip>
           <v-tooltip bottom v-if="s1Possible">
             <template v-slot:activator="{ on, attrs }">
-            <v-chip v-bind="attrs" v-on="on" class="ma-2" label outline text-color="grey darken-3" style="border-style: dashed solid">S1 : possible</v-chip>
+            <v-chip v-bind="attrs" v-on="on" class="ma-2" label outlined text-color="grey darken-3" style="border-style: dashed solid">S1 : possible</v-chip>
             </template>
             <span>Cette entreprise peut faire partie du secteur S1 au titre de l'activité :<br>{{ s1Possible.libelleActivite }}</span>
           </v-tooltip>
           <v-tooltip bottom v-if="s1bis">
             <template v-slot:activator="{ on, attrs }">
-            <v-chip v-bind="attrs" v-on="on" class="ma-2" label outline text-color="grey darken-3">S1 bis : très probable</v-chip>
+            <v-chip v-bind="attrs" v-on="on" class="ma-2" label outlined text-color="grey darken-3">S1 bis : très probable</v-chip>
             </template>
             <span>Cette entreprise fait très probablement partie du secteur S1 bis au titre de l'activité :<br>{{ s1bis.libelleActivite }}</span>
           </v-tooltip>
           <v-tooltip bottom v-if="s1bisPossible">
             <template v-slot:activator="{ on, attrs }">
-            <v-chip v-bind="attrs" v-on="on" class="ma-2" label outline text-color="grey darken-3" style="border-style: dashed solid">S1 bis : possible</v-chip>
+            <v-chip v-bind="attrs" v-on="on" class="ma-2" label outlined text-color="grey darken-3" style="border-style: dashed solid">S1 bis : possible</v-chip>
             </template>
             <span>Cette entreprise peut faire partie du secteur S1 bis au titre de l'activité :<br>{{ s1bisPossible.libelleActivite }}</span>
           </v-tooltip>
           <v-tooltip bottom v-if="s2">
             <template v-slot:activator="{ on, attrs }">
-            <v-chip v-bind="attrs" v-on="on" class="ma-2" label outline text-color="grey darken-3">S2 : très probable</v-chip>
+            <v-chip v-bind="attrs" v-on="on" class="ma-2" label outlined text-color="grey darken-3">S2 : très probable</v-chip>
             </template>
             <span>Cette entreprise fait probablement partie du secteur S2</span>
           </v-tooltip>
@@ -75,7 +75,7 @@
       <v-flex xs12 md6>
         <h3>adresse postale du siège</h3>
         <hr style="color: #eee;" class="mr-4" />
-        <div style="padding: 10px; margin: 4px; font-size: 16px">
+        <div style="padding: 10px; margin: 4px; font-size: 17px">
           <v-layout wrap>
             <v-flex shrink>
               <div v-html="adresse" class="mb-3 mr-5"></div>

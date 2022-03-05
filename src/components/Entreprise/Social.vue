@@ -19,19 +19,19 @@
         <v-flex md6 xs12 grow>
           <v-layout column px-2 fill-height>
             <v-flex shrink>
-              <v-layout row align-center class="resume">
-                <v-flex text-xs-left class="valeur" style="line-height: 1.2em">
+              <v-layout px-3 row align-center class="resume">
+                <v-flex text-left class="valeur" style="line-height: 1.2em">
                   {{ etablissementActif() | pluralizeEtablissement }} en activité
                 </v-flex>
-                <v-flex text-xs-right shrink ml-3>
+                <v-flex text-right shrink ml-3>
                   EFFECTIF
                   <div class="valeur">{{ effectifEntreprise }}</div>
                 </v-flex>
-                <v-flex v-if="permDGEFP" text-xs-right shrink ml-3>
+                <v-flex v-if="permDGEFP" text-right shrink ml-3>
                   ACT. PARTIELLE
                   <div class="valeur">{{ activitePartielleEntreprise }}</div>
                 </v-flex>
-                <v-flex v-if="permUrssaf" text-xs-right shrink ml-3>
+                <v-flex v-if="permUrssaf" text-right shrink ml-3>
                   DETTE SOC.
                   <div class="valeur">{{ detteSocialeEntreprise }}</div>
                 </v-flex>
@@ -47,11 +47,11 @@
         </v-flex>
         <v-flex md6 xs12>
           <v-layout column fill-height style="font-weight: normal">
-            <v-flex v-if="permDGEFP || permUrssaf" py-3 text-xs-center shrink>
+            <v-flex v-if="permDGEFP || permUrssaf" py-3 text-center shrink>
               <v-btn-toggle mandatory v-model="sort">
-                <v-btn flat value="effectif">Trié par effectif</v-btn>
-                <v-btn v-if="permDGEFP" flat value="activite-partielle">Par activité partielle</v-btn>
-                <v-btn v-if="permUrssaf" flat value="dette-sociale">Par dette sociale</v-btn>
+                <v-btn text value="effectif">Trié par effectif</v-btn>
+                <v-btn v-if="permDGEFP" text value="activite-partielle">Par activité partielle</v-btn>
+                <v-btn v-if="permUrssaf" text value="dette-sociale">Par dette sociale</v-btn>
               </v-btn-toggle>
             </v-flex>
             <v-flex px-2 grow>
@@ -82,7 +82,7 @@
                 />
               </div>
             </v-flex>
-            <v-flex pt-2 text-xs-center align-end shrink>
+            <v-flex pt-2 text-center align-end shrink>
               <v-pagination
                 v-if="totalPages > 1"
                 v-model="currentPage"
@@ -96,7 +96,7 @@
       <v-layout mt-4 wrap>
         <v-flex v-if="ecartEffectif >= 0" md6 xs12>
           <v-layout px-3 align-center style="min-height: 80px">
-            <v-flex style="font-size: 16px">
+            <v-flex style="font-size: 17px">
               L'effectif de cette entreprise {{ introEffectif }}
               <span v-if="permDGEFP">
                 et elle
@@ -106,7 +106,7 @@
               sur les 24 derniers mois.
             </v-flex>
             <v-flex md5 shrink>
-              <v-btn outline color="indigo" @click="toggleHistoriqueEffectif" class="ml-4">
+              <v-btn outlined color="indigo" @click="toggleHistoriqueEffectif" class="ml-4">
                 {{
                 showHistoriqueEffectif ? "Masquer" : "Afficher"
                 }}
@@ -128,7 +128,7 @@
         </v-flex>
         <v-flex v-if="permUrssaf" md6 xs12>
           <v-layout px-3 align-center style="min-height: 80px">
-            <v-flex style="font-size: 16px">
+            <v-flex style="font-size: 17px">
               Cette entreprise
               {{
               hasDetteSociale
@@ -139,7 +139,7 @@
             </v-flex>
             <v-flex md5 shrink>
               <v-btn
-                outline
+                outlined
                 color="indigo"
                 @click="toggleHistoriqueDetteSociale"
                 class="ml-4"

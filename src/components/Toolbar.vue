@@ -1,10 +1,9 @@
 <template>
-  <v-toolbar
+  <v-app-bar app
     height="35px"
     class="toolbar elevation-12"
     color="#ffffff"
     extension-height="48px"
-    app
   >
     <v-icon
       @click="openLeftDrawer()"
@@ -23,7 +22,7 @@
     <v-icon
       
       color="#ffffff" v-if="!rightDrawer && drawer" @click="rightDrawer=!rightDrawer">{{ icon }}</v-icon>
-  </v-toolbar>
+  </v-app-bar>
 </template>
 
 <script>

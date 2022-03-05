@@ -23,7 +23,7 @@
           </v-tooltip>
           <v-tooltip bottom v-if="prediction.etat_procol !== 'in_bonis'">
             <template v-slot:activator="{ on, attrs }">
-            <v-chip v-bind="attrs" v-on="on" class="ma-0 mr-1 chip" outline small text-color="red darken-1">{{ libellesProcols[prediction.etat_procol] }}</v-chip>
+            <v-chip v-bind="attrs" v-on="on" class="ma-0 mr-1 chip" outlined small text-color="red darken-1">{{ libellesProcols[prediction.etat_procol] }}</v-chip>
             </template>
             <span>Cette entreprise fait l’objet d’une procédure collective : {{ libellesProcols[prediction.etat_procol] }}</span>
           </v-tooltip>
@@ -34,30 +34,30 @@
           </div>
         </div>
         <transition name="fade">
-          <div v-show="showRaccourci" style="position: absolute; right: 0">
-            <v-btn dark color="indigo" @click="showEtablissement">Voir Fiche Etablissement</v-btn>
-            <v-btn v-if="prediction.siren" dark color="indigo" @click="showEntreprise">Voir Fiche Entreprise</v-btn>
+          <div  v-show="showRaccourci" style="position: absolute; right: 0">
+            <v-btn class="mx-2" dark color="indigo" @click="showEtablissement">Voir Fiche Etablissement</v-btn>
+            <v-btn class="mx-2" v-if="prediction.siren" dark color="indigo" @click="showEntreprise">Voir Fiche Entreprise</v-btn>
           </div>
         </transition>
         <template v-if="social">
-          <div class="eff mr-2 text-xs-right">
+          <div class="eff mr-2 text-right">
             EFFECTIF
             <br />
             <span class="valeur" >{{ prediction.dernier_effectif || 'n/c' }}</span>
           </div>
-          <div v-if="permDGEFP" class="ap mr-2 text-xs-right">
+          <div v-if="permDGEFP" class="ap mr-2 text-right">
             ACT. PARTIELLE
             <br />
             <span class="valeur" :class="prediction.apHeureConsommeAVG12m > 0 ? 'down' : ''" >{{ this.$parent.formatActivitePartielle(this.$parent.equivalentTempsPlein(prediction.apHeureConsommeAVG12m || 0)) }}</span>
           </div>
-          <div v-if="permUrssaf" class="ds mr-2 text-xs-right">
+          <div v-if="permUrssaf" class="ds mr-2 text-right">
             DETTE SOC.
             <br />
             <span class="valeur" :class="prediction.detteUrssaf > 0 ? 'down' : ''">{{ prediction.detteUrssaf != null ? this.$parent.formatDetteSociale(prediction.detteUrssaf) : 'n/c'}}</span>
           </div>
         </template>
         <template v-else>
-          <div class="social mr-2 text-xs-right">
+          <div class="social mr-2 text-right">
             <div class="mt-2">
               <img
                 class="mr-2"
@@ -86,24 +86,24 @@
             </div>
             <div class="effectif">{{ this.libelleEffectif }}</div>
           </div>
-          <div class="ca mr-2 text-xs-right">
+          <div class="ca mr-2 text-right">
             CA {{prediction.exerciceDiane}}
             <br />
             <span class="valeur" :class="diane.ca_color">{{ diane.ca || 'n/c' }}</span>
             <v-icon small v-if="diane.ca_arrow">{{ diane.ca_arrow }}</v-icon>
           </div>
-          <div class="rex mr-2 text-xs-right">
+          <div class="rex mr-2 text-right">
             EBE
             <br />
             <span class="valeur" :class="diane.excedent_brut_d_exploitation_color">{{ diane.excedent_brut_d_exploitation }}</span>
           </div>
-          <div class="rex mr-2 text-xs-right">
+          <div class="rex mr-2 text-right">
             REX
             <br />
             <span class="valeur" :class="diane.resultat_expl_color">{{ diane.resultat_expl }}</span>
           </div>
         </template>
-        <v-dialog lazy fullscreen v-model="dialog">
+        <v-dialog fullscreen v-model="dialog">
           <div style="height: 100%; width: 100%; font-weight: 800; font-family: 'Oswald', sans;">
             <v-toolbar
               fixed
@@ -118,7 +118,7 @@
             <Etablissement v-if="dialog" :siret="prediction.siret" :batch="currentBatchKey" v-on="$listeners"></Etablissement>
           </div>
         </v-dialog>
-        <v-dialog lazy fullscreen v-model="entrepriseDialog">
+        <v-dialog fullscreen v-model="entrepriseDialog">
           <div style="height: 100%; width: 100%; font-weight: 800; font-family: 'Oswald', sans;">
             <v-toolbar
               fixed
@@ -250,12 +250,12 @@ export default {
 }
 .commune {
   font-family: "Oswald";
-  font-size: 20px;
+  font-size: 21px;
   color: #333;
 }
 .raison-sociale {
   font-family: "Oswald";
-  font-size: 24px;
+  font-size: 25px;
   color: #333;
 }
 .identite {

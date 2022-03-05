@@ -30,7 +30,7 @@
             <span>Cet établissement est fermé ou l’activité de l’entreprise a cessé</span>
           </v-tooltip>
         </div>
-        <div style="font-size: 16px">
+        <div style="font-size: 17px">
           <div v-if="permScore">
             <div v-if="summary.alert == null">
               Cet établissement ne faisait pas partie du périmètre de Signaux Faibles au moment de la production de cette liste de détection.
@@ -70,60 +70,53 @@
           :series="series(dernierScore)"
         ></apexchart>
       </v-flex>
-      <v-btn v-if="permScore && !this.crash && historique.length > 1" outline small dark color="indigo" @click="historiqueDialog = true">Voir historique des alertes</v-btn>
+      <v-btn v-if="permScore && !this.crash && historique.length > 1" outlined small dark color="indigo" @click="historiqueDialog = true">Voir historique des alertes</v-btn>
       <v-dialog v-model="historiqueDialog" @input="historiqueDialog = false" max-width="500px">
         <div>
           <v-card>
             <v-card-title class="headline">
               Historique des alertes
             </v-card-title>
-            <v-card-text style="font-size: 16px; font-weight: 800; font-family: 'Oswald', sans;">
-              <v-expansion-panel>
-                <v-expansion-panel-content
+            <v-card-text style="font-size: 17px; font-weight: 800; font-family: 'Oswald', sans;">
+              <v-expansion-panels accordion>
+                <v-expansion-panel
                   v-for="h in historique"
-                  :key="h.idListe"
-                >
-                  <template v-slot:header>
+                  :key="h.idListe">
+                  <v-expansion-panel-header>
                     <div><ScoreWidget size="25px" :prediction="h" class="mr-1" /> {{ h.idListe }}</div>
-                  </template>
-                  <v-card>
-                    <v-card-text>
-                      <div v-if="h.alert == null" >
-                        Cet établissement ne faisait pas partie du périmètre de Signaux Faibles au moment de la production de cette liste de détection.
-                      </div>
-                      <div v-if="h.alert === 'Pas d\'alerte'">
-                        Cet établissement n’a pas été identifié par l’algorithme comme étant à risque de défaillance à 18 mois.
-                      </div>
-                      <div v-if="h.alert === 'Alerte seuil F2'">
-                        Cet établissement a été identifié par l’algorithme comme étant à risque modéré de défaillance à 18 mois{{ alertSuffix(h) }}
-                        <ul v-if="selectConcerning(h)" style="list-style-type: disc">
-                          <li v-for="c in selectConcerning(h)" :key="c[1]"><em>{{ libelleMicro(c[1]) }}</em> ({{ libelleMacro(c[0]) }})</li>
-                        </ul>
-                      </div>
-                      <div v-if="h.alert === 'Alerte seuil F1'">
-                        Cet établissement a été identifié par l’algorithme comme étant à risque élevé de défaillance à 18 mois{{ alertSuffix(h) }}
-                        <ul v-if="selectConcerning(h)" style="list-style-type: disc">
-                          <li v-for="c in selectConcerning(h)" :key="c[1]"><em>{{ libelleMicro(c[1]) }}</em> ({{ libelleMacro(c[0]) }})</li>
-                        </ul>
-                      </div>
-                      <div class="mt-4">
-                        <apexchart
-                          v-if="h.macroRadar && Object.keys(h.macroRadar).length > 2 && (h.alert === 'Alerte seuil F1' || h.alert === 'Alerte seuil F2')"
-                          type="radar"
-                          height="200"
-                          :options="macroOptions(h)"
-                          :series="series(h)"
-                        ></apexchart>
-                      </div>
-                    </v-card-text>
-                  </v-card>
-                </v-expansion-panel-content>
-              </v-expansion-panel>
+                  </v-expansion-panel-header>
+                  <v-expansion-panel-content>
+                        <div v-if="h.alert == null" >
+                          Cet établissement ne faisait pas partie du périmètre de Signaux Faibles au moment de la production de cette liste de détection.
+                        </div>
+                        <div v-if="h.alert === 'Pas d\'alerte'">
+                          Cet établissement n’a pas été identifié par l’algorithme comme étant à risque de défaillance à 18 mois.
+                        </div>
+                        <div v-if="h.alert === 'Alerte seuil F2'">
+                          Cet établissement a été identifié par l’algorithme comme étant à risque modéré de défaillance à 18 mois{{ alertSuffix(h) }}
+                          <ul v-if="selectConcerning(h)" style="list-style-type: disc">
+                            <li v-for="c in selectConcerning(h)" :key="c[1]"><em>{{ libelleMicro(c[1]) }}</em> ({{ libelleMacro(c[0]) }})</li>
+                          </ul>
+                        </div>
+                        <div v-if="h.alert === 'Alerte seuil F1'">
+                          Cet établissement a été identifié par l’algorithme comme étant à risque élevé de défaillance à 18 mois{{ alertSuffix(h) }}
+                          <ul v-if="selectConcerning(h)" style="list-style-type: disc">
+                            <li v-for="c in selectConcerning(h)" :key="c[1]"><em>{{ libelleMicro(c[1]) }}</em> ({{ libelleMacro(c[0]) }})</li>
+                          </ul>
+                        </div>
+                        <div class="mt-4">
+                          <apexchart
+                            v-if="h.macroRadar && Object.keys(h.macroRadar).length > 2 && (h.alert === 'Alerte seuil F1' || h.alert === 'Alerte seuil F2')"
+                            type="radar"
+                            height="200"
+                            :options="macroOptions(h)"
+                            :series="series(h)"
+                          ></apexchart>
+                        </div>
+                  </v-expansion-panel-content>
+                </v-expansion-panel>
+              </v-expansion-panels>
             </v-card-text>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn flat color="primary" @click="historiqueDialog = false">Fermer</v-btn>
-            </v-card-actions>
           </v-card>
         </div>
       </v-dialog>

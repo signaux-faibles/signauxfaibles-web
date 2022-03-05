@@ -18,10 +18,10 @@
               :summary="summary"
             />
             <v-btn v-if="etablissement.siren" dark color="indigo" @click="showEntreprise">Voir Fiche Entreprise</v-btn>
-            <v-btn outline color="indigo" class="ml-4" @click="exportDOCX" :dark="!exportDOCXLoading" :loading="exportDOCXLoading" :disabled="exportDOCXLoading"><v-icon small class="mr-2">fa-file-word</v-icon>Exporter en DOCX (Word)</v-btn>
+            <v-btn outlined color="indigo" class="ml-4" @click="exportDOCX" :dark="!exportDOCXLoading" :loading="exportDOCXLoading" :disabled="exportDOCXLoading"><v-icon small class="mr-2">fa-file-word</v-icon>Exporter en DOCX (Word)</v-btn>
             <v-alert :value="alertExport" type="error" transition="scale-transition" dismissible>Un problème est survenu lors de l'export de l’établissement.</v-alert>
           </v-flex>
-          <v-flex xs12 md6 class="text-xs-left pa-3" style="font-size: 16px">
+          <v-flex xs12 md6 class="text-left pa-3" style="font-size: 17px">
             <v-layout fill-height align-center>
               <v-flex>
                 <v-layout wrap>
@@ -45,16 +45,16 @@
                       <div v-if="summary && summary.etat_procol !== 'in_bonis'">
                         <div>
                           Cet établissement fait l’objet d’une procédure collective :<br/>
-                          <v-chip class="my-2 chip" outline small text-color="red darken-1">{{ libellesProcols[summary.etat_procol] }}</v-chip>
+                          <v-chip class="my-2 chip" outlined small text-color="red darken-1">{{ libellesProcols[summary.etat_procol] }}</v-chip>
                         </div>
-                        <v-btn outline small dark color="indigo" @click="jugementsDialog = true">Voir historique des jugements</v-btn>
+                        <v-btn outlined small dark color="indigo" @click="jugementsDialog = true">Voir historique des jugements</v-btn>
                         <v-dialog v-model="jugementsDialog" @input="jugementsDialog = false" max-width="500px">
                           <div>
                             <v-card>
                               <v-card-title class="headline">
                                 Jugements de procédure collective
                               </v-card-title>
-                              <v-card-text style="font-size: 16px">
+                              <v-card-text style="font-size: 17px">
                                 <v-expansion-panel v-model="jugementsPanel" expand style="font-weight: 800; font-family: 'Oswald', sans;">
                                   <v-expansion-panel-content v-if="liquidationJugements.length > 0">
                                     <template v-slot:header>
@@ -95,12 +95,12 @@
                                 </v-expansion-panel>
                                 <div class="mt-4" style="font-size: 14px; font-weight: 400; font-family: 'Roboto', sans-serif">
                                   Vous pouvez consulter les annonces publiées au bulletin officiel.
-                                  <v-btn class="my-2" small outline color="indigo" :href="lienBODACC" target="_blank" rel="noopener"><v-icon small left>open_in_new</v-icon>Voir annonces BODACC</v-btn>
+                                  <v-btn class="my-2" small outlined color="indigo" :href="lienBODACC" target="_blank" rel="noopener"><v-icon small left>open_in_new</v-icon>Voir annonces BODACC</v-btn>
                                 </div>
                               </v-card-text>
                               <v-card-actions>
                                 <v-spacer></v-spacer>
-                                <v-btn flat color="primary" @click="jugementsDialog = false">Fermer</v-btn>
+                                <v-btn text color="primary" @click="jugementsDialog = false">Fermer</v-btn>
                               </v-card-actions>
                             </v-card>
                           </div>
@@ -123,7 +123,7 @@
                       </h2>
                       <div v-if="visiteFCE">
                         <div class="mb-2">Cet établissement a reçu la visite de la Dreets (ex-Direccte) au cours des 24 derniers mois.</div>
-                        <v-btn v-if="showLienVisiteFCE" small outline color="indigo" :href="lienVisiteFCE" target="_blank" rel="noopener" @click="getLienVisiteFCE()"><v-icon small left>open_in_new</v-icon>Fiche Commune Entreprise</v-btn>
+                        <v-btn v-if="showLienVisiteFCE" small outlined color="indigo" :href="lienVisiteFCE" target="_blank" rel="noopener" @click="getLienVisiteFCE()"><v-icon small left>open_in_new</v-icon>Fiche Commune Entreprise</v-btn>
                       </div>
                       <div v-else>
                         <div class="mb-2">Cet établissement n’a pas reçu la visite de la Dreets (ex-Direccte) au cours des 24 derniers mois.</div>
@@ -134,7 +134,7 @@
               </v-flex>
             </v-layout>
           </v-flex>
-          <v-flex xs12 md12 class="text-xs-right pa-3">
+          <v-flex xs12 md12 class="text-right pa-3">
             <Commentaire :siret="siret" />
           </v-flex>
           <v-flex md6 xs12 class="pr-1" style="min-height: 200px">    
@@ -149,12 +149,12 @@
           <v-flex xs12 class="pr-1 pt-3">
             <EtablissementEntreprise :siret="siret" :siege="etablissement.siege" :codeDepartement="sirene.codeDepartement" :etablissementsSummary="etablissementsSummary" v-on="$listeners" />
           </v-flex>
-          <FollowDialog lazy/>
-          <UnfollowDialog lazy/>
-          <BoardDialog v-if="wekanUser" lazy/>
+          <FollowDialog/>
+          <UnfollowDialog/>
+          <BoardDialog v-if="wekanUser"/>
 
 
-          <v-dialog lazy fullscreen v-model="entrepriseDialog">
+          <v-dialog fullscreen v-model="entrepriseDialog">
             <div style="height: 100%; width: 100%; font-weight: 800; font-family: 'Oswald', sans;">
               <v-toolbar
                 fixed
@@ -171,7 +171,7 @@
           </v-dialog>
         </v-layout>
         <v-btn v-if="followed === false" fab fixed bottom right dark color="indigo" class="mr-2" @click="followDialog = true"><v-icon>mdi-star-outline</v-icon></v-btn>
-        <v-btn v-if="followed === true" fab fixed bottom right outline color="indigo" class="mr-2" @click="unfollowDialog = true"><v-icon>mdi-star</v-icon></v-btn>
+        <v-btn v-if="followed === true" fab fixed bottom right outlined color="indigo" class="mr-2" @click="unfollowDialog = true"><v-icon>mdi-star</v-icon></v-btn>
       </v-container>
     </div>
   </div>
@@ -259,8 +259,8 @@ export default {
             }
             return c
           })
-          if (this.boards.filter(b => !b.card && b.isMember).length>0) {
-            this.currentBoard = this.boards.filter(b => b.id && !b.card)[0].id
+          if (this.boards.filter((b) => !b.card && b.isMember).length > 0) {
+            this.currentBoard = this.boards.filter((b) => b.id && !b.card)[0].id
           }
         }).catch((_) => {
           this.boards = []
