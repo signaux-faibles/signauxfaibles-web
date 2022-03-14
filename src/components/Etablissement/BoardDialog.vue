@@ -18,6 +18,8 @@
             :value="board.id"
           ></v-radio>
         </v-radio-group>
+        <span v-if="currentBoardHasCard" class="red--text" style="font-size: 16px">Une carte de suivi existe déjà dans ce tableau, ne créez une nouvelle carte que si cela est nécessaire.<br/></span>
+        <span v-if="currentBoardHasArchive && !currentBoardHasCard" class="red--text" style="font-size: 16px">Une ancienne carte existe déjà dans les archives, ne créez une nouvelle carte que si cela est nécessaire.<br/></span>
         Quelles problématiques avez vous identifiées à ce stade ?
         <Help titre="Problématiques identifiées" :big="true">
           <div v-html="followCardConfig.problemHelpContent" />
@@ -152,6 +154,12 @@ export default {
       set(val) {
         this.$parent.currentBoard = val
       },
+    },
+    currentBoardHasCard() {
+      return this.boards.filter(b => b.id == this.currentBoard && (b.cards || []).filter(c => !c.archived).length > 0).length > 0
+    },
+    currentBoardHasArchive() {
+      return this.boards.filter(b => b.id == this.currentBoard && (b.cards || []).filter(c => c.archived).length > 0).length > 0
     },
     boards() {
         return this.$parent.boards || []

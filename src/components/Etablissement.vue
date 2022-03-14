@@ -143,9 +143,6 @@
           <v-flex md6 xs12 class="pr-1">
             <Urssaf :debit="debit" :cotisation="cotisation" :permUrssaf="perms.permUrssaf" />
           </v-flex>
-          <v-flex xs12 class="pr-1">
-            <Finance :siren="etablissement.siren" />
-          </v-flex>
           <v-flex xs12 class="pr-1 pt-3">
             <EtablissementEntreprise :siret="siret" :siege="etablissement.siege" :codeDepartement="sirene.codeDepartement" :etablissementsSummary="etablissementsSummary" v-on="$listeners" />
           </v-flex>
@@ -182,14 +179,12 @@ import Effectif from '@/components/Etablissement/Effectif.vue'
 import Urssaf from '@/components/Etablissement/Urssaf.vue'
 import Identite from '@/components/Etablissement/Identite.vue'
 import Map from '@/components/Etablissement/Map.vue'
-import Finance from '@/components/Etablissement/Finance.vue'
 import Commentaire from '@/components/Etablissement/Commentaire.vue'
 import EtablissementEntreprise from '@/components/Etablissement/Entreprise.vue'
 import Entreprise from '@/components/Entreprise.vue'
 import Historique from '@/components/Etablissement/Historique.vue'
 import axios from 'axios'
 import fr from 'apexcharts/dist/locales/fr.json'
-import MarkdownIt from 'markdown-it'
 import libellesProcols from '@/assets/libelles_procols.json'
 import Boards from '@/components/Etablissement/Boards.vue'
 import FollowDialog from '@/components/Etablissement/FollowDialog.vue'
@@ -200,7 +195,7 @@ import Help from '@/components/Help.vue'
 export default {
   props: ['siret', 'batch'],
   name: 'Etablissement',
-  components: { Effectif, Urssaf, Help, Finance, Identite, Map,
+  components: { Effectif, Urssaf, Help, Identite, Map,
     Commentaire, EtablissementEntreprise, Entreprise, Historique,
     Boards, FollowDialog, UnfollowDialog, BoardDialog },
   data() {
@@ -232,7 +227,6 @@ export default {
       joinCardAlert: false,
       joinCardAlertError: '',
       followSwimlane: '',
-      currentBoard: '',
     }
   },
   methods: {
@@ -246,21 +240,15 @@ export default {
         this.etablissement = {}
         this.historique = []
         this.sirene = {}
-      })
+      }) 
     },
     getBoards() {
       if (this.wekanUser) {
         this.$axios.get(`/wekan/cards/${this.siret}`).then((response) => {
-          const card = response.data
-          const md = new MarkdownIt()
-          this.boards = card.map((c) => {
-            if (c.card && c.card.cardDescription) {
-              c.card.cardDescription = md.render(c.card.cardDescription)
-            }
-            return c
-          })
-          if (this.boards.filter((b) => !b.card && b.isMember).length > 0) {
-            this.currentBoard = this.boards.filter((b) => b.id && !b.card)[0].id
+          this.boards = response.data
+          const myBoardIds =  this.boards.filter((b) => b.isMember).map((b) => b.id)
+          if (myBoardIds.length>0 && !myBoardIds.includes(this.currentBoard)) {
+            this.currentBoard = myBoardIds[0]
           }
         }).catch((_) => {
           this.boards = []
@@ -373,6 +361,10 @@ export default {
     },
   },
   computed: {
+    currentBoard: {
+      get() { return this.$localStore.state.currentBoard },
+      set(value) { this.$localStore.commit('setCurrentBoard', value) },
+    },
     wekanUser() {
       return this.roles.includes('wekan')
     },
