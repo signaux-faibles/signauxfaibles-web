@@ -18,6 +18,8 @@
             :value="board.id"
           ></v-radio>
         </v-radio-group>
+        <span v-if="currentBoardHasCard" class="red--text">Une carte existe déjà dans ce tableau, en avez vous connaissance ?<br/></span>
+        <span v-if="currentBoardHasArchive && !currentBoardHasCard" class="red--text">Il est possible de sortir des archives une ancienne carte, en avez vous connaissance ?<br/></span>
         Quelles problématiques avez vous identifiées à ce stade ?
         <Help titre="Problématiques identifiées" :big="true">
           <div v-html="followCardConfig.problemHelpContent" />
@@ -152,6 +154,12 @@ export default {
       set(val) {
         this.$parent.currentBoard = val
       },
+    },
+    currentBoardHasCard() {
+      return this.boards.filter(b => b.id == this.currentBoard && (b.cards || []).filter(c => !c.archived).length > 0).length > 0
+    },
+    currentBoardHasArchive() {
+      return this.boards.filter(b => b.id == this.currentBoard && (b.cards || []).filter(c => c.archived).length > 0).length > 0
     },
     boards() {
         return this.$parent.boards || []

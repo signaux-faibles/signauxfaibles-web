@@ -36,6 +36,7 @@ const localStore = new Vuex.Store({
     statutSuivi: ['Suivi en cours'],
     zoneSuivi: [],
     labelsSuivi: [],
+    currentBoard: "",
   },
   mutations: {
     setexcludeSecteursCovid(state, val: boolean) { state.excludeSecteursCovid = val },
@@ -54,6 +55,7 @@ const localStore = new Vuex.Store({
     setStatutSuivi(state, value) { state.statutSuivi = value },
     setZoneSuivi(state, value) { state.zoneSuivi = value },
     setLabelsSuivi(state, value) { state.labelsSuivi = value },
+    setCurrentBoard(state, value) { state.currentBoard = value },
   },
 })
 
