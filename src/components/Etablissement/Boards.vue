@@ -31,7 +31,12 @@
                 <v-card-title class="headline">
                   Aperçu de la carte de suivi
                 </v-card-title>
-                <v-card-text>     
+                <v-card-text>
+                  <div class="pb-10">
+                    <b>suivi depuis:</b> {{ card.startAtDate.toLocaleDateString("fr") }}<br/>
+                    <span v-if="endAt"><b>suivi terminé:</b> {{ card.endAtDate.toLocaleDateString("fr")  }}<br/></span>
+                    <b>dernière activité:</b> {{ card.lastActivityDate.toLocaleDateString("fr")  }}<br/>
+                  </div>    
                   <div v-html="card.cardDescriptionMD"/>
                 </v-card-text>
                 <v-card-actions>
@@ -40,7 +45,16 @@
                 </v-card-actions>
               </v-card>
             </v-menu>
-            <v-icon v-if="card.archived && !card.board.isMember">mdi-archive</v-icon>
+
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on, attrs }">
+                <v-icon v-on="on" v-bind="attrs" v-if="card.archived && !card.board.isMember">mdi-archive</v-icon>
+              </template>
+              <b>suivi depuis:</b> {{ card.startAtDate.toLocaleDateString("fr") }}<br/>
+              <span v-if="endAt"><b>suivi terminé:</b> {{ card.endAtDate.toLocaleDateString("fr")  }}<br/></span>
+              <b>dernière activité:</b> {{ card.lastActivityDate.toLocaleDateString("fr")  }}<br/>
+            </v-tooltip>
+
           </td>
           <td>
             <v-btn 
@@ -52,7 +66,7 @@
               @click="trackMatomoEvent('follow', 'contacter_createur', card.creator)" 
               target="_blank">
               <v-icon>
-                  email
+                email
               </v-icon>
             </v-btn>
           </td>
@@ -83,86 +97,6 @@
         </tr>
       </tbody>
     </v-simple-table>
-    <!-- <v-list three-line subheader > -->
-      <!-- <v-list-item
-        v-for="board in (boards || []).filter(b => b.card)"
-        :key="board.title"
-      >
-        <v-list-item-content>
-          <h4>{{ board.title }}
-            <v-chip v-if="board.card.listIndex" small class="chip ml-3">{{ board.card.listIndex }}</v-chip>
-            <v-menu v-if="board.card.cardDescription" min-width="300px" max-width="40%" max-height="60%" offset-y>
-              <template v-slot:activator="{ on, attrs }">              
-                <v-btn v-bind="attrs" icon v-on="on" text color="indigo" ref="btn" slot="activator" @click="trackMatomoEvent('general', 'ouvrir_aide', board.title)">
-                  <v-icon>fa-eye</v-icon>
-                </v-btn>
-              </template>
-              <v-card>
-                <v-card-title class="headline">
-                  Aperçu de la carte de suivi
-                </v-card-title>
-                <v-card-text>     
-                  <div v-html="board.card.cardDescription"/>
-                </v-card-text>
-                <v-card-actions>
-                  <v-spacer/>
-                  <v-btn text color="primary">OK</v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-menu>
-          </h4>
-        </v-list-item-content>
-        <v-list-item-action>
-          <v-btn v-if="board.card && board.card.cardURL" :href="board.card.cardURL"  dark color="indigo" class="px-2 ma-1">
-            <v-icon small class="mr-2">fab fa-trello</v-icon>
-            Carte de suivi
-          </v-btn>
-          <v-btn 
-            class="px-2 ma-1"
-            dark color="indigo"
-            outlined
-            v-if="board.card.creator != jwt.email && !board.card.isMember" 
-            :href="'mailto:' + board.card.creator + '?subject=Suivi Signaux Faibles - demande d\'informations sur ' + denomination" 
-            @click="trackMatomoEvent('follow', 'contacter_createur', board.card.creator)" 
-            target="_blank">
-            <v-icon small class="mr-2">
-                email
-            </v-icon>
-            Contacter
-          </v-btn>
-          <v-btn 
-              class="px-2 ma-1"
-               color="indigo"
-              disabled  
-              outlined            
-              v-if="board.card.creator == jwt.email && !board.card.isMember" 
-              :href="'mailto:' + board.card.creator" 
-              @click="trackMatomoEvent('follow', 'contacter_createur', board.card.creator)" 
-              target="_blank">
-            <v-icon small class="mr-2">
-                email
-            </v-icon>
-            Vous êtes createur
-          </v-btn>
-        </v-list-item-action>
-      </v-list-item>
-      <v-list-item v-if="boards.filter(c => !c.card && c.isMember).length > 0" :style="{
-          'align-items':'left'
-        }">
-        <v-list-item-content>
-          <span v-if="boards.filter(b=>b.card).length==0">
-            Cet établissement ne fait l'objet d'aucune carte de suivi.
-          </span><br/>
-          <v-btn v-if="followed" outlined color="indigo" class="pa-2" @click="showBoardDialog()">
-            <v-icon>edit</v-icon>
-            créer une carte de suivi<br/>
-          </v-btn>
-          <span v-if="!followed">
-            Pour créer une carte de suivi, veuillez suivre cet établissement.
-          </span> 
-        </v-list-item-content>
-      </v-list-item>
-    </v-list> --> 
   </div>
 </template>
 
@@ -210,6 +144,9 @@ export default {
           slug: b.slug,
           url: b.url,
         }
+        c.startAtDate = new Date(c.startAt)
+        c.endAtDate = new Date(c.endAt)
+        c.lastActivityDate = new Date(c.lastActivity)
         return c
       })) 
     },

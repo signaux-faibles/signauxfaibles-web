@@ -164,7 +164,7 @@ export default {
             },
           },
         },
-        colors: [ '#fac699', '#e76278', '#4f8a83'],
+        colors: ['#fac699', '#e76278', '#4f8a83'],
         fill: {
           type: ['solid', 'solid', 'solid'],
           colors: [ '#fac699', '#e76278', '#4f8a83' ],

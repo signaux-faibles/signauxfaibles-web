@@ -60,8 +60,8 @@
           <v-icon :class="loading?'rotate':''" @click="closeRightDrawer()">mdi-target</v-icon>
         </v-toolbar>
         <div class="mt-2" style="display: flex; flex-direction: column; vertical-align: middle; padding: 0 15px;">
-          <span style="font-size: 15px;">Statut du suivi</span>
           <v-select
+            prepend-icon="mdi-playlist-check"
             :disabled="type == 'no-card'"
             ref="statutMenu" 
             v-model="statut"
@@ -70,6 +70,7 @@
             v-on:change="getFollowedEtablissements"
             multiple
             chips
+            label="Statut du suivi"
           >
             <template v-slot:append-item>
               <div class="text-center my-2">
@@ -80,8 +81,8 @@
         </div>
         <v-divider class="mb-3" />
         <div class="mt-2" style="display: flex; flex-direction: column; vertical-align: middle; padding: 0 15px;">
-          <span style="font-size: 15px;">Étiquettes</span>
           <v-select
+            prepend-icon="mdi-label"
             :disabled="type == 'no-card'"
             ref="labelMenu" 
             v-model="labels"
@@ -90,6 +91,7 @@
             v-on:change="getFollowedEtablissements"
             multiple
             chips
+            label="Étiquettes"
           >
             <template v-slot:append-item>
               <div class="text-center my-2">
@@ -101,6 +103,7 @@
         <v-divider class="mb-3" />
         <div style="display: flex; flex-direction: row; vertical-align: middle; padding: 0 15px;">
           <v-select
+          prepend-icon="mdi-map-marker"
           :items="subzones"
           v-on:change="getFollowedEtablissements"
           v-model="zone"
@@ -108,6 +111,50 @@
           ></v-select>
         </div>
         <v-divider class="mb-3" />
+        <div style="display: flex; flex-direction: row; vertical-align: middle; padding: 0 15px;">
+          <v-dialog
+            ref="menuSince"
+            v-model="menuSince"
+            :return-value.sync="since"
+            persistent
+            width="290px"
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <v-text-field
+                v-model="since"
+                label="Modifié depuis"
+                prepend-icon="mdi-calendar"
+                readonly
+                v-bind="attrs"
+                v-on="on"
+                clearable
+                @click:clear="() => {since=null; getFollowedEtablissements()}"
+              ></v-text-field>
+            </template>
+            <v-date-picker
+              v-model="since"
+              scrollable
+              locale="fr"
+              v-on:change="getFollowedEtablissements"
+            >
+              <v-spacer></v-spacer>
+              <v-btn
+                text
+                color="primary"
+                @click="menuSince = false"
+              >
+                Cancel
+              </v-btn>
+              <v-btn
+                text
+                color="primary"
+                @click="$refs.menuSince.save(since)"
+              >
+                OK
+              </v-btn>
+            </v-date-picker>
+          </v-dialog>
+        </div>
       </v-navigation-drawer>
     </div>
     <v-layout column fill-height style="font-weight: normal">
@@ -178,7 +225,9 @@ export default {
       snackbar: true,
       exportXSLXLoading: false,
       exportDOCXLoading: false,
+      menuSince: false,
       alertExport: false,
+      since: null,
       statutItems: ['A définir', 'Veille', 'Suivi en cours', 'Suivi terminé'],
 
     }
@@ -274,8 +323,11 @@ export default {
         if (this.zone.length > 0) {
           params.zone = this.zone
         }
-        if (this.labels.length > 0) {
+        if (this.labels.length > 0) {
           params.labels = this.labels
+        }
+        if (this.since) {
+          params.since = new Date(this.since)
         }
       }
       return params
