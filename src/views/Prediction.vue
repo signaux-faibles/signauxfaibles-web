@@ -197,6 +197,15 @@
             <v-subheader slot="activator">Filtres avancés</v-subheader>
             <v-list-item>
               <v-list-item-action>
+                <v-checkbox v-model="firstAlert" @change="getPrediction()"></v-checkbox>
+              </v-list-item-action>
+              <v-list-item-content @click="toggleFirstAlert()">
+                <v-list-item-title>Premières alertes</v-list-item-title>
+                <v-list-item-subtitle>Affiche uniquement les premières alertes</v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item>
+              <v-list-item-action>
                 <v-checkbox v-model="ignorezone" @change="getPrediction()"></v-checkbox>
               </v-list-item-action>
               <v-list-item-content @click="toggleIgnoreZone()">
@@ -416,6 +425,10 @@ export default {
       this.excludeSecteursCovid = !this.excludeSecteursCovid
       this.getPrediction()
     },
+    toggleFirstAlert() {
+      this.firstAlert = !this.firstAlert
+      this.getPrediction()
+    },
     toggleIgnoreZone() {
       this.ignorezone = !this.ignorezone
       this.getPrediction()
@@ -466,6 +479,9 @@ export default {
         params.caMin = parseInt(this.caMin, 10)
       }
       params.effectifMinEntreprise = parseInt(this.minEffectif, 10)
+      if (this.firstAlert) {
+        params.firstAlert = true
+      }
       if (this.ignorezone) {
         params.ignorezone = this.ignorezone
       }
@@ -502,6 +518,10 @@ export default {
     ignorezone: {
       get() { return this.$localStore.state.ignorezone },
       set(value) { this.$localStore.commit('setignorezone', value) },
+    },
+    firstAlert: {
+      get() { return this.$localStore.state.firstAlert },
+      set(value) { this.$localStore.commit('setfirstAlert', value) },
     },
     procol: {
       get() { return this.$localStore.state.procol },
