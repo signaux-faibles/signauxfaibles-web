@@ -33,8 +33,8 @@ npx vue-cli-service build --mode=$2
 
 # Build docker
 cd ../..
-docker build -t sfweb --build-arg app="./workspace/signauxfaibles-web-$1/dist" .
-docker save sfweb | gzip > sfweb.tar.gz
+docker build -t sfweb-testing --build-arg app="./workspace/signauxfaibles-web-$1/dist" .
+docker save sfweb-testing | gzip > sfweb-testing.tar.gz
 
 # Cleanup
 rm -rf workspace
