@@ -53,9 +53,6 @@ export default {
         }, []),
       }]
     },
-    selectConcerning(h) {
-      return ((h || {}).explSelection || {}).selectConcerning
-    },
     libelleMicro(variable) {
       return libellesVariablesScores.micro[variable]
     },

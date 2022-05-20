@@ -1,17 +1,17 @@
 <template>
-  <div>
+  <div v-if="permScore && dernierScore && dernierScore.macroRadar && Object.keys(dernierScore.macroRadar).length > 2 && (summary.alert === 'Alerte seuil F1' || summary.alert === 'Alerte seuil F2')">
     <v-toolbar dense flat class="mytoolbar" light>
       <v-toolbar-title class="localtoolbar mytoolbar">Analyse pré-crise (mars 2020)</v-toolbar-title>
       <v-spacer />
       <Help titre="Cotisations et impayés URSSAF">
         <template>
-          
+
         </template>
       </Help>
     </v-toolbar>
     <v-card outlined>
       <v-card-text>
-        <div v-if="permScore && dernierScore && dernierScore.macroRadar && Object.keys(dernierScore.macroRadar).length > 2 && (summary.alert === 'Alerte seuil F1' || summary.alert === 'Alerte seuil F2')">
+        <div>
           Score pré-crise:
           <apexchart
             type="radar"
@@ -53,9 +53,6 @@ export default {
           return data
         }, []),
       }]
-    },
-    selectConcerning(h) {
-      return ((h || {}).explSelection || {}).selectConcerning
     },
     libelleMicro(variable) {
       return libellesVariablesScores.micro[variable]
