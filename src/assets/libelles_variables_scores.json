@@ -1,18 +1,17 @@
 {
   "micro": {
-    "MNT_AF_BFONC_BFR": "Besoin en fonds de roulement",
-    "MNT_AF_BFONC_FRNG": "Fonds de roulement net global",
-    "MNT_AF_BFONC_TRESORERIE": "Trésorerie",
-    "MNT_AF_CA": "Chiffre d'affaires",
-    "MNT_AF_SIG_EBE_RET": "Excédent brut d'exploitation (avec retraitement)",
-    "RTO_AF_RATIO_RENT_MBE": "Ratio rentabilité / marge brute d'exploitation",
-    "RTO_AF_RENT_ECO": "Rentabilité économique",
-    "RTO_AF_SOLIDITE_FINANCIERE": "Solidité financière",
-    "RTO_INVEST_CA": "Ratio investissements / chiffre d'affaires",
+    "mnt_af_bfonc_bfr": "Besoin en fonds de roulement",
+    "mnt_af_bfonc_frng": "Fonds de roulement net global",
+    "mnt_af_bfonc_tresorerie": "Trésorerie",
+    "mnt_af_ca": "Chiffre d'affaires",
+    "mnt_af_sig_ebe_ret": "Excédent brut d'exploitation (avec retraitement)",
+    "rto_af_ratio_rent_mbe": "Ratio rentabilité / marge brute d'exploitation",
+    "rto_af_rent_eco": "Rentabilité économique",
+    "rto_af_solidite_financiere": "Solidité financière",
+    "rto_invest_ca": "Ratio investissements / chiffre d'affaires",
     "apart_heures_consommees": "Heures consommées en activité partielle",
     "apart_heures_consommees_cumulees": "Heures consommées en activité partielle cumulées",
     "avg_delta_dette_par_effectif": "Tendance d’évolution de la dette par effectif",
-    "ca": "Chiffre d’affaires",
     "cotisation": "Cotisations sociales",
     "degre_immo_corporelle": "Degré d’amortissements des immobilisations corporelles",
     "dette": "Poids de la dette Urssaf",
@@ -29,7 +28,9 @@
     "ratio_dette": "Poids de la dette Urssaf",
     "rentabilite_economique": "Rentabilité économique",
     "rentabilite_nette": "Rentabilité nette",
-    "retards_paiement": "Retards de paiement des fournisseurs"
+    "paydex_yoy": "Évolution des retards de paiement des fournisseurs",
+    "paydex_bin": "Retards de paiement des fournisseurs",
+    "paydex_nb_jours": "Retards de paiement des fournisseurs"
   },
   "macro": {
     "activite_partielle": "Activité partielle",
