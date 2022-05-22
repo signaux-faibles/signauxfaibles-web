@@ -1,11 +1,11 @@
 <template>
-  <div v-if="permScore && dernierScore && dernierScore.macroRadar && Object.keys(dernierScore.macroRadar).length > 2 && (summary.alert === 'Alerte seuil F1' || summary.alert === 'Alerte seuil F2')">
+  <div v-if="permScore && dernierScore && dernierScore.macroRadar && Object.keys(dernierScore.macroRadar).length > 2 && hasAlert">
     <v-toolbar dense flat class="mytoolbar" light>
       <v-toolbar-title class="localtoolbar mytoolbar">Analyse pré-crise (mars 2020)</v-toolbar-title>
       <v-spacer />
-      <Help titre="Cotisations et impayés URSSAF">
+      <Help titre="Analyse pré-crise">
         <template>
-
+          
         </template>
       </Help>
     </v-toolbar>
