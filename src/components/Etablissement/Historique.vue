@@ -30,45 +30,7 @@
             <span>Cet établissement est fermé ou l’activité de l’entreprise a cessé</span>
           </v-tooltip>
         </div>
-        <div style="font-size: 17px">
-          <div v-if="permScore">
-            <div v-if="summary.alert == null">
-              Cet établissement ne faisait pas partie du périmètre de Signaux Faibles au moment de la production de cette liste de détection.
-            </div>
-            <div v-if="summary.alert === 'Pas d\'alerte'">
-              <span v-if="this.crash">Cet établissement est fermé ou est en situation de défaillance</span>
-              <span v-else>Cet établissement n’a pas été identifié par l’algorithme comme étant à risque de défaillance à 18 mois.</span>
-            </div>
-            <div v-if="summary.alert === 'Alerte seuil F2'">
-              <span v-if="this.crash">Cet établissement est fermé ou est en situation de défaillance</span>
-              <span v-else>Cet établissement a été identifié par l’algorithme comme étant à risque modéré de défaillance à 18 mois</span>{{ alertSuffix(dernierScore) }}
-              <ul v-if="selectConcerning(dernierScore)">
-                <li v-for="c in selectConcerning(dernierScore)" :key="c[1]"><em>{{ libelleMicro(c[1]) }}</em> ({{ libelleMacro(c[0]) }})</li>
-              </ul>
-            </div>
-            <div v-if="summary.alert === 'Alerte seuil F1'">
-              <span v-if="this.crash">Cet établissement est fermé ou est en situation de défaillance</span>
-              <span v-else>Cet établissement a été identifié par l’algorithme comme étant à risque élevé de défaillance à 18 mois</span>{{ alertSuffix(dernierScore) }}
-              <ul v-if="selectConcerning(dernierScore)">
-                <li v-for="c in selectConcerning(dernierScore)" :key="c[1]"><em>{{ libelleMicro(c[1]) }}</em> ({{ libelleMacro(c[0]) }})</li>
-              </ul>
-            </div>
-            <div v-if="dernierScore.hasOwnProperty('alertPreRedressements') && dernierScore.alertPreRedressements != summary.alert && (dernierScore.redressements || []).includes('detteUrssaf')">Ce risque a été réévalué à la hausse car l’établissement présente une augmentation significative de la dette Urssaf entre juillet 2020 et janvier 2021.</div>
-          </div>
-          <div v-else>
-            <div v-if="roles.includes('score')">Veuillez suivre cet établissement pour consulter ses données de détection.</div>
-            <div v-else>Vous n’êtes pas autorisé(e) à consulter les données de détection.</div>
-          </div>
-        </div>
-      </v-flex>
-      <v-flex xl6 lg12 mt-2>
-        <apexchart
-          v-if="permScore && dernierScore && dernierScore.macroRadar && Object.keys(dernierScore.macroRadar).length > 2 && (summary.alert === 'Alerte seuil F1' || summary.alert === 'Alerte seuil F2')"
-          type="radar"
-          height="200"
-          :options="macroOptions(dernierScore)"
-          :series="series(dernierScore)"
-        ></apexchart>
+        <HistoriqueExplain :summary="summary" :historique="historique"/>
       </v-flex>
       <v-btn v-if="permScore && !this.crash && historique.length > 1" outlined small dark color="indigo" @click="historiqueDialog = true">Voir historique des alertes</v-btn>
       <v-dialog v-model="historiqueDialog" @input="historiqueDialog = false" max-width="500px">
@@ -78,44 +40,13 @@
               Historique des alertes
             </v-card-title>
             <v-card-text style="font-size: 17px; font-weight: 800; font-family: 'Oswald', sans;">
-              <v-expansion-panels accordion>
-                <v-expansion-panel
-                  v-for="h in historique"
-                  :key="h.idListe">
-                  <v-expansion-panel-header>
-                    <div><ScoreWidget size="25px" :prediction="h" class="mr-1" /> {{ h.idListe }}</div>
-                  </v-expansion-panel-header>
-                  <v-expansion-panel-content>
-                        <div v-if="h.alert == null" >
-                          Cet établissement ne faisait pas partie du périmètre de Signaux Faibles au moment de la production de cette liste de détection.
-                        </div>
-                        <div v-if="h.alert === 'Pas d\'alerte'">
-                          Cet établissement n’a pas été identifié par l’algorithme comme étant à risque de défaillance à 18 mois.
-                        </div>
-                        <div v-if="h.alert === 'Alerte seuil F2'">
-                          Cet établissement a été identifié par l’algorithme comme étant à risque modéré de défaillance à 18 mois{{ alertSuffix(h) }}
-                          <ul v-if="selectConcerning(h)" style="list-style-type: disc">
-                            <li v-for="c in selectConcerning(h)" :key="c[1]"><em>{{ libelleMicro(c[1]) }}</em> ({{ libelleMacro(c[0]) }})</li>
-                          </ul>
-                        </div>
-                        <div v-if="h.alert === 'Alerte seuil F1'">
-                          Cet établissement a été identifié par l’algorithme comme étant à risque élevé de défaillance à 18 mois{{ alertSuffix(h) }}
-                          <ul v-if="selectConcerning(h)" style="list-style-type: disc">
-                            <li v-for="c in selectConcerning(h)" :key="c[1]"><em>{{ libelleMicro(c[1]) }}</em> ({{ libelleMacro(c[0]) }})</li>
-                          </ul>
-                        </div>
-                        <div class="mt-4">
-                          <apexchart
-                            v-if="h.macroRadar && Object.keys(h.macroRadar).length > 2 && (h.alert === 'Alerte seuil F1' || h.alert === 'Alerte seuil F2')"
-                            type="radar"
-                            height="200"
-                            :options="macroOptions(h)"
-                            :series="series(h)"
-                          ></apexchart>
-                        </div>
-                  </v-expansion-panel-content>
-                </v-expansion-panel>
-              </v-expansion-panels>
+              <div v-for="h in historique"
+                    :key="h.idListe" 
+                    size="25px"
+                    class="pa-4">
+                <ScoreWidget :prediction="h"/> 
+                {{ h.idListe }}
+              </div>
             </v-card-text>
           </v-card>
         </div>
@@ -126,103 +57,21 @@
 
 <script>
 import ScoreWidget from '@/components/ScoreWidget.vue'
+import HistoriqueExplain from '@/components/Etablissement/HistoriqueExplain.vue'
 import Help from '@/components/Help.vue'
-import libellesVariablesScores from '@/assets/libelles_variables_scores.json'
 
 export default {
   name: 'Historique',
   props: ['historique', 'summary'],
-  components: { ScoreWidget, Help },
+  components: { ScoreWidget, Help, HistoriqueExplain },
   data() {
     return {
-      variablesMacro: ['activite_partielle', 'dette_urssaf', 'retards_paiement', 'sante_financiere'],
       historiqueDialog: false,
     }
   },
-  methods: {
-    libelleMicro(variable) {
-      return libellesVariablesScores.micro[variable]
-    },
-    libelleMacro(variable) {
-      return libellesVariablesScores.macro[variable]
-    },
-    series(h) {
-      return [{
-        data: this.variablesMacro.reduce((data, v) => {
-          if (h.macroRadar.hasOwnProperty(v)) {
-            data.push(h.macroRadar[v])
-          }
-          return data
-        }, []),
-      }]
-    },
-    macroOptions(h) {
-      const xaxis = {
-        xaxis: {
-          categories: this.variablesMacro.reduce((categories, v) => {
-            if (h.macroRadar.hasOwnProperty(v)) {
-              categories.push(this.libelleMacro(v))
-            }
-            return categories
-          }, []),
-        },
-      }
-      return {...this.options, ...xaxis}
-    },
-    selectConcerning(h) {
-      return ((h || {}).explSelection || {}).selectConcerning
-    },
-    alertSuffix(h) {
-      return this.selectConcerning(h) ?
-        ', principalement en raison des données suivantes :' : '.'
-    },
-  },
   computed: {
-    options() {
-      return {
-        chart: {
-          type: 'radar',
-          toolbar: {
-            show: false,
-          },
-        },
-        colors: ['#999'],
-        fill: {
-          opacity: 0,
-        },
-        stroke: {
-          show: true,
-          width: 2,
-        },
-        markers: {
-          size: 0,
-        },
-        yaxis: {
-          show: false,
-          tickAmount: 5,
-          max: 1,
-        },
-        plotOptions: {
-          radar: {
-            size: 75,
-            polygons: {
-              strokeColors: ['#f67577', '#f9c16b', '#eeedaa', '#b9e69f', '#8ec07e'],
-              fill: {
-                colors: ['#f67577', '#f9c16b', '#eeedaa', '#b9e69f', '#8ec07e'],
-              },
-            },
-          },
-        },
-        legend: {
-          show: true,
-        },
-      }
-    },
     permScore() {
       return this.summary.hasOwnProperty('permScore') ? this.summary.permScore : true
-    },
-    dernierScore() {
-      return this.historique[0] || {}
     },
     batches() {
       const batches = this.$store.getters.batches
