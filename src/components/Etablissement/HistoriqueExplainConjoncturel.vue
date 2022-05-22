@@ -11,25 +11,25 @@
     </v-toolbar>
     <v-card outlined>
       <v-card-text>
-        <span v-if="bilanRedressements === -1">Les données récentes comportent des signaux qui mènent à augmenter le niveau d'alerte.</span>
-        <span v-else-if="bilanRedressements === 0">Les données récentes comportent des tendances qui ne remettent pas en cause le niveau d'alerte.</span>
-        <span v-else-if="bilanRedressements === 1">Les données récentes comportent des tendances qui mènent à diminuer le niveau d'alerte.</span>
+        <span v-if="bilanRedressements === -1">Les données récentes comportent des signaux qui augmentent le niveau d'alerte.</span>
+        <span v-else-if="bilanRedressements === 0">Les données récentes n'influencent pas le niveau d'alerte.</span>
+        <span v-else-if="bilanRedressements === 1">Les données récentes comportent des tendances qui diminuent le niveau d'alerte.</span>
         <div v-if="signal1 !== 0">
           <div class="align-center d-flex justify-start mb-1">
             <div class="pa-2"><v-icon large color="red">mdi-arrow-top-right-bold-outline</v-icon></div>
-            <div class="pa-2">L'entreprise a contracté des dettes sociales récemment.</div>
+            <div class="pa-2">Les dettes sociales contractées récemment augmentent le niveau d'alerte.</div>
           </div>
         </div>
         <div v-if="signal3 !== 0">
           <div class="align-center d-flex justify-start mb-1">
             <div class="pa-2"><v-icon large color="red">mdi-arrow-top-right-bold-outline</v-icon></div>
-            <div class="pa-2">La quantité d'activité partielle demandée par l'entreprise est préoccupant. Ce signal tend à augmenter le niveau d’alerte.</div>
+            <div class="pa-2">La quantité d'activité partielle demandée par l'entreprise tend à augmenter le niveau d’alerte.</div>
           </div>
         </div>
         <div v-if="signal2 !== 0">
           <div class="align-center d-flex justify-start mb-1">
             <div class="pa-2"><v-icon large color="green">mdi-arrow-bottom-right-bold-outline</v-icon></div>
-            <div class="pa-2">L'entreprise semble suivre les échéanciers de recouvrement de ses dettes sociales qui étaient la raison majoritaire du niveau d'alerte initial.</div>
+            <div class="pa-2">Le suivi des échéanciers de recouvrement de l'entreprise diminue le niveau d'alerte fondé principalement sur la dette sociale.'.</div>
           </div>
         </div>
       </v-card-text>
