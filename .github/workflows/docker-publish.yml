@@ -18,7 +18,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        env: [ development, preprod, production ]
+        env: [ development, preprod, production, testing ]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
