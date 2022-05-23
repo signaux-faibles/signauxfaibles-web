@@ -151,16 +151,28 @@ export default {
         return "crash" 
       } else if (this.alert == null) {
         return "horsperimetre"
-      } else if (this.hasRedressements && this.hasAlertPreRedressements && this.hasAlert) {
+      } else if (this.hasSignal && this.hasAlertPreRedressements && this.hasAlert) {
         return "mixte"
-      } else if (this.hasRedressements && !this.hasAlertPreRedressements) {
+      } else if (this.hasSignal && !this.hasAlertPreRedressements) {
         return "conjoncturel"
-      } else if (!this.hasRedressements && this.hasAlertPreRedressements) {
+      } else if (!this.hasSignal && this.hasAlertPreRedressements) {
         return "structurel" 
       } else {
         return "ras"
       }
     },
+    hasSignal() {
+      return (this.signal1 != 0 || this.signal2 != 0 || this.signal3 != 0)
+    },
+    signal1() {
+      return (this.redressements.includes("augmentation_dette_urssaf_recente"))?-1:0
+    },
+    signal2() {
+      return (this.redressements.includes("diminution_dette_urssaf_ancienne") && !this.redressements.includes("augmentation_dette_urssaf_recente") && this.redressements.includes("dette_urssaf_macro_preponderante"))?1:0
+    },
+    signal3() {
+      return (this.redressements.includes("demande_activite_partielle_elevee"))?-1:0
+    }
   }
 }
 
