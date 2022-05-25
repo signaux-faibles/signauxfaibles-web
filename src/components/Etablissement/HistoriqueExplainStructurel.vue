@@ -5,7 +5,18 @@
       <v-spacer />
       <Help titre="Analyse pré-crise">
         <template>
-          
+          L'analyse pré-crise utilise des techniques de machine learning pour établir une prédiction de faillite à 18 mois 
+          à l'entrée de la crise COVID, sur les bases du comportement historique des entreprises, au dernier moment où les données 
+          n'étaient pas encore perturbées par les mesures gouvernementales<br/>
+          Les variables apportées à cet algorithme comportent des informations sur:
+          <ul>
+            <li>Données financières</li>
+            <li>Dettes fiscales et sociales</li>
+            <li>Retards de paiement des fournisseurs, lorsqu'ils sont disponibles</li>
+            <li>Demandes et consommation d'activité partielle</li>
+          </ul>
+          Le score ainsi obtenu est présenté, lorsque c'est possible, sous forme d'un radar détaillant le poids de chaque famille de variable dans le score total.
+          Ce score sert ensuite de base pour les redressements experts. Si aucun redressement expert ne s'applique alors le score est présenté sous forme d'alerte.
         </template>
       </Help>
     </v-toolbar>

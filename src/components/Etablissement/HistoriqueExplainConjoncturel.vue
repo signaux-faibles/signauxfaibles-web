@@ -5,7 +5,12 @@
       <v-spacer />
       <Help titre="Signaux Récents">
         <template>
-          
+          Les données récentes permettent de faire ressortir les entreprises correspondants à ces critères
+          <ul>
+            <li>L'entreprise a demandé une grande quantité d'activité partielle sur les 12 derniers mois (plus de 10 mois), alors l'alerte sera renforcée.</li>
+            <li>Une dette récente auprès de l'URSSAF (depuis septembre 2021) sera également facteur d'augmentation de l'alerte.</li>
+            <li>Si l'entreprise voit par contre sa dette plus ancienne diminuer, et que la dette URSSAF est en tête des variables préoccupante de la détection structurelle, alors l'alerte sera diminuée</li>
+          </ul>
         </template>
       </Help>
     </v-toolbar>
