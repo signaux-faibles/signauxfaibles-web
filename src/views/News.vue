@@ -57,7 +57,12 @@ export default {
     return {
       dialog: false,
       news: [
-        // TODO: externalize
+        { date: new Date('2022-05-15'), news: [
+          'Documentation du modèle de Mai 2022',
+          'Refonte de l\'encart d\'explicabilité de l\'algorithme',
+          'Explicabilité des redressements',
+          'Ajout du filtre première alerte',
+        ]},
         {
           date: new Date('2022-03-03'), news: [
             'Migration vuetify 1.5 -> 2.6',
