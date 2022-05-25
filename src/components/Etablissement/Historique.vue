@@ -2,14 +2,9 @@
   <div>
     <h2>
       Détection Signaux Faibles
-      <Help titre="Détection Signaux Faibles">
+      <Help titre="Analyse pré-crise">
         <template>
-          <p>En premier lieu, c’est le risque de défaillance à 18 mois estimé lors de la production de la dernière liste de détection qui vous est présenté.<br />
-          Son calcul est basé sur des éléments structurels non affectés par la crise et sur des règles métier conjoncturelles.<br />
-          Lorsque ce risque existe, nous l’expliquons par les données ayant le plus influencé ce résultat.<br />
-          Un graphique sous la forme d’un radar vous permettra de rapidement juger du positionnement (risque élevé rouge en périphérie) de l’établissement pour chaque thématique de données.<br />
-          Vous avez également la possibilité de consulter l’historique des alertes qui synthétise toutes les listes de détection sur lesquelles l’établissement est apparu.</p>
-          <p>Notez que cet espace est très dépendant de vos habilitations. Par conséquent, les détections émanant d’une zone géographique en dehors de vos attributions nécessiteront que vous suiviez l’établissement.</p>
+          <div v-html="currentBatchDescription"></div>
         </template>
       </Help>
     </h2>
@@ -70,6 +65,13 @@ export default {
     }
   },
   computed: {
+    currentBatchKey() {
+      return this.$store.state.currentBatchKey
+    },
+    currentBatchDescription() {
+      const batches = this.$store.state.batches
+      return (batches.filter((b) => b.id === this.currentBatchKey)[0]).description
+    },
     permScore() {
       return this.summary.hasOwnProperty('permScore') ? this.summary.permScore : true
     },

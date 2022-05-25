@@ -146,6 +146,9 @@ export default {
     hasAlertPreRedressements() {
       return (this.alertPreRedressements === "Alerte seuil F1" || this.alertPreRedressements === "Alerte seuil F2")
     },
+    redressements() {
+      return this.dernierScore.redressements
+    },
     typeExplication() {
       if (this.crash) {
         return "crash" 
