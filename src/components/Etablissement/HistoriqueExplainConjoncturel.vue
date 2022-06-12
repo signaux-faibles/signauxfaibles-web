@@ -63,10 +63,13 @@ export default {
       return (this.signal1 != 0 || this.signal2 != 0 || this.signal3 != 0)
     },
     signal1() {
-      return (this.redressements.includes("augmentation_dette_urssaf_recente"))?-1:0
+      return (this.redressements.includes("augmentation_dette_sur_cotisation_urssaf_recente") && 
+      !this.redressements.includes("dette_urssaf_macro_preponderante"))?-1:0
     },
     signal2() {
-      return (this.redressements.includes("diminution_dette_urssaf_ancienne") && !this.redressements.includes("augmentation_dette_urssaf_recente") && this.redressements.includes("dette_urssaf_macro_preponderante"))?1:0
+      return (this.redressements.includes("diminution_dette_urssaf_ancienne") && 
+      !this.redressements.includes("augmentation_dette_sur_cotisation_urssaf_recente") && 
+      this.redressements.includes("dette_urssaf_macro_preponderante"))?1:0
     },
     signal3() {
       return (this.redressements.includes("demande_activite_partielle_elevee"))?-1:0
