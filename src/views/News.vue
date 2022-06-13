@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="dialog" width="800px">
+  <v-dialog v-model="dialog" height="500px" width="880px">
     <template v-slot:activator="{ on }">
       <v-btn
         :class="(newsToRead>0)?'pulse':'inerte'"
@@ -9,23 +9,41 @@
         @click="trackMatomoEvent('general', 'ouvrir_nouveautes')"
       >Nouveautés ({{ newsToRead }})</v-btn>
     </template>
-    <v-card>
+    <v-card height='90vh'>
       <v-card-title>
         <span class="headline">Journal des changements</span>
         <v-spacer />
         <v-btn color="primary" text @click="newsread">ok</v-btn>
       </v-card-title>
       <v-card-text>
-        <ul>
-          <li v-for="n in news" :key="n.date.getTime()">
-            <b>{{ n.date.toLocaleDateString() }}:</b>
-            <ul>
-              <li v-for="l in n.news" :key="l">{{ l }}</li>
-            </ul>
-          </li>
-        </ul>
+        <v-expansion-panels accordion>
+          <v-expansion-panel>
+            <v-expansion-panel-header>
+              Nouvelles
+            </v-expansion-panel-header>
+            <v-expansion-panel-content>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+          <v-expansion-panel>
+            <v-expansion-panel-header>
+              Changements
+            </v-expansion-panel-header>
+            <v-expansion-panel-content>
+              <ul>
+                <li v-for="n in news" :key="n.date.getTime()">
+                  <b>{{ n.date.toLocaleDateString() }}:</b>
+                  <ul>
+                    <li v-for="l in n.news" :key="l">{{ l }}</li>
+                  </ul>
+                </li>
+              </ul>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+
+        </v-expansion-panels>
       </v-card-text>
     </v-card>
+
   </v-dialog>
 </template>
 
