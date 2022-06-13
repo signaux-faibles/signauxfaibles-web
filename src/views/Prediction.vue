@@ -209,8 +209,8 @@
                 <v-checkbox v-model="ignorezone" @change="getPrediction()"></v-checkbox>
               </v-list-item-action>
               <v-list-item-content @click="toggleIgnoreZone()">
-                <v-list-item-title>Tous les établissements</v-list-item-title>
-                <v-list-item-subtitle>Inclure tous les établissements des entreprises de ma zone</v-list-item-subtitle>
+                <v-list-item-title>Implantations dans ma zone</v-list-item-title>
+                <v-list-item-subtitle>Inclure les sièges dont les établissements sont dans ma zone</v-list-item-subtitle>
               </v-list-item-content>
             </v-list-item>
             <v-list-item>
