@@ -9,24 +9,25 @@
         @click="trackMatomoEvent('general', 'ouvrir_nouveautes')"
       >Nouveautés ({{ newsToRead }})</v-btn>
     </template>
-    <v-card height='90vh'>
+    <v-card min-height='90vh'>
       <v-card-title>
-        <span class="headline">Journal des changements</span>
+        <span class="headline">Nouveautés</span>
         <v-spacer />
         <v-btn color="primary" text @click="newsread">ok</v-btn>
       </v-card-title>
       <v-card-text>
-        <v-expansion-panels accordion>
+        <v-expansion-panels v-model="activePanel" focusable>
           <v-expansion-panel>
             <v-expansion-panel-header>
               Nouvelles
             </v-expansion-panel-header>
             <v-expansion-panel-content>
+              <News001/>
             </v-expansion-panel-content>
           </v-expansion-panel>
           <v-expansion-panel>
             <v-expansion-panel-header>
-              Changements
+              Journal des changements
             </v-expansion-panel-header>
             <v-expansion-panel-content>
               <ul>
@@ -48,8 +49,11 @@
 </template>
 
 <script>
+import News001 from '@/views/news/News001.vue'
+
 export default {
   name: 'News',
+  components: {News001},
   methods: {
     newsread() {
       this.dialog = false
@@ -74,6 +78,7 @@ export default {
   data() {
     return {
       dialog: false,
+      activePanel: 0,
       news: [
         // TODO: externalize
         {
