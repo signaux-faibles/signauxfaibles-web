@@ -34,7 +34,7 @@
         <div v-if="signal2 !== 0">
           <div class="align-center d-flex justify-start mb-1">
             <div class="pa-2"><v-icon large color="green">mdi-arrow-bottom-right-bold-outline</v-icon></div>
-            <div class="pa-2">Le suivi des échéanciers de recouvrement de l'entreprise diminue le niveau d'alerte fondé principalement sur la dette sociale.'.</div>
+            <div class="pa-2">Le suivi des échéanciers de recouvrement de l'entreprise diminue le niveau d'alerte.</div>
           </div>
         </div>
       </v-card-text>
