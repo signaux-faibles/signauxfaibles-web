@@ -44,9 +44,9 @@ export default {
   },
   computed: {
     securityConsent() {
-      const refDate = new Date('2019-10-22')
       const securityConsent = new Date(this.$localStore.state.securityConsent)
-      return securityConsent.getTime() >= refDate.getTime()
+      const limitConsent = new Date(securityConsent.setMonth(securityConsent.getMonth()+2));
+      return limitConsent.getTime() >= Date.now()
     },
     height: {
       get() {
