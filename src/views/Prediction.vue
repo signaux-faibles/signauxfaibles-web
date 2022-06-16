@@ -144,7 +144,7 @@
           <v-select
             :items="subzones"
             v-model="zone"
-            label="Zone Géographique"
+            label="Zones Géographiques"
             @change="getPrediction()"
           ></v-select>
         </div>
@@ -648,7 +648,10 @@ export default {
           text: d + ' ' + this.$store.state.departements[d],
           value: [d],
         }
-      }).sort((d1, d2) => d1.value[0] > d2.value[0])
+      }).sort((d1, d2) => {
+        return d1.value[0].replace('2A', '200').replace('2B', '201') > 
+               d2.value[0].replace('2A', '200').replace('2B', '201')?1:-1
+      })
       all = all.concat(departement)
       return all
     },
