@@ -78,8 +78,12 @@ const sessionStore = new Vuex.Store({
     scrollTop: 0,
     prediction: [],
     loading: false,
+    newsDialog: null,
   },
   mutations: {
+    setNewsDialog(state, value) {
+      state.newsDialog = value
+    },
     setLoading(state, value) {
       state.loading = value
     },

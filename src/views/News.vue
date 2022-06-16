@@ -1,19 +1,25 @@
 <template>
-  <v-dialog v-model="dialog" height="500px" width="880px">
+  <v-dialog scrollable v-model="dialog" height="500px" width="880px">
     <template v-slot:activator="{ on }">
       <v-btn
-        :class="(newsToRead>0)?'pulse':'inerte'"
+        :class="(changelogToRead+newsToRead>0)?'pulse':'inerte'"
         text
         rounded
+        plain
         v-on="on"
         @click="trackMatomoEvent('general', 'ouvrir_nouveautes')"
-      >Nouveautés ({{ newsToRead }})</v-btn>
+      >Nouveautés ({{ newsToRead + changelogToRead }})</v-btn>
     </template>
     <v-card min-height='90vh'>
       <v-card-title>
-        <span class="headline">Nouveautés</span>
-        <v-spacer />
-        <v-btn color="primary" text @click="newsread">ok</v-btn>
+        <v-toolbar flat>
+          <v-toolbar-title class="headline">Nouveautés Signaux-Faibles</v-toolbar-title>
+          <v-spacer></v-spacer>
+          <v-btn color="primary darken-2" text @click="newsread">OK, J'AI LU</v-btn>
+          &nbsp;
+          <v-btn color="red darken-4" dark text @click="close">Je lirai plus tard</v-btn>
+        </v-toolbar>
+
       </v-card-title>
       <v-card-text>
         <v-expansion-panels v-model="activePanel" focusable>
@@ -31,7 +37,7 @@
             </v-expansion-panel-header>
             <v-expansion-panel-content>
               <ul>
-                <li v-for="n in news" :key="n.date.getTime()">
+                <li v-for="n in changelog" :key="n.date.getTime()">
                   <b>{{ n.date.toLocaleDateString() }}:</b>
                   <ul>
                     <li v-for="l in n.news" :key="l">{{ l }}</li>
@@ -54,16 +60,32 @@ import News001 from '@/views/news/News001.vue'
 export default {
   name: 'News',
   components: {News001},
+  mounted() {
+    if (this.newsToRead > 0 && this.dialog == null) {
+      this.dialog = true;
+    }
+  },
   methods: {
     newsread() {
       this.dialog = false
       const today = new Date()
       this.newsRead = today
     },
+    close() {
+      this.dialog = false
+    }
   },
   computed: {
     newsToRead() {
       return this.news.reduce((m, n) => {
+        if (n.getTime() > this.newsRead.getTime()) {
+          m += 1
+        }
+        return m
+      }, 0)
+    },
+    changelogToRead() {
+      return this.changelog.reduce((m, n) => {
         if (n.date.getTime() > this.newsRead.getTime()) {
           m += 1
         }
@@ -74,12 +96,24 @@ export default {
       get() { return new Date(this.$localStore.state.newsRead) },
       set(val) { this.$localStore.commit('setNewsRead', val) },
     },
+    dialog: {
+      get() { return this.$store.state.newsDialog },
+      set(val) { this.$store.commit('setNewsDialog', val) }
+    }
   },
   data() {
     return {
-      dialog: false,
       activePanel: 0,
       news: [
+        new Date('2022-06-16'),
+      ],
+      changelog: [
+        { date: new Date('2022-06-16'), news: [
+          'Ajout d\'un nouvel écran de nouveautés',
+          'Fonctionnalité de relecture pour plus tard',
+          'Correction des liens renvoyant vers le site Bodacc',
+          'L\'écran d\'informations sur la sensibilité des données sera désormais rappelé tous les deux mois',
+        ]},
         { date: new Date('2022-05-15'), news: [
           'Documentation du modèle de Mai 2022',
           'Refonte de l\'encart d\'explicabilité de l\'algorithme',

@@ -509,7 +509,7 @@ export default {
       return statutJuridique
     },
     lienBODACC() {
-      const lienBODACC = `https://www.bodacc.fr/annonce/liste/${this.etablissement.siren}/pcl`
+      const lienBODACC = `https://www.bodacc.fr/pages/annonces-commerciales/?disjunctive.typeavis&disjunctive.familleavis&disjunctive.publicationavis&disjunctive.region_min&disjunctive.nom_dep_min&disjunctive.numerodepartement&sort=dateparution&q.registre=registre:${this.etablissement.siren}&refine.familleavis=collective#resultarea`
       return lienBODACC
     },
     showFCE() {
