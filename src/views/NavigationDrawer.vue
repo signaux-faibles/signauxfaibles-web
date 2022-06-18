@@ -1,5 +1,5 @@
 <template>
-  <v-navigation-drawer class="elevation-6" style="background-color: #ed9121;" width="280" v-model="drawer" app>
+  <v-navigation-drawer class="elevation-6" width="280" v-model="drawer" app>
     <v-toolbar flat class="transparent">
       <v-list class="pa-0">
         <v-list-item>
@@ -10,7 +10,7 @@
             <v-list-item-title>
               <img height="20" src="../assets/text_signaux_faibles.svg" />
             </v-list-item-title>
-            testing mode
+
           </v-list-item-content>
           <v-list-item-avatar>
             <v-icon @click="closeDrawer()">mdi-backburger</v-icon>
