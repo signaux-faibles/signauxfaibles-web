@@ -6,18 +6,18 @@
         text
         rounded
         plain
-        v-on="on"
+        v-on="on" 
         @click="trackMatomoEvent('general', 'ouvrir_nouveautes')"
       >Nouveautés ({{ newsToRead + changelogToRead }})</v-btn>
     </template>
     <v-card min-height='90vh'>
       <v-card-title>
         <v-toolbar flat>
-          <v-toolbar-title class="headline">Nouveautés Signaux-Faibles</v-toolbar-title>
+          <v-toolbar-title class="headline"></v-toolbar-title>
           <v-spacer></v-spacer>
-          <v-btn color="primary darken-2" text @click="newsread">OK, J'AI LU</v-btn>
+          <v-btn color="red darken-4" :disabled="!postponable" dark text @click="close">Je lirai plus tard</v-btn>
           &nbsp;
-          <v-btn color="red darken-4" dark text @click="close">Je lirai plus tard</v-btn>
+          <v-btn color="primary darken-2" text @click="newsread">OK, J'AI LU</v-btn>
         </v-toolbar>
 
       </v-card-title>
@@ -25,7 +25,7 @@
         <v-expansion-panels v-model="activePanel" focusable>
           <v-expansion-panel>
             <v-expansion-panel-header>
-              Nouvelles
+              Nouveautés Signaux-Faibles
             </v-expansion-panel-header>
             <v-expansion-panel-content>
               <News001/>
@@ -99,6 +99,9 @@ export default {
     dialog: {
       get() { return this.$store.state.newsDialog },
       set(val) { this.$store.commit('setNewsDialog', val) }
+    },
+    postponable() {
+      return this.changelogToRead + this.newsToRead > 0
     }
   },
   data() {
