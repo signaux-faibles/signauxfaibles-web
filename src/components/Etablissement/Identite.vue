@@ -2,12 +2,6 @@
   <div>
     <h1>
       {{ denomination }}
-      <Help titre="Identité de l’entreprise">
-        <p>Les données d’identité de l’entreprise sont principalement issues de la base Sirene des entreprises et de leurs établissements produite par l’Insee.</p>
-        <p>L’<b>activité</b> est une donnée déclarative fournie par l’entreprise lors de sa création. Il peut être constaté un décalage entre le code déclaré et l’activité réelle de l’entreprise.</p>
-        <p>Le <b>statut juridique</b> indiqué correspond à la catégorie juridique de niveau II (37 positions suivant les critères juridiques fondamentaux du droit).</p>
-        <p>Les <b>têtes de groupe</b> ont été obtenues auprès de la société Ellisphere. Sauf cas particulier d’arbitrage, est considérée comme tête de groupe (ou société mère) l’entreprise qui détient de façon directe ou indirecte plus de 50% du capital et qui n’est pas elle-même détenue à plus de 50% par une autre entreprise.</p>
-      </Help>
       <v-btn v-if="followed === false" dark color="indigo" @click="showFollowDialog"><v-icon left class="mr-2">mdi-star-outline</v-icon>Suivre</v-btn>
       <v-btn v-if="followed === true" outlined color="indigo" @click="showUnfollowDialog"><v-icon left class="mr-2">mdi-star</v-icon>Ne plus suivre</v-btn>
     </h1>
@@ -15,6 +9,12 @@
       siren {{ siret.slice(0,9) }}
       <span style="color: #999">{{ siret.slice(9,14) }} siret</span>
       {{ siege ? ' (siège)' : '' }}
+      <Help titre="Identité de l’entreprise">
+        <p>Les données d’identité de l’entreprise sont principalement issues de la base Sirene des entreprises et de leurs établissements produite par l’Insee.</p>
+        <p>L’<b>activité</b> est une donnée déclarative fournie par l’entreprise lors de sa création. Il peut être constaté un décalage entre le code déclaré et l’activité réelle de l’entreprise.</p>
+        <p>Le <b>statut juridique</b> indiqué correspond à la catégorie juridique de niveau II (37 positions suivant les critères juridiques fondamentaux du droit).</p>
+        <p>La <b>tête de groupe (tdg)</b> est l’entreprise qui détient de façon directe ou indirecte plus de 50% du capital et qui n’est pas elle-même détenue à plus de 50% par une autre entreprise. Cette information est issue sur des données publiques et n'est pas exhaustive. Source: Ellisphère (2020).</p>
+      </Help>
     </h3>
     <hr style="color: #eee;" />
     <div style="padding: 10px; margin: 4px;">

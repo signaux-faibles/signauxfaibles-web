@@ -10,6 +10,7 @@
             <v-list-item-title>
               <img height="20" src="../assets/text_signaux_faibles.svg" />
             </v-list-item-title>
+
           </v-list-item-content>
           <v-list-item-avatar>
             <v-icon @click="closeDrawer()">mdi-backburger</v-icon>
@@ -18,8 +19,9 @@
       </v-list>
     </v-toolbar>
     <v-list class="pt-0" dense>
-      <v-divider></v-divider>
 
+
+      <v-divider></v-divider>
       <v-list-item to="/">
         <v-list-item-action>
           <v-icon>search</v-icon>

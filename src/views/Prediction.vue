@@ -144,7 +144,7 @@
           <v-select
             :items="subzones"
             v-model="zone"
-            label="Zone Géographique"
+            label="Zones Géographiques"
             @change="getPrediction()"
           ></v-select>
         </div>
@@ -209,8 +209,8 @@
                 <v-checkbox v-model="ignorezone" @change="getPrediction()"></v-checkbox>
               </v-list-item-action>
               <v-list-item-content @click="toggleIgnoreZone()">
-                <v-list-item-title>Tous les établissements</v-list-item-title>
-                <v-list-item-subtitle>Inclure tous les établissements des entreprises de ma zone</v-list-item-subtitle>
+                <v-list-item-title>Implantations dans ma zone</v-list-item-title>
+                <v-list-item-subtitle>Inclure les sièges dont certains établissements sont dans ma zone</v-list-item-subtitle>
               </v-list-item-content>
             </v-list-item>
             <v-list-item>
@@ -648,7 +648,10 @@ export default {
           text: d + ' ' + this.$store.state.departements[d],
           value: [d],
         }
-      }).sort((d1, d2) => d1.value[0] > d2.value[0])
+      }).sort((d1, d2) => {
+        return d1.value[0].replace('2A', '200').replace('2B', '201') > 
+               d2.value[0].replace('2A', '200').replace('2B', '201')?1:-1
+      })
       all = all.concat(departement)
       return all
     },
