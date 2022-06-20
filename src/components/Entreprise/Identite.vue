@@ -103,6 +103,21 @@
                 </Help>
               </div>
             </v-flex>
+            <v-flex grow>
+              <div v-if="pge" class="text-uppercase" style="font-size: 18px">
+                <span class="pge">
+                  PGE
+                </span>
+                <Help
+                  style="position: relative; top: -3px; right: 10px"
+                  titre="Prêt Garanti par l'État"
+                >
+                  Ce pictogramme indique si l'entreprise a souscrit à un Prêt Garanti par l'État. 
+                  Cet affichage est réservé aux entreprises pour lesquelles vous disposez de l'autorisation de consultation.
+                  Les entreprises dont le PGE est totalement remboursé ne sont pas indiquées.
+                </Help>
+              </div>
+            </v-flex>
           </v-layout>
           <v-layout wrap>
             <div v-if="relance" class="text-uppercase" style="font-size: 18px">
@@ -145,7 +160,7 @@ import axios from 'axios'
 
 export default {
   name: 'EntrepriseIdentite',
-  props: ['denomination', 'siren', 'siege', 'groupe', 'terrind', 'creation', 'statutJuridique'],
+  props: ['denomination', 'siren', 'siege', 'groupe', 'terrind', 'creation', 'statutJuridique', 'pge'],
   components: { Help },
   data() {
     return {
@@ -234,3 +249,9 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+  .pge {
+    font-size: 1.6em;
+  }
+</style>
