@@ -16,6 +16,14 @@
         <div style="padding: 10px; margin: 4px;">
           <div v-html="identiteHtml" style="font-size: 17px"></div>
         </div>
+        <v-tooltip bottom v-if="pge">
+          <template v-slot:activator="{ on, attrs }">
+          <v-chip color="indigo" v-bind="attrs" v-on="on" class="ma-2" label outlined >
+            PGE en cours au 31/12/2021
+          </v-chip>
+          </template>
+          <span>Cette entreprise était en train de rembourser un PGE au 31/12/2021</span>
+        </v-tooltip>
         <div v-if="showSecteursCovid" class="text-uppercase" style="font-size: 18px">
           Secteurs COVID-19
           <Help
@@ -145,7 +153,7 @@ import axios from 'axios'
 
 export default {
   name: 'EntrepriseIdentite',
-  props: ['denomination', 'siren', 'siege', 'groupe', 'terrind', 'creation', 'statutJuridique'],
+  props: ['denomination', 'siren', 'siege', 'groupe', 'terrind', 'creation', 'statutJuridique', 'pge'],
   components: { Help },
   data() {
     return {

@@ -10,6 +10,7 @@
               :siege="siege"
               :groupe="groupe"
               :terrind="terrind"
+              :pge="pge"
               :creation="creation"
               :statutJuridique="statutJuridique"
             />
@@ -261,6 +262,9 @@ export default {
     },
     terrind() {
       return (this.siege.territoireIndustrie || {}).libelle
+    },
+    pge() {
+      return this.entreprise.pge || false
     },
     groupe() {
       return ((this.entreprise || {}).groupe || {}).raison_sociale_groupe
