@@ -264,7 +264,7 @@ export default {
       return (this.siege.territoireIndustrie || {}).libelle
     },
     pge() {
-      return this.siege.pge || false
+      return this.entreprise.pge || false
     },
     groupe() {
       return ((this.entreprise || {}).groupe || {}).raison_sociale_groupe

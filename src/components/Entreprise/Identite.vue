@@ -16,6 +16,14 @@
         <div style="padding: 10px; margin: 4px;">
           <div v-html="identiteHtml" style="font-size: 17px"></div>
         </div>
+        <v-tooltip bottom v-if="pge">
+          <template v-slot:activator="{ on, attrs }">
+          <v-chip color="indigo" v-bind="attrs" v-on="on" class="ma-2" label outlined >
+            PGE en cours au 31/12/2021
+          </v-chip>
+          </template>
+          <span>Cette entreprise était en train de rembourser un PGE au 31/12/2021</span>
+        </v-tooltip>
         <div v-if="showSecteursCovid" class="text-uppercase" style="font-size: 18px">
           Secteurs COVID-19
           <Help
@@ -100,21 +108,6 @@
                   <br />
                   <br />Pour en savoir davantage :
                   <a href="https://agence-cohesion-territoires.gouv.fr/territoires-dindustrie-44" target="_blank" rel="noopener">https://agence-cohesion-territoires.gouv.fr/territoires-dindustrie-44</a>
-                </Help>
-              </div>
-            </v-flex>
-            <v-flex grow>
-              <div v-if="pge" class="text-uppercase" style="font-size: 18px">
-                <span class="pge">
-                  PGE
-                </span>
-                <Help
-                  style="position: relative; top: -3px; right: 10px"
-                  titre="Prêt Garanti par l'État"
-                >
-                  Ce pictogramme indique si l'entreprise a souscrit à un Prêt Garanti par l'État. 
-                  Cet affichage est réservé aux entreprises pour lesquelles vous disposez de l'autorisation de consultation.
-                  Les entreprises dont le PGE est totalement remboursé ne sont pas indiquées.
                 </Help>
               </div>
             </v-flex>
@@ -249,9 +242,3 @@ export default {
   },
 }
 </script>
-
-<style scoped>
-  .pge {
-    font-size: 1.6em;
-  }
-</style>
