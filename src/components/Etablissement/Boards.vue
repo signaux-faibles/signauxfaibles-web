@@ -34,7 +34,7 @@
                 <v-card-text>
                   <div class="pb-10">
                     <b>suivi depuis:</b> {{ card.startAtDate.toLocaleDateString("fr") }}<br/>
-                    <span v-if="endAt"><b>suivi terminé:</b> {{ card.endAtDate.toLocaleDateString("fr")  }}<br/></span>
+                    <span v-if="card.endAt"><b>suivi terminé:</b> {{ card.endAtDate.toLocaleDateString("fr")  }}<br/></span>
                     <b>dernière activité:</b> {{ card.lastActivityDate.toLocaleDateString("fr")  }}<br/>
                   </div>    
                   <div v-html="card.cardDescriptionMD"/>
@@ -51,7 +51,7 @@
                 <v-icon v-on="on" v-bind="attrs" v-if="card.archived && !card.board.isMember">mdi-archive</v-icon>
               </template>
               <b>suivi depuis:</b> {{ card.startAtDate.toLocaleDateString("fr") }}<br/>
-              <span v-if="endAt"><b>suivi terminé:</b> {{ card.endAtDate.toLocaleDateString("fr")  }}<br/></span>
+              <span v-if="card.endAt"><b>suivi terminé:</b> {{ card.endAtDate.toLocaleDateString("fr")  }}<br/></span>
               <b>dernière activité:</b> {{ card.lastActivityDate.toLocaleDateString("fr")  }}<br/>
             </v-tooltip>
 
