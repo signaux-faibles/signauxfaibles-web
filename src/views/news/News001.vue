@@ -14,7 +14,7 @@
                 Le filtre « Premières alertes » est positionné sur la droite dans le panneau de filtrage des listes de détection.
                 Ce filtre permet de sélectionner uniquement les alertes présentant le badge
                 <v-chip class="mb-1 ma-0 mr-1 chip" small color="primary" text-color="white">1re alerte</v-chip>
-                indiquant que l'entreprise a déjà fait l'objet d'alertes (rouges ou oranges) depuis le début de Signaux-Faibles (2019).
+                indiquant que l'entreprise n'a jamais fait l'objet d'alertes (rouges ou oranges) depuis le début de Signaux-Faibles (2019).
                 <v-card width="40%" ><v-img src="/news/001/screen_premiere_alerte.png"/></v-card><p/>
                 <h2>Radar</h2>
                 Le radar présenté sur les fiches établissement détaille plus précisément les raisons de la détection:
@@ -34,10 +34,10 @@
 
                 <h3>Deux redressements défavorables</h3>
                 <v-card width="62%"><v-img src="/news/001/screen_demande_activite_partielle_elevee.png"></v-img></v-card>
-                Ce redressement s'active lorsque l'entreprise voit le montant de sa dette sociale augmenter de façon significative depuis septembre 2021. Il annule l'effet d'une diminution de la dette..<p/>
+                Ce redressement s'active lorsqu'un des établissements de l'entreprise a effectué une demande d'activité partielle supérieure ou égale à 12 mois et concernant plus de 50% de ses effectifs.
 
                 <v-card width="60%"><v-img src="/news/001/screen_augmentation_dette_recente.png"></v-img></v-card>
-                Ce redressement s'active lorsqu'un des établissements de l'entreprise a effectué une demande d'activité partielle supérieure ou égale à 12 mois et concernant plus de 50% de ses effectifs.
+                Ce redressement s'active lorsque l'entreprise voit le montant de sa dette sociale augmenter de façon significative depuis septembre 2021. Il annule l'effet d'une diminution de la dette..<p/>
 
                 <h3>Un redressement favorable</h3>
                 <v-card width="65%"><v-img src="/news/001/screen_diminution_dette_urssaf_ancienne.png"></v-img></v-card>
