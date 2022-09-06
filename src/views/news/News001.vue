@@ -2,7 +2,7 @@
     <div>
         <v-card flat>
             <v-card-text class="text">
-                <h1>Liste de détection « Mai 2022 »</h1>
+                <h1>Signalements « Mai 2022 »</h1>
                 <ul>
                     <li>Un nouveau filtre: Premières alertes</li>
                     <li>Un radar de détection plus précis</li>
@@ -14,7 +14,7 @@
                 Le filtre « Premières alertes » est positionné sur la droite dans le panneau de filtrage des listes de détection.
                 Ce filtre permet de sélectionner uniquement les alertes présentant le badge
                 <v-chip class="mb-1 ma-0 mr-1 chip" small color="primary" text-color="white">1re alerte</v-chip>
-                indiquant que l'entreprise n'a jamais fait l'objet d'alertes (rouges ou oranges) depuis le début de Signaux-Faibles (2019).
+                indiquant que l'entreprise n'avait jamais fait l'objet d'alertes (rouges ou oranges) avant cette liste.
                 <v-card width="40%" ><v-img src="/news/001/screen_premiere_alerte.png"/></v-card><p/>
                 <h2>Radar</h2>
                 Le radar présenté sur les fiches établissement détaille plus précisément les raisons de la détection:
@@ -61,5 +61,8 @@ export default {
     }
     .red-darken-4 {
         color: #B71C1C;
+    }
+    h1 {
+        color: #333;
     }
 </style>

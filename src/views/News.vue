@@ -28,6 +28,10 @@
               Nouveautés Signaux-Faibles
             </v-expansion-panel-header>
             <v-expansion-panel-content>
+              <News002/>
+            </v-expansion-panel-content>
+            <hr style="margin: 30px; border: 0; border-top: 2px solid #ddd;"/>
+            <v-expansion-panel-content>
               <News001/>
             </v-expansion-panel-content>
           </v-expansion-panel>
@@ -56,10 +60,12 @@
 
 <script>
 import News001 from '@/views/news/News001.vue'
+import News002 from '@/views/news/News002.vue'
+
 
 export default {
   name: 'News',
-  components: {News001},
+  components: {News001, News002},
   mounted() {
     if (this.newsToRead > 0 && this.dialog == null) {
       this.dialog = true;
@@ -108,7 +114,7 @@ export default {
     return {
       activePanel: 0,
       news: [
-        new Date('2022-06-16'),
+        new Date('2022-09-05'),
       ],
       changelog: [
         { date: new Date('2022-06-16'), news: [
