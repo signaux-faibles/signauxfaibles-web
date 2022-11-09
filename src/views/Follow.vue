@@ -62,7 +62,7 @@
         <div class="mt-2" style="display: flex; flex-direction: column; vertical-align: middle; padding: 0 15px;">
           <v-select
             prepend-icon="mdi-playlist-check"
-            :disabled="type == 'no-card'"
+            :disabled="type === 'no-card'"
             ref="statutMenu" 
             v-model="statut"
             :items="statutItems"
@@ -83,7 +83,7 @@
         <div class="mt-2" style="display: flex; flex-direction: column; vertical-align: middle; padding: 0 15px;">
           <v-select
             prepend-icon="mdi-label"
-            :disabled="type == 'no-card'"
+            :disabled="type === 'no-card'"
             ref="labelMenu" 
             v-model="labels"
             :items="labelsItems"
@@ -166,7 +166,7 @@
         </v-btn-toggle>
       </v-flex>
       <v-flex px-2 grow>
-        <div id="nodata" v-if="!loading && follow.length == 0 && init == false">
+        <div id="nodata" v-if="!loading && follow.length === 0 && init === false">
           <div v-if="wekanUser">
             Vous ne suivez aucun établissement ou aucun établissement suivi ne correspond à vos critères de filtrage.<br />
           </div>
@@ -176,9 +176,9 @@
           <a href="mailto:contact@signaux-faibles.beta.gouv.fr?subject=Import massif d'établissements" target="_blank"><code>contact@signaux-faibles.beta.gouv.fr</code></a></div>
         </div>
         <div class="py-3 px-3 text-center" v-if="follow.length > 0">
-          <span v-if="wekanUser && type=='my-cards'" class="intro">Vous suivez {{this.follow.length | pluralizeEtablissement}} associés à des cartes dont vous êtes le créateur ou un des participants selon les filtres sélectionnés.</span>
-          <span v-if="wekanUser && type=='all-cards'" class="intro">Le ou les tableaux régionaux auxquels vous êtes habilités référencent {{this.follow.length | pluralizeEtablissement}} selon les filtres sélectionnés.</span>
-          <span v-if="wekanUser && type=='no-card'" class="intro">Vous suivez {{this.follow.length | pluralizeEtablissement}} associés à aucune carte de suivi ou à une carte inaccessible.</span>
+          <span v-if="wekanUser && type==='my-cards'" class="intro">Vous suivez {{this.follow.length | pluralizeEtablissement}} associés à des cartes dont vous êtes le créateur ou un des participants selon les filtres sélectionnés.</span>
+          <span v-if="wekanUser && type==='all-cards'" class="intro">Le ou les tableaux régionaux auxquels vous êtes habilités référencent {{this.follow.length | pluralizeEtablissement}} selon les filtres sélectionnés.</span>
+          <span v-if="wekanUser && type==='no-card'" class="intro">Vous suivez {{this.follow.length | pluralizeEtablissement}} associés à aucune carte de suivi ou à une carte inaccessible.</span>
           <span v-if="!wekanUser" class="intro">Vous suivez {{this.follow.length | pluralizeEtablissement}}.</span><br/>
           <v-btn outlined color="indigo" @click="exportXSLX" :dark="!exportXSLXLoading" :loading="exportXSLXLoading" :disabled="loading || exportXSLXLoading" class="mr-4"><v-icon small class="mr-2">fa-file-excel</v-icon>Exporter en XLSX (Excel)</v-btn>
           <v-btn outlined color="indigo" @click="exportDOCX" :dark="!exportDOCXLoading" :loading="exportDOCXLoading" :disabled="loading || exportDOCXLoading"><v-icon small class="mr-2">fa-file-word</v-icon>Exporter en DOCX (Word)</v-btn>
@@ -292,7 +292,7 @@ export default {
       this.$axios.post('/export/xlsx/follow', this.params, {responseType: 'blob', timeout: 120000}).then((response) => {
         this.download(response, 'export-suivi.xlsx')
         this.exportXSLXLoading = false
-      }).catch((error) => {
+      }).catch((_) => {
         this.exportXSLXLoading = false
         this.alertExport = true
       })
@@ -304,7 +304,7 @@ export default {
       this.$axios.post('/export/docx/follow', this.params, {responseType: 'blob', timeout: 120000}).then((response) => {
         this.download(response, 'export-suivi.zip')
         this.exportDOCXLoading = false
-      }).catch((error) => {
+      }).catch((_) => {
         this.exportDOCXLoading = false
         this.alertExport = true
       })
@@ -380,14 +380,15 @@ export default {
           text: r,
           value: this.$store.state.region[r],
         }
-      }).sort((r1, r2) => r1.text > r2.text)
+      // }).sort((r1, r2) => (r1.text>r2.text)?1:-1)
+      }).sort((r1, r2) => r1.text.localeCompare(r2.text))
       all = all.concat(region)
       const departement = Object.keys(this.$store.state.departements).map((d) => {
         return {
           text: d + ' ' + this.$store.state.departements[d],
           value: [d],
         }
-      }).sort((d1, d2) => d1.value[0] > d2.value[0])
+      }).sort((d1, d2) => d1.value[0].localeCompare(d2.value[0]))
       all = all.concat(departement)
       return all
     },
@@ -412,9 +413,12 @@ export default {
     statutItems() {
       if (this.wekanUser) {
         const boards = this.$store.state.wekanConfig.boards
-        return Object.values(boards).flatMap((board) => {
+        const dupItems = Object.values(boards).flatMap((board) => {
           return board.listDetails.map((l) => l.Title)
         })
+        const items = dupItems.filter((v, i, a) => a.indexOf(v) === i)
+        console.log(items)
+        return items
       }
     },
   },
