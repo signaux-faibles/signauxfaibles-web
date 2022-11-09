@@ -58,15 +58,6 @@
         </v-list-item-content>
       </v-list-item>
 
-      <v-list-item :href="fider_url">
-        <v-list-item-action>
-          <v-icon>mdi-puzzle</v-icon>
-        </v-list-item-action>
-        <v-list-item-content>
-          <v-list-item-title>Contribuer</v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
-
       <v-list-item to="/goup" v-if="jwt.goup_path">
         <v-list-item-action>
           <v-icon>cloud_upload</v-icon>
