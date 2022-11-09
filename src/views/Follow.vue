@@ -228,8 +228,6 @@ export default {
       menuSince: false,
       alertExport: false,
       since: null,
-      statutItems: ['A définir', 'Veille', 'Suivi en cours', 'Suivi terminé'],
-
     }
   },
   mounted() {
@@ -410,6 +408,14 @@ export default {
         return Object.keys(labels).sort()
       }
       return []
+    },
+    statutItems() {
+      if (this.wekanUser) {
+        const boards = this.$store.state.wekanConfig.boards
+        return Object.values(boards).flatMap((board) => {
+          return board.listDetails.map((l) => l.Title)
+        })
+      }
     },
   },
   filters: {
