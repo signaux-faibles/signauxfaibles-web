@@ -1,5 +1,10 @@
 <template>
-  <v-navigation-drawer class="elevation-6" width="280" v-model="drawer" app>
+  <v-navigation-drawer
+      class="elevation-6"
+      width="280"
+      v-model="drawer"
+      :style="tbg"
+      app>
     <v-toolbar flat class="transparent">
       <v-list class="pa-0">
         <v-list-item>
@@ -10,7 +15,6 @@
             <v-list-item-title>
               <img height="20" src="../assets/text_signaux_faibles.svg" />
             </v-list-item-title>
-
           </v-list-item-content>
           <v-list-item-avatar>
             <v-icon @click="closeDrawer()">mdi-backburger</v-icon>
@@ -58,15 +62,6 @@
         </v-list-item-content>
       </v-list-item>
 
-      <v-list-item :href="fider_url">
-        <v-list-item-action>
-          <v-icon>mdi-puzzle</v-icon>
-        </v-list-item-action>
-        <v-list-item-content>
-          <v-list-item-title>Contribuer</v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
-
       <v-list-item to="/goup" v-if="jwt.goup_path">
         <v-list-item-action>
           <v-icon>cloud_upload</v-icon>
@@ -87,12 +82,12 @@
         </v-list-item-content>
       </v-list-item>
     </v-list>
-
     <v-footer class="elevation-6" style="color: blue; width:100%; position: fixed; bottom: 0px;">
       <v-btn text icon color="blue" :href="github_url">
         <v-icon>fab fa-github</v-icon>
       </v-btn>
       <v-spacer />
+      {{ mode }}
       <News />
     </v-footer>
   </v-navigation-drawer>
@@ -126,6 +121,15 @@ export default {
     },
   },
   computed: {
+    tbg() {
+      return 'background: linear-gradient(45deg, #fff, 13%, ' + this.bgcolor + ' 13%, '+ this.bgcolor + ' 38%, #fff 38%, #fff 63%, ' + this.bgcolor + ' 63%, ' + this.bgcolor + ' 88%, #fff 88%); background-size: 10px 10px; background-position: 5px 5px;"'
+    },
+    mode() {
+      return this.bgcolor == '#ffffff' ? "" : "testing"
+    },
+    bgcolor() {
+      return process.env.VUE_APP_SIDEBAR_BACKGROUND_COLOR
+    },
     fider_url() {
       return process.env.VUE_APP_FIDER_URL
     },
