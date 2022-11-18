@@ -1,38 +1,50 @@
 <template>
   <div style="font-size: 17px">
     <div v-if="permScore">
-      <span v-if="typeExplication=='crash'">Cet établissement est fermé ou est en situation de défaillance</span>
-      <span v-else-if="typeExplication == 'ras'">Cet établissement n’a pas été identifié par l’algorithme comme étant à risque de défaillance à 18 mois.</span>
-      <span v-else-if="typeExplication == 'horsperimetre'">Cet établissement ne faisait pas partie du périmètre de Signaux Faibles au moment de la production de cette liste de détection.</span>
-      <span v-else-if="typeExplication == 'mixte'">
-        Cette entreprise a été identifié par Signaux-Faibles comme étant à risque{{ this.alert=="Alerte seuil F2"?' modéré ':' '}}de défaillance à 18 mois.<br/>
+      <span v-if="typeExplication === 'crash'">Cet établissement est fermé ou est en situation de défaillance</span>
+      <span v-else-if="typeExplication === 'ras'">Cet établissement n’a pas été identifié par l’algorithme comme étant à risque de défaillance à 18 mois.</span>
+      <span v-else-if="typeExplication === 'horsperimetre'">Cet établissement ne faisait pas partie du périmètre de Signaux Faibles au moment de la production de cette liste de détection.</span>
+      <span v-else-if="typeExplication === 'mixte'">
+        Cette entreprise a été identifié par Signaux-Faibles comme étant à risque{{ this.alert === "Alerte seuil F2"?' modéré ':' '}}de défaillance à 18 mois.<br/>
         Cette alerte se fonde sur des données datant de Mars 2020 (pré-crise COVID) et des redressements experts basés sur des données actuelles.
-        <HistoriqueExplainStructurel :summary="summary" :historique="historique"/>
-        <HistoriqueExplainConjoncturel :summary="summary" :historique="historique"/>
+        <ExplainConjoncturel
+            :signalAugmentationUrssaf="signalAugmentationUrssaf"
+            :signalDiminutionUrssaf="signalDiminutionUrssaf"
+            :signalActivitePartielle="signalActivitePartielle"
+            :signalFinancier="signalFinancier"
+            :redressements="redressements"
+        />
+        <ExplainStructurel :summary="summary" :historique="historique"/>
       </span>
-      <span v-else-if="typeExplication == 'structurel'">
-        Cette entreprise a été identifiée par Signaux-Faibles comme étant à risque{{ this.alert=="Alerte seuil F2"?' modéré ':' '}}de défaillance à 18 mois.<br/>
-        Cette alerte se fonde sur des données datant de Mars 2020 (pré-crise COVID). Les redressements experts n'indiquent pas d'évolution.
-        <HistoriqueExplainStructurel :summary="summary" :historique="historique"/>
-      </span>
-      <span v-else-if="typeExplication == 'conjoncturel'">
-        Cette entreprise a été identifiée par Signaux-Faibles comme étant à risque{{ this.alert=="Alerte seuil F2"?' modéré ':' '}}de défaillance à 18 mois.<br/>
+      <span v-else-if="typeExplication === 'conjoncturel'">
+        Cette entreprise a été identifiée par Signaux-Faibles comme étant à risque{{ this.alert === "Alerte seuil F2"?' modéré ':' '}}de défaillance à 18 mois.<br/>
         Les données datant de Mars 2020 n'ont pas provoqué d'alerte, toutefois les redressements experts indiquent un changement de situation.
-        <HistoriqueExplainConjoncturel :summary="summary" :historique="historique"/>
+        <ExplainConjoncturel
+            :signalAugmentationUrssaf="signalAugmentationUrssaf"
+            :signalDiminutionUrssaf="signalDiminutionUrssaf"
+            :signalActivitePartielle="signalActivitePartielle"
+            :signalFinancier="signalFinancier"
+            :redressements="redressements"
+        />
       </span>
+      <span v-else-if="typeExplication === 'structurel'">
+        Cette entreprise a été identifiée par Signaux-Faibles comme étant à risque{{ this.alert === "Alerte seuil F2"?' modéré ':' '}}de défaillance à 18 mois.<br/>
+        Cette alerte se fonde sur des données datant de Mars 2020 (pré-crise COVID). Les redressements experts n'indiquent pas d'évolution.
+        <ExplainStructurel :summary="summary" :historique="historique"/>
+      </span>
+
     </div>
     <div v-else>
       <div v-if="roles.includes('score')">Veuillez suivre cet établissement pour consulter ses données de détection.</div>
       <div v-else>Vous n’êtes pas autorisé(e) à consulter les données de détection.</div>
     </div>
-
   </div>
 </template>
 
 <script>
 import libellesVariablesScores from '@/assets/libelles_variables_scores.json'
-import HistoriqueExplainConjoncturel from '@/components/Etablissement/HistoriqueExplainConjoncturel.vue'
-import HistoriqueExplainStructurel from '@/components/Etablissement/HistoriqueExplainStructurel.vue'
+import ExplainConjoncturel from '@/components/Etablissement/Score/ExplainConjoncturel.vue'
+import ExplainStructurel from '@/components/Etablissement/Score/ExplainStructurel.vue'
 
 export default {
   data() {
@@ -41,7 +53,7 @@ export default {
     }
   },
   props: ['historique', 'summary'],
-  components: {HistoriqueExplainConjoncturel, HistoriqueExplainStructurel},
+  components: {ExplainConjoncturel, ExplainStructurel},
   methods: {
     series(h) {
       return [{
@@ -78,6 +90,9 @@ export default {
         },
       }
       return {...this.options, ...xaxis}
+    },
+    hasRedressement(redressement) {
+      return this.redressements.includes(redressement)
     },
   },
   computed: {
@@ -149,9 +164,38 @@ export default {
     redressements() {
       return this.dernierScore.redressements
     },
+    hasSignal() {
+      return this.signals.some((signal) => signal)
+    },
+    signals() {
+      return [
+        this.signalAugmentationUrssaf,
+        this.signalDiminutionUrssaf,
+        this.signalActivitePartielle,
+        this.signalFinancier,
+      ]
+    },
+    signalAugmentationUrssaf() {
+      return (this.hasRedressement("augmentation_dette_sur_cotisation_urssaf_recente") &&
+      !this.hasRedressement("dette_urssaf_macro_preponderante"))
+    },
+    signalDiminutionUrssaf() {
+      return (this.hasRedressement("diminution_dette_urssaf_ancienne") &&
+      !this.hasRedressement("augmentation_dette_sur_cotisation_urssaf_recente") &&
+      this.hasRedressement("dette_urssaf_ancienne_significative"))
+    },
+    signalActivitePartielle() {
+      return (this.hasRedressement("demande_activite_partielle_elevee"))
+    },
+    signalFinancier() {
+      return ((this.hasRedressement("solvabilité_faible")?1:0) +
+      (this.hasRedressement("k_propres_negatifs")?1:0) +
+      (this.hasRedressement("rentabilité_faible")?1:0) +
+      (this.hasRedressement("tva_rar_elevé")?1:0)) > 1
+    },
     typeExplication() {
       if (this.crash) {
-        return "crash" 
+        return "crash"
       } else if (this.alert == null) {
         return "horsperimetre"
       } else if (this.hasSignal && this.hasAlertPreRedressements && this.hasAlert) {
@@ -159,29 +203,11 @@ export default {
       } else if (this.hasSignal && !this.hasAlertPreRedressements) {
         return "conjoncturel"
       } else if (!this.hasSignal && this.hasAlertPreRedressements) {
-        return "structurel" 
+        return "structurel"
       } else {
         return "ras"
       }
     },
-    redressements() {
-      return this.dernierScore.redressements
-    },
-    hasSignal() {
-      return (this.signal1 != 0 || this.signal2 != 0 || this.signal3 != 0)
-    },
-    signal1() {
-      return (this.redressements.includes("augmentation_dette_sur_cotisation_urssaf_recente") && 
-      !this.redressements.includes("dette_urssaf_macro_preponderante"))?-1:0
-    },
-    signal2() {
-      return (this.redressements.includes("diminution_dette_urssaf_ancienne") && 
-      !this.redressements.includes("augmentation_dette_sur_cotisation_urssaf_recente") && 
-      this.redressements.includes("dette_urssaf_ancienne_significative"))?1:0
-    },
-    signal3() {
-      return (this.redressements.includes("demande_activite_partielle_elevee"))?-1:0
-    }
   }
 }
 
