@@ -25,7 +25,7 @@
             <span>Cet établissement est fermé ou l’activité de l’entreprise a cessé</span>
           </v-tooltip>
         </div>
-        <HistoriqueExplain :summary="summary" :historique="historique"/>
+        <Explain :summary="summary" :historique="historique"/>
       </v-flex>
       <v-btn v-if="permScore && !this.crash && historique.length > 1" outlined small dark color="indigo" @click="historiqueDialog = true">Voir historique des alertes</v-btn>
       <v-dialog v-model="historiqueDialog" @input="historiqueDialog = false" max-width="500px">
@@ -52,13 +52,13 @@
 
 <script>
 import ScoreWidget from '@/components/ScoreWidget.vue'
-import HistoriqueExplain from '@/components/Etablissement/HistoriqueExplain.vue'
+import Explain from '@/components/Etablissement/Score/Explain.vue'
 import Help from '@/components/Help.vue'
 
 export default {
   name: 'Historique',
   props: ['historique', 'summary'],
-  components: { ScoreWidget, Help, HistoriqueExplain },
+  components: { ScoreWidget, Help, Explain },
   data() {
     return {
       historiqueDialog: false,

@@ -143,7 +143,8 @@ export default {
       get() {
         return this.$store.state.leftDrawer
       },
-      set(val) {
+      set(val) {clear
+
         this.$store.dispatch('setLeftDrawer', val)
       },
     },
