@@ -24,7 +24,7 @@
           dark
           target="_blank"
           href="https://signaux-faibles.gitbook.io/guide-dutilisation-et-faq/fiche-etablissement"
-          flat
+          text
           style="position: relative; top: -2px;"
         >
           <v-icon dark>

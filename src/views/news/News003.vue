@@ -15,16 +15,30 @@
           <Gitbook target="f.a.q.#comment-sont-obtenues-les-listes-comment-fonctionne-le-modele-algorithmique"/>
           <p/>
           <h2>Statistiques de la nouvelle liste</h2>
-          <ul>
-            <li>nombre total de signalements : 31174</li>
-            <li>nombre de premières alertes : 15227</li>
-            <ul>
-            <li>dont 12164 sont signalées uniquement grâce aux nouveaux critères financiers</li>
-            </ul>
-          </ul>
-          <p/>
-          Ce dernier point explique notamment la hausse de 3124% des premières alertes par rapport à la publication de septembre 2022.
-          <p/>
+          <v-row>
+            <v-col>
+              <ul>
+                <li>nombre total de signalements : 31174</li>
+                <li>nombre de premières alertes : 15227</li>
+                <ul>
+                <li>dont 12164 sont signalées uniquement grâce aux nouveaux critères financiers</li>
+                </ul>
+              </ul>
+              <p/>
+              La nouveauté de ces critères financiers engendre un grand nombre de nouvelles alertes.
+              <p/>
+            </v-col>
+            <v-col>
+              <apexchart
+                  height="300px"
+                  type="donut"
+                  :options="options"
+                  :series="series"
+                  :labels="labels"
+              ></apexchart>
+            </v-col>
+          </v-row>
+
 
           <h2>Mise à jour des données</h2>
           Les données ont été actualisées en octobre 2022 et mises en ligne dans l'applicatif. <br/>
@@ -48,7 +62,31 @@ import Gitbook from '@/components/Gitbook.vue'
 
 export default {
   components: {Gitbook},
-  props: ['activePanel']
+  props: ['activePanel'],
+  data() {
+    return {
+      series: [
+        15227,
+        3063,
+        15947,
+      ],
+      options: {
+        labels: [
+          "premières alertes financières",
+          "premières alertes",
+          "alertes renouvelées",
+        ],
+        colors: [
+          '#89D685',
+          '#1976d2',
+          '#ff5252',
+        ],
+        dataLabels: {
+          enabled: false
+        }
+      },
+    }
+  }
 }
 </script>
 
