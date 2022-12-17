@@ -19,6 +19,18 @@
         class="toolbar_titre"
       >
         Détection - {{ currentBatch }}
+        <v-btn
+          icon
+          dark
+          target="_blank"
+          href="https://signaux-faibles.gitbook.io/guide-dutilisation-et-faq/fiche-etablissement"
+          text
+          style="position: relative; top: -2px;"
+        >
+          <v-icon dark>
+            help
+          </v-icon>
+        </v-btn>
         <Help v-if="currentBatchDescription" ref="modelHelp" titre="Modèle de détection" :dark="true" :big="true">
           <template>
             <div v-html="currentBatchDescription"></div>

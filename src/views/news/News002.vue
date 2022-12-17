@@ -1,8 +1,12 @@
 <template>
-    <div>
+    <v-expansion-panel>
+      <v-expansion-panel-header ripple>
+        <h1>Publication de signalements — Septembre 2022</h1>
+      </v-expansion-panel-header>
+      <v-expansion-panel-content>
         <v-card flat>
             <v-card-text class="text">
-                <h1>Signalements « Septembre 2022 »</h1>
+
 
                 <h2>Mise à jour des redressements experts</h2>
                 <ul>
@@ -18,7 +22,7 @@
                 <p/>
 
 
-                <h1>Mise à jour des données</h1>
+                <h2>Mise à jour des données</h2>
                     Les données ont été actualisées en août 2022 et mises en ligne dans l'applicatif. <br/>
                     Voici leur état de fraicheur :
                     <ul>
@@ -31,12 +35,13 @@
                     </ul>  
             </v-card-text>
         </v-card>
-    </div>
+      </v-expansion-panel-content>
+    </v-expansion-panel>
 </template>
 
 <script lang="js">
 export default {
-
+  props: ['activePanel']
 }
 </script>
 

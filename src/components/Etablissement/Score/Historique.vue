@@ -2,11 +2,6 @@
   <div>
     <h2>
       Détection Signaux Faibles
-      <Help titre="Analyse pré-crise">
-        <template>
-          <div v-html="currentBatchDescription"></div>
-        </template>
-      </Help>
     </h2>
     <v-layout wrap>
       <v-flex xl6 lg12 mb-2> 

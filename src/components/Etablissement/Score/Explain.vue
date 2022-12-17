@@ -4,34 +4,28 @@
       <span v-if="typeExplication === 'crash'">Cet établissement est fermé ou est en situation de défaillance</span>
       <span v-else-if="typeExplication === 'ras'">Cet établissement n’a pas été identifié par l’algorithme comme étant à risque de défaillance à 18 mois.</span>
       <span v-else-if="typeExplication === 'horsperimetre'">Cet établissement ne faisait pas partie du périmètre de Signaux Faibles au moment de la production de cette liste de détection.</span>
-      <span v-else-if="typeExplication === 'mixte'">
-        Cette entreprise a été identifié par Signaux-Faibles comme étant à risque{{ this.alert === "Alerte seuil F2"?' modéré ':' '}}de défaillance à 18 mois.<br/>
-        Cette alerte se fonde sur des données datant de Mars 2020 (pré-crise COVID) et des redressements experts basés sur des données actuelles.
+      <span v-else>
+        Cette entreprise est portée à votre attention car elle présente des signes d'alerte {{ this.alert === "Alerte seuil F2"?' modérés':' importants'}} détaillés ci-dessous.<br/>
+        <p/>
+        <span>
+          <Gitbook target="f.a.q.#comment-sont-obtenues-les-listes-comment-fonctionne-le-modele-algorithmique"/>
+        </span>
         <ExplainConjoncturel
             :signalAugmentationUrssaf="signalAugmentationUrssaf"
             :signalDiminutionUrssaf="signalDiminutionUrssaf"
             :signalActivitePartielle="signalActivitePartielle"
             :signalFinancier="signalFinancier"
             :redressements="redressements"
+            :typeExplication="typeExplication"
         />
-        <ExplainStructurel :summary="summary" :historique="historique"/>
-      </span>
-      <span v-else-if="typeExplication === 'conjoncturel'">
-        Cette entreprise a été identifiée par Signaux-Faibles comme étant à risque{{ this.alert === "Alerte seuil F2"?' modéré ':' '}}de défaillance à 18 mois.<br/>
-        Les données datant de Mars 2020 n'ont pas provoqué d'alerte, toutefois les redressements experts indiquent un changement de situation.
-        <ExplainConjoncturel
-            :signalAugmentationUrssaf="signalAugmentationUrssaf"
-            :signalDiminutionUrssaf="signalDiminutionUrssaf"
-            :signalActivitePartielle="signalActivitePartielle"
-            :signalFinancier="signalFinancier"
-            :redressements="redressements"
+
+        <ExplainStructurel
+            :summary="summary"
+            :historique="historique"
+            :typeExplication="typeExplication"
         />
       </span>
-      <span v-else-if="typeExplication === 'structurel'">
-        Cette entreprise a été identifiée par Signaux-Faibles comme étant à risque{{ this.alert === "Alerte seuil F2"?' modéré ':' '}}de défaillance à 18 mois.<br/>
-        Cette alerte se fonde sur des données datant de Mars 2020 (pré-crise COVID). Les redressements experts n'indiquent pas d'évolution.
-        <ExplainStructurel :summary="summary" :historique="historique"/>
-      </span>
+
 
     </div>
     <div v-else>
@@ -45,6 +39,7 @@
 import libellesVariablesScores from '@/assets/libelles_variables_scores.json'
 import ExplainConjoncturel from '@/components/Etablissement/Score/ExplainConjoncturel.vue'
 import ExplainStructurel from '@/components/Etablissement/Score/ExplainStructurel.vue'
+import Gitbook from '@/components/Gitbook.vue'
 
 export default {
   data() {
@@ -53,7 +48,7 @@ export default {
     }
   },
   props: ['historique', 'summary'],
-  components: {ExplainConjoncturel, ExplainStructurel},
+  components: {ExplainConjoncturel, ExplainStructurel, Gitbook},
   methods: {
     series(h) {
       return [{

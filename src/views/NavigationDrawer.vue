@@ -2,6 +2,7 @@
   <v-navigation-drawer
       class="elevation-6"
       width="280"
+      transition="scroll-x-transition"
       v-model="drawer"
       :style="tbg"
       app>
@@ -23,8 +24,6 @@
       </v-list>
     </v-toolbar>
     <v-list class="pt-0" dense>
-
-
       <v-divider></v-divider>
       <v-list-item to="/">
         <v-list-item-action>
@@ -34,7 +33,6 @@
           <v-list-item-title>Consultation</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
-
       <v-list-item to="/prediction">
         <v-list-item-action>
           <v-icon>mdi-target</v-icon>
@@ -43,7 +41,6 @@
           <v-list-item-title>Listes de détection</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
-
       <v-list-item to="/follow">
         <v-list-item-action>
           <v-icon>mdi-star</v-icon>
@@ -52,8 +49,7 @@
           <v-list-item-title>Suivi d'établissements</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
-
-      <v-list-item v-if="roles.includes('wekan')" :href="wekan_url">
+      <v-list-item v-if="roles.includes('wekan')" :href="wekan_url" target="_blank">
         <v-list-item-action>
           <v-icon>fab fa-trello</v-icon>
         </v-list-item-action>
@@ -61,7 +57,6 @@
           <v-list-item-title>Kanban de suivi</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
-
       <v-list-item to="/goup" v-if="jwt.goup_path">
         <v-list-item-action>
           <v-icon>cloud_upload</v-icon>
@@ -70,9 +65,19 @@
           <v-list-item-title>Envoi de données manuel</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
-
+      <v-list-item
+          href="https://signaux-faibles.gitbook.io/guide-dutilisation-et-faq/"
+          target="_blank">
+        <v-list-item-action>
+          <v-icon>
+            mdi-library-books
+          </v-icon>
+        </v-list-item-action>
+        <v-list-item-content>
+          <v-list-item-title>Guide utilisateur et FAQ</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
       <v-divider></v-divider>
-
       <v-list-item @click="logout()">
         <v-list-item-action>
           <v-icon>logout</v-icon>
@@ -143,8 +148,7 @@ export default {
       get() {
         return this.$store.state.leftDrawer
       },
-      set(val) {clear
-
+      set(val) {
         this.$store.dispatch('setLeftDrawer', val)
       },
     },

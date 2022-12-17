@@ -1,8 +1,12 @@
 <template>
-    <div>
+    <v-expansion-panel>
+      <v-expansion-panel-header ripple>
+        <h1>Publication de signalements — Mai 2022</h1>
+      </v-expansion-panel-header>
+      <v-expansion-panel-content>
         <v-card flat>
             <v-card-text class="text">
-                <h1>Signalements « Mai 2022 »</h1>
+
                 <ul>
                     <li>Un nouveau filtre: Premières alertes</li>
                     <li>Un radar de détection plus précis</li>
@@ -46,12 +50,13 @@
 
             </v-card-text>
         </v-card>
-    </div>
+      </v-expansion-panel-content>
+    </v-expansion-panel>
 </template>
 
 <script lang="js">
 export default {
-
+  props: ['activePanel']
 }
 </script>
 
@@ -63,6 +68,6 @@ export default {
         color: #B71C1C;
     }
     h1 {
-        color: #333;
+      color: #333;
     }
 </style>
