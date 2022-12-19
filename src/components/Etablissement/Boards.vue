@@ -142,7 +142,7 @@ export default {
           title: b.title,
           isMember: b.isMember,
           slug: b.slug,
-          url: b.url,
+          url: process.env.VUE_APP_WEKAN_URL + b.url,
         }
         c.startAtDate = new Date(c.startAt)
         c.endAtDate = new Date(c.endAt)
