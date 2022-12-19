@@ -71,7 +71,7 @@
             </v-btn>
           </td>
           <td>
-            <v-btn v-if="card.cardURL && !card.archived" :href="card.cardURL" @click="trackMatomoEvent('general', 'visite_carte', card.title)" dark color="indigo" class="px-2 ma-1">
+            <v-btn v-if="card.cardURL && !card.archived" :href="card.absoluteCardURL" @click="trackMatomoEvent('general', 'visite_carte', card.title)" dark color="indigo" class="px-2 ma-1">
               <v-icon small class="mr-2">mdi-trello</v-icon>
               Carte de suivi
             </v-btn>
@@ -147,6 +147,7 @@ export default {
         c.startAtDate = new Date(c.startAt)
         c.endAtDate = new Date(c.endAt)
         c.lastActivityDate = new Date(c.lastActivity)
+        c.absoluteCardURL = process.env.VUE_APP_WEKAN_URL + c.cardURL
         return c
       })) 
     },
