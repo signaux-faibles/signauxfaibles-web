@@ -4,7 +4,7 @@ name: Publish sfweb container to ghcr.io
 on:
   pull_request:
     branches:
-      - 'main'
+      - 'master'
   push:
     tags:
       - '*'
