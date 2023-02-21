@@ -28,11 +28,14 @@ export default {
           width: '50%',
         },
         yaxis: {
-          tickAmount: 3,
+          tickAmount: 7,
+          labels: {
+            formatter: function (value) {
+              return value.toLocaleString() + " €";
+            }
+          }
         },
-
         labels: [
-          ['Chiffre d\'Affaire'],
           ['Marge brute'],
           ['EBITDA'],
           ['Résultat d\'exploitation'],
@@ -41,7 +44,7 @@ export default {
         tooltip: {
           y: {
             formatter: function(value, { series, seriesIndex, dataPointIndex, w }) {
-              return value.toLocaleString() + ' jours'
+              return value.toLocaleString() + ' €'
             }
           }
         }
@@ -70,7 +73,6 @@ export default {
             return {
               name: exercice.exercice,
               data: [
-                exercice.performance.chiffreDAffaires,
                 exercice.performance.margeBrute,
                 exercice.performance.ebitda,
                 exercice.performance.ebit,

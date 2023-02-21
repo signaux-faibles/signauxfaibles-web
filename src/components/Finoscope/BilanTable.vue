@@ -2,50 +2,53 @@
   <div>
     <table>
       <tr>
-        <td>Exercice<br/>Date de clôture</td>
+        <th>Exercice (Date de clôture)</th>
         <td v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
-          {{ exercice.exercice }}<br/>
-          {{ exercice.dateClotureExercice.toLocaleDateString() }}
+          {{ exercice.exercice }} ({{ exercice.dateClotureExercice.toLocaleDateString() }})
         </td>
       </tr>
       <tr>
-        <td>Taux d'endettement</td>
+        <th>Taux d'endettement</th>
         <td v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
           {{ exercice.bilan.tauxDEndettement.toLocaleString() }} %
         </td>
       </tr>
       <tr>
-        <td>Ratio de liquidité</td>
+        <th>Ratio de liquidité</th>
         <td v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
           {{ exercice.bilan.ratioDeLiquidite.toLocaleString() }} %
         </td>
       </tr>
       <tr>
-        <td>Ratio de vétusté</td>
+        <th>Ratio de vétusté</th>
         <td v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
           {{ exercice.bilan.ratioDeVetuste.toLocaleString() }} %
         </td>
       </tr>
       <tr>
-        <td>Autonomie financière</td>
+        <th>Autonomie financière</th>
         <td v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
           {{ exercice.bilan.autonomieFinanciere.toLocaleString() }} %
         </td>
       </tr>
       <tr>
-        <td>BFR exploitation sur CA</td>
+        <th>BFR exploitation sur CA</th>
         <td v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
           {{ exercice.bilan.poidsBFRExploitationSurCA.toLocaleString() }} %
         </td>
       </tr>
     </table>
+    <DataSource :siren="siren"/>
   </div>
 </template>
 
 <script>
+import DataSource from "@/components/Finoscope/DataSource.vue";
+
 export default {
   name: 'BilanTable',
-  props: ['ratios'],
+  components: {DataSource},
+  props: ['ratios', 'siren'],
   methods: {
     exercices(length) {
       const currentYear = (new Date()).getFullYear()

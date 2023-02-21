@@ -20,7 +20,7 @@
       <v-tab-item>
         <v-layout mt-4 wrap width="100%">
           <v-flex md6 xs12>
-            <BilanTable :ratios="ratios"/>
+            <BilanTable :ratios="ratios" :siren="siren"/>
           </v-flex>
           <v-flex md6 xs12>
             <BilanGraph :ratios="ratios" :chartOptions="chartOptions"/>
@@ -30,17 +30,17 @@
       <v-tab-item>
         <v-layout mt-4 wrap width="100%">
           <v-flex md6 xs12>
-            <CompteDeResultatTable :ratios="ratios"/>
+            <CompteDeResultatTable :ratios="ratios" :siren="siren"/>
           </v-flex>
           <v-flex md6 xs12>
-            <CompteDeResultatGraph :ratios="ratios" :chartOptions="chartOptions"/>
+            <CompteDeResultatGraph :ratios="ratios" :chartOptions="chartOptions" :siren="siren"/>
           </v-flex>
         </v-layout>
       </v-tab-item>
       <v-tab-item>
         <v-layout mt-4 wrap width="100%">
           <v-flex md6 xs12>
-            <GestionTable :ratios="ratios"/>
+            <GestionTable :ratios="ratios" :siren="siren"/>
           </v-flex>
           <v-flex md6 xs12>
             <GestionGraph :ratios="ratios" :chartOptions="chartOptions"/>
@@ -48,10 +48,6 @@
         </v-layout>
       </v-tab-item>
     </v-tabs-items>
-
-    Données financières issues du <a href="https://data.inpi.fr/">Registre National du Commerce et des Sociétés</a> (INPI)<br/>
-    Retrouvez tous les chiffres disponibles sur <a :href="'https://data.economie.gouv.fr/explore/dataset/ratios_inpi_bce/table/?q=siren%3d' + this.siren">data.economie.gouv.fr</a>
-
   </div>
 </template>
 
@@ -207,15 +203,38 @@ export default {
 
 <style>
 table {
-  width: 100%
+  width: 100%;
+  padding: 10px;
 }
 
-tr td, tr td {
+
+
+tr td {
   padding: 4px;
   text-align: right;
 }
 
-table tr:not(:last-child) td {
+tr th {
+  padding: 4px;
+  text-align: left;
+}
+
+tr th:first-child {
+  max-width: 180px;
+}
+table tr:not(:last-child) td, table tr:not(:last-child) th {
   border-bottom: 1px solid rgba(0,0,0,0.20);
 }
+
+table tr:nth-child(odd){
+  background-color: rgba(0,0,0,0.03);
+}
+
+table tr:first-child td, table tr:first-child th {
+  border-bottom: 2px solid rgba(0,0,0,0.20);
+  background-color: rgba(0,0,0,0.08);
+  text-align: center;
+}
+
+
 </style>

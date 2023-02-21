@@ -2,44 +2,47 @@
   <div>
     <table>
       <tr>
-        <td>Exercice<br/>Date de clôture</td>
+        <th>Exercice (Date de clôture)</th>
         <td v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
-          {{ exercice.exercice }}<br/>
-          {{ exercice.dateClotureExercice.toLocaleDateString() }}
+          {{ exercice.exercice }} ({{ exercice.dateClotureExercice.toLocaleDateString() }})
         </td>
       </tr>
       <tr>
-        <td>BFR exploitation sur CA</td>
+        <th>BFR exploitation sur CA</th>
         <td v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
           {{ exercice.gestion.poidsBFRExploitationSurCAJours.toLocaleString() }} j.
         </td>
       </tr>
       <tr>
-        <td>Rotation des stocks</td>
+        <th>Rotation des stocks</th>
         <td v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
           {{ exercice.gestion.rotationDesStocks.toLocaleString() }} j.
         </td>
       </tr>
       <tr>
-        <td>Crédit Clients</td>
+        <th>Crédit Clients</th>
         <td v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
           {{ exercice.gestion.creditClients.toLocaleString() }} j.
         </td>
       </tr>
       <tr>
-        <td>Crédits Fournisseurs</td>
+        <th>Crédits Fournisseurs</th>
         <td v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
           {{ exercice.gestion.creditFournisseurs.toLocaleString() }} j.
         </td>
       </tr>
     </table>
+    <DataSource :siren="siren"/>
   </div>
 </template>
 
 <script>
+import DataSource from "@/components/Finoscope/DataSource.vue";
+
 export default {
   name: 'GestionTable',
-  props: ['ratios'],
+  components: {DataSource},
+  props: ['ratios', 'siren'],
   computed: {
     localRatios() {
       return this.ratios.slice().reverse()
