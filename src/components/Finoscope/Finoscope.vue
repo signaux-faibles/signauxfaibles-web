@@ -1,11 +1,22 @@
 <template>
   <div>
     <v-tabs v-model="tab">
+      <v-tab>Performance</v-tab>
       <v-tab>Bilan</v-tab>
       <v-tab>Compte de résultat</v-tab>
       <v-tab>Gestion</v-tab>
     </v-tabs>
     <v-tabs-items v-model="tab">
+      <v-tab-item>
+        <v-layout mt-4 wrap width="100%">
+          <v-flex md6 xs12>
+            <PerformanceTable :ratios="ratios"/>
+          </v-flex>
+          <v-flex md6 xs12>
+            <PerformanceGraph :ratios="ratios"/>
+          </v-flex>
+        </v-layout>
+      </v-tab-item>
       <v-tab-item>
         <v-layout mt-4 wrap width="100%">
           <v-flex md6 xs12>
@@ -37,11 +48,17 @@
         </v-layout>
       </v-tab-item>
     </v-tabs-items>
+
+    Données financières issues du <a href="https://data.inpi.fr/">Registre National du Commerce et des Sociétés</a> (INPI)<br/>
+    Retrouvez tous les chiffres disponibles sur <a :href="'https://data.economie.gouv.fr/explore/dataset/ratios_inpi_bce/table/?q=siren%3d' + this.siren">data.economie.gouv.fr</a>
+
   </div>
 </template>
 
 <script>
 import axios from 'axios'
+import PerformanceTable from "@/components/Finoscope/PerformanceTable.vue";
+import PerformanceGraph from "@/components/Finoscope/PerformanceGraph.vue";
 import BilanTable from "@/components/Finoscope/BilanTable.vue";
 import BilanGraph from "@/components/Finoscope/BilanGraph.vue";
 import CompteDeResultatTable from "@/components/Finoscope/CompteDeResultatTable.vue";
@@ -49,9 +66,15 @@ import CompteDeResultatGraph from "@/components/Finoscope/CompteDeResultatGraph.
 import GestionTable from "@/components/Finoscope/GestionTable.vue";
 import GestionGraph from "@/components/Finoscope/GestionGraph.vue";
 
+
 export default {
   name: 'Finoscope',
-  components: {BilanTable, BilanGraph, CompteDeResultatTable, CompteDeResultatGraph, GestionTable, GestionGraph},
+  components: {
+    PerformanceTable, PerformanceGraph,
+    BilanTable, BilanGraph,
+    CompteDeResultatTable, CompteDeResultatGraph,
+    GestionTable, GestionGraph
+  },
   props: ['siren'],
   data() {
     return {
@@ -69,6 +92,9 @@ export default {
           palette: 'palette5',
         },
         chart: {
+          toolbar: {
+              show: false,
+            },
           type: 'radar',
           width: '50%',
         },
@@ -116,6 +142,13 @@ export default {
           dateClotureExercice: dateClotureExercice,
           exercice: this.exerciceFromDateCloture(dateClotureExercice),
           siren: fields.siren,
+          performance: {
+            chiffreDAffaires: this.roundAt(fields.chiffre_d_affaires, 1),
+            margeBrute: this.roundAt(fields.marge_brute, 1),
+            ebitda: this.roundAt(fields.ebitda, 1),
+            ebit: this.roundAt(fields.ebit, 1),
+            resultatNet: this.roundAt(fields.resultat_net, 1),
+          },
           bilan: {
             tauxDEndettement: this.roundAt(fields.taux_d_endettement,1),
             ratioDeLiquidite: this.roundAt(fields.ratio_de_liquidite, 1),
@@ -161,12 +194,12 @@ export default {
       } else {
         return this.odsPayload.records
             .map(this.fieldsTransform)
+            .filter(r => {
+              return r.dateClotureExercice.getTime() > (new Date('2019-01-01')).getTime()
+            })
             .sort(this.sortRatios)
       }
     },
-    ratiosBilan() {
-
-    }
   },
 }
 </script>

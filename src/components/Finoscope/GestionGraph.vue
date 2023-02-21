@@ -5,6 +5,8 @@
 </template>
 
 <script>
+import fr from 'apexcharts/dist/locales/fr.json'
+
 export default {
   name: 'BilanGraph',
   props: ['ratios', 'chartOptions'],
@@ -12,12 +14,25 @@ export default {
     return {
       localOptions: {
         labels: [
-          ['Poids BFR exploitation','sur CA (jours)'],
-          ['Rotation','des stocks'],
-          ['Crédit fournisseurs','(jours)'],
-          ['Crédit clients','(jours)'],
-        ]
-      }
+          ['BFR exploitation sur CA'],
+          ['Rotation des','stocks'],
+          ['Crédit fournisseurs'],
+          ['Crédit clients'],
+        ],
+        tooltip: {
+          y: {
+            formatter: function(value, { series, seriesIndex, dataPointIndex, w }) {
+              return value.toLocaleString() + ' jours'
+            }
+          }
+        }
+      },
+    }
+  },
+  created() {
+    Apex.chart = {
+      locales: [fr],
+      defaultLocale: 'fr',
     }
   },
   methods: {
@@ -28,7 +43,7 @@ export default {
   },
   computed: {
     options() {
-      return Object.assign(this.chartOptions, this.localOptions)
+      return Object.assign(this.localOptions, this.chartOptions)
     },
     series() {
       if (this.ratios == null) {return []}

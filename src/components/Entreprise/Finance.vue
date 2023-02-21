@@ -14,7 +14,7 @@
           style="position: relative; top: -2px;"
       >
         <v-icon dark>
-          help
+          mdi-library-books
         </v-icon>
       </v-btn>
     </v-toolbar>

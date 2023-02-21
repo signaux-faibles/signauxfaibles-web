@@ -9,33 +9,33 @@
         </td>
       </tr>
       <tr>
-        <td>Taux d'endettement</td>
+        <td>Chiffre d'Affaire</td>
         <td v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
-          {{ exercice.bilan.tauxDEndettement.toLocaleString() }} %
+          {{ exercice.performance.chiffreDAffaires.toLocaleString() }} €
         </td>
       </tr>
       <tr>
-        <td>Ratio de liquidité</td>
+        <td>Marge brute</td>
         <td v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
-          {{ exercice.bilan.ratioDeLiquidite.toLocaleString() }} %
+          {{ exercice.performance.margeBrute.toLocaleString() }} €
         </td>
       </tr>
       <tr>
-        <td>Ratio de vétusté</td>
+        <td>EBITDA</td>
         <td v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
-          {{ exercice.bilan.ratioDeVetuste.toLocaleString() }} %
+          {{ exercice.performance.ebitda.toLocaleString() }} €
         </td>
       </tr>
       <tr>
-        <td>Autonomie financière</td>
+        <td>Résultat d'exploitation</td>
         <td v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
-          {{ exercice.bilan.autonomieFinanciere.toLocaleString() }} %
+          {{ exercice.performance.ebit.toLocaleString() }} €
         </td>
       </tr>
       <tr>
-        <td>BFR exploitation sur CA</td>
+        <td>Résultat net</td>
         <td v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
-          {{ exercice.bilan.poidsBFRExploitationSurCA.toLocaleString() }} %
+          {{ exercice.performance.resultatNet.toLocaleString() }} €
         </td>
       </tr>
     </table>
@@ -44,14 +44,8 @@
 
 <script>
 export default {
-  name: 'BilanTable',
+  name: 'PerfomanceTable',
   props: ['ratios'],
-  methods: {
-    exercices(length) {
-      const currentYear = (new Date()).getFullYear()
-      return Array(length).fill().map((_, index) => currentYear - index - 1)
-    },
-  },
   computed: {
     localRatios() {
       return this.ratios.slice().reverse()
@@ -59,4 +53,3 @@ export default {
   }
 }
 </script>
-
