@@ -5,6 +5,9 @@ on:
   push:
     tags:
       - '*'
+  pull_request:
+    branches:
+      - main
   workflow_dispatch: # pour être lancé à la main
 
 env:
@@ -18,7 +21,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        env: [ development, preprod, production, testing ]
+        env: [ preprod, production ]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
