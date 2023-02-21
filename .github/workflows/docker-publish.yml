@@ -2,12 +2,12 @@ name: Publish sfweb container to ghcr.io
 
 # Run workflow on tags starting with v (eg. v2, v1.2.0)
 on:
+  pull_request:
+    branches:
+      - 'main'
   push:
     tags:
       - '*'
-  pull_request:
-    branches:
-      - main
   workflow_dispatch: # pour être lancé à la main
 
 env:
