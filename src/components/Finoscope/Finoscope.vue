@@ -10,7 +10,7 @@
       <v-tab-item>
         <v-layout mt-4 wrap width="100%">
           <v-flex md6 xs12>
-            <PerformanceTable :ratios="ratios"/>
+            <PerformanceTable :ratios="ratios" :siren="siren"/>
           </v-flex>
           <v-flex md6 xs12>
             <PerformanceGraph :ratios="ratios"/>
