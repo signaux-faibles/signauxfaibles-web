@@ -21,30 +21,52 @@ export default {
           palette: 'palette5',
         },
         chart: {
+          fontFamily: 'Oswald',
           toolbar: {
             show: false,
           },
           type: 'bar',
           width: '50%',
         },
+        dataLabels: {
+          enabled: false,
+        },
+        xaxis: {
+          labels: {
+            style: {
+              fontSize: '13px',
+            }
+          }
+        },
         yaxis: {
           tickAmount: 7,
           labels: {
-            formatter: function (value) {
-              return value.toLocaleString() + " €";
+            style: {
+              fontSize: '13px',
+            },
+            formatter: function(value, { series, seriesIndex, dataPointIndex, w }) {
+              if (Math.abs(value) > 1000 && Math.abs(value) < 1000000) {
+                const val = Math.round(value/100)/10
+                return val.toLocaleString() + ' k€'
+              } else if (Math.abs(value) > 1000000) {
+                const val = Math.round(value/100000)/10
+                return val.toLocaleString() + ' M€'
+              } else {
+                return value.toLocaleString() + ' €'
+              }
             }
           }
         },
         labels: [
-          ['Marge brute'],
-          ['EBITDA'],
+          ['Marge commerciale'],
+          ['EBE'],
           ['Résultat d\'exploitation'],
           ['Résultat net']
         ],
         tooltip: {
           y: {
             formatter: function(value, { series, seriesIndex, dataPointIndex, w }) {
-              return value.toLocaleString() + ' €'
+              return value.toLocaleString() + '€'
             }
           }
         }
@@ -61,7 +83,7 @@ export default {
     exercices(length) {
       const currentYear = (new Date()).getFullYear()
       return Array(length).fill().map((_, index) => currentYear - index - 1)
-    }
+    },
   },
   computed: {
     series() {
@@ -73,8 +95,8 @@ export default {
             return {
               name: exercice.exercice,
               data: [
-                exercice.performance.margeBrute,
-                exercice.performance.ebitda,
+                exercice.performance.margeCommerciale,
+                exercice.performance.ebe,
                 exercice.performance.ebit,
                 exercice.performance.resultatNet,
               ]

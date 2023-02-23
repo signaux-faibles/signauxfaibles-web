@@ -23,7 +23,11 @@ export default {
         tooltip: {
           y: {
             formatter: function(value, { series, seriesIndex, dataPointIndex, w }) {
-              return value.toLocaleString() + ' %'
+              if (dataPointIndex == 2) {
+                return '× ' + value.toLocaleString()
+              } else {
+                return value.toLocaleString() + ' %'
+              }
             }
           }
         }

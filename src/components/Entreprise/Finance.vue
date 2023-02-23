@@ -50,10 +50,6 @@ export default {
   text-align: center;
 }
 
-::v-deep .numerateur {
-  border-bottom: 2px solid black;
-}
-
 div.valeur {
   text-align: right;
   width: 100%;

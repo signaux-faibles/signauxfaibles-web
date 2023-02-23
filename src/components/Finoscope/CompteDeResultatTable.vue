@@ -3,9 +3,9 @@
     <table>
       <tr>
         <th>Exercice (Date de clôture)</th>
-        <td v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
+        <th v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
           {{ exercice.exercice }} ({{ exercice.dateClotureExercice.toLocaleDateString() }})
-        </td>
+        </th>
       </tr>
       <tr>
         <th>Couverture des intérêts</th>
@@ -14,7 +14,9 @@
         </td>
       </tr>
       <tr>
-        <th>Capacité d'autofinancement sur CA</th>
+        <th>
+          <div class="numerateur">Capacité d'autofinancement</div>
+          <div class="denominateur">Chiffre d'affaires</div></th>
         <td v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
           {{ exercice.compteDeResultat.cafSurCA.toLocaleString() }} %
         </td>
@@ -22,17 +24,19 @@
       <tr>
         <th>Capacité de remboursement</th>
         <td v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
-          {{ exercice.compteDeResultat.capaciteRemboursement.toLocaleString() }} %
+          × {{ exercice.compteDeResultat.capaciteRemboursement.toLocaleString() }}
         </td>
       </tr>
       <tr>
-        <th>Marge EBE</th>
+        <th>Marge d'excédent brut d'exploitation </th>
         <td v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
           {{ exercice.compteDeResultat.margeEBE.toLocaleString() }} %
         </td>
       </tr>
       <tr>
-        <th>Résultat courant avant impôts sur CA</th>
+        <th>
+          <div class="numerateur">Résultat courant avant impôts</div>
+          <div class="denominateur">CA</div></th>
         <td v-for="exercice in ratios" :key="exercice.dateClotureExercice.getTime()">
           {{ exercice.compteDeResultat.resultatCourantAvantImpotsSurCA.toLocaleString() }} %
         </td>

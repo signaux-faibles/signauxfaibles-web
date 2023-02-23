@@ -1,7 +1,8 @@
 <template>
   <div>
-    Données financières issues du <a href="https://data.inpi.fr/">Registre National du Commerce et des Sociétés</a> (INPI)<br/>
-    Retrouvez tous les chiffres disponibles sur <a :href="'https://data.economie.gouv.fr/explore/dataset/ratios_inpi_bce/table/?q=siren%3d' + this.siren">data.economie.gouv.fr</a>
+    <br/>
+    Données financières issues du Registre National du Commerce et des Sociétés (source: <a target="_blank" href="https://data.inpi.fr/">INPI</a>)<br/>
+    Retrouvez les chiffres financiers de cette entreprise en <a target="_blank" :href="'https://data.economie.gouv.fr/explore/dataset/ratios_inpi_bce/table/?q=siren%3d' + this.siren">open data</a>
   </div>
 </template>
 

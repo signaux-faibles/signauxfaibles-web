@@ -88,6 +88,9 @@ export default {
           palette: 'palette5',
         },
         chart: {
+            fontFamily: 'Oswald',
+            fontSize: '14px',
+
           toolbar: {
               show: false,
             },
@@ -96,6 +99,16 @@ export default {
         },
         yaxis: {
           tickAmount: 3,
+        },
+        xaxis: {
+          labels: {
+            show: true,
+            style: {
+              fontSize: '14px',
+              fontFamily: 'Oswald',
+              colors: ['#444','#444','#444','#444','#444'],
+            }
+          }
         }
       }
     }
@@ -140,8 +153,8 @@ export default {
           siren: fields.siren,
           performance: {
             chiffreDAffaires: this.roundAt(fields.chiffre_d_affaires, 1),
-            margeBrute: this.roundAt(fields.marge_brute, 1),
-            ebitda: this.roundAt(fields.ebitda, 1),
+            margeCommerciale: this.roundAt(fields.marge_brute, 1),
+            ebe: this.roundAt(fields.ebe, 1),
             ebit: this.roundAt(fields.ebit, 1),
             resultatNet: this.roundAt(fields.resultat_net, 1),
           },
@@ -204,14 +217,16 @@ export default {
 <style>
 table {
   width: 100%;
-  padding: 10px;
+  margin: 5px;
+  border-collapse: collapse;
 }
-
-
 
 tr td {
   padding: 4px;
   text-align: right;
+  font-family: Abel;
+  font-size: 16px;
+  padding: 5px;
 }
 
 tr th {
@@ -219,8 +234,11 @@ tr th {
   text-align: left;
 }
 
+tr:not(:first-child), td {
+}
+
 tr th:first-child {
-  max-width: 180px;
+  min-width: 232px;
 }
 table tr:not(:last-child) td, table tr:not(:last-child) th {
   border-bottom: 1px solid rgba(0,0,0,0.20);
@@ -236,5 +254,17 @@ table tr:first-child td, table tr:first-child th {
   text-align: center;
 }
 
+.negative {
+  color: rgba(210,0,0,1);
+}
+
+.numerateur {
+  text-align: center;
+  border-bottom: 2px solid rgba(0,0,0,0.6);
+}
+
+.denominateur {
+  text-align: center;
+}
 
 </style>

@@ -3,12 +3,14 @@
     <table>
       <tr>
         <th>Exercice (Date de clôture)</th>
-        <td v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
+        <th v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
           {{ exercice.exercice }} ({{ exercice.dateClotureExercice.toLocaleDateString() }})
-        </td>
+        </th>
       </tr>
       <tr>
-        <th>BFR exploitation sur CA</th>
+        <th>
+          <div class="numerateur">Besoin fond de roulement exploitation</div>
+          <div class="denominateur">Chiffre d'affaires</div></th>
         <td v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
           {{ exercice.gestion.poidsBFRExploitationSurCAJours.toLocaleString() }} j.
         </td>

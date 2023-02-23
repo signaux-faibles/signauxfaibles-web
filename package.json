@@ -13,7 +13,7 @@
     "@babel/core": "^7.4.3",
     "@dsb-norge/vue-keycloak-js": "^1.3.2",
     "@types/jwt-decode": "^2.2.1",
-    "apexcharts": "^3.8.6",
+    "apexcharts": "^3.37.1",
     "axios": "^0.26.0",
     "core-js": "^3.8.3",
     "filesize": "^4.1.2",
