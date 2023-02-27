@@ -225,7 +225,7 @@ tr td {
   padding: 4px;
   text-align: right;
   font-family: Abel;
-  font-size: 16px;
+  font-size: 16gpx;
   padding: 5px;
 }
 
@@ -238,7 +238,7 @@ tr:not(:first-child), td {
 }
 
 tr th:first-child {
-  min-width: 232px;
+  max-width: 200px;
 }
 table tr:not(:last-child) td, table tr:not(:last-child) th {
   border-bottom: 1px solid rgba(0,0,0,0.20);

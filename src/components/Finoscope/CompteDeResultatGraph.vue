@@ -24,7 +24,7 @@ export default {
           y: {
             formatter: function(value, { series, seriesIndex, dataPointIndex, w }) {
               if (dataPointIndex == 2) {
-                return '× ' + value.toLocaleString()
+                return value.toLocaleString() + '  '
               } else {
                 return value.toLocaleString() + ' %'
               }

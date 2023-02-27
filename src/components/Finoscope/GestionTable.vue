@@ -9,8 +9,7 @@
       </tr>
       <tr>
         <th>
-          <div class="numerateur">Besoin fond de roulement exploitation</div>
-          <div class="denominateur">Chiffre d'affaires</div></th>
+          Besoin fond de roulement exploitation / CA</th>
         <td v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
           {{ exercice.gestion.poidsBFRExploitationSurCAJours.toLocaleString() }} j.
         </td>

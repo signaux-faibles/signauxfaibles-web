@@ -14,9 +14,7 @@
         </td>
       </tr>
       <tr>
-        <th>
-          <div class="numerateur">Capacité d'autofinancement</div>
-          <div class="denominateur">Chiffre d'affaires</div></th>
+        <th>Capacité d'autofinancement / CA</th>
         <td v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
           {{ exercice.compteDeResultat.cafSurCA.toLocaleString() }} %
         </td>
@@ -24,7 +22,7 @@
       <tr>
         <th>Capacité de remboursement</th>
         <td v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
-          × {{ exercice.compteDeResultat.capaciteRemboursement.toLocaleString() }}
+          {{ exercice.compteDeResultat.capaciteRemboursement.toLocaleString() }}
         </td>
       </tr>
       <tr>
@@ -35,8 +33,7 @@
       </tr>
       <tr>
         <th>
-          <div class="numerateur">Résultat courant avant impôts</div>
-          <div class="denominateur">CA</div></th>
+          Résultat courant avant impôts / CA</th>
         <td v-for="exercice in ratios" :key="exercice.dateClotureExercice.getTime()">
           {{ exercice.compteDeResultat.resultatCourantAvantImpotsSurCA.toLocaleString() }} %
         </td>
