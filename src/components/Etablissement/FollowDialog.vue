@@ -9,7 +9,7 @@
       </v-card-title>
       <v-card-text>
         Pour quel motif souhaitez-vous suivre cet établissement ?
-        <v-radio-group v-model="followCategory" :mandatory="true">
+        <v-radio-group v-model="followCategory" :mandatory="false">
           <v-radio key="detection" value="detection"><template slot="label"><span class="text-pre-wrap">L'établissement fait partie d'une <strong>liste de détection</strong></span></template></v-radio>
           <v-radio key="source_externe" value="source_externe"><template slot="label"><span class="text-pre-wrap">J'ai eu connaissance de difficultés par l'<strong>ecosystème local</strong> ou <strong>la presse</strong></span></template></v-radio>
           <v-radio key="source_interne" value="source_interne"><template slot="label"><span class="text-pre-wrap">J'ai été contacté par l'<strong>entreprise</strong> ou un <strong>partenaire direct</strong>  (expert comptable, client, fournisseur, etc.)</span></template></v-radio>
@@ -20,7 +20,12 @@
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn text @click="closeFollowDialog()">Annuler</v-btn>
-        <v-btn dark color="indigo" @click="followEtablissement()"><v-icon left class="mr-2">mdi-star-outline</v-icon>Suivre</v-btn>
+        <v-btn
+            :dark="followCategory!=''"
+            color="indigo"
+            :disabled="followCategory==''"
+            @click="followEtablissement()">
+        <v-icon left class="mr-2">mdi-star-outline</v-icon>Suivre</v-btn>
       </v-card-actions>
       <v-alert :value="followAlert" type="error" transition="scale-transition">{{ followAlertError }}</v-alert>
     </v-card>

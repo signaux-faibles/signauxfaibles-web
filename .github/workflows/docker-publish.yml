@@ -2,6 +2,9 @@ name: Publish sfweb container to ghcr.io
 
 # Run workflow on tags starting with v (eg. v2, v1.2.0)
 on:
+  pull_request:
+    branches:
+      - 'master'
   push:
     tags:
       - '*'
@@ -18,7 +21,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        env: [ development, preprod, production, testing ]
+        env: [ preprod, production ]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code

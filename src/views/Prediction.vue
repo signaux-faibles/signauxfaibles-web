@@ -31,11 +31,6 @@
             help
           </v-icon>
         </v-btn>
-        <Help v-if="currentBatchDescription" ref="modelHelp" titre="Modèle de détection" :dark="true" :big="true">
-          <template>
-            <div v-html="currentBatchDescription"></div>
-          </template>
-        </Help>
       </div>
       <v-spacer></v-spacer>
       <v-icon
