@@ -1,6 +1,5 @@
 <template>
   <div style="font-size: 17px">
-    {{ signalFinancier }}
     <div v-if="permScore">
       <span v-if="typeExplication === 'crash'">Cet établissement est fermé ou est en situation de défaillance</span>
       <span v-else-if="typeExplication === 'ras'">Cet établissement n’a pas été identifié par l’algorithme comme étant à risque de défaillance à 18 mois.</span>
