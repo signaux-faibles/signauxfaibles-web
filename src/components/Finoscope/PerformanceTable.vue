@@ -8,7 +8,7 @@
         </th>
       </tr>
       <tr>
-        <th>Chiffre d'Affaire</th>
+        <th>Chiffre d'Affaires</th>
         <td
             v-for="exercice in localRatios"
             :key="exercice.dateClotureExercice.getTime()"
