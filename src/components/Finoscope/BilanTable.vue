@@ -10,32 +10,32 @@
       <tr>
         <th>Taux d'endettement</th>
         <td v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
-          {{ exercice.bilan.tauxDEndettement.toLocaleString() }} %
+          {{ printNumber(exercice.bilan.tauxDEndettement, ' %') }}
         </td>
       </tr>
       <tr>
         <th>Ratio de liquidité</th>
         <td v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
-          {{ exercice.bilan.ratioDeLiquidite.toLocaleString() }} %
+          {{ printNumber(exercice.bilan.ratioDeLiquidite, ' %') }}
         </td>
       </tr>
       <tr>
         <th>Ratio de vétusté</th>
         <td v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
-          {{ exercice.bilan.ratioDeVetuste.toLocaleString() }} %
+          {{ printNumber(exercice.bilan.ratioDeVetuste, ' %') }}
         </td>
       </tr>
       <tr>
         <th>Autonomie financière</th>
         <td v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
-          {{ exercice.bilan.autonomieFinanciere.toLocaleString() }} %
+          {{ printNumber(exercice.bilan.autonomieFinanciere, ' %') }}
         </td>
       </tr>
       <tr>
         <th>
           Besoin fond de roulement exploitation / CA</th>
         <td v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
-          {{ exercice.bilan.poidsBFRExploitationSurCA.toLocaleString() }} %
+          {{ printNumber(exercice.bilan.poidsBFRExploitationSurCA, ' %') }}
         </td>
       </tr>
     </table>
@@ -50,17 +50,56 @@ export default {
   name: 'BilanTable',
   components: {DataSource},
   props: ['ratios', 'siren'],
-  methods: {
-    exercices(length) {
-      const currentYear = (new Date()).getFullYear()
-      return Array(length).fill().map((_, index) => currentYear - index - 1)
-    },
-  },
   computed: {
     localRatios() {
       return this.ratios.slice().reverse()
     }
-  }
+  },
+  methods: {
+    printNumber(value, suffix) {
+      if (value) {
+        return value.toLocaleString() + suffix
+      } else {
+        return 'n/c'
+      }
+    }
+  },
 }
 </script>
 
+<style scoped>
+table {
+  width: 100%;
+  margin: 5px;
+  border-collapse: collapse;
+}
+tr td {
+  text-align: right;
+  font-family: Abel;
+  font-size: 16px;
+  padding: 5px;
+}
+tr th {
+  padding: 4px;
+  text-align: left;
+}
+tr:not(:first-child), td {
+}
+tr th:first-child {
+  max-width: 200px;
+}
+table tr:not(:last-child) td, table tr:not(:last-child) th {
+  border-bottom: 1px solid rgba(0,0,0,0.20);
+}
+table tr:nth-child(odd){
+  background-color: rgba(0,0,0,0.03);
+}
+table tr:first-child td, table tr:first-child th {
+  border-bottom: 2px solid rgba(0,0,0,0.20);
+  background-color: rgba(0,0,0,0.08);
+  text-align: center;
+}
+.negative {
+  color: rgba(210,0,0,1);
+}
+</style>

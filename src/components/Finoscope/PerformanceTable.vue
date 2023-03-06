@@ -14,7 +14,7 @@
             :key="exercice.dateClotureExercice.getTime()"
             :class="(exercice.performance.chiffreDAffaires < 0)?'negative':''"
         >
-          {{ exercice.performance.chiffreDAffaires.toLocaleString() }}&nbsp;€
+          {{ printNumber(exercice.performance.chiffreDAffaires, '€') }}
         </td>
       </tr>
       <tr>
@@ -24,7 +24,7 @@
             :key="exercice.dateClotureExercice.getTime()"
             :class="(exercice.performance.margeCommerciale < 0)?'negative':''"
         >
-          {{ exercice.performance.margeCommerciale.toLocaleString() }}&nbsp;€
+          {{ printNumber(exercice.performance.margeCommerciale, '€') }}
         </td>
       </tr>
       <tr>
@@ -34,7 +34,7 @@
             :key="exercice.dateClotureExercice.getTime()"
             :class="(exercice.performance.ebe < 0)?'negative':''"
         >
-          {{ exercice.performance.ebe.toLocaleString() }}&nbsp;€
+          {{ printNumber(exercice.performance.ebe, '€') }}
         </td>
       </tr>
       <tr>
@@ -44,7 +44,7 @@
             :key="exercice.dateClotureExercice.getTime()"
             :class="(exercice.performance.ebit < 0)?'negative':''"
         >
-          {{ exercice.performance.ebit.toLocaleString() }}&nbsp;€
+          {{ printNumber(exercice.performance.ebit, '€') }}
         </td>
       </tr>
       <tr>
@@ -54,7 +54,7 @@
             :key="exercice.dateClotureExercice.getTime()"
             :class="(exercice.performance.resultatNet < 0)?'negative':''"
         >
-          {{ exercice.performance.resultatNet.toLocaleString() }}&nbsp;€
+          {{ printNumber(exercice.performance.resultatNet, '€') }}
         </td>
       </tr>
     </table>
@@ -73,6 +73,52 @@ export default {
     localRatios() {
       return this.ratios.slice().reverse()
     },
+  },
+  methods: {
+    printNumber(value, suffix) {
+      if (value) {
+        return value.toLocaleString() + suffix
+      } else {
+        return 'n/c'
+      }
+    }
   }
 }
 </script>
+
+<style scoped>
+table {
+  width: 100%;
+  margin: 5px;
+  border-collapse: collapse;
+}
+tr td {
+  text-align: right;
+  font-family: Abel;
+  font-size: 16px;
+  padding: 5px;
+}
+tr th {
+  padding: 4px;
+  text-align: left;
+}
+tr:not(:first-child), td {
+}
+tr th:first-child {
+  max-width: 200px;
+}
+table tr:not(:last-child) td, table tr:not(:last-child) th {
+  border-bottom: 1px solid rgba(0,0,0,0.20);
+}
+table tr:nth-child(odd){
+  background-color: rgba(0,0,0,0.03);
+}
+table tr:first-child td, table tr:first-child th {
+  border-bottom: 2px solid rgba(0,0,0,0.20);
+  background-color: rgba(0,0,0,0.08);
+  text-align: center;
+}
+.negative {
+  color: rgba(210,0,0,1);
+}
+</style>

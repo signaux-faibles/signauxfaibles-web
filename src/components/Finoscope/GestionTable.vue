@@ -11,25 +11,25 @@
         <th>
           Besoin fond de roulement exploitation / CA</th>
         <td v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
-          {{ exercice.gestion.poidsBFRExploitationSurCAJours.toLocaleString() }} j.
+          {{ printNumber(exercice.gestion.poidsBFRExploitationSurCAJours, ' j.') }}
         </td>
       </tr>
       <tr>
         <th>Rotation des stocks</th>
         <td v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
-          {{ exercice.gestion.rotationDesStocks.toLocaleString() }} j.
+          {{ printNumber(exercice.gestion.rotationDesStocks, ' j.') }}
         </td>
       </tr>
       <tr>
         <th>Crédit Clients</th>
         <td v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
-          {{ exercice.gestion.creditClients.toLocaleString() }} j.
+          {{ printNumber(exercice.gestion.creditClients, ' j.') }}
         </td>
       </tr>
       <tr>
         <th>Crédits Fournisseurs</th>
         <td v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
-          {{ exercice.gestion.creditFournisseurs.toLocaleString() }} j.
+          {{ printNumber(exercice.gestion.creditFournisseurs, ' j.') }}
         </td>
       </tr>
     </table>
@@ -48,6 +48,49 @@ export default {
     localRatios() {
       return this.ratios.slice().reverse()
     }
+  },
+  methods: {
+    printNumber(value, suffix) {
+      if (value) {
+        return value.toLocaleString() + suffix
+      } else {
+        return 'n/c'
+      }
+    }
   }
 }
 </script>
+
+<style scoped>
+table {
+  width: 100%;
+  margin: 5px;
+  border-collapse: collapse;
+}
+tr td {
+  text-align: right;
+  font-family: Abel;
+  font-size: 16px;
+  padding: 5px;
+}
+tr th {
+  padding: 4px;
+  text-align: left;
+}
+tr:not(:first-child), td {
+}
+tr th:first-child {
+  max-width: 200px;
+}
+table tr:not(:last-child) td, table tr:not(:last-child) th {
+  border-bottom: 1px solid rgba(0,0,0,0.20);
+}
+table tr:nth-child(odd){
+  background-color: rgba(0,0,0,0.03);
+}
+table tr:first-child td, table tr:first-child th {
+  border-bottom: 2px solid rgba(0,0,0,0.20);
+  background-color: rgba(0,0,0,0.08);
+  text-align: center;
+}
+</style>

@@ -214,57 +214,6 @@ export default {
 </script>
 
 
-<style>
-table {
-  width: 100%;
-  margin: 5px;
-  border-collapse: collapse;
-}
-
-tr td {
-  padding: 4px;
-  text-align: right;
-  font-family: Abel;
-  font-size: 16gpx;
-  padding: 5px;
-}
-
-tr th {
-  padding: 4px;
-  text-align: left;
-}
-
-tr:not(:first-child), td {
-}
-
-tr th:first-child {
-  max-width: 200px;
-}
-table tr:not(:last-child) td, table tr:not(:last-child) th {
-  border-bottom: 1px solid rgba(0,0,0,0.20);
-}
-
-table tr:nth-child(odd){
-  background-color: rgba(0,0,0,0.03);
-}
-
-table tr:first-child td, table tr:first-child th {
-  border-bottom: 2px solid rgba(0,0,0,0.20);
-  background-color: rgba(0,0,0,0.08);
-  text-align: center;
-}
-
-.negative {
-  color: rgba(210,0,0,1);
-}
-
-.numerateur {
-  text-align: center;
-  border-bottom: 2px solid rgba(0,0,0,0.6);
-}
-
-.denominateur {
-  text-align: center;
-}
+<style scoped>
 
 </style>
