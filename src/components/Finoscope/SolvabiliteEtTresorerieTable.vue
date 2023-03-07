@@ -10,32 +10,38 @@
       <tr>
         <th>Taux d'endettement</th>
         <td v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
-          {{ printNumber(exercice.bilan.tauxDEndettement, ' %') }}
-        </td>
-      </tr>
-      <tr>
-        <th>Ratio de liquidité</th>
-        <td v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
-          {{ printNumber(exercice.bilan.ratioDeLiquidite, ' %') }}
-        </td>
-      </tr>
-      <tr>
-        <th>Ratio de vétusté</th>
-        <td v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
-          {{ printNumber(exercice.bilan.ratioDeVetuste, ' %') }}
+          {{ printNumber(exercice.solvabiliteEtTresorerie.tauxDEndettement, ' %') }}
         </td>
       </tr>
       <tr>
         <th>Autonomie financière</th>
         <td v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
-          {{ printNumber(exercice.bilan.autonomieFinanciere, ' %') }}
+          {{ printNumber(exercice.solvabiliteEtTresorerie.autonomieFinanciere, ' %') }}
         </td>
       </tr>
       <tr>
-        <th>
-          Besoin fond de roulement exploitation / CA</th>
+        <th>Ratio de vétusté</th>
         <td v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
-          {{ printNumber(exercice.bilan.poidsBFRExploitationSurCA, ' %') }}
+          {{ printNumber(exercice.solvabiliteEtTresorerie.ratioDeVetuste, ' %') }}
+        </td>
+      </tr>
+      <tr>
+        <th>Capacité d'autofinancement / CA</th>
+        <td v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
+          {{ printNumber(exercice.solvabiliteEtTresorerie.cafSurCA, ' %') }}
+        </td>
+      </tr>
+      <tr>
+      <tr>
+        <th>Capacité de remboursement</th>
+        <td v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
+          {{ printNumber(exercice.solvabiliteEtTresorerie.capaciteDeRemboursement, '') }}
+        </td>
+      </tr>
+      <tr>
+        <th>Ratio de liquidité</th>
+        <td v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
+          {{ printNumber(exercice.solvabiliteEtTresorerie.ratioDeLiquidite, ' %') }}
         </td>
       </tr>
     </table>
@@ -47,7 +53,7 @@
 import DataSource from "@/components/Finoscope/DataSource.vue";
 
 export default {
-  name: 'BilanTable',
+  name: 'SolvabiliteEtTresorerieTable',
   components: {DataSource},
   props: ['ratios', 'siren'],
   computed: {

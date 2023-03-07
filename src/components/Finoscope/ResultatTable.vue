@@ -12,49 +12,54 @@
         <td
             v-for="exercice in localRatios"
             :key="exercice.dateClotureExercice.getTime()"
-            :class="(exercice.performance.chiffreDAffaires < 0)?'negative':''"
+            :class="(exercice.resultat.chiffreDAffaires < 0)?'negative':''"
         >
-          {{ printNumber(exercice.performance.chiffreDAffaires, '€') }}
+          {{ printNumber(exercice.resultat.chiffreDAffaires, ' €') }}
         </td>
       </tr>
       <tr>
-        <th>Marge commerciale</th>
+        <th>Marge commerciale<br/><span class="left-offset percentage">en % de CA</span></th>
         <td
             v-for="exercice in localRatios"
             :key="exercice.dateClotureExercice.getTime()"
-            :class="(exercice.performance.margeCommerciale < 0)?'negative':''"
+            :class="(exercice.resultat.margeCommerciale < 0)?'negative':''"
         >
-          {{ printNumber(exercice.performance.margeCommerciale, '€') }}
+          {{ printNumber(exercice.resultat.margeCommerciale, ' €') }}<br/>
+          <span class="percentage">{{ printNumber(exercice.resultat.partCaMargeCommerciale, ' %') }}</span>
         </td>
       </tr>
       <tr>
-        <th>Excédent brut d'exploitation</th>
+        <th>Résultat d'exploitation<br/><span class="left-offset percentage">en % de CA</span></th>
         <td
             v-for="exercice in localRatios"
             :key="exercice.dateClotureExercice.getTime()"
-            :class="(exercice.performance.ebe < 0)?'negative':''"
+            :class="(exercice.resultat.ebit < 0)?'negative':''"
         >
-          {{ printNumber(exercice.performance.ebe, '€') }}
+          {{ printNumber(exercice.resultat.ebit, ' €') }}<br/>
+          <span class="percentage">{{ printNumber(exercice.resultat.partCaEbit, ' %') }}</span>
         </td>
       </tr>
       <tr>
-        <th>Résultat d'exploitation</th>
+        <th>Résultat net<br/><span class="left-offset percentage">en % de CA</span></th>
         <td
             v-for="exercice in localRatios"
             :key="exercice.dateClotureExercice.getTime()"
-            :class="(exercice.performance.ebit < 0)?'negative':''"
+            :class="(exercice.resultat.resultatNet < 0)?'negative':''"
         >
-          {{ printNumber(exercice.performance.ebit, '€') }}
+          {{ printNumber(exercice.resultat.resultatNet, ' €') }}<br/>
+          <span class="percentage">{{ printNumber(exercice.resultat.partCaResultatNet, ' %') }}</span>
+
         </td>
       </tr>
       <tr>
-        <th>Résultat net</th>
+        <th>Excédent brut d'exploitation<br/><span class="left-offset percentage">en % de CA</span></th>
         <td
             v-for="exercice in localRatios"
             :key="exercice.dateClotureExercice.getTime()"
-            :class="(exercice.performance.resultatNet < 0)?'negative':''"
+            :class="(exercice.resultat.ebe < 0)?'negative':''"
         >
-          {{ printNumber(exercice.performance.resultatNet, '€') }}
+          {{ printNumber(exercice.resultat.ebe, ' €') }}<br/>
+          <span class="percentage">{{ printNumber(exercice.resultat.partCaEBE, ' %') }}</span>
         </td>
       </tr>
     </table>
@@ -66,7 +71,7 @@
 import DataSource from "@/components/Finoscope/DataSource.vue";
 
 export default {
-  name: 'PerfomanceTable',
+  name: 'ResultatTable',
   props: ['ratios', 'siren'],
   components: {DataSource},
   computed: {
@@ -117,6 +122,13 @@ table tr:first-child td, table tr:first-child th {
   border-bottom: 2px solid rgba(0,0,0,0.20);
   background-color: rgba(0,0,0,0.08);
   text-align: center;
+}
+span.percentage {
+  font-weight: 100;
+  font-size: 15px;
+}
+span.left-offset {
+  margin-left: 30px;
 }
 .negative {
   color: rgba(210,0,0,1);

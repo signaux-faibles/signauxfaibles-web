@@ -8,7 +8,7 @@
 import fr from 'apexcharts/dist/locales/fr.json'
 
 export default {
-  name: 'BilanGraph',
+  name: 'SolvabiliteEtTresorerieGraph',
   props: ['ratios', 'chartOptions'],
   data() {
     return {
@@ -55,11 +55,11 @@ export default {
         return {
           name: exercice.exercice,
           data: [
-            exercice.bilan.tauxDEndettement,
-            exercice.bilan.ratioDeLiquidite,
-            exercice.bilan.ratioDeVetuste,
-            exercice.bilan.autonomieFinanciere,
-            exercice.bilan.poidsBFRExploitationSurCA,
+            exercice.solvabiliteEtTresorerie.tauxDEndettement,
+            exercice.solvabiliteEtTresorerie.ratioDeLiquidite,
+            exercice.solvabiliteEtTresorerie.ratioDeVetuste,
+            exercice.solvabiliteEtTresorerie.autonomieFinanciere,
+            exercice.solvabiliteEtTresorerie.poidsBFRExploitationSurCA,
           ]
         }
       })

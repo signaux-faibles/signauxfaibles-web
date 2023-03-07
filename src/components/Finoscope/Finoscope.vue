@@ -1,42 +1,42 @@
 <template>
   <div>
     <v-tabs v-model="tab">
-      <v-tab>Performance</v-tab>
-      <v-tab>Bilan</v-tab>
-      <v-tab>Compte de résultat</v-tab>
+      <v-tab>Résultat</v-tab>
+      <v-tab>Solvabilité et Trésorerie</v-tab>
+<!--      <v-tab>Compte de résultat</v-tab>-->
       <v-tab>Gestion</v-tab>
     </v-tabs>
     <v-tabs-items v-model="tab">
       <v-tab-item>
         <v-layout mt-4 wrap width="100%">
           <v-flex md6 xs12>
-            <PerformanceTable :ratios="ratios" :siren="siren"/>
+            <ResultatTable :ratios="ratios" :siren="siren"/>
           </v-flex>
           <v-flex md6 xs12>
-            <PerformanceGraph :ratios="ratios"/>
+            <ResultatGraph :ratios="ratios"/>
           </v-flex>
         </v-layout>
       </v-tab-item>
       <v-tab-item>
         <v-layout mt-4 wrap width="100%">
           <v-flex md6 xs12>
-            <BilanTable :ratios="ratios" :siren="siren"/>
+            <SolvabiliteEtTresorerieTable :ratios="ratios" :siren="siren"/>
           </v-flex>
           <v-flex md6 xs12>
-            <BilanGraph :ratios="ratios" :chartOptions="chartOptions"/>
+            <SolvabiliteEtTresorerieGraph :ratios="ratios" :chartOptions="chartOptions"/>
           </v-flex>
         </v-layout>
       </v-tab-item>
-      <v-tab-item>
-        <v-layout mt-4 wrap width="100%">
-          <v-flex md6 xs12>
-            <CompteDeResultatTable :ratios="ratios" :siren="siren"/>
-          </v-flex>
-          <v-flex md6 xs12>
-            <CompteDeResultatGraph :ratios="ratios" :chartOptions="chartOptions" :siren="siren"/>
-          </v-flex>
-        </v-layout>
-      </v-tab-item>
+<!--      <v-tab-item>-->
+<!--        <v-layout mt-4 wrap width="100%">-->
+<!--          <v-flex md6 xs12>-->
+<!--            <CompteDeResultatTable :ratios="ratios" :siren="siren"/>-->
+<!--          </v-flex>-->
+<!--          <v-flex md6 xs12>-->
+<!--            <CompteDeResultatGraph :ratios="ratios" :chartOptions="chartOptions" :siren="siren"/>-->
+<!--          </v-flex>-->
+<!--        </v-layout>-->
+<!--      </v-tab-item>-->
       <v-tab-item>
         <v-layout mt-4 wrap width="100%">
           <v-flex md6 xs12>
@@ -53,12 +53,12 @@
 
 <script>
 import axios from 'axios'
-import PerformanceTable from "@/components/Finoscope/PerformanceTable.vue";
-import PerformanceGraph from "@/components/Finoscope/PerformanceGraph.vue";
-import BilanTable from "@/components/Finoscope/BilanTable.vue";
-import BilanGraph from "@/components/Finoscope/BilanGraph.vue";
-import CompteDeResultatTable from "@/components/Finoscope/CompteDeResultatTable.vue";
-import CompteDeResultatGraph from "@/components/Finoscope/CompteDeResultatGraph.vue";
+import ResultatTable from "@/components/Finoscope/ResultatTable.vue";
+import ResultatGraph from "@/components/Finoscope/ResultatGraph.vue";
+import SolvabiliteEtTresorerieTable from "@/components/Finoscope/SolvabiliteEtTresorerieTable.vue";
+import SolvabiliteEtTresorerieGraph from "@/components/Finoscope/SolvabiliteEtTresorerieGraph.vue";
+// import CompteDeResultatTable from "@/components/Finoscope/CompteDeResultatTable.vue";
+// import CompteDeResultatGraph from "@/components/Finoscope/CompteDeResultatGraph.vue";
 import GestionTable from "@/components/Finoscope/GestionTable.vue";
 import GestionGraph from "@/components/Finoscope/GestionGraph.vue";
 
@@ -66,9 +66,9 @@ import GestionGraph from "@/components/Finoscope/GestionGraph.vue";
 export default {
   name: 'Finoscope',
   components: {
-    PerformanceTable, PerformanceGraph,
-    BilanTable, BilanGraph,
-    CompteDeResultatTable, CompteDeResultatGraph,
+    ResultatTable, ResultatGraph,
+    SolvabiliteEtTresorerieTable, SolvabiliteEtTresorerieGraph,
+    // CompteDeResultatTable, CompteDeResultatGraph,
     GestionTable, GestionGraph
   },
   props: ['siren'],
@@ -151,28 +151,28 @@ export default {
           dateClotureExercice: dateClotureExercice,
           exercice: this.exerciceFromDateCloture(dateClotureExercice),
           siren: fields.siren,
-          performance: {
+          resultat: {
             chiffreDAffaires: this.roundAt(fields.chiffre_d_affaires, 1),
             margeCommerciale: this.roundAt(fields.marge_brute, 1),
+            partCaMargeCommerciale: this.roundAt(fields.marge_brute/fields.chiffre_d_affaires*100, 1),
             ebe: this.roundAt(fields.ebe, 1),
-            ebit: this.roundAt(fields.ebit, 1),
-            resultatNet: this.roundAt(fields.resultat_net, 1),
-          },
-          bilan: {
-            tauxDEndettement: this.roundAt(fields.taux_d_endettement,1),
-            ratioDeLiquidite: this.roundAt(fields.ratio_de_liquidite, 1),
-            ratioDeVetuste: this.roundAt(fields.ratio_de_vetuste, 1),
-            autonomieFinanciere: this.roundAt(fields.autonomie_financiere, 1),
-            poidsBFRExploitationSurCA: this.roundAt(fields.poids_bfr_exploitation_sur_ca, 1),
-          },
-          compteDeResultat: {
-            couvertureDesInterets: this.roundAt(fields.couverture_des_interets, 1),
-            cafSurCA: this.roundAt(fields.caf_sur_ca, 1),
-            capaciteRemboursement: this.roundAt(fields.capacite_de_remboursement, 1),
             margeEBE: this.roundAt(fields.marge_ebe, 1),
-            resultatCourantAvantImpotsSurCA: this.roundAt(fields.resultat_courant_avant_impots_sur_ca, 1)
+            partCaEBE: this.roundAt(fields.ebe/fields.chiffre_d_affaires*100, 1),
+            ebit: this.roundAt(fields.ebit, 1),
+            partCaEbit: this.roundAt(fields.ebit/fields.chiffre_d_affaires*100, 1),
+            resultatNet: this.roundAt(fields.resultat_net, 1),
+            partCaResultatNet: this.roundAt(fields.resultat_net/fields.chiffre_d_affaires*100, 1),
+          },
+          solvabiliteEtTresorerie: {
+            tauxDEndettement: this.roundAt(fields.taux_d_endettement,1),
+            autonomieFinanciere: this.roundAt(fields.autonomie_financiere, 1),
+            ratioDeVetuste: this.roundAt(fields.ratio_de_vetuste, 1),
+            cafSurCA: this.roundAt(fields.caf_sur_ca, 1),
+            capaciteDeRemboursement: this.roundAt(fields.capacite_de_remboursement, 1),
+            ratioDeLiquidite: this.roundAt(fields.ratio_de_liquidite, 1),
           },
           gestion: {
+            poidsBfrExploitation: this.roundAt(fields.poids_bfr_exploitation, 1),
             poidsBFRExploitationSurCAJours: this.roundAt(fields.poids_bfr_exploitation_sur_ca_jours, 1),
             rotationDesStocks: this.roundAt(fields.rotation_des_stocks_jours, 1),
             creditClients: this.roundAt(fields.credit_clients_jours, 1),

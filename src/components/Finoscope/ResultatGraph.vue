@@ -8,7 +8,7 @@
 import fr from 'apexcharts/dist/locales/fr.json'
 
 export default {
-  name: 'PerformanceGraph',
+  name: 'ResultatGraph',
   props: ['ratios'],
   data() {
     return {
@@ -48,7 +48,7 @@ export default {
               if (Math.abs(value) > 1000 && Math.abs(value) < 1000000) {
                 const val = Math.round(value/100)/10
                 return val.toLocaleString() + ' k€'
-              } else if (Math.abs(value) > 1000000) {
+              } else if (Math.abs(value) >= 1000000) {
                 const val = Math.round(value/100000)/10
                 return val.toLocaleString() + ' M€'
               } else {
@@ -95,10 +95,10 @@ export default {
             return {
               name: exercice.exercice,
               data: [
-                exercice.performance.margeCommerciale,
-                exercice.performance.ebe,
-                exercice.performance.ebit,
-                exercice.performance.resultatNet,
+                exercice.resultat.margeCommerciale,
+                exercice.resultat.ebe,
+                exercice.resultat.ebit,
+                exercice.resultat.resultatNet,
               ]
             }
           })

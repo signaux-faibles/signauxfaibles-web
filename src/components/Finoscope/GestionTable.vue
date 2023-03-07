@@ -9,7 +9,14 @@
       </tr>
       <tr>
         <th>
-          Besoin fond de roulement exploitation / CA</th>
+          Besoin fond de roulement exploitation / CA (%)</th>
+        <td v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
+          {{ printNumber(Math.round(exercice.gestion.poidsBFRExploitationSurCAJours/0.365)/10, ' %') }}
+        </td>
+      </tr>
+      <tr>
+        <th>
+          Besoin fond de roulement exploitation / CA (jours)</th>
         <td v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
           {{ printNumber(exercice.gestion.poidsBFRExploitationSurCAJours, ' j.') }}
         </td>
