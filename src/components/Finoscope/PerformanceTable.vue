@@ -12,9 +12,9 @@
         <td
             v-for="exercice in localRatios"
             :key="exercice.dateClotureExercice.getTime()"
-            :class="(exercice.resultat.chiffreDAffaires < 0)?'negative':''"
+            :class="(exercice.performance.chiffreDAffaires < 0)?'negative':''"
         >
-          {{ printNumber(exercice.resultat.chiffreDAffaires, ' €') }}
+          {{ printNumber(exercice.performance.chiffreDAffaires, ' €') }}
         </td>
       </tr>
       <tr>
@@ -22,33 +22,10 @@
         <td
             v-for="exercice in localRatios"
             :key="exercice.dateClotureExercice.getTime()"
-            :class="(exercice.resultat.margeCommerciale < 0)?'negative':''"
+            :class="(exercice.performance.margeCommerciale < 0)?'negative':''"
         >
-          {{ printNumber(exercice.resultat.margeCommerciale, ' €') }}<br/>
-          <span class="percentage">{{ printNumber(exercice.resultat.partCaMargeCommerciale, ' %') }}</span>
-        </td>
-      </tr>
-      <tr>
-        <th>Résultat d'exploitation<br/><span class="left-offset percentage">en % de CA</span></th>
-        <td
-            v-for="exercice in localRatios"
-            :key="exercice.dateClotureExercice.getTime()"
-            :class="(exercice.resultat.ebit < 0)?'negative':''"
-        >
-          {{ printNumber(exercice.resultat.ebit, ' €') }}<br/>
-          <span class="percentage">{{ printNumber(exercice.resultat.partCaEbit, ' %') }}</span>
-        </td>
-      </tr>
-      <tr>
-        <th>Résultat net<br/><span class="left-offset percentage">en % de CA</span></th>
-        <td
-            v-for="exercice in localRatios"
-            :key="exercice.dateClotureExercice.getTime()"
-            :class="(exercice.resultat.resultatNet < 0)?'negative':''"
-        >
-          {{ printNumber(exercice.resultat.resultatNet, ' €') }}<br/>
-          <span class="percentage">{{ printNumber(exercice.resultat.partCaResultatNet, ' %') }}</span>
-
+          {{ printNumber(exercice.performance.margeCommerciale, ' €') }}<br/>
+          <span class="percentage">{{ printNumber(exercice.performance.partCaMargeCommerciale, ' %') }}</span>
         </td>
       </tr>
       <tr>
@@ -56,10 +33,33 @@
         <td
             v-for="exercice in localRatios"
             :key="exercice.dateClotureExercice.getTime()"
-            :class="(exercice.resultat.ebe < 0)?'negative':''"
+            :class="(exercice.performance.ebe < 0)?'negative':''"
         >
-          {{ printNumber(exercice.resultat.ebe, ' €') }}<br/>
-          <span class="percentage">{{ printNumber(exercice.resultat.partCaEBE, ' %') }}</span>
+          {{ printNumber(exercice.performance.ebe, ' €') }}<br/>
+          <span class="percentage">{{ printNumber(exercice.performance.partCaEBE, ' %') }}</span>
+        </td>
+      </tr>
+      <tr>
+        <th>Résultat d'exploitation<br/><span class="left-offset percentage">en % de CA</span></th>
+        <td
+            v-for="exercice in localRatios"
+            :key="exercice.dateClotureExercice.getTime()"
+            :class="(exercice.performance.ebit < 0)?'negative':''"
+        >
+          {{ printNumber(exercice.performance.ebit, ' €') }}<br/>
+          <span class="percentage">{{ printNumber(exercice.performance.partCaEbit, ' %') }}</span>
+        </td>
+      </tr>
+      <tr>
+        <th>Résultat net<br/><span class="left-offset percentage">en % de CA</span></th>
+        <td
+            v-for="exercice in localRatios"
+            :key="exercice.dateClotureExercice.getTime()"
+            :class="(exercice.performance.resultatNet < 0)?'negative':''"
+        >
+          {{ printNumber(exercice.preformance.resultatNet, ' €') }}<br/>
+          <span class="percentage">{{ printNumber(exercice.performance.partCaResultatNet, ' %') }}</span>
+
         </td>
       </tr>
     </table>
@@ -71,7 +71,7 @@
 import DataSource from "@/components/Finoscope/DataSource.vue";
 
 export default {
-  name: 'ResultatTable',
+  name: 'PerformanceTable',
   props: ['ratios', 'siren'],
   components: {DataSource},
   computed: {

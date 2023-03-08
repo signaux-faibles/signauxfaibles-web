@@ -1,6 +1,7 @@
 <template>
   <div>
     <apexchart width="100%" heigth="100%" type="bar" :options="options" :series="series"></apexchart>
+    <apexchart width="100%" heigth="100%" type="bar" :options="options" :series="series"></apexchart>
   </div>
 </template>
 
@@ -8,7 +9,7 @@
 import fr from 'apexcharts/dist/locales/fr.json'
 
 export default {
-  name: 'ResultatGraph',
+  name: 'PerformanceGraph',
   props: ['ratios'],
   data() {
     return {
@@ -58,10 +59,10 @@ export default {
           }
         },
         labels: [
-          ['Marge commerciale'],
+          ['Marge'],
           ['EBE'],
-          ['Résultat d\'exploitation'],
-          ['Résultat net']
+          ['Ré'],
+          ['A']
         ],
         tooltip: {
           y: {
@@ -89,16 +90,16 @@ export default {
     series() {
       if (this.ratios == null) {return []}
       return this.ratios
-          .slice(0,2)
+          // .slice(0,3)
           .reverse()
           .map((exercice) => {
             return {
               name: exercice.exercice,
               data: [
-                exercice.resultat.margeCommerciale,
-                exercice.resultat.ebe,
-                exercice.resultat.ebit,
-                exercice.resultat.resultatNet,
+                exercice.performance.margeCommerciale,
+                exercice.performance.ebe,
+                exercice.performance.ebit,
+                exercice.performance.resultatNet,
               ]
             }
           })

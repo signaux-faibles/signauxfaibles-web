@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-tabs v-model="tab">
-      <v-tab>Résultat</v-tab>
+      <v-tab>Performance</v-tab>
       <v-tab>Solvabilité et Trésorerie</v-tab>
 <!--      <v-tab>Compte de résultat</v-tab>-->
       <v-tab>Gestion</v-tab>
@@ -10,10 +10,10 @@
       <v-tab-item>
         <v-layout mt-4 wrap width="100%">
           <v-flex md6 xs12>
-            <ResultatTable :ratios="ratios" :siren="siren"/>
+            <PerformanceTable :ratios="ratios" :siren="siren"/>
           </v-flex>
           <v-flex md6 xs12>
-            <ResultatGraph :ratios="ratios"/>
+            <PerformanceGraph :ratios="ratios"/>
           </v-flex>
         </v-layout>
       </v-tab-item>
@@ -53,8 +53,8 @@
 
 <script>
 import axios from 'axios'
-import ResultatTable from "@/components/Finoscope/ResultatTable.vue";
-import ResultatGraph from "@/components/Finoscope/ResultatGraph.vue";
+import PerformanceTable from "@/components/Finoscope/PerformanceTable.vue";
+import PerformanceGraph from "@/components/Finoscope/PerformanceGraph.vue";
 import SolvabiliteEtTresorerieTable from "@/components/Finoscope/SolvabiliteEtTresorerieTable.vue";
 import SolvabiliteEtTresorerieGraph from "@/components/Finoscope/SolvabiliteEtTresorerieGraph.vue";
 // import CompteDeResultatTable from "@/components/Finoscope/CompteDeResultatTable.vue";
@@ -151,7 +151,7 @@ export default {
           dateClotureExercice: dateClotureExercice,
           exercice: this.exerciceFromDateCloture(dateClotureExercice),
           siren: fields.siren,
-          resultat: {
+          performance: {
             chiffreDAffaires: this.roundAt(fields.chiffre_d_affaires, 1),
             margeCommerciale: this.roundAt(fields.marge_brute, 1),
             partCaMargeCommerciale: this.roundAt(fields.marge_brute/fields.chiffre_d_affaires*100, 1),
@@ -204,7 +204,7 @@ export default {
         return this.odsPayload.records
             .map(this.fieldsTransform)
             .filter(r => {
-              return r.dateClotureExercice.getTime() > (new Date('2019-01-01')).getTime()
+              return r.dateClotureExercice.getTime() > (new Date('2018-01-01')).getTime()
             })
             .sort(this.sortRatios)
       }
