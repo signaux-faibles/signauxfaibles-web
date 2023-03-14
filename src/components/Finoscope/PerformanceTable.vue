@@ -57,7 +57,7 @@
             :key="exercice.dateClotureExercice.getTime()"
             :class="(exercice.performance.resultatNet < 0)?'negative':''"
         >
-          {{ printNumber(exercice.preformance.resultatNet, ' €') }}<br/>
+          {{ printNumber(exercice.performance.resultatNet, ' €') }}<br/>
           <span class="percentage">{{ printNumber(exercice.performance.partCaResultatNet, ' %') }}</span>
 
         </td>

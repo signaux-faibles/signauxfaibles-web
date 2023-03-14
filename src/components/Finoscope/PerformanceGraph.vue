@@ -1,7 +1,21 @@
 <template>
   <div>
-    <apexchart width="100%" heigth="100%" type="bar" :options="options" :series="series"></apexchart>
-    <apexchart width="100%" heigth="100%" type="bar" :options="options" :series="series"></apexchart>
+    <div>
+      CA
+      <v-switch
+        v-model="graph"
+        huge
+      />
+      SIG
+    </div>
+    <div v-if="graph">
+      <apexchart width="100%" heigth="100%" type="bar" :options="optionsBar" :series="seriesBar"/>
+    </div>
+    <div v-if="!graph">
+      <apexchart width="100%" heigth="100%" type="line" :options="optionsLine" :series="seriesLine"/>
+    </div>
+    {{ seriesLine }}
+    {{ ratios[0].performance }}
   </div>
 </template>
 
@@ -13,7 +27,23 @@ export default {
   props: ['ratios'],
   data() {
     return {
-      options: {
+      graph: false,
+      optionsLine: {
+        yaxis: [
+          {
+            title: {
+              text: "Chiffre d'affaire"
+            },
+          },
+          {
+            opposite: true,
+            title: {
+              text: "Marge Excedent Bute d'Exploitation"
+            }
+          }
+        ]
+      },
+      optionsBar: {
         legend: {
           show: true,
           position: 'right',
@@ -87,22 +117,37 @@ export default {
     },
   },
   computed: {
-    series() {
+    seriesLine() {
+      if (this.ratios == null) {return []}
+      return [
+        {
+          name: "Chiffre d'affaires",
+          data: this.ratios.reverse().map((exercice) => exercice.performance.chiffreDAffaires)
+        },
+        {
+          name: "EBE",
+          data: this.ratios.reverse().map((exercice) => exercice.performance.ebe)
+        }
+      ]
+    },
+    seriesBar() {
       if (this.ratios == null) {return []}
       return this.ratios
-          // .slice(0,3)
-          .reverse()
-          .map((exercice) => {
-            return {
-              name: exercice.exercice,
-              data: [
-                exercice.performance.margeCommerciale,
-                exercice.performance.ebe,
-                exercice.performance.ebit,
-                exercice.performance.resultatNet,
-              ]
+        // .slice(0,3)
+        .reverse()
+        .map((exercice) => {
+          return {
+            name: exercice.exercice,
+            data:
+                [
+                  exercice.performance.margeCommerciale,
+                  exercice.performance.ebe,
+                  exercice.performance.ebit,
+                  exercice.performance.resultatNet,
+                ]
+              }
             }
-          })
+          )
     },
   }
 }

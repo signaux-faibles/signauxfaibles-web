@@ -66,9 +66,8 @@ import GestionGraph from "@/components/Finoscope/GestionGraph.vue";
 export default {
   name: 'Finoscope',
   components: {
-    ResultatTable, ResultatGraph,
+    PerformanceTable, PerformanceGraph,
     SolvabiliteEtTresorerieTable, SolvabiliteEtTresorerieGraph,
-    // CompteDeResultatTable, CompteDeResultatGraph,
     GestionTable, GestionGraph
   },
   props: ['siren'],
