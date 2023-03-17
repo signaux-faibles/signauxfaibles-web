@@ -261,7 +261,7 @@ export default {
       } else if (niveau == 4) {
         return "«" + this.naf.libelleN4 + '» (NAF = ' + this.sectors[this.perimeter].classeNAF + '*)'
       } else {
-        return "«" + this.naf.libelleActivite + 'NAF = » (' + this.sectors[this.perimeter].classeNAF + ')'
+        return "«" + this.naf.libelleActivite + '» (NAF = ' + this.sectors[this.perimeter].classeNAF + ')'
       }
     },
     libelleCA() {
