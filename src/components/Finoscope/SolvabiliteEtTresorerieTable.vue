@@ -44,9 +44,7 @@
           {{ printNumber(exercice.solvabiliteEtTresorerie.ratioDeLiquidite, ' %') }}
         </td>
       </tr>
-
     </table>
-    <DataSource :siren="siren"/>
   </div>
 </template>
 

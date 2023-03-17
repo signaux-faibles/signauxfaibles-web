@@ -1,6 +1,6 @@
 <template>
   <div>
-    <span v-if="!ready">Loading...</span>
+    <Spinner v-if="!ready"/>
     <v-tabs v-model="tab" v-if="ready">
       <v-tab>Performance</v-tab>
       <v-tab>Solvabilité et Trésorerie</v-tab>
@@ -23,7 +23,7 @@
             <SolvabiliteEtTresorerieTable :ratios="ratios" :siren="siren"/>
           </v-flex>
           <v-flex md12>
-            <SolvabiliteEtTresorerieGraph :ratios="ratios" :chartOptions="chartOptions"/>
+            <SolvabiliteEtTresorerieGraph :ratios="ratios" :sectors="sectors" :naf="naf"/>
           </v-flex>
         </v-layout>
       </v-tab-item>
@@ -33,7 +33,7 @@
             <GestionTable :ratios="ratios" :siren="siren"/>
           </v-flex>
           <v-flex md12>
-            <GestionGraph :ratios="ratios" :chartOptions="chartOptions"/>
+            <GestionGraph :ratios="ratios" :sectors="sectors" :naf="naf"/>
           </v-flex>
         </v-layout>
       </v-tab-item>
@@ -51,6 +51,7 @@ import SolvabiliteEtTresorerieGraph from "@/components/Finoscope/SolvabiliteEtTr
 import GestionTable from "@/components/Finoscope/GestionTable.vue";
 import GestionGraph from "@/components/Finoscope/GestionGraph.vue";
 import DataSource from "@/components/Finoscope/DataSource.vue"
+import Spinner from "@/components/Spinner.vue"
 
 export default {
   name: 'Finoscope',
@@ -58,7 +59,7 @@ export default {
     PerformanceTable, PerformanceGraph,
     SolvabiliteEtTresorerieTable, SolvabiliteEtTresorerieGraph,
     GestionTable, GestionGraph,
-    DataSource
+    DataSource, Spinner
   },
   props: ['siren', 'naf'],
   data() {
@@ -139,19 +140,18 @@ export default {
     },
     getRatios() {
       this.axios
-          .get(this.odsURL, this.odsRatiosParams)
+          .get(this.odsURL + "/api/records/1.0/search/", this.odsRatiosParams)
           .then(r => {
             this.odsRatiosPayload = r.data
             this.getSectors()
           })
           .catch(r => {
-            this.loading = null
           })
 
     },
     getSectors() {
       this.axios
-          .get("https://data.economie.gouv.fr/api/v2/catalog/datasets/ratios_inpi_bce_sectors/records", this.odsSectorsParams)
+          .get(this.odsURL + "/api/v2/catalog/datasets/" + this.odsSectorsDataset + "/records", this.odsSectorsParams)
           .then(r => {
             this.odsSectorsPayload = r.data
             this.ready = true
@@ -296,6 +296,7 @@ export default {
         return this.odsRatiosPayload.records
             .map(this.ratiosTransform)
             .sort(this.sortRatios)
+            .slice(0,5)
       }
     },
     sectors() {

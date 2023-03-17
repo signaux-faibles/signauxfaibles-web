@@ -121,7 +121,8 @@ export default {
             },{
               val: w.globals.series[1][dataPointIndex],
               libelle: 'entreprise'
-            }].sort((v1, v2) => (v1.val > v2.val)?-1:1)
+            }].filter(v => v.val).sort((v1, v2) => (v1.val > v2.val) ? -1 : 1)
+                .sort((v1, v2) => (v1.val > v2.val)?-1:1)
 
             return '<div class="apexcharts-tooltip-candlestick">' +
                 '<table>' +
@@ -237,6 +238,9 @@ export default {
       const currentYear = (new Date()).getFullYear()
       return Array(length).fill().map((_, index) => currentYear - index - 1)
     },
+    sortCloture(e1, e2) {
+      return (e1.dateClotureExercice < e2.dateClotureExercice)?-1:1
+    }
   },
   computed: {
     libelleActivite() {
@@ -265,9 +269,6 @@ export default {
         return "supérieur à 50M€"
       }
     },
-    // perimeters() {
-    //   return this.sectors.map(s => {return "CA "+s.classeCA+", naf=" + s.classeNAF + ", " + s.cohorte + " entreprises"})
-    // },
     perimeter() {
       return (this.withCA)?0:1
     },
@@ -313,18 +314,23 @@ export default {
       return [
         {
           name: "Chiffre d'affaires",
-          data: this.ratios.reverse().map((exercice) => {return {x: exercice.exercice, y: exercice.performance.chiffreDAffaires}})
+          data: this.ratios
+              .sort(this.sortCloture)
+              .map((exercice) => {return {x: exercice.exercice, y: exercice.performance.chiffreDAffaires}})
         },
         {
           name: "EBE",
-          data: this.ratios.reverse().map((exercice) => {return {x: exercice.exercice, y: exercice.performance.ebe}})
+          data: this.ratios
+              .sort(this.sortCloture)
+              .map((exercice) => {return {x: exercice.exercice, y: exercice.performance.ebe}})
         }
       ]
     },
     seriesSig() {
       if (this.ratios == null) {return []}
       return this.ratios
-        .slice(0,3)
+        .slice(0,4)
+        .sort(this.sortCloture)
         .map((exercice) => {
           return {
             name: exercice.exercice,

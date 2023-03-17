@@ -34,13 +34,12 @@
         </td>
       </tr>
       <tr>
-        <th>Crédits Fournisseurs</th>
+        <th>Crédit Fournisseurs</th>
         <td v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
           {{ printNumber(exercice.gestion.creditFournisseurs, ' j.') }}
         </td>
       </tr>
     </table>
-    <DataSource :siren="siren"/>
   </div>
 </template>
 
