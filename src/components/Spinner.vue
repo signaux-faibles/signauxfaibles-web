@@ -28,13 +28,13 @@ export default {
 
 <style scoped>
 #spinner {
-  position: absolute;
+  position: relative;
   width: 100%;
   height: 250px;
   vertical-align: middle;
   text-align: center;
   font-size: 200px;
-  font-family:monospace;
+  font-family: Monospace;
   color: #888;
 }
 </style>

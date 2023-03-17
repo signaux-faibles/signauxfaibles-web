@@ -1,6 +1,9 @@
 <template>
   <div>
-    <Spinner v-if="!ready"/>
+    <div style="height: 400px" v-if="!ready">
+      <Spinner style=""/>
+    </div>
+    <div v-if="ready">
     <v-tabs v-model="tab" v-if="ready">
       <v-tab>Performance</v-tab>
       <v-tab>Solvabilité et Trésorerie</v-tab>
@@ -10,35 +13,36 @@
       <v-tab-item>
         <v-layout mt-4 wrap width="100%">
           <v-flex md12>
-            <PerformanceTable :ratios="ratios" :siren="siren"/>
+            <PerformanceTable :ratios="[...ratios]" :siren="siren"/>
           </v-flex>
           <v-flex md12>
-            <PerformanceGraph :ratios="ratios" :sectors="sectors" :naf="naf"/>
-          </v-flex>
-        </v-layout>
-      </v-tab-item>
-      <v-tab-item>
-        <v-layout mt-4 wrap width="100%">
-          <v-flex md12>
-            <SolvabiliteEtTresorerieTable :ratios="ratios" :siren="siren"/>
-          </v-flex>
-          <v-flex md12>
-            <SolvabiliteEtTresorerieGraph :ratios="ratios" :sectors="sectors" :naf="naf"/>
+            <PerformanceGraph :ratios="[...ratios]" :sectors="sectors" :naf="naf"/>
           </v-flex>
         </v-layout>
       </v-tab-item>
       <v-tab-item>
         <v-layout mt-4 wrap width="100%">
           <v-flex md12>
-            <GestionTable :ratios="ratios" :siren="siren"/>
+            <SolvabiliteEtTresorerieTable :ratios="[...ratios]" :siren="siren"/>
           </v-flex>
           <v-flex md12>
-            <GestionGraph :ratios="ratios" :sectors="sectors" :naf="naf"/>
+            <SolvabiliteEtTresorerieGraph :ratios="[...ratios]" :sectors="sectors" :naf="naf"/>
+          </v-flex>
+        </v-layout>
+      </v-tab-item>
+      <v-tab-item>
+        <v-layout mt-4 wrap width="100%">
+          <v-flex md12>
+            <GestionTable :ratios="[...ratios]" :siren="siren"/>
+          </v-flex>
+          <v-flex md12>
+            <GestionGraph :ratios="[...ratios]" :sectors="sectors" :naf="naf"/>
           </v-flex>
         </v-layout>
       </v-tab-item>
     </v-tabs-items>
     <DataSource :siren="siren"/>
+    </div>
   </div>
 </template>
 
@@ -114,8 +118,8 @@ export default {
     this.getRatios()
   },
   methods: {
-    sortRatios(ratio1, ratio2) {
-      return (ratio1.dateClotureExercice.getTime() > ratio2.dateClotureExercice.getTime())?-1:1
+    sortRatios(exercice1, exercice2) {
+      return (exercice1.dateClotureExercice.getTime() < exercice2.dateClotureExercice.getTime())?1:-1
     },
     sortSectorsCohorte(sectors1, sectors2) {
       return (sectors1.cohorte < sectors2.cohorte)?-1:1
@@ -143,9 +147,10 @@ export default {
           .get(this.odsURL + "/api/records/1.0/search/", this.odsRatiosParams)
           .then(r => {
             this.odsRatiosPayload = r.data
-            this.getSectors()
+            window.setTimeout(this.getSectors, 1000)
           })
           .catch(r => {
+            alert('error loading ratios')
           })
 
     },
@@ -157,6 +162,7 @@ export default {
             this.ready = true
           })
           .catch(r => {
+            alert('error loading sectors: ' + JSON.stringify(r))
           })
     },
     exerciceFromDateCloture(dateClotureExercice) {
@@ -295,8 +301,9 @@ export default {
       } else {
         return this.odsRatiosPayload.records
             .map(this.ratiosTransform)
-            .sort(this.sortRatios)
-            .slice(0,5)
+            .sort((exercice1, exercice2) => {
+          return (exercice1.dateClotureExercice.getTime() < exercice2.dateClotureExercice.getTime())?1:-1
+            }).slice(0,5)
       }
     },
     sectors() {

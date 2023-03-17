@@ -10,13 +10,13 @@
       </v-tab-item>
       <v-tab-item>
         <v-layout>
-          <v-flex xs5>
+          <v-flex xs6>
             <apexchart width="100%" height="400px" type="boxPlot" :options="optionsSectors1" :series="seriesSectors1"></apexchart>
           </v-flex>
           <v-flex xs3>
             <apexchart width="100%" height="400px" type="boxPlot" :options="optionsSectors2" :series="seriesSectors2"></apexchart>
           </v-flex>
-          <v-flex xs4>
+          <v-flex xs3>
             <v-switch
                 v-on:change="fakeResize"
                 v-model="withCA"
@@ -322,7 +322,7 @@ export default {
             x: "CAF / CA",
             y: this.sectors[this.perimeter].solvabiliteEtTresorerie.cafSurCA
           },{
-            x: ["Cap. Rmb."],
+            x: ["Cap. Remb."],
             y: this.sectors[this.perimeter].solvabiliteEtTresorerie.capaciteDeRemboursement
           }]
         }, {
@@ -332,7 +332,7 @@ export default {
               x: "CAF / CA",
               y: this.ratios[0].solvabiliteEtTresorerie.cafSurCA
             },{
-              x: ["Cap. Rmb."],
+              x: ["Cap. Remb."],
               y: this.ratios[0].solvabiliteEtTresorerie.capaciteDeRemboursement
             }
           ]}
@@ -340,9 +340,8 @@ export default {
     },
     series() {
       if (this.ratios == null) {return []}
-      return this.ratios
-          .slice(0,4)
-          .sort((e1, e2) => (e1.dateClotureExercice.getTime() > e2.dateClotureExercice.getTime())?1:-1)
+      let ratios = this.ratios.slice(0,4).reverse()
+      return ratios
           .map((exercice) => {
         return {
           name: exercice.exercice,
@@ -355,7 +354,6 @@ export default {
           ]
         }
       })
-
     },
   }
 }

@@ -73,7 +73,7 @@ export default {
   components: {},
   computed: {
     localRatios() {
-      return this.ratios.slice().reverse()
+      return this.ratios.slice(0,5).reverse()
     },
   },
   methods: {

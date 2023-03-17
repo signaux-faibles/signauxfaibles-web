@@ -57,7 +57,7 @@ export default {
   props: ['ratios', 'siren'],
   computed: {
     localRatios() {
-      return this.ratios.slice().reverse()
+      return this.ratios.slice(0,5).reverse()
     }
   },
   methods: {

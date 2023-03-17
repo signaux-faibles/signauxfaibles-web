@@ -51,7 +51,8 @@ export default {
   props: ['ratios', 'siren'],
   computed: {
     localRatios() {
-      return this.ratios.slice().reverse()
+      let ratios = this.ratios.slice(0,4)
+      return ratios.sort((e1, e2) => (e1.dateClotureExercice.getTime() > e2.dateClotureExercice.getTime())?1:-1)
     }
   },
   methods: {

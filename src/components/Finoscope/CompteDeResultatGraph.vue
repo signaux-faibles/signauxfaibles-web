@@ -54,7 +54,6 @@ export default {
       if (this.ratios == null) {return []}
       return this.ratios
           .slice(0,2)
-          .reverse()
           .map((exercice) => {
         return {
           name: exercice.exercice,
