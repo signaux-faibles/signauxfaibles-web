@@ -63,17 +63,14 @@
         </td>
       </tr>
     </table>
-    <DataSource :siren="siren"/>
   </div>
 </template>
 
 <script>
-import DataSource from "@/components/Finoscope/DataSource.vue";
-
 export default {
   name: 'PerformanceTable',
   props: ['ratios', 'siren'],
-  components: {DataSource},
+  components: {},
   computed: {
     localRatios() {
       return this.ratios.slice().reverse()

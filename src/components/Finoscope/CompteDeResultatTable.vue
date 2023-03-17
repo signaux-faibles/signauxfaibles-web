@@ -39,7 +39,6 @@
         </td>
       </tr>
     </table>
-    <DataSource :siren="siren"/>
   </div>
 </template>
 

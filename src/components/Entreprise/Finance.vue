@@ -19,7 +19,7 @@
       </v-btn>
     </v-toolbar>
     <div>
-      <Finoscope :siren="siren"/>
+      <Finoscope :siren="siren" :naf="naf"/>
     </div>
   </div>
 </template>
@@ -29,7 +29,7 @@ import Finoscope from '@/components/Finoscope/Finoscope.vue'
 
 export default {
   name: 'EntrepriseFinoscope',
-  props: ['siren'],
+  props: ['siren', 'naf'],
   components: { Finoscope },
   created() {
     if (process.env.VUE_APP_BILANS_ENABLED && !!JSON.parse(process.env.VUE_APP_BILANS_ENABLED)) {
