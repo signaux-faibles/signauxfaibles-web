@@ -51,23 +51,24 @@ export default {
           type: 'bar',
           width: '50%',
         },
+        colors: ['#008FFB', '#FEB019'],
         tooltip: {
           custom({seriesIndex, dataPointIndex, w}) {
             var values = [{
               val: w.globals.seriesCandleO[seriesIndex][dataPointIndex],
-              libelle: '10° centile'
+              libelle: '10<sup>e</sup> centile'
             }, {
               val: w.globals.seriesCandleH[seriesIndex][dataPointIndex],
-              libelle: '25° centile'
+              libelle: '25<sup>e</sup> centile'
             }, {
               val: w.globals.seriesCandleM[seriesIndex][dataPointIndex],
-              libelle: '50° centile'
+              libelle: 'médiane'
             }, {
               val: w.globals.seriesCandleL[seriesIndex][dataPointIndex],
-              libelle: '75° centile'
+              libelle: '75<sup>e</sup> centile'
             }, {
               val: w.globals.seriesCandleC[seriesIndex][dataPointIndex],
-              libelle: '90° centile'
+              libelle: '90<sup>e</sup> centile'
             }, {
               val: w.globals.series[1][dataPointIndex],
               libelle: 'entreprise'

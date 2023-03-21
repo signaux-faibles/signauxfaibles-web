@@ -1,9 +1,20 @@
 <template>
   <div>
-    <div style="height: 400px" v-if="!ready">
+    <div v-if="ready && nodata">
+      <v-layout mt-4 wrap style="font-size: 17px">
+        <v-flex xs12>
+          <div class="px-3" style="text-align: center;">
+            Il n'existe pas de donnée financière publique pour cette entreprise.<br/>
+            <v-icon size="100">fa-data-alert</v-icon>
+          </div>
+        </v-flex>
+      </v-layout>
+
+    </div>
+    <div style="height: 400px" v-if="!ready && !nodata">
       <Spinner style=""/>
     </div>
-    <div v-if="ready">
+    <div v-if="ready && !nodata">
     <v-tabs v-model="tab" v-if="ready">
       <v-tab>Performance</v-tab>
       <v-tab>Solvabilité et Trésorerie</v-tab>
@@ -68,6 +79,7 @@ export default {
   props: ['siren', 'naf'],
   data() {
     return {
+      nodata: false,
       ready: false,
       tab: null,
       axios: axios.create(),
@@ -144,19 +156,23 @@ export default {
     },
     getRatios() {
       this.axios
-          .get(this.odsURL + "/api/records/1.0/search/", this.odsRatiosParams)
+          .get(this.odsRatiosURL, this.odsRatiosParams)
           .then(r => {
             this.odsRatiosPayload = r.data
-            window.setTimeout(this.getSectors, 1000)
+
+            if (this.ratios.length < 1) {
+              this.ready = true
+              this.nodata = true
+              return
+            }
+            this.getSectors()
           })
-          .catch(r => {
-            alert('error loading ratios')
-          })
+
 
     },
     getSectors() {
       this.axios
-          .get(this.odsURL + "/api/v2/catalog/datasets/" + this.odsSectorsDataset + "/records", this.odsSectorsParams)
+          .get(this.odsSectorsURL, this.odsSectorsParams)
           .then(r => {
             this.odsSectorsPayload = r.data
             this.ready = true
@@ -206,7 +222,7 @@ export default {
     },
     ratiosTransform(record) {
       if (record) {
-        let fields = record.fields
+        let fields = record.record.fields
         const dateClotureExercice = new Date(fields.date_cloture_exercice)
         return {
           dateClotureExercice: dateClotureExercice,
@@ -278,22 +294,27 @@ export default {
         }
       }
     },
+    odsRatiosParams() {
+      return {
+        params: {
+          where: "siren='"+this.siren+"'"
+        },
+      }
+    },
     odsURL() {
       return process.env.VUE_APP_ODS_URL
+    },
+    odsRatiosURL() {
+      return this.odsURL + "/api/v2/catalog/datasets/" + this.odsRatiosDataset + "/records"
+    },
+    odsSectorsURL() {
+      return this.odsURL + "/api/v2/catalog/datasets/" + this.odsSectorsDataset + "/records"
     },
     odsRatiosDataset() {
       return process.env.VUE_APP_ODS_RATIOS_DATASET
     },
     odsSectorsDataset() {
       return process.env.VUE_APP_ODS_SECTORS_DATASET
-    },
-    odsRatiosParams() {
-      return {
-        params: {
-          q: encodeURI("siren="+this.siren),
-          dataset: this.odsRatiosDataset
-        },
-      }
     },
     ratios() {
       if (this.odsRatiosPayload == null) {
