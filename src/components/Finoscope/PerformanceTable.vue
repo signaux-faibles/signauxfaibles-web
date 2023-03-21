@@ -8,7 +8,10 @@
         </th>
       </tr>
       <tr>
-        <th>Chiffre d'Affaires</th>
+        <th>
+          Chiffre d'Affaires
+          <Info id="chiffreDAffaires"/>
+        </th>
         <td
             v-for="exercice in localRatios"
             :key="exercice.dateClotureExercice.getTime()"
@@ -67,10 +70,12 @@
 </template>
 
 <script>
+import Info from "@/components/Finoscope/Info.vue"
+
 export default {
   name: 'PerformanceTable',
   props: ['ratios', 'siren'],
-  components: {},
+  components: {Info},
   computed: {
     localRatios() {
       return this.ratios.slice(0,5).reverse()

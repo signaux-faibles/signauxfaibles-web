@@ -3,9 +3,9 @@
     <div v-if="ready && nodata">
       <v-layout mt-4 wrap style="font-size: 17px">
         <v-flex xs12>
-          <div class="px-3" style="text-align: center;">
+          <div class="px-12 ma-12" style="text-align: center;">
             Il n'existe pas de donnée financière publique pour cette entreprise.<br/>
-            <v-icon size="100">fa-data-alert</v-icon>
+            <v-icon size="100" color="#ccc" class="ma-12">fa-low-vision</v-icon>
           </div>
         </v-flex>
       </v-layout>
