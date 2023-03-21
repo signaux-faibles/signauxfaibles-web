@@ -40,7 +40,7 @@
     "definition": "Le ratio de vétusté mesure le niveau d'usure de l'appareil productif.",
     "link": "https://signaux-faibles.gitbook.io/guide-dutilisation-et-faq/consultation/ratios-financiers/ratio-de-vetuste"
   },  {
-    "id": "CAFsurCA",
+    "id": "cafSurCA",
     "title": "Capacité d'autofinancement / CA",
     "definition": "La capacité d'autofinancement / CA mesure la capacité d'une entreprise à investir, rembourser ses dettes financières ou verser des dividendes à ses actionnaires.",
     "link": "https://signaux-faibles.gitbook.io/guide-dutilisation-et-faq/consultation/ratios-financiers/capacite-dautofinancement-caf-sur-ca"
@@ -55,17 +55,17 @@
     "definition": "Le ratio de liquidité mesure la capacité d'une entreprise à régler ses dettes arrivant à échéance",
     "link": "https://signaux-faibles.gitbook.io/guide-dutilisation-et-faq/consultation/ratios-financiers/ratio-de-liquidite"
   },  {
-    "id": "bfrSurCA",
+    "id": "poidsBFRExploitationSurCAPourcent",
     "title": "Besoin fonds de roulement exploitation / CA (%)",
     "definition": "Le BFR / CA mesure le besoin de trésorerie généré par le décalage entre les décaissements et les encaissements liés à l'exploitation courante en pourcentage du chiffre d'affaire",
     "link": "https://signaux-faibles.gitbook.io/guide-dutilisation-et-faq/consultation/ratios-financiers/poids-besoin-en-fonds-de-roulement-bfr-exploitation-sur-ca"
   },  {
-    "id": "bfnSurCAJours",
+    "id": "poidsBFRExploitationSurCAJours",
     "title": "Besoin fonds de roulement exploitation / CA (J)",
     "definition": "Le BFR / CA mesure le besoin de trésorerie généré par le décalage entre les décaissements et les encaissements liés à l'exploitation courante en jours projetés sur une année de 365 jours",
     "link": "https://signaux-faibles.gitbook.io/guide-dutilisation-et-faq/consultation/ratios-financiers/poids-bfr-exploitation-sur-le-ca-jours"
   },  {
-    "id": "rotationDesStockes",
+    "id": "rotationDesStocks",
     "title": "Rotation des stocks",
     "definition": "Cet indicateur mesure la durée moyenne pendant laquelle un produit est conservé en stock avant d’être vendu.",
     "link": "https://signaux-faibles.gitbook.io/guide-dutilisation-et-faq/consultation/ratios-financiers/rotation-des-stocks-jours"

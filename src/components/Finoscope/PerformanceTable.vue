@@ -21,7 +21,9 @@
         </td>
       </tr>
       <tr>
-        <th>Marge commerciale<br/><span class="left-offset percentage">en % de CA</span></th>
+        <th>
+          Marge commerciale <Info id="margeCommerciale"/><br/>
+          <span class="left-offset percentage">en % de CA</span></th>
         <td
             v-for="exercice in localRatios"
             :key="exercice.dateClotureExercice.getTime()"
@@ -32,7 +34,10 @@
         </td>
       </tr>
       <tr>
-        <th>Excédent brut d'exploitation<br/><span class="left-offset percentage">en % de CA</span></th>
+        <th>
+          Excédent brut d'exploitation <Info id="ebe"/><br/>
+          <span class="left-offset percentage">en % de CA</span>
+        </th>
         <td
             v-for="exercice in localRatios"
             :key="exercice.dateClotureExercice.getTime()"
@@ -43,7 +48,10 @@
         </td>
       </tr>
       <tr>
-        <th>Résultat d'exploitation<br/><span class="left-offset percentage">en % de CA</span></th>
+        <th>
+          Résultat d'exploitation <Info id="ebit"/><br/>
+          <span class="left-offset percentage">en % de CA</span>
+        </th>
         <td
             v-for="exercice in localRatios"
             :key="exercice.dateClotureExercice.getTime()"
@@ -54,7 +62,10 @@
         </td>
       </tr>
       <tr>
-        <th>Résultat net<br/><span class="left-offset percentage">en % de CA</span></th>
+        <th>
+          Résultat net <Info id="resultatNet"/><br/>
+          <span class="left-offset percentage">en % de CA</span>
+        </th>
         <td
             v-for="exercice in localRatios"
             :key="exercice.dateClotureExercice.getTime()"

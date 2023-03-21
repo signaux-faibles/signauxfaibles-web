@@ -9,32 +9,45 @@
       </tr>
       <tr>
         <th>
-          Besoin fond de roulement exploitation / CA (%)</th>
+          Besoin fond de roulement exploitation / CA (%)
+          <Info id="poidsBFRExploitationSurCAPourcent"/>
+        </th>
         <td v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
           {{ printNumber(Math.round(exercice.gestion.poidsBFRExploitationSurCAJours/0.365)/10, ' %') }}
         </td>
       </tr>
       <tr>
         <th>
-          Besoin fond de roulement exploitation / CA (jours)</th>
+          Besoin fond de roulement exploitation / CA (jours)
+          <Info id="poidsBFRExploitationSurCAJours"/>
+        </th>
         <td v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
           {{ printNumber(exercice.gestion.poidsBFRExploitationSurCAJours, ' j.') }}
         </td>
       </tr>
       <tr>
-        <th>Rotation des stocks</th>
+        <th>
+          Rotation des stocks
+          <Info id="rotationDesStocks"/>
+        </th>
         <td v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
           {{ printNumber(exercice.gestion.rotationDesStocks, ' j.') }}
         </td>
       </tr>
       <tr>
-        <th>Crédit Clients</th>
+        <th>
+          Crédit Clients
+          <Info id="creditClients"/>
+        </th>
         <td v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
           {{ printNumber(exercice.gestion.creditClients, ' j.') }}
         </td>
       </tr>
       <tr>
-        <th>Crédit Fournisseurs</th>
+        <th>
+          Crédit Fournisseurs
+          <Info id="creditFournisseurs"/>
+        </th>
         <td v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
           {{ printNumber(exercice.gestion.creditFournisseurs, ' j.') }}
         </td>
@@ -44,11 +57,10 @@
 </template>
 
 <script>
-import DataSource from "@/components/Finoscope/DataSource.vue";
-
+import Info from '@/components/Finoscope/Info.vue'
 export default {
   name: 'GestionTable',
-  components: {DataSource},
+  components: {Info},
   props: ['ratios', 'siren'],
   computed: {
     localRatios() {

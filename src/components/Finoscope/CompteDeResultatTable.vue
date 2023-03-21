@@ -14,26 +14,26 @@
         </td>
       </tr>
       <tr>
-        <th>Capacité d'autofinancement / CA</th>
+        <th>Capacité d'autofinancement / CA <Info id="cafSurCA"/></th>
         <td v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
           {{ printNumber(exercice.compteDeResultat.cafSurCA, ' %') }}
         </td>
       </tr>
       <tr>
-        <th>Capacité de remboursement</th>
+        <th>Capacité de remboursement <Info id="capaciteRemboursement"/></th>
         <td v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
           {{ printNumber(exercice.compteDeResultat.capaciteRemboursement, '') }}
         </td>
       </tr>
       <tr>
-        <th>Marge d'excédent brut d'exploitation </th>
+        <th>Marge d'excédent brut d'exploitation <Info id="margeEBE"/></th>
         <td v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
           {{ printNumber(exercice.compteDeResultat.margeEBE, ' %') }}
         </td>
       </tr>
       <tr>
         <th>
-          Résultat courant avant impôts / CA</th>
+          Résultat courant avant impôts / CA <Info id="resultatCourantAvantImpotsSurCA"/></th>
         <td v-for="exercice in ratios" :key="exercice.dateClotureExercice.getTime()">
           {{ printNumber(exercice.compteDeResultat.resultatCourantAvantImpotsSurCA, ' %') }}
         </td>

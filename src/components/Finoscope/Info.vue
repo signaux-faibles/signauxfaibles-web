@@ -1,12 +1,12 @@
 <template>
-  <v-menu v-if="info" :max-width="big ? '600px' : '400px'" offset-y>
+  <v-menu v-if="info" max-width="600px" offset-y>
     <template v-slot:activator="{ on, attrs }">
       <v-btn
           icon
           v-bind="attrs"
           v-on="on"
           ref="btn"
-          @click="trackMatomoEvent('general', 'info_finoscope', titre)"
+          @click="trackMatomoEvent('general', 'info_finoscope', info.title)"
           x-small
           style="position: relative; top: -2px;"
           color="#999"
@@ -16,10 +16,11 @@
     </template>
     <v-card>
       <v-card-title class="headline">
-        {{ titre }}
+        {{ info.title }}
       </v-card-title>
       <v-card-text>
-        Ici le corps
+        {{ info.definition }}<br/>
+        Pour en savoir plus, consultez <a target="_blank" :href="info.link">la définition complète</a>.
       </v-card-text>
       <v-card-actions>
         <v-spacer/>
