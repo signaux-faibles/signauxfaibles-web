@@ -24,9 +24,9 @@
             ></v-switch>
             Cette comparaison se base sur les {{ sectors[perimeter].cohorte }} bilans déposés publiquement pour l'exercice {{ sectors[perimeter].exercice }}
             dans le secteur d'activité de niveau {{ sectors[perimeter].classeNAF.length }} {{ libelleActivite }}
-            <div width="100%" style="padding-top: 50px; text-align: center;">
+            <div width="100%" style="padding-top: 5px; text-align: center;">
               légende<br/>
-              <img src="@/assets/boxPlot.png"/>
+              <img width="90%" src="@/assets/boxPlot.png"/>
             </div>
           </v-flex>
         </v-layout>
@@ -80,7 +80,7 @@ export default {
 
             return '<div class="apexcharts-tooltip-candlestick">' +
                 '<table>' +
-                values.map(v => {return '<tr><td>'+v.libelle+'</td><td style="text-align: right">'+v.val+' %</td></tr>'}).join('') +
+                values.map(v => {return '<tr><td>'+v.libelle+'</td><td style="text-align: right">'+ (Math.round(v.val*10)/10).toLocaleString() + ' %</td></tr>'}).join('') +
 
                 '</table>'
           }
@@ -96,6 +96,12 @@ export default {
           show: false
         },
         plotOptions: {
+          boxPlot: {
+            colors: {
+              upper: '#13d8aa',
+              lower: '#33b2df'
+            }
+          },
           bar: {
             columnWidth: '40%',
           },
@@ -114,6 +120,13 @@ export default {
         },
       },
       optionsSectors2: {
+        states: {
+          active: {
+            filter: {
+              type: 'none' /* none, lighten, darken */
+            }
+          }
+        },
         chart: {
           fontFamily: 'Oswald',
           toolbar: {
@@ -126,19 +139,19 @@ export default {
         tooltip: {
           custom: function({ seriesIndex, dataPointIndex, w }) {
             var values = [{
-              val: w.globals.seriesCandleO[seriesIndex][dataPointIndex],
+              val: w.globals.seriesCandleO[0][dataPointIndex],
               libelle: '10<sup>e</sup> centile'
             },{
-              val: w.globals.seriesCandleH[seriesIndex][dataPointIndex],
+              val: w.globals.seriesCandleH[0][dataPointIndex],
               libelle: '25<sup>e</sup> centile'
             },{
-              val: w.globals.seriesCandleM[seriesIndex][dataPointIndex],
+              val: w.globals.seriesCandleM[0][dataPointIndex],
               libelle: '50<sup>e</sup> centile'
             },{
-              val: w.globals.seriesCandleL[seriesIndex][dataPointIndex],
+              val: w.globals.seriesCandleL[0][dataPointIndex],
               libelle: '75<sup>e</sup> centile'
             },{
-              val: w.globals.seriesCandleC[seriesIndex][dataPointIndex],
+              val: w.globals.seriesCandleC[0][dataPointIndex],
               libelle: '90<sup>e</sup> centile'
             },{
               val: w.globals.series[1][dataPointIndex],
@@ -148,7 +161,7 @@ export default {
 
             return '<div class="apexcharts-tooltip-candlestick">' +
                 '<table>' +
-                values.map(v => {return '<tr><td>'+v.libelle+'</td><td style="text-align: right">'+v.val+ ((dataPointIndex==0)?' %':'') +'</td></tr>'}).join('') +
+                values.map(v => {return '<tr><td>'+v.libelle+'</td><td style="text-align: right">'+ (Math.round(v.val*10)/10).toLocaleString() + ((dataPointIndex==0)?' %':'') +'</td></tr>'}).join('') +
 
                 '</table>'
           }
@@ -164,6 +177,12 @@ export default {
           show: false
         },
         plotOptions: {
+          boxPlot: {
+            colors: {
+              upper: '#13d8aa',
+              lower: '#33b2df'
+            }
+          },
           bar: {
             columnWidth: '40%',
           },
@@ -190,6 +209,13 @@ export default {
         }]
       },
       options: {
+        states: {
+          active: {
+            filter: {
+              type: 'none' /* none, lighten, darken */
+            }
+          }
+        },
         labels: [
           'Taux d\'endettement',
           ['Ratio de', 'liquidité'],

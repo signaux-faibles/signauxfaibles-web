@@ -2,27 +2,27 @@
   <div>
     <table>
       <tr>
-        <th>Exercice (Date de clôture)</th>
+        <th style="min-width: 240px">Exercice (Date de clôture)</th>
         <th v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
           {{ exercice.exercice }} ({{ exercice.dateClotureExercice.toLocaleDateString() }})
         </th>
       </tr>
       <tr>
         <th>
-          Besoin fond de roulement exploitation / CA (%)
-          <Info id="poidsBFRExploitationSurCAPourcent"/>
+          Besoin fonds de roulement exploitation / CA (%)
+          <Info id="poidsBfrExploitationSurCAPourcent"/>
         </th>
         <td v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
-          {{ printNumber(Math.round(exercice.gestion.poidsBFRExploitationSurCAJours/0.365)/10, ' %') }}
+          {{ printNumber(Math.round(exercice.gestion.poidsBfrExploitationSurCAJours/0.365)/10, ' %') }}
         </td>
       </tr>
       <tr>
         <th>
-          Besoin fond de roulement exploitation / CA (jours)
-          <Info id="poidsBFRExploitationSurCAJours"/>
+          Besoin fonds de roulement exploitation / CA (jours)
+          <Info id="poidsBfrExploitationSurCAJours"/>
         </th>
         <td v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
-          {{ printNumber(exercice.gestion.poidsBFRExploitationSurCAJours, ' j.') }}
+          {{ printNumber(exercice.gestion.poidsBfrExploitationSurCAJours, ' j.') }}
         </td>
       </tr>
       <tr>

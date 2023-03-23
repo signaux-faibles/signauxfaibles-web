@@ -212,7 +212,7 @@ export default {
           },
           gestion: {
             poidsBfrExploitation: this.quantiles(fields, 'poids_bfr_exploitation'),
-            poidsBFRExploitationSurCAJours: this.quantiles(fields, 'poids_bfr_exploitation_sur_ca_jours'),
+            poidsBfrExploitationSurCAJours: this.quantiles(fields, 'poids_bfr_exploitation_sur_ca_jours'),
             rotationDesStocks: this.quantiles(fields, 'rotation_des_stocks_jours'),
             creditClients: this.quantiles(fields, 'credit_clients_jours'),
             creditFournisseurs: this.quantiles(fields, 'credit_fournisseurs_jours'),
@@ -250,7 +250,7 @@ export default {
           },
           gestion: {
             poidsBfrExploitation: this.roundAt(fields.poids_bfr_exploitation, 1),
-            poidsBFRExploitationSurCAJours: this.roundAt(fields.poids_bfr_exploitation_sur_ca_jours, 1),
+            poidsBfrExploitationSurCAJours: this.roundAt(fields.poids_bfr_exploitation_sur_ca_jours, 1),
             rotationDesStocks: this.roundAt(fields.rotation_des_stocks_jours, 1),
             creditClients: this.roundAt(fields.credit_clients_jours, 1),
             creditFournisseurs: this.roundAt(fields.credit_fournisseurs_jours, 1),

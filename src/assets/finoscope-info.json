@@ -2,7 +2,7 @@
   {
     "id":"chiffreDAffaires",
     "title": "Chiffres d'affaires",
-    "definition": "Le Chiffre d'Affaires (CA) indique le niveau d'activité d'une entreprise sur une période donnée.",
+    "definition": "Le Chiffre d'affaires (CA) indique le niveau d'activité d'une entreprise sur une période donnée.",
     "link": "https://signaux-faibles.gitbook.io/guide-dutilisation-et-faq/consultation/ratios-financiers/les-principes-de-la-comptabilite"
   },  {
     "id": "margeCommerciale",
@@ -55,12 +55,12 @@
     "definition": "Le ratio de liquidité mesure la capacité d'une entreprise à régler ses dettes arrivant à échéance",
     "link": "https://signaux-faibles.gitbook.io/guide-dutilisation-et-faq/consultation/ratios-financiers/ratio-de-liquidite"
   },  {
-    "id": "poidsBFRExploitationSurCAPourcent",
+    "id": "poidsBfrExploitationSurCAPourcent",
     "title": "Besoin fonds de roulement exploitation / CA (%)",
     "definition": "Le BFR / CA mesure le besoin de trésorerie généré par le décalage entre les décaissements et les encaissements liés à l'exploitation courante en pourcentage du chiffre d'affaire",
     "link": "https://signaux-faibles.gitbook.io/guide-dutilisation-et-faq/consultation/ratios-financiers/poids-besoin-en-fonds-de-roulement-bfr-exploitation-sur-ca"
   },  {
-    "id": "poidsBFRExploitationSurCAJours",
+    "id": "poidsBfrExploitationSurCAJours",
     "title": "Besoin fonds de roulement exploitation / CA (J)",
     "definition": "Le BFR / CA mesure le besoin de trésorerie généré par le décalage entre les décaissements et les encaissements liés à l'exploitation courante en jours projetés sur une année de 365 jours",
     "link": "https://signaux-faibles.gitbook.io/guide-dutilisation-et-faq/consultation/ratios-financiers/poids-bfr-exploitation-sur-le-ca-jours"

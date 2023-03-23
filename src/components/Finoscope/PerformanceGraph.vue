@@ -2,20 +2,38 @@
   <div>
     <v-tabs v-model="graphTab">
       <v-tab>Soldes intermédiaires de gestion</v-tab>
-      <v-tab>Chiffre d'affaires et EBE</v-tab>
+      <v-tab>CA et EBE/CA</v-tab>
       <v-tab>Comparaison sectorielle</v-tab>
     </v-tabs>
     <v-tabs-items v-model="graphTab">
       <v-tab-item>
-          <apexchart width="100%" height="400px" type="bar" :options="optionsSig" :series="seriesSig"/>
+          <apexchart
+              width="100%"
+              height="400px"
+              type="bar"
+              :options="optionsSig"
+              :series="seriesSig"
+          />
       </v-tab-item>
       <v-tab-item>
-        <apexchart width="100%" height="400px" type="line" :options="optionsCA" :series="seriesCA"/>
+        <apexchart
+            width="100%"
+            height="400px"
+            type="line"
+            :options="optionsCA"
+            :series="seriesCA"
+        />
       </v-tab-item>
       <v-tab-item>
           <v-layout>
             <v-flex xs8>
-              <apexchart width="100%" height="400px" type="boxPlot" :options="optionsSectors" :series="seriesSectors"/>
+              <apexchart
+                  width="100%"
+                  height="400px"
+                  type="boxPlot"
+                  :options="optionsSectors"
+                  :series="seriesSectors"
+              />
             </v-flex>
             <v-flex xs4>
               <v-switch
@@ -25,9 +43,9 @@
               ></v-switch>
               Cette comparaison se base sur les {{ sectors[perimeter].cohorte }} bilans déposés publiquement pour l'exercice {{ sectors[perimeter].exercice }}
               dans le secteur d'activité de niveau {{ sectors[perimeter].classeNAF.length }} {{ libelleActivite }}
-              <div width="100%" style="padding-top: 50px; text-align: center;">
+              <div width="100%" style="padding-top: 5px; text-align: center;">
                 légende<br/>
-                <img src="@/assets/boxPlot.png"/>
+                <img width="90%" src="@/assets/boxPlot.png"/>
               </div>
             </v-flex>
           </v-layout>
@@ -53,114 +71,15 @@ export default {
       classeCA: null,
       classeNAF: null,
       exercice: null,
-      optionsCA: {
-        theme: {
-          palette: 'palette3',
-        },
-        chart: {
-          fontFamily: 'Oswald',
-          toolbar: {
-            show: false,
-          },
-          type: 'bar',
-          width: '50%',
-        },
-        xaxis: {
-          labels: {
-            style: {
-              fontSize: '13px',
-            }
-          }
-        },
-        yaxis: [
-          {
-            title: {
-              text: "Chiffre d'affaire"
-            },
-            labels: {
-              formatter: this.euroAxisFormatter
-            }
-          },
-          {
-            opposite: true,
-            title: {
-              text: "Excédent Brut d'Exploitation"
-            },
-            labels: {
-              formatter: this.euroAxisFormatter
-            }
-          }
-        ]
-      },
-      optionsSectors: {
-        chart: {
-          fontFamily: 'Oswald',
-          toolbar: {
-            show: false,
-          },
-          type: 'bar',
-          width: '50%',
-        },
-        colors: ['#008FFB', '#FEB019'],
-        tooltip: {
-          custom: function({ seriesIndex, dataPointIndex, w }) {
-            var values = [{
-              val: w.globals.seriesCandleO[seriesIndex][dataPointIndex],
-              libelle: '10<sup>e</sup> centile'
-            },{
-              val: w.globals.seriesCandleH[seriesIndex][dataPointIndex],
-              libelle: '25<sup>e</sup> centile'
-            },{
-              val: w.globals.seriesCandleM[seriesIndex][dataPointIndex],
-              libelle: '50<sup>e</sup> centile'
-            },{
-              val: w.globals.seriesCandleL[seriesIndex][dataPointIndex],
-              libelle: '75<sup>e</sup> centile'
-            },{
-              val: w.globals.seriesCandleC[seriesIndex][dataPointIndex],
-              libelle: '90<sup>e</sup> centile'
-            },{
-              val: w.globals.series[1][dataPointIndex],
-              libelle: 'entreprise'
-            }].filter(v => v.val).sort((v1, v2) => (v1.val > v2.val) ? -1 : 1)
-                .sort((v1, v2) => (v1.val > v2.val)?-1:1)
-
-            return '<div class="apexcharts-tooltip-candlestick">' +
-                '<table>' +
-                values.map(v => {return '<tr><td>'+v.libelle+'</td><td style="text-align: right">'+v.val+' %</td></tr>'}).join('') +
-
-                '</table>'
-          }
-        },
-        xaxis: {
-          labels: {
-            style: {
-              fontSize: '13px',
-            }
-          }
-        },
-        legend: {
-          show: false
-        },
-        plotOptions: {
-          bar: {
-            columnWidth: '40%',
-          },
-        },
-        theme: {
-          palette: 'palette5',
-        },
-        yaxis: {
-          tickAmount: 7,
-          labels: {
-            style: {
-              fontSize: '13px',
-            },
-            formatter: this.percentAxisFormatter
-          }
-        },
-      },
       optionsSig: {
+        states: {
+          active: {
+            filter: {
+              type: 'none' /* none, lighten, darken */
+            }
+          }
+        },
+        selection: false,
         legend: {
           show: true,
           position: 'right',
@@ -279,16 +198,16 @@ export default {
         {
           type: 'boxPlot',
           data: [{
-            x: "Marge Commerciale / CA",
+            x: ["Marge commerciale", "sur chiffre d'affaires"],
             y: this.sectors[this.perimeter].performance.margeCommerciale,
           },{
-            x: "EBE / CA",
+            x: ["Excédent brut d'exploitation", "sur chiffre d'affaires"],
             y: this.sectors[this.perimeter].performance.ebe,
           },{
-            x: "Résultat d'exploitation / CA",
+            x: ["Résultat d'exploitation","sur chiffre d'affaires"],
             y: this.sectors[this.perimeter].performance.ebit
           },{
-            x: "Résultat net / CA",
+            x: ["Résultat net", "sur chiffre d'affaire"],
             y: this.sectors[this.perimeter].performance.resultatNet
           }]
         }, {
@@ -320,10 +239,10 @@ export default {
               .map((exercice) => {return {x: exercice.exercice, y: exercice.performance.chiffreDAffaires}})
         },
         {
-          name: "EBE",
+          name: "Excédent brut d'exploitation sur chiffre d'affaire",
           data: this.ratios
               .sort(this.sortCloture)
-              .map((exercice) => {return {x: exercice.exercice, y: exercice.performance.ebe}})
+              .map((exercice) => {return {x: exercice.exercice, y: exercice.performance.partCaEBE}})
         }
       ]
     },
@@ -345,6 +264,141 @@ export default {
               }
             }
           )
+    },
+    optionsSectors() {
+      return {
+        states: {
+          active: {
+            filter: {
+              type: 'none' /* none, lighten, darken */
+            }
+          }
+        },
+        chart: {
+          fontFamily: 'Oswald',
+          toolbar: {
+            show: false,
+          },
+          type: 'bar',
+          width: '50%',
+        },
+        colors: ['#008FFB', '#FEB019'],
+        tooltip: {
+          custom: function ({seriesIndex, dataPointIndex, w}) {
+            console.log(w.globals)
+            var values = [{
+              val: w.globals.seriesCandleO[0][dataPointIndex],
+              libelle: '10<sup>e</sup> centile'
+            }, {
+              val: w.globals.seriesCandleH[0][dataPointIndex],
+              libelle: '25<sup>e</sup> centile'
+            }, {
+              val: w.globals.seriesCandleM[0][dataPointIndex],
+              libelle: '50<sup>e</sup> centile'
+            }, {
+              val: w.globals.seriesCandleL[0][dataPointIndex],
+              libelle: '75<sup>e</sup> centile'
+            }, {
+              val: w.globals.seriesCandleC[0][dataPointIndex],
+              libelle: '90<sup>e</sup> centile'
+            }, {
+              val: w.globals.series[1][dataPointIndex],
+              libelle: 'entreprise'
+            }].filter(v => v.val).sort((v1, v2) => (v1.val > v2.val) ? -1 : 1)
+                .sort((v1, v2) => (v1.val > v2.val) ? -1 : 1)
+
+            return '<div class="apexcharts-tooltip-candlestick">' +
+                '<table>' +
+                values.map(v => {
+                  return '<tr><td>' + v.libelle + '</td><td style="text-align: right">' + (Math.round(v.val*10)/10).toLocaleString() + ' %</td></tr>'
+                }).join('') +
+
+                '</table>'
+          }
+        },
+        xaxis: {
+          labels: {
+            style: {
+              fontSize: '13px',
+            }
+          }
+        },
+        legend: {
+          show: false
+        },
+        plotOptions: {
+          boxPlot: {
+            colors: {
+              upper: '#13d8aa',
+              lower: '#33b2df'
+            }
+          },
+          bar: {
+            columnWidth: '40%',
+          },
+        },
+        theme: {
+          palette: 'palette5',
+        },
+        yaxis: {
+          tickAmount: 7,
+          labels: {
+            style: {
+              fontSize: '13px',
+            },
+            formatter: this.percentAxisFormatter
+          }
+        },
+      }
+    },
+    optionsCA() {
+      return {
+        states: {
+          active: {
+            filter: {
+              type: 'none' /* none, lighten, darken */
+            }
+          }
+        },
+        theme: {
+          palette: 'palette3',
+        },
+        chart: {
+          fontFamily: 'Oswald',
+          toolbar: {
+            show: false,
+          },
+          type: 'line',
+          width: '50%',
+        },
+        xaxis: {
+          labels: {
+            style: {
+              fontSize: '13px',
+            }
+          }
+        },
+        yaxis: [
+          {
+            title: {
+              text: "Chiffre d'affaire"
+            },
+            labels: {
+              formatter: this.euroAxisFormatter
+            }
+          },
+          {
+            opposite: true,
+            max: Math.max(0,Math.round(Math.max(...(this.seriesCA[1].data.map(d => d.y))) * 2.5)) ,
+            title: {
+              text: "Excédent Brut d'Exploitation sur chiffre d'affaires"
+            },
+            labels: {
+              formatter: this.percentAxisFormatter
+            }
+          }
+        ]
+      }
     },
   }
 }
