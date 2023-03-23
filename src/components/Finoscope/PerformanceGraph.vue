@@ -285,7 +285,6 @@ export default {
         colors: ['#008FFB', '#FEB019'],
         tooltip: {
           custom: function ({seriesIndex, dataPointIndex, w}) {
-            console.log(w.globals)
             var values = [{
               val: w.globals.seriesCandleO[0][dataPointIndex],
               libelle: '10<sup>e</sup> centile'
