@@ -69,7 +69,7 @@ export default {
   },
   methods: {
     printNumber(value, suffix) {
-      if (value) {
+      if (!isNaN(value)) {
         return value.toLocaleString() + suffix
       } else {
         return 'n/c'

@@ -1,7 +1,7 @@
 <template>
   <v-expansion-panel>
     <v-expansion-panel-header ripple>
-      <h1>Publication de signalements — Mars 2023</h1>
+      <h1>Signalements — Mars 2023</h1>
     </v-expansion-panel-header>
     <v-expansion-panel-content>
       <v-card flat>

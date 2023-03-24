@@ -58,19 +58,19 @@ export default {
         tooltip: {
           custom: function({ seriesIndex, dataPointIndex, w }) {
             var values = [{
-              val: w.globals.seriesCandleO[seriesIndex][dataPointIndex],
+              val: w.globals.seriesCandleO[0][dataPointIndex],
               libelle: '10<sup>e</sup> centile'
             },{
-              val: w.globals.seriesCandleH[seriesIndex][dataPointIndex],
+              val: w.globals.seriesCandleH[0][dataPointIndex],
               libelle: '25<sup>e</sup> centile'
             },{
-              val: w.globals.seriesCandleM[seriesIndex][dataPointIndex],
+              val: w.globals.seriesCandleM[0][dataPointIndex],
               libelle: '50<sup>e</sup> centile'
             },{
-              val: w.globals.seriesCandleL[seriesIndex][dataPointIndex],
+              val: w.globals.seriesCandleL[0][dataPointIndex],
               libelle: '75<sup>e</sup> centile'
             },{
-              val: w.globals.seriesCandleC[seriesIndex][dataPointIndex],
+              val: w.globals.seriesCandleC[0][dataPointIndex],
               libelle: '90<sup>e</sup> centile'
             },{
               val: w.globals.series[1][dataPointIndex],

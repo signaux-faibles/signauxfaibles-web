@@ -4,8 +4,10 @@
       <v-layout mt-4 wrap style="font-size: 17px">
         <v-flex xs12>
           <div class="px-12 ma-12" style="text-align: center;">
-            Il n'existe pas de donnée financière publique pour cette entreprise.<br/>
-            <v-icon size="100" color="#ccc" class="ma-12">fa-low-vision</v-icon>
+            Nous ne disposons pas de données publiques pour cette entreprise<br/>
+
+            <v-icon size="100" color="#ccc" class="ma-12">fa-low-vision</v-icon><br/>
+            <Gitbook target="/f.a.q./declaration-des-comptes-annuels-par-les-entreprises-open-data-and-confidentialite"/>
           </div>
         </v-flex>
       </v-layout>
@@ -67,6 +69,7 @@ import GestionTable from "@/components/Finoscope/GestionTable.vue";
 import GestionGraph from "@/components/Finoscope/GestionGraph.vue";
 import DataSource from "@/components/Finoscope/DataSource.vue"
 import Spinner from "@/components/Spinner.vue"
+import Gitbook from "@/components/Gitbook.vue"
 
 export default {
   name: 'Finoscope',
@@ -74,7 +77,7 @@ export default {
     PerformanceTable, PerformanceGraph,
     SolvabiliteEtTresorerieTable, SolvabiliteEtTresorerieGraph,
     GestionTable, GestionGraph,
-    DataSource, Spinner
+    DataSource, Spinner, Gitbook
   },
   props: ['siren', 'naf'],
   data() {
@@ -198,10 +201,10 @@ export default {
           exercice: fields.exercice,
           cohorte: fields.cohorte,
           performance: {
-            margeCommerciale: this.quantiles(fields, 'part_ca_marge_brute'),
-            ebe: this.quantiles(fields, 'part_ca_ebe'),
-            ebit: this.quantiles(fields, 'part_ca_ebit'),
-            resultatNet: this.quantiles(fields, 'part_ca_resultat_net'),
+            partCaMargeCommerciale: this.quantiles(fields, 'part_ca_marge_brute'),
+            partCaEbe: this.quantiles(fields, 'part_ca_ebe'),
+            partCaEbit: this.quantiles(fields, 'part_ca_ebit'),
+            partCaResultatNet: this.quantiles(fields, 'part_ca_resultat_net'),
           },
           solvabiliteEtTresorerie: {
             tauxDEndettement: this.quantiles(fields, 'taux_d_endettement'),
@@ -323,9 +326,8 @@ export default {
       } else {
         return this.odsRatiosPayload.records
             .map(this.ratiosTransform)
-            .sort((exercice1, exercice2) => {
-          return (exercice1.dateClotureExercice.getTime() < exercice2.dateClotureExercice.getTime())?1:-1
-            }).slice(0,5)
+            .sort(this.sortRatios)
+            .slice(0,5)
       }
     },
     sectors() {

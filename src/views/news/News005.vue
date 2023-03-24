@@ -1,7 +1,7 @@
 <template>
   <v-expansion-panel>
     <v-expansion-panel-header ripple>
-      <h1>Données financières améliorées</h1>
+      <h1>Actualisation des données financières</h1>
     </v-expansion-panel-header>
     <v-expansion-panel-content>
       <v-card flat>
@@ -9,32 +9,20 @@
 
           <v-row>
             <v-col class="col-8">
-              <h3>L'application Signaux Faibles se dote d'un nouvel outil de visualisation des données financières
-                publiques.
+              <h3>
+                Les informations financières intègrent les derniers bilans.
               </h3>
               <ul>
-                <li>Situé au sein de la fiche entreprise, ce composant vous propose de consulter une sélection
-                  d'indicateurs financiers fréquemment remis à jour et réunis pour leur pertinence et leur
-                  complémentarité
+
+                <li>Une vingtaine d'indicateurs, établis avec des experts, vous permet une analyse rapide de la situation financière de l'entreprise
                 </li>
-                <li><a
-                    href="https://signaux-faibles.gitbook.io/guide-dutilisation-et-faq/consultation/ratios-financiers"
-                    target="_blank">Une
-                  documentation détaillée</a> expliquant les principes de la comptabilité et de l'analyse financière a
-                  été constituée sur mesure pour vous accompagner dans l'analyse de ces informations
+                <li>Un retraitement statistique vous offre la possibilité de situer l'entreprise dans son secteur d'activité
                 </li>
-                <li>Un retraitement statistique des indicateurs financiers vous offre la possibilité de situer
-                  l'entreprise
-                  dans son secteur d'activité
+                <li>Pour vous accompagner dans l'analyse de ces informations, des éléments de documentation sont intégrés dans le produit</li>
+                <li>Un guide complet est accessible <a target="_blank" href="https://signaux-faibles.gitbook.io/guide-dutilisation-et-faq/consultation/ratios-financiers">ici</a></li>
+                <li>Toutes les informations seront actualisées sur la base des données ouvertes du <a
+                  href="https://www.economie.gouv.fr/entreprises/data-inpi-registre-commerce-societes-rncs" target="_blank">RNCS</a>
                 </li>
-                <li>L'extraction des <a
-                    href="https://data.economie.gouv.fr/explore/dataset/ratios_inpi_bce/table/">chiffres
-                  financiers</a> et <a
-                    href="https://data.economie.gouv.fr/explore/dataset/ratios_inpi_bce_sectors/table/" target="_blank">indicateurs
-                  sectoriels</a> est mise à votre disposition sur la <a
-                    href="https://data.economie.gouv.fr/pages/accueil/"
-                    target="_blank">plateforme Open Data du Ministère de
-                  l'Économie et des Finances</a></li>
               </ul>
             </v-col>
             <v-col class="col-4">
@@ -57,7 +45,7 @@
                     <v-img src="/finoscope.png" @click="showModal=!showModal"/>
                   </div>
                 </v-dialog>
-                exemple de comparaison sectorielle
+
               </div>
             </v-col>
           </v-row>

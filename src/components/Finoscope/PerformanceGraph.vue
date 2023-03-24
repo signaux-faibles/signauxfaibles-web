@@ -1,54 +1,58 @@
 <template>
   <div>
     <v-tabs v-model="graphTab">
-      <v-tab @click="trackMatomoEvent('finoscope', 'performance_evolution_graph', siren)">Soldes intermédiaires de gestion</v-tab>
+      <v-tab @click="trackMatomoEvent('finoscope', 'performance_evolution_graph', siren)">Soldes intermédiaires de
+        gestion
+      </v-tab>
       <v-tab @click="trackMatomoEvent('finoscope', 'performance_ca_ebe_graph', siren)">CA et EBE/CA</v-tab>
-      <v-tab @click="trackMatomoEvent('finoscope', 'performance_sectoriel_graph', siren)">Comparaison sectorielle</v-tab>
+      <v-tab @click="trackMatomoEvent('finoscope', 'performance_sectoriel_graph', siren)">Comparaison sectorielle
+      </v-tab>
     </v-tabs>
     <v-tabs-items v-model="graphTab">
       <v-tab-item>
-          <apexchart
-              width="100%"
-              height="400px"
-              type="bar"
-              :options="optionsSig"
-              :series="seriesSig"
-          />
-      </v-tab-item>
-      <v-tab-item>
         <apexchart
-            width="100%"
+            :options="optionsSig"
+            :series="seriesSig"
             height="400px"
-            type="line"
-            :options="optionsCA"
-            :series="seriesCA"
+            type="bar"
+            width="100%"
         />
       </v-tab-item>
       <v-tab-item>
-          <v-layout>
-            <v-flex xs8>
-              <apexchart
-                  width="100%"
-                  height="400px"
-                  type="boxPlot"
-                  :options="optionsSectors"
-                  :series="seriesSectors"
-              />
-            </v-flex>
-            <v-flex xs4>
-              <v-switch
-                  v-on:change="fakeResize"
-                  v-model="withCA"
-                  :label="'Comparer aux entreprises ayant un chiffre d\'affaires ' + libelleCA"
-              ></v-switch>
-              Cette comparaison se base sur les {{ sectors[perimeter].cohorte }} bilans déposés publiquement pour l'exercice {{ sectors[perimeter].exercice }}
-              dans le secteur d'activité de niveau {{ sectors[perimeter].classeNAF.length }} {{ libelleActivite }}
-              <div width="100%" style="padding-top: 5px; text-align: center;">
-                légende<br/>
-                <img width="90%" src="@/assets/boxPlot.png"/>
-              </div>
-            </v-flex>
-          </v-layout>
+        <apexchart
+            :options="optionsCA"
+            :series="seriesCA"
+            height="400px"
+            type="line"
+            width="100%"
+        />
+      </v-tab-item>
+      <v-tab-item>
+        <v-layout>
+          <v-flex xs8>
+            <apexchart
+                :options="optionsSectors"
+                :series="seriesSectors"
+                height="400px"
+                type="boxPlot"
+                width="100%"
+            />
+          </v-flex>
+          <v-flex xs4>
+            <v-switch
+                v-model="withCA"
+                :label="'Comparer aux entreprises ayant un chiffre d\'affaires ' + libelleCA"
+                v-on:change="fakeResize"
+            ></v-switch>
+            Cette comparaison se base sur les {{ sectors[perimeter].cohorte }} bilans déposés publiquement pour
+            l'exercice {{ sectors[perimeter].exercice }}
+            dans le secteur d'activité de niveau {{ sectors[perimeter].classeNAF.length }} {{ libelleActivite }}
+            <div style="padding-top: 5px; text-align: center;" width="100%">
+              légende<br/>
+              <img src="@/assets/boxPlot.png" width="90%"/>
+            </div>
+          </v-flex>
+        </v-layout>
       </v-tab-item>
     </v-tabs-items>
 
@@ -123,7 +127,7 @@ export default {
         ],
         tooltip: {
           y: {
-            formatter: function(value, { series, seriesIndex, dataPointIndex, w }) {
+            formatter: function (value, {series, seriesIndex, dataPointIndex, w}) {
               return value.toLocaleString() + '€'
             }
           }
@@ -143,24 +147,24 @@ export default {
     },
     euroAxisFormatter(value) {
       if (Math.abs(value) > 1000 && Math.abs(value) < 1000000) {
-        const val = Math.round(value/100)/10
+        const val = Math.round(value / 100) / 10
         return val.toLocaleString() + ' k€'
       } else if (Math.abs(value) >= 1000000) {
-        const val = Math.round(value/100000)/10
+        const val = Math.round(value / 100000) / 10
         return val.toLocaleString() + ' M€'
       } else {
         return value.toLocaleString() + ' €'
       }
     },
     percentAxisFormatter(value) {
-      return (Math.round(value * 10)/10).toLocaleString() + ' %'
+      return (Math.round(value * 10) / 10).toLocaleString() + ' %'
     },
     exercices(length) {
       const currentYear = (new Date()).getFullYear()
       return Array(length).fill().map((_, index) => currentYear - index - 1)
     },
     sortCloture(e1, e2) {
-      return (e1.dateClotureExercice < e2.dateClotureExercice)?-1:1
+      return (e1.dateClotureExercice < e2.dateClotureExercice) ? -1 : 1
     }
   },
   computed: {
@@ -191,80 +195,115 @@ export default {
       }
     },
     perimeter() {
-      return (this.withCA)?0:1
+      return (this.withCA) ? 0 : 1
     },
     seriesSectors() {
-      if (this.sectors == []) {return [{type: 'boxPlot', data: []}, {type:''}]}
+      if (this.sectors == []) {
+        return [{type: 'boxPlot', data: []}, {type: ''}]
+      }
       return [
         {
           type: 'boxPlot',
           data: [{
             x: ["Marge commerciale", "sur chiffre d'affaires"],
-            y: this.sectors[this.perimeter].performance.margeCommerciale,
-          },{
+            y: this.sectors[this.perimeter].performance.partCaMargeCommerciale,
+          }, {
             x: ["Excédent brut d'exploitation", "sur chiffre d'affaires"],
-            y: this.sectors[this.perimeter].performance.ebe,
-          },{
-            x: ["Résultat d'exploitation","sur chiffre d'affaires"],
-            y: this.sectors[this.perimeter].performance.ebit
-          },{
+            y: this.sectors[this.perimeter].performance.partCaEbe,
+          }, {
+            x: ["Résultat d'exploitation", "sur chiffre d'affaires"],
+            y: this.sectors[this.perimeter].performance.partCaEbit
+          }, {
             x: ["Résultat net", "sur chiffre d'affaire"],
-            y: this.sectors[this.perimeter].performance.resultatNet
+            y: this.sectors[this.perimeter].performance.partCaResultatNet
           }]
         }, {
           type: 'scatter',
           data: [
             {
-              x: "Marge Commerciale / CA",
+              x: ["Marge commerciale", "sur chiffre d'affaires"],
               y: this.ratios[0].performance.partCaMargeCommerciale,
-            },{
-              x: "EBE / CA",
+            }, {
+              x: ["Excédent brut d'exploitation", "sur chiffre d'affaires"],
               y: this.ratios[0].performance.partCaEBE,
-            },{
-              x: "Résultat d'exploitation / CA",
+            }, {
+              x: ["Résultat d'exploitation", "sur chiffre d'affaires"],
               y: this.ratios[0].performance.partCaEbit,
-            },{
-              x: "Résultat net / CA",
+            }, {
+              x: ["Résultat net", "sur chiffre d'affaire"],
               y: this.ratios[0].performance.partCaResultatNet,
             },
-          ]}
+          ]
+        }
       ]
     },
     seriesCA() {
-      if (this.ratios == null) {return []}
+      if (this.ratios == null) {
+        return []
+      }
       return [
         {
           name: "Chiffre d'affaires",
-          data: this.ratios
+          data: [...this.ratios]
               .sort(this.sortCloture)
-              .map((exercice) => {return {x: exercice.exercice, y: exercice.performance.chiffreDAffaires}})
+              .map((exercice) => {
+                return {x: exercice.exercice, y: exercice.performance.chiffreDAffaires}
+              })
         },
         {
           name: "Excédent brut d'exploitation sur chiffre d'affaire",
-          data: this.ratios
+          data: [...this.ratios]
               .sort(this.sortCloture)
-              .map((exercice) => {return {x: exercice.exercice, y: exercice.performance.partCaEBE}})
+              .map((exercice) => {
+                return {x: exercice.exercice, y: exercice.performance.partCaEBE}
+              })
         }
       ]
     },
     seriesSig() {
-      if (this.ratios == null) {return []}
-      return this.ratios
-        .slice(0,4)
-        .sort(this.sortCloture)
-        .map((exercice) => {
-          return {
-            name: exercice.exercice,
-            data:
-                [
-                  exercice.performance.margeCommerciale,
-                  exercice.performance.ebe,
-                  exercice.performance.ebit,
-                  exercice.performance.resultatNet,
-                ]
+      if (this.ratios == null) {
+        return []
+      }
+      return [...this.ratios]
+          .slice(0, 4)
+          .sort(this.sortCloture)
+          .map((exercice) => {
+                return {
+                  name: exercice.exercice,
+                  data:
+                      [
+                        exercice.performance.margeCommerciale,
+                        exercice.performance.ebe,
+                        exercice.performance.ebit,
+                        exercice.performance.resultatNet,
+                      ]
+                }
               }
-            }
           )
+    },
+    minSectors() {
+      return Math.floor(
+          Math.min(
+              ...Object.values(this.sectors[0].performance).map(s => s[0]),
+              ...Object.values(this.sectors[1].performance).map(s => s[0]),
+              this.ratios[0].performance.partCaMargeCommerciale,
+              this.ratios[0].performance.partCaEBE,
+              this.ratios[0].performance.partCaResultatNet,
+              this.ratios[0].performance.partCaEbit,
+          )/5
+      )*5 - 5
+    },
+    maxSectors() {
+      return Math.ceil(
+          Math.max(
+              ...Object.values(this.sectors[0].performance).map(s => s[4]),
+              ...Object.values(this.sectors[1].performance).map(s => s[4]),
+              this.ratios[0].performance.partCaMargeCommerciale,
+              this.ratios[0].performance.partCaEBE,
+              this.ratios[0].performance.partCaResultatNet,
+              this.ratios[0].performance.partCaEbit,
+          )/5
+      )*5
     },
     optionsSectors() {
       return {
@@ -304,13 +343,13 @@ export default {
             }, {
               val: w.globals.series[1][dataPointIndex],
               libelle: 'entreprise'
-            }].filter(v => v.val).sort((v1, v2) => (v1.val > v2.val) ? -1 : 1)
+            }].filter(v => !isNaN(v.val)).sort((v1, v2) => (v1.val > v2.val) ? -1 : 1)
                 .sort((v1, v2) => (v1.val > v2.val) ? -1 : 1)
 
             return '<div class="apexcharts-tooltip-candlestick">' +
                 '<table>' +
                 values.map(v => {
-                  return '<tr><td>' + v.libelle + '</td><td style="text-align: right">' + (Math.round(v.val*10)/10).toLocaleString() + ' %</td></tr>'
+                  return '<tr><td>' + v.libelle + '</td><td style="text-align: right">' + (Math.round(v.val * 10) / 10).toLocaleString() + ' %</td></tr>'
                 }).join('') +
 
                 '</table>'
@@ -341,6 +380,8 @@ export default {
           palette: 'palette5',
         },
         yaxis: {
+          min: this.minSectors,
+          max: this.maxSectors,
           tickAmount: 7,
           labels: {
             style: {
@@ -369,7 +410,6 @@ export default {
             show: false,
           },
           type: 'line',
-          width: '50%',
         },
         xaxis: {
           labels: {
@@ -389,7 +429,7 @@ export default {
           },
           {
             opposite: true,
-            max: Math.max(0,Math.round(Math.max(...(this.seriesCA[1].data.map(d => d.y))) * 2.5)) ,
+            max: Math.max(0, Math.round(Math.max(...(this.seriesCA[1].data.map(d => d.y))) * 2.5)),
             title: {
               text: "Excédent Brut d'Exploitation sur chiffre d'affaires"
             },
