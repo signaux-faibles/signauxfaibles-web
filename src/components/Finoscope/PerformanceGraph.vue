@@ -1,9 +1,9 @@
 <template>
   <div>
     <v-tabs v-model="graphTab">
-      <v-tab>Soldes intermédiaires de gestion</v-tab>
-      <v-tab>CA et EBE/CA</v-tab>
-      <v-tab>Comparaison sectorielle</v-tab>
+      <v-tab @click="trackMatomoEvent('finoscope', 'performance_evolution_graph', siren)">Soldes intermédiaires de gestion</v-tab>
+      <v-tab @click="trackMatomoEvent('finoscope', 'performance_ca_ebe_graph', siren)">CA et EBE/CA</v-tab>
+      <v-tab @click="trackMatomoEvent('finoscope', 'performance_sectoriel_graph', siren)">Comparaison sectorielle</v-tab>
     </v-tabs>
     <v-tabs-items v-model="graphTab">
       <v-tab-item>
@@ -60,8 +60,9 @@ import fr from 'apexcharts/dist/locales/fr.json'
 
 export default {
   name: 'PerformanceGraph',
-  props: ['ratios', 'sectors', 'naf'],
+  props: ['ratios', 'sectors', 'naf', 'siren'],
   mounted() {
+    this.trackMatomoEvent('finoscope', 'performance_evolution_graph', this.siren)
   },
   data() {
     return {

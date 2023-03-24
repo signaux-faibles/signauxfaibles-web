@@ -1,8 +1,8 @@
 <template>
   <div>
     <v-tabs v-model="graphTab">
-      <v-tab>Évolution</v-tab>
-      <v-tab>Comparaison sectorielle</v-tab>
+      <v-tab @click="trackMatomoEvent('finoscope', 'solvabilite_tresorerie_evolution_graph', siren)">Évolution</v-tab>
+      <v-tab @click="trackMatomoEvent('finoscope', 'solvabilite_tresorerie_sectoriel_graph', siren)">Comparaison sectorielle</v-tab>
     </v-tabs>
     <v-tabs-items v-model="graphTab">
       <v-tab-item>
@@ -40,7 +40,7 @@ import fr from 'apexcharts/dist/locales/fr.json'
 
 export default {
   name: 'SolvabiliteEtTresorerieGraph',
-  props: ['ratios', 'sectors', 'naf'],
+  props: ['ratios', 'sectors', 'naf', 'siren'],
   data() {
     return {
       graphTab: 0,
@@ -261,6 +261,9 @@ export default {
       locales: [fr],
       defaultLocale: 'fr',
     }
+  },
+  mounted() {
+    this.trackMatomoEvent('finoscope', 'solvabilite_tresorerie_evolution_graph', this.siren)
   },
   methods: {
     fakeResize() {

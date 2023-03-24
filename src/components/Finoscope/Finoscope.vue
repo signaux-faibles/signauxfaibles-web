@@ -16,9 +16,9 @@
     </div>
     <div v-if="ready && !nodata">
     <v-tabs v-model="tab" v-if="ready">
-      <v-tab>Performance</v-tab>
-      <v-tab>Solvabilité et Trésorerie</v-tab>
-      <v-tab>Gestion</v-tab>
+      <v-tab @click="trackMatomoEvent('finoscope', 'performance_table', siren)">Performance</v-tab>
+      <v-tab @click="trackMatomoEvent('finoscope', 'solvabilite_tresorerie_table', siren)">Solvabilité et Trésorerie</v-tab>
+      <v-tab @click="trackMatomoEvent('finoscope', 'gestion_table', siren)">Gestion</v-tab>
     </v-tabs>
     <v-tabs-items v-model="tab">
       <v-tab-item>
@@ -27,7 +27,7 @@
             <PerformanceTable :ratios="[...ratios]" :siren="siren"/>
           </v-flex>
           <v-flex md12>
-            <PerformanceGraph :ratios="[...ratios]" :sectors="sectors" :naf="naf"/>
+            <PerformanceGraph :ratios="[...ratios]" :siren="siren" :sectors="sectors" :naf="naf"/>
           </v-flex>
         </v-layout>
       </v-tab-item>
@@ -37,7 +37,7 @@
             <SolvabiliteEtTresorerieTable :ratios="[...ratios]" :siren="siren"/>
           </v-flex>
           <v-flex md12>
-            <SolvabiliteEtTresorerieGraph :ratios="[...ratios]" :sectors="sectors" :naf="naf"/>
+            <SolvabiliteEtTresorerieGraph :ratios="[...ratios]" :siren="siren" :sectors="sectors" :naf="naf"/>
           </v-flex>
         </v-layout>
       </v-tab-item>
@@ -47,7 +47,7 @@
             <GestionTable :ratios="[...ratios]" :siren="siren"/>
           </v-flex>
           <v-flex md12>
-            <GestionGraph :ratios="[...ratios]" :sectors="sectors" :naf="naf"/>
+            <GestionGraph :ratios="[...ratios]" :siren="siren" :sectors="sectors" :naf="naf"/>
           </v-flex>
         </v-layout>
       </v-tab-item>
@@ -176,6 +176,7 @@ export default {
           .then(r => {
             this.odsSectorsPayload = r.data
             this.ready = true
+            this.trackMatomoEvent('finoscope', 'performance_table', this.siren)
           })
           .catch(r => {
             alert('error loading sectors: ' + JSON.stringify(r))
