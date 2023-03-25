@@ -15,7 +15,7 @@
               Exercice {{ sectors[perimeter].exercice }}
             </div>
             <br/>
-            <apexchart :options="optionsSectors" :series="seriesSectors" height="400px" type="boxPlot"
+            <apexchart :options="optionsSectors" :series="seriesSectors" height="500px" type="boxPlot"
                        width="100%"></apexchart>
             <br/>
           </v-flex>

@@ -11,7 +11,12 @@
         <apexchart :options="options" :series="series" height="400px" type="bar" width="100%"></apexchart>
       </v-tab-item>
       <v-tab-item>
-        <v-layout>
+        <v-layout wrap>
+          <v-flex style="text-align: center" xs8>
+            <div style="position: relative; top: 30px">
+              Exercice {{ sectors[perimeter].exercice }}
+            </div><br/>
+          </v-flex><v-flex xs4></v-flex>
           <v-flex xs6>
             <apexchart :options="optionsSectors1" :series="seriesSectors1" height="400px" type="boxPlot"
                        width="100%"></apexchart>
