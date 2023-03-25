@@ -6,24 +6,31 @@
     </v-tabs>
     <v-tabs-items v-model="graphTab">
       <v-tab-item>
-        <apexchart width="100%" height="400px" type="bar" :options="options" :series="series"></apexchart>
+        <apexchart :options="options" :series="series" height="400px" type="bar" width="100%"></apexchart>
       </v-tab-item>
       <v-tab-item>
         <v-layout>
-          <v-flex xs8>
-            <apexchart width="100%" height="400px" type="boxPlot" :options="optionsSectors" :series="seriesSectors"></apexchart>
+          <v-flex style="text-align: center" xs8>
+            <div style="position: relative; top: 30px">
+              Exercice {{ sectors[perimeter].exercice }}
+            </div>
+            <br/>
+            <apexchart :options="optionsSectors" :series="seriesSectors" height="400px" type="boxPlot"
+                       width="100%"></apexchart>
+            <br/>
           </v-flex>
           <v-flex xs4>
             <v-switch
-                v-on:change="fakeResize"
                 v-model="withCA"
                 :label="'Comparer aux entreprises ayant un chiffre d\'affaires ' + libelleCA"
+                v-on:change="fakeResize"
             ></v-switch>
-            Cette comparaison se base sur les {{ sectors[perimeter].cohorte }} bilans déposés publiquement pour l'exercice {{ sectors[perimeter].exercice }}
+            Cette comparaison se base sur les {{ sectors[perimeter].cohorte }} bilans déposés publiquement pour
+            l'exercice {{ sectors[perimeter].exercice }}
             dans le secteur d'activité de niveau {{ sectors[perimeter].classeNAF.length }} {{ libelleActivite }}
-            <div width="100%" style="padding-top: 5px; text-align: center;">
+            <div style="padding-top: 5px; text-align: center;" width="100%">
               légende<br/>
-              <img width="90%" src="@/assets/boxPlot.png"/>
+              <img src="@/assets/boxPlot.png" width="90%"/>
             </div>
           </v-flex>
         </v-layout>
@@ -42,87 +49,7 @@ export default {
     return {
       graphTab: 0,
       withCA: true,
-      optionsSectors: {
-        states: {
-          active: {
-            filter: {
-              type: 'none' /* none, lighten, darken */
-            }
-          }
-        },
-        chart: {
-          fontFamily: 'Oswald',
-          toolbar: {
-            show: false,
-          },
-          type: 'bar',
-          width: '50%',
-        },
-        colors: ['#008FFB', '#FEB019'],
-        tooltip: {
-          custom({seriesIndex, dataPointIndex, w}) {
-            var values = [{
-              val: w.globals.seriesCandleO[0][dataPointIndex],
-              libelle: '10<sup>e</sup> centile'
-            }, {
-              val: w.globals.seriesCandleH[0][dataPointIndex],
-              libelle: '25<sup>e</sup> centile'
-            }, {
-              val: w.globals.seriesCandleM[0][dataPointIndex],
-              libelle: 'médiane'
-            }, {
-              val: w.globals.seriesCandleL[0][dataPointIndex],
-              libelle: '75<sup>e</sup> centile'
-            }, {
-              val: w.globals.seriesCandleC[0][dataPointIndex],
-              libelle: '90<sup>e</sup> centile'
-            }, {
-              val: w.globals.series[1][dataPointIndex],
-              libelle: 'entreprise'
-            }].filter(v => v.val).sort((v1, v2) => (v1.val > v2.val) ? -1 : 1)
-            return '<div class="apexcharts-tooltip-candlestick">' +
-                '<table>' +
-                values.map(v => {
-                  return '<tr><td>' + v.libelle + '</td><td style="text-align: right">' + Math.round(v.val*10)/10 + ' jours</td></tr>'
-                }).join('') +
 
-                '</table>'
-          }
-        },
-        xaxis: {
-          labels: {
-            style: {
-              fontSize: '13px',
-            }
-          }
-        },
-        legend: {
-          show: false
-        },
-        plotOptions: {
-          boxPlot: {
-            colors: {
-              upper: '#13d8aa',
-              lower: '#33b2df'
-            }
-          },
-          bar: {
-            columnWidth: '40%',
-          },
-        },
-        theme: {
-          palette: 'palette5',
-        },
-        yaxis: {
-          tickAmount: 7,
-          labels: {
-            style: {
-              fontSize: '13px',
-            },
-            formatter: this.joursAxisFormatter
-          }
-        },
-      },
       options: {
         states: {
           active: {
@@ -158,7 +85,7 @@ export default {
         },
         labels: [
           ['BFR exploitation sur CA'],
-          ['Rotation des','stocks'],
+          ['Rotation des', 'stocks'],
           ['Crédit fournisseurs'],
           ['Crédit clients'],
         ],
@@ -192,8 +119,44 @@ export default {
     },
   },
   computed: {
+    minSectors() {
+      return Math.floor(
+          Math.min(
+              this.sectors[0].gestion.poidsBfrExploitationSurCAJours[0],
+              this.sectors[0].gestion.rotationDesStocks[0],
+              this.sectors[0].gestion.creditClients[0],
+              this.sectors[0].gestion.creditFournisseurs[0],
+              this.sectors[1].gestion.poidsBfrExploitationSurCAJours[0],
+              this.sectors[1].gestion.rotationDesStocks[0],
+              this.sectors[1].gestion.creditClients[0],
+              this.sectors[1].gestion.creditFournisseurs[0],
+              this.ratios[0].gestion.poidsBfrExploitationSurCAJours,
+              this.ratios[0].gestion.rotationDesStocks,
+              this.ratios[0].gestion.creditClients,
+              this.ratios[0].gestion.creditFournisseurs,
+          ) / 5
+      ) * 5 - 5
+    },
+    maxSectors() {
+      return Math.ceil(
+          Math.max(
+              this.sectors[0].gestion.poidsBfrExploitationSurCAJours[4],
+              this.sectors[0].gestion.rotationDesStocks[4],
+              this.sectors[0].gestion.creditClients[4],
+              this.sectors[0].gestion.creditFournisseurs[4],
+              this.sectors[1].gestion.poidsBfrExploitationSurCAJours[4],
+              this.sectors[1].gestion.rotationDesStocks[4],
+              this.sectors[1].gestion.creditClients[4],
+              this.sectors[1].gestion.creditFournisseurs[4],
+              this.ratios[0].gestion.poidsBfrExploitationSurCAJours,
+              this.ratios[0].gestion.rotationDesStocks,
+              this.ratios[0].gestion.creditClients,
+              this.ratios[0].gestion.creditFournisseurs,
+          ) / 5
+      ) * 5 + 5
+    },
     perimeter() {
-      return (this.withCA)?0:1
+      return (this.withCA) ? 0 : 1
     },
     libelleActivite() {
       const niveau = this.sectors[this.perimeter].classeNAF.length
@@ -222,20 +185,22 @@ export default {
       }
     },
     seriesSectors() {
-      if (this.sectors == []) {return [{type: 'boxPlot', data: []}, {type:''}]}
+      if (this.sectors == []) {
+        return [{type: 'boxPlot', data: []}, {type: ''}]
+      }
       return [
         {
           type: 'boxPlot',
           data: [{
             x: "BFR Exploitation",
             y: this.sectors[this.perimeter].gestion.poidsBfrExploitationSurCAJours,
-          },{
+          }, {
             x: "Rotation des stocks",
             y: this.sectors[this.perimeter].gestion.rotationDesStocks,
-          },{
+          }, {
             x: "Crédit Clients",
             y: this.sectors[this.perimeter].gestion.creditClients,
-          },{
+          }, {
             x: "Crédit Fournisseur",
             y: this.sectors[this.perimeter].gestion.creditFournisseurs,
           }]
@@ -245,37 +210,124 @@ export default {
             {
               x: "BFR Exploitation",
               y: this.ratios[0].gestion.poidsBfrExploitationSurCAJours,
-            },{
+            }, {
               x: "Rotation des stocks",
               y: this.ratios[0].gestion.rotationDesStocks
-            },{
+            }, {
               x: "Crédit Clients",
               y: this.ratios[0].gestion.creditClients,
-            },{
+            }, {
               x: "Crédit Fournisseur",
               y: this.ratios[0].gestion.creditFournisseurs,
             },
-          ]}
+          ]
+        }
       ]
     },
     series() {
-      if (this.ratios == null) {return []}
+      if (this.ratios == null) {
+        return []
+      }
       return this.ratios
-          .slice(0,4)
-          .sort((e1, e2) => (e1.dateClotureExercice.getTime() > e2.dateClotureExercice.getTime())?1:-1)
+          .slice(0, 4)
+          .sort((e1, e2) => (e1.dateClotureExercice.getTime() > e2.dateClotureExercice.getTime()) ? 1 : -1)
           .map((exercice) => {
-        return {
-          name: exercice.exercice,
-          data: [
-            exercice.gestion.poidsBfrExploitationSurCAJours,
-            exercice.gestion.rotationDesStocks,
-            exercice.gestion.creditFournisseurs,
-            exercice.gestion.creditClients,
-          ]
-        }
-      })
+            return {
+              name: exercice.exercice,
+              data: [
+                exercice.gestion.poidsBfrExploitationSurCAJours,
+                exercice.gestion.rotationDesStocks,
+                exercice.gestion.creditFournisseurs,
+                exercice.gestion.creditClients,
+              ]
+            }
+          })
     },
-  }
+    optionsSectors() {
+      return {
+        states: {
+          active: {
+            filter: {
+              type: 'none' /* none, lighten, darken */
+            }
+          }
+        },
+        chart: {
+          fontFamily: 'Oswald',
+          toolbar: {
+            show: false,
+          },
+          type: 'bar',
+        },
+        colors: ['#008FFB', '#FEB019'],
+        tooltip: {
+          custom({seriesIndex, dataPointIndex, w}) {
+            var values = [{
+              val: w.globals.seriesCandleO[0][dataPointIndex],
+              libelle: '10<sup>e</sup> centile'
+            }, {
+              val: w.globals.seriesCandleH[0][dataPointIndex],
+              libelle: '25<sup>e</sup> centile'
+            }, {
+              val: w.globals.seriesCandleM[0][dataPointIndex],
+              libelle: 'médiane'
+            }, {
+              val: w.globals.seriesCandleL[0][dataPointIndex],
+              libelle: '75<sup>e</sup> centile'
+            }, {
+              val: w.globals.seriesCandleC[0][dataPointIndex],
+              libelle: '90<sup>e</sup> centile'
+            }, {
+              val: w.globals.series[1][dataPointIndex],
+              libelle: 'entreprise'
+            }].filter(v => v.val).sort((v1, v2) => (v1.val > v2.val) ? -1 : 1)
+            return '<div class="apexcharts-tooltip-candlestick">' +
+                '<table>' +
+                values.map(v => {
+                  return '<tr><td>' + v.libelle + '</td><td style="text-align: right">' + Math.round(v.val * 10) / 10 + ' jours</td></tr>'
+                }).join('') +
+
+                '</table>'
+          }
+        },
+        xaxis: {
+          labels: {
+            style: {
+              fontSize: '13px',
+            }
+          }
+        },
+        legend: {
+          show: false
+        },
+        plotOptions: {
+          boxPlot: {
+            colors: {
+              upper: '#13d8aa',
+              lower: '#33b2df'
+            }
+          },
+          bar: {
+            columnWidth: '40%',
+          },
+        },
+        theme: {
+          palette: 'palette5',
+        },
+        yaxis: {
+          min: this.minSectors,
+          max: this.maxSectors,
+          tickAmount: 7,
+          labels: {
+            style: {
+              fontSize: '13px',
+            },
+            formatter: this.joursAxisFormatter
+          }
+        },
+      }
+    },
+  },
 }
 
 </script>

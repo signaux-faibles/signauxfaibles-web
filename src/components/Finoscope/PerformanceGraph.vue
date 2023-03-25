@@ -55,7 +55,6 @@
         </v-layout>
       </v-tab-item>
     </v-tabs-items>
-
   </div>
 </template>
 
@@ -98,7 +97,6 @@ export default {
             show: false,
           },
           type: 'bar',
-          width: '50%',
         },
         dataLabels: {
           enabled: false,
@@ -320,7 +318,6 @@ export default {
             show: false,
           },
           type: 'bar',
-          width: '50%',
         },
         colors: ['#008FFB', '#FEB019'],
         tooltip: {
