@@ -24,7 +24,8 @@
             <v-switch
                 v-model="withCA"
                 :label="'Comparer aux entreprises ayant un chiffre d\'affaires ' + libelleCA"
-                v-on:change="fakeResize"
+                @click="trackMatomoEvent('finoscope', 'solvabilite_tresorerie_graph_switch_sector_', siren)"
+                @change="fakeResize"
             ></v-switch>
             Cette comparaison se base sur les {{ sectors[perimeter].cohorte }} bilans déposés publiquement pour
             l'exercice {{ sectors[perimeter].exercice }}

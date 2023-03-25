@@ -42,7 +42,8 @@
             <v-switch
                 v-model="withCA"
                 :label="'Comparer aux entreprises ayant un chiffre d\'affaires ' + libelleCA"
-                v-on:change="fakeResize"
+                @change="fakeResize"
+                @click="trackMatomoEvent('finoscope', 'performance_graph_switch_sector', siren)"
             ></v-switch>
             Cette comparaison se base sur les {{ sectors[perimeter].cohorte }} bilans déposés publiquement pour
             l'exercice {{ sectors[perimeter].exercice }}
