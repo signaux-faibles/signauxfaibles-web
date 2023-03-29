@@ -7,7 +7,7 @@
    viewBox="0 0 210 297"
    version="1.1"
    id="svg5"
-   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
    sodipodi:docname="boxPlot.svg"
    inkscape:export-filename="/home/christophe/Projects/signauxfaibles-web/src/assets/boxPlot.png"
    inkscape:export-xdpi="109.91321"
@@ -27,11 +27,11 @@
      inkscape:pagecheckerboard="0"
      inkscape:document-units="mm"
      showgrid="false"
-     inkscape:zoom="2.9433782"
-     inkscape:cx="267.37984"
-     inkscape:cy="429.94814"
-     inkscape:window-width="3828"
-     inkscape:window-height="2119"
+     inkscape:zoom="2.0812827"
+     inkscape:cx="279.87548"
+     inkscape:cy="378.1322"
+     inkscape:window-width="3840"
+     inkscape:window-height="2160"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
@@ -49,7 +49,8 @@
     <sodipodi:guide
        position="65.850816,189.57927"
        orientation="1,0"
-       id="guide425970" />
+       id="guide425970"
+       inkscape:locked="false" />
   </sodipodi:namedview>
   <defs
      id="defs2">
@@ -437,18 +438,18 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;line-height:1.15;font-family:'Saira Condensed';-inkscape-font-specification:'Saira Condensed, ';fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
-       x="64.031891"
-       y="109.47369"
+       x="58.994106"
+       y="110.00124"
        id="text6959-09"><tspan
          sodipodi:role="line"
          id="tspan6957-7"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;font-family:'Saira Condensed';-inkscape-font-specification:'Saira Condensed, ';text-align:end;text-anchor:end;stroke-width:0.264583"
-         x="64.031891"
-         y="109.47369">Valeur pour </tspan><tspan
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.23333px;font-family:'Saira Condensed';-inkscape-font-specification:'Saira Condensed, ';text-align:end;text-anchor:end;stroke-width:0.264583"
+         x="58.994106"
+         y="110.00124">Valeur pour </tspan><tspan
          sodipodi:role="line"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;font-family:'Saira Condensed';-inkscape-font-specification:'Saira Condensed, ';text-align:end;text-anchor:end;stroke-width:0.264583"
-         x="64.031891"
-         y="114.34202"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.23333px;font-family:'Saira Condensed';-inkscape-font-specification:'Saira Condensed, ';text-align:end;text-anchor:end;stroke-width:0.264583"
+         x="58.994106"
+         y="114.86957"
          id="tspan396826">l'entreprise consultée</tspan></text>
     <text
        xml:space="preserve"
@@ -629,7 +630,7 @@
        sodipodi:nodetypes="ccc" />
     <path
        style="opacity:0.875;fill:none;stroke:#c2c2c2;stroke-width:0.819926;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#TriangleInS-3-0-8)"
-       d="m 84.074478,105.66906 -18.223662,5.03059 v 0"
+       d="m 84.116967,105.35551 -23.818813,5.90155 v 0"
        id="path92816-3-8-3-9"
        sodipodi:nodetypes="ccc" />
     <text
