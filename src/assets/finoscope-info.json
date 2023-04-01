@@ -1,0 +1,83 @@
+[
+  {
+    "id":"chiffreDAffaires",
+    "title": "Chiffres d'affaires",
+    "definition": "Le Chiffre d'affaires (CA) indique le niveau d'activité d'une entreprise sur une période donnée.",
+    "link": "https://signaux-faibles.gitbook.io/guide-dutilisation-et-faq/consultation/ratios-financiers/les-principes-de-la-comptabilite#le-chiffre-daffaires"
+  },  {
+    "id": "margeCommerciale",
+    "title": "Marge commerciale",
+    "definition": "La marge commerciale permet de mesurer la capacité de l'entreprise à dégager des profits.",
+    "link": "https://signaux-faibles.gitbook.io/guide-dutilisation-et-faq/consultation/ratios-financiers/les-principes-de-la-comptabilite#la-marge-commerciale-ou-marge-brute"
+  },  {
+    "id": "ebe",
+    "title": "Excédent brut d'exploitation (EBE)",
+    "definition": "L'excédent brut d'exploitation exprime la capacité d'une entreprise à générer des ressources de trésorerie grâce à son exploitation.",
+    "link": "https://signaux-faibles.gitbook.io/guide-dutilisation-et-faq/consultation/ratios-financiers/les-principes-de-la-comptabilite#lexcedent-brut-dexploitation-ebe"
+  },  {
+    "id": "ebit",
+    "title": "Résultat d'exploitation",
+    "definition": "Le résultat d'exploitation mesure la capacité de l'entreprise à générer des ressources avec son activité principale, sans prendre en compte les éléments financiers ni exceptionnels.",
+    "link": "https://signaux-faibles.gitbook.io/guide-dutilisation-et-faq/consultation/ratios-financiers/les-principes-de-la-comptabilite#lexcedent-brut-dexploitation-ebe"
+  },  {
+    "id": "resultatNet",
+    "title": "Résultat net",
+    "definition": "Le résultat net caractérise l'enrichissement ou l'appauvrissement de l'entreprise au cours d'une période considérée.",
+    "link": "https://signaux-faibles.gitbook.io/guide-dutilisation-et-faq/consultation/ratios-financiers/les-principes-de-la-comptabilite#le-resultat-net"
+  },  {
+    "id": "tauxDEndettement",
+    "title": "Taux d'endettement",
+    "definition": "Cet indicateur mesure le niveau d'endettement de l'entreprise par rapport à ses capitaux propres.",
+    "link": "https://signaux-faibles.gitbook.io/guide-dutilisation-et-faq/consultation/ratios-financiers/taux-dendettement"
+  },  {
+    "id": "autonomieFinanciere",
+    "title": "Autonomie financière",
+    "definition": "L'autonomie financière mesure la solidité de la structure financière.",
+    "link": "https://signaux-faibles.gitbook.io/guide-dutilisation-et-faq/consultation/ratios-financiers/autonomie-financiere"
+  },  {
+    "id": "ratioDeVetuste",
+    "title": "Ratio de vétusté",
+    "definition": "Le ratio de vétusté mesure le niveau d'usure de l'appareil productif.",
+    "link": "https://signaux-faibles.gitbook.io/guide-dutilisation-et-faq/consultation/ratios-financiers/ratio-de-vetuste"
+  },  {
+    "id": "cafSurCA",
+    "title": "Capacité d'autofinancement / CA",
+    "definition": "La capacité d'autofinancement / CA mesure la capacité d'une entreprise à investir, rembourser ses dettes financières ou verser des dividendes à ses actionnaires.",
+    "link": "https://signaux-faibles.gitbook.io/guide-dutilisation-et-faq/consultation/ratios-financiers/capacite-dautofinancement-caf-sur-ca"
+  },  {
+    "id": "capaciteDeRemboursement",
+    "title": "Capacité de remboursement",
+    "definition": "La capacité de remboursement mesure la durée théorique de remboursement des dettes financières.",
+    "link": "https://signaux-faibles.gitbook.io/guide-dutilisation-et-faq/consultation/ratios-financiers/capacite-de-remboursement-en-exercices-comptables"
+  },  {
+    "id": "ratioDeLiquidite",
+    "title": "Ratio de liquidité",
+    "definition": "Le ratio de liquidité mesure la capacité d'une entreprise à régler ses dettes arrivant à échéance.",
+    "link": "https://signaux-faibles.gitbook.io/guide-dutilisation-et-faq/consultation/ratios-financiers/ratio-de-liquidite"
+  },  {
+    "id": "poidsBfrExploitationSurCAPourcent",
+    "title": "Besoin fonds de roulement exploitation / CA (%)",
+    "definition": "Le BFR / CA mesure le besoin de trésorerie généré par le décalage entre les décaissements et les encaissements liés à l'exploitation courante en pourcentage du chiffre d'affaire.",
+    "link": "https://signaux-faibles.gitbook.io/guide-dutilisation-et-faq/consultation/ratios-financiers/poids-besoin-en-fonds-de-roulement-bfr-exploitation-sur-ca"
+  },  {
+    "id": "poidsBfrExploitationSurCAJours",
+    "title": "Besoin fonds de roulement exploitation / CA (J)",
+    "definition": "Le BFR / CA mesure le besoin de trésorerie généré par le décalage entre les décaissements et les encaissements liés à l'exploitation courante en jours projetés sur une année de 365 jours.",
+    "link": "https://signaux-faibles.gitbook.io/guide-dutilisation-et-faq/consultation/ratios-financiers/poids-bfr-exploitation-sur-le-ca-jours"
+  },  {
+    "id": "rotationDesStocks",
+    "title": "Rotation des stocks",
+    "definition": "Cet indicateur mesure la durée moyenne pendant laquelle un produit est conservé en stock avant d’être vendu.",
+    "link": "https://signaux-faibles.gitbook.io/guide-dutilisation-et-faq/consultation/ratios-financiers/rotation-des-stocks-jours"
+  },  {
+    "id": "creditClients",
+    "title": "Crédit clients",
+    "definition": "Cet indicateur mesure la durée moyenne de règlement par les clients après la facturation.",
+    "link": "https://signaux-faibles.gitbook.io/guide-dutilisation-et-faq/consultation/ratios-financiers/credit-clients-jours"
+  },  {
+    "id": "creditFournisseurs",
+    "title": "Crédit Fournisseurs",
+    "definition": "Cet indicateur mesure la durée moyenne de règlement aux fournisseurs après l’achat.",
+    "link": "https://signaux-faibles.gitbook.io/guide-dutilisation-et-faq/consultation/ratios-financiers/credit-fournisseurs-jours"
+  }
+]

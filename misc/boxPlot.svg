@@ -1,0 +1,646 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   sodipodi:docname="boxPlot.svg"
+   inkscape:export-filename="/home/christophe/Projects/signauxfaibles-web/src/assets/boxPlot.png"
+   inkscape:export-xdpi="109.91321"
+   inkscape:export-ydpi="109.91321"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="2.0812827"
+     inkscape:cx="279.87548"
+     inkscape:cy="378.1322"
+     inkscape:window-width="3840"
+     inkscape:window-height="2160"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1"
+     inkscape:snap-perpendicular="true"
+     inkscape:snap-tangential="true"
+     showguides="true"
+     inkscape:guide-bbox="true"
+     inkscape:showpageshadow="0"
+     inkscape:deskcolor="#d1d1d1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid1010"
+       snapvisiblegridlinesonly="true" />
+    <sodipodi:guide
+       position="65.850816,189.57927"
+       orientation="1,0"
+       id="guide425970"
+       inkscape:locked="false" />
+  </sodipodi:namedview>
+  <defs
+     id="defs2">
+    <rect
+       x="95.658864"
+       y="189.10082"
+       width="157.13688"
+       height="397.3476"
+       id="rect422138" />
+    <marker
+       style="overflow:visible"
+       id="TriangleInS"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="TriangleInS"
+       inkscape:isstock="true">
+      <path
+         transform="scale(-0.2)"
+         style="fill-rule:evenodd;fill:context-stroke;stroke:context-stroke;stroke-width:1.0pt"
+         d="M 5.77,0.0 L -2.88,5.0 L -2.88,-5.0 L 5.77,0.0 z "
+         id="path93545" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="Arrow2Mstart"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="Arrow2Mstart"
+       inkscape:isstock="true">
+      <path
+         transform="scale(0.6) translate(0,0)"
+         d="M 8.7185878,4.0337352 L -2.2072895,0.016013256 L 8.7185884,-4.0017078 C 6.9730900,-1.6296469 6.9831476,1.6157441 8.7185878,4.0337352 z "
+         style="stroke:context-stroke;fill-rule:evenodd;fill:context-stroke;stroke-width:0.62500000;stroke-linejoin:round"
+         id="path93430" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="DotS"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="DotS"
+       inkscape:isstock="true">
+      <path
+         transform="scale(0.2) translate(7.4, 1)"
+         style="fill-rule:evenodd;fill:context-stroke;stroke:context-stroke;stroke-width:1.0pt"
+         d="M -2.5,-1.0 C -2.5,1.7600000 -4.7400000,4.0 -7.5,4.0 C -10.260000,4.0 -12.5,1.7600000 -12.5,-1.0 C -12.5,-3.7600000 -10.260000,-6.0 -7.5,-6.0 C -4.7400000,-6.0 -2.5,-3.7600000 -2.5,-1.0 z "
+         id="path93473" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="Arrow2Lstart"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="Arrow2Lstart"
+       inkscape:isstock="true">
+      <path
+         transform="scale(1.1) translate(1,0)"
+         d="M 8.7185878,4.0337352 L -2.2072895,0.016013256 L 8.7185884,-4.0017078 C 6.9730900,-1.6296469 6.9831476,1.6157441 8.7185878,4.0337352 z "
+         style="stroke:context-stroke;fill-rule:evenodd;fill:context-stroke;stroke-width:0.62500000;stroke-linejoin:round"
+         id="path93424" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="Arrow1Lstart"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="Arrow1Lstart"
+       inkscape:isstock="true">
+      <path
+         transform="scale(0.8) translate(12.5,0)"
+         style="fill-rule:evenodd;fill:context-stroke;stroke:context-stroke;stroke-width:1.0pt"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         id="path93406" />
+    </marker>
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient92581">
+      <stop
+         style="stop-color:#c2c2c2;stop-opacity:1"
+         offset="0"
+         id="stop92577" />
+      <stop
+         style="stop-color:#000000;stop-opacity:0;"
+         offset="1"
+         id="stop92579" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient92581"
+       id="linearGradient90016"
+       x1="90.676628"
+       y1="51.562065"
+       x2="90.645096"
+       y2="44.711338"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(-0.09517376)" />
+    <marker
+       style="overflow:visible"
+       id="DotS-0"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="DotS"
+       inkscape:isstock="true">
+      <path
+         transform="matrix(0.2,0,0,0.2,1.48,0.2)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="m -2.5,-1 c 0,2.76 -2.24,5 -5,5 -2.76,0 -5,-2.24 -5,-5 0,-2.76 2.24,-5 5,-5 2.76,0 5,2.24 5,5 z"
+         id="path93473-3" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="DotS-2"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="DotS"
+       inkscape:isstock="true">
+      <path
+         transform="matrix(0.2,0,0,0.2,1.48,0.2)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="m -2.5,-1 c 0,2.76 -2.24,5 -5,5 -2.76,0 -5,-2.24 -5,-5 0,-2.76 2.24,-5 5,-5 2.76,0 5,2.24 5,5 z"
+         id="path93473-0" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="TriangleInS-3"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleInS"
+       inkscape:isstock="true">
+      <path
+         transform="scale(-0.2)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path93545-2" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="TriangleInS-1"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleInS"
+       inkscape:isstock="true">
+      <path
+         transform="scale(-0.2)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path93545-9" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="TriangleInS-8"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleInS"
+       inkscape:isstock="true">
+      <path
+         transform="scale(-0.2)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path93545-6" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="TriangleInS-4"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleInS"
+       inkscape:isstock="true">
+      <path
+         transform="scale(-0.2)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path93545-5" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="TriangleInS-3-7"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleInS"
+       inkscape:isstock="true">
+      <path
+         transform="scale(-0.2)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path93545-2-5" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="TriangleInS-3-5"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleInS"
+       inkscape:isstock="true">
+      <path
+         transform="scale(-0.2)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path93545-2-6" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="TriangleInS-3-9"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleInS"
+       inkscape:isstock="true">
+      <path
+         transform="scale(-0.2)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path93545-2-1" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="TriangleInS-3-0"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleInS"
+       inkscape:isstock="true">
+      <path
+         transform="scale(-0.2)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path93545-2-9" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="TriangleInS-3-6"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleInS"
+       inkscape:isstock="true">
+      <path
+         transform="scale(-0.2)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path93545-2-0" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="TriangleInS-3-9-2"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleInS"
+       inkscape:isstock="true">
+      <path
+         transform="scale(-0.2)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path93545-2-1-6" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="TriangleInS-3-0-8"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleInS"
+       inkscape:isstock="true">
+      <path
+         transform="scale(-0.2)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path93545-2-9-7" />
+    </marker>
+  </defs>
+  <g
+     inkscape:label="Calque 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="fill:#36ddb6;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.232954;stroke-opacity:1"
+       id="rect31"
+       width="18.520834"
+       height="19.843748"
+       x="78.423454"
+       y="80.389244"
+       ry="0" />
+    <rect
+       style="fill:#51bde3;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.204635;stroke-opacity:1"
+       id="rect33"
+       width="18.52083"
+       height="18.520838"
+       x="78.423454"
+       y="100.233" />
+    <circle
+       id="path1064"
+       style="fill:#269ffb;stroke:#000000;stroke-width:0.264583"
+       cx="86.510269"
+       cy="80.370293"
+       r="0.0056643914" />
+    <circle
+       id="path1066"
+       style="fill:#269ffb;stroke:#000000;stroke-width:0.264583"
+       cx="86.510269"
+       cy="80.370293"
+       r="0.0056643914" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 87.683872,65.83716 V 80.389243 M 94.298455,65.83716 H 81.069289 m 6.614583,52.91667 v 9.26041 m 6.614583,0 c -4.395319,0 -8.772066,0 -13.229166,0"
+       id="path1107"
+       sodipodi:nodetypes="cccccccc" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;line-height:1.15;font-family:'Saira Condensed';-inkscape-font-specification:'Saira Condensed, ';fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="63.724983"
+       y="122.54741"
+       id="text6959"><tspan
+         sodipodi:role="line"
+         id="tspan6957"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;font-family:'Saira Condensed';-inkscape-font-specification:'Saira Condensed, ';text-align:end;text-anchor:end;stroke-width:0.264583"
+         x="63.724983"
+         y="122.54741">25% des entreprises</tspan><tspan
+         sodipodi:role="line"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;font-family:'Saira Condensed';-inkscape-font-specification:'Saira Condensed, ';text-align:end;text-anchor:end;stroke-width:0.264583"
+         x="63.724983"
+         y="127.41574"
+         id="tspan313860">ont une valeur inférieure</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;line-height:1.15;font-family:'Saira Condensed';-inkscape-font-specification:'Saira Condensed, ';fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="63.99662"
+       y="59.58329"
+       id="text6959-1"><tspan
+         sodipodi:role="line"
+         id="tspan6957-45"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;font-family:'Saira Condensed';-inkscape-font-specification:'Saira Condensed, ';text-align:end;text-anchor:end;stroke-width:0.264583"
+         x="63.99662"
+         y="59.58329">90% des entreprises</tspan><tspan
+         sodipodi:role="line"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;font-family:'Saira Condensed';-inkscape-font-specification:'Saira Condensed, ';text-align:end;text-anchor:end;stroke-width:0.264583"
+         x="63.99662"
+         y="64.451622"
+         id="tspan309132">ont une valeur inférieure</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;line-height:1.15;font-family:'Saira Condensed';-inkscape-font-specification:'Saira Condensed, ';fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="63.99662"
+       y="99.008919"
+       id="text6959-7"><tspan
+         sodipodi:role="line"
+         id="tspan6957-76"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;font-family:'Saira Condensed';-inkscape-font-specification:'Saira Condensed, ';text-align:end;text-anchor:end;stroke-width:0.264583"
+         x="63.99662"
+         y="99.008919">50% des entreprises</tspan><tspan
+         sodipodi:role="line"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;font-family:'Saira Condensed';-inkscape-font-specification:'Saira Condensed, ';text-align:end;text-anchor:end;stroke-width:0.264583"
+         x="63.99662"
+         y="103.87725"
+         id="tspan312340">ont une valeur inférieure</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;line-height:1.15;font-family:'Saira Condensed';-inkscape-font-specification:'Saira Condensed, ';fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="63.99662"
+       y="74.102989"
+       id="text6959-092"><tspan
+         sodipodi:role="line"
+         id="tspan6957-5"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;font-family:'Saira Condensed';-inkscape-font-specification:'Saira Condensed, ';text-align:end;text-anchor:end;stroke-width:0.264583"
+         x="63.99662"
+         y="74.102989">75% des entreprises</tspan><tspan
+         sodipodi:role="line"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;font-family:'Saira Condensed';-inkscape-font-specification:'Saira Condensed, ';text-align:end;text-anchor:end;stroke-width:0.264583"
+         x="63.99662"
+         y="78.971321"
+         id="tspan310586">ont une valeur inférieure</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;line-height:1.15;font-family:'Saira Condensed';-inkscape-font-specification:'Saira Condensed, ';fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="58.994106"
+       y="110.00124"
+       id="text6959-09"><tspan
+         sodipodi:role="line"
+         id="tspan6957-7"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.23333px;font-family:'Saira Condensed';-inkscape-font-specification:'Saira Condensed, ';text-align:end;text-anchor:end;stroke-width:0.264583"
+         x="58.994106"
+         y="110.00124">Valeur pour </tspan><tspan
+         sodipodi:role="line"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.23333px;font-family:'Saira Condensed';-inkscape-font-specification:'Saira Condensed, ';text-align:end;text-anchor:end;stroke-width:0.264583"
+         x="58.994106"
+         y="114.86957"
+         id="tspan396826">l'entreprise consultée</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;line-height:1.15;font-family:'Saira Condensed';-inkscape-font-specification:'Saira Condensed, ';fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="104.87017"
+       y="88.821594"
+       id="text6959-0"><tspan
+         sodipodi:role="line"
+         id="tspan6957-4"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;font-family:'Saira Condensed';-inkscape-font-specification:'Saira Condensed, ';stroke-width:0.264583"
+         x="104.87017"
+         y="88.821594">25% des entreprises</tspan><tspan
+         sodipodi:role="line"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;font-family:'Saira Condensed';-inkscape-font-specification:'Saira Condensed, ';stroke-width:0.264583"
+         x="104.87017"
+         y="93.689926"
+         id="tspan296466">dans cet intervalle</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;line-height:1.15;font-family:'Saira Condensed';-inkscape-font-specification:'Saira Condensed, ';fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="104.87017"
+       y="107.59999"
+       id="text6959-0-7"><tspan
+         sodipodi:role="line"
+         id="tspan6957-4-7"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;font-family:'Saira Condensed';-inkscape-font-specification:'Saira Condensed, ';stroke-width:0.264583"
+         x="104.87017"
+         y="107.59999">25% des entreprises</tspan><tspan
+         sodipodi:role="line"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;font-family:'Saira Condensed';-inkscape-font-specification:'Saira Condensed, ';stroke-width:0.264583"
+         x="104.87017"
+         y="112.46832"
+         id="tspan298028">dans cet intervalle</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;line-height:1.15;font-family:'Saira Condensed';-inkscape-font-specification:'Saira Condensed, ';fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="104.92097"
+       y="121.83346"
+       id="text6959-0-7-8"><tspan
+         sodipodi:role="line"
+         id="tspan6957-4-7-4"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;font-family:'Saira Condensed';-inkscape-font-specification:'Saira Condensed, ';stroke-width:0.264583"
+         x="104.92097"
+         y="121.83346">15% des entreprises</tspan><tspan
+         sodipodi:role="line"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;font-family:'Saira Condensed';-inkscape-font-specification:'Saira Condensed, ';stroke-width:0.264583"
+         x="104.92097"
+         y="126.70179"
+         id="tspan300796">dans cet intervalle </tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;line-height:1.15;font-family:'Saira Condensed';-inkscape-font-specification:'Saira Condensed, ';fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="104.92097"
+       y="56.272251"
+       id="text6959-0-7-8-5-7"><tspan
+         sodipodi:role="line"
+         id="tspan6957-4-7-4-00-7"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;font-family:'Saira Condensed';-inkscape-font-specification:'Saira Condensed, ';stroke-width:0.264583"
+         x="104.92097"
+         y="56.272251">10% des entreprises </tspan><tspan
+         sodipodi:role="line"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;font-family:'Saira Condensed';-inkscape-font-specification:'Saira Condensed, ';stroke-width:0.264583"
+         x="104.92097"
+         y="61.140583"
+         id="tspan292420">au-dessus de cette valeur</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;line-height:1.15;font-family:'Saira Condensed';-inkscape-font-specification:'Saira Condensed, ';fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="104.92097"
+       y="71.902657"
+       id="text6959-0-7-8-8"><tspan
+         sodipodi:role="line"
+         id="tspan6957-4-7-4-0"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;font-family:'Saira Condensed';-inkscape-font-specification:'Saira Condensed, ';stroke-width:0.264583"
+         x="104.92097"
+         y="71.902657">15% des entreprises </tspan><tspan
+         sodipodi:role="line"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;font-family:'Saira Condensed';-inkscape-font-specification:'Saira Condensed, ';stroke-width:0.264583"
+         x="104.92097"
+         y="76.770988"
+         id="tspan286202">dans cet intervalle </tspan></text>
+    <circle
+       style="fill:#deb82e;fill-opacity:1;stroke:#000000;stroke-width:0.264583;stroke-opacity:1"
+       id="path63065"
+       cx="87.72522"
+       cy="104.30437"
+       r="1.984375" />
+    <g
+       aria-label="}"
+       id="text85780"
+       style="font-size:10.5833px;stroke-width:0.264583"
+       transform="matrix(1,0,0,1.3733759,10.065787,8.114105)">
+      <path
+         d="m 88.635412,51.252681 h 0.361734 q 0.723468,0 0.940508,-0.222208 0.222208,-0.222208 0.222208,-0.961178 v -1.281572 q 0,-0.80615 0.232544,-1.173051 0.232543,-0.366902 0.806149,-0.506428 -0.573606,-0.12919 -0.806149,-0.496092 -0.232544,-0.366901 -0.232544,-1.178219 v -1.281571 q 0,-0.733803 -0.222208,-0.956011 -0.21704,-0.227376 -0.940508,-0.227376 h -0.361734 v -0.73897 h 0.325561 q 1.286739,0 1.715652,0.382404 0.434081,0.377237 0.434081,1.519282 v 1.240231 q 0,0.769976 0.279052,1.069699 0.279051,0.294554 1.012854,0.294554 h 0.320393 v 0.738971 h -0.320393 q -0.733803,0 -1.012854,0.299722 -0.279052,0.299723 -0.279052,1.080034 v 1.235063 q 0,1.142046 -0.434081,1.52445 -0.428913,0.382404 -1.715652,0.382404 h -0.325561 z"
+         id="path89816"
+         style="fill:#c2c2c2;fill-opacity:1;stroke:none" />
+    </g>
+    <g
+       aria-label="}"
+       id="text85780-1"
+       style="font-size:10.5833px;stroke-width:0.264583"
+       transform="matrix(1,0,0,1.9915538,10.065787,-3.8305614)">
+      <path
+         d="m 88.635412,51.252681 h 0.361734 q 0.723468,0 0.940508,-0.222208 0.222208,-0.222208 0.222208,-0.961178 v -1.281572 q 0,-0.80615 0.232544,-1.173051 0.232543,-0.366902 0.806149,-0.506428 -0.573606,-0.12919 -0.806149,-0.496092 -0.232544,-0.366901 -0.232544,-1.178219 v -1.281571 q 0,-0.733803 -0.222208,-0.956011 -0.21704,-0.227376 -0.940508,-0.227376 h -0.361734 v -0.73897 h 0.325561 q 1.286739,0 1.715652,0.382404 0.434081,0.377237 0.434081,1.519282 v 1.240231 q 0,0.769976 0.279052,1.069699 0.279051,0.294554 1.012854,0.294554 h 0.320393 v 0.738971 h -0.320393 q -0.733803,0 -1.012854,0.299722 -0.279052,0.299723 -0.279052,1.080034 v 1.235063 q 0,1.142046 -0.434081,1.52445 -0.428913,0.382404 -1.715652,0.382404 h -0.325561 z"
+         id="path89816-5"
+         style="fill:#c2c2c2;fill-opacity:1;stroke:none" />
+    </g>
+    <g
+       aria-label="}"
+       id="text85780-1-5"
+       style="font-size:10.5833px;stroke-width:0.264583"
+       transform="matrix(1,0,0,1.7879425,10.065787,24.758283)">
+      <path
+         d="m 88.635412,51.252681 h 0.361734 q 0.723468,0 0.940508,-0.222208 0.222208,-0.222208 0.222208,-0.961178 v -1.281572 q 0,-0.80615 0.232544,-1.173051 0.232543,-0.366902 0.806149,-0.506428 -0.573606,-0.12919 -0.806149,-0.496092 -0.232544,-0.366901 -0.232544,-1.178219 v -1.281571 q 0,-0.733803 -0.222208,-0.956011 -0.21704,-0.227376 -0.940508,-0.227376 h -0.361734 v -0.73897 h 0.325561 q 1.286739,0 1.715652,0.382404 0.434081,0.377237 0.434081,1.519282 v 1.240231 q 0,0.769976 0.279052,1.069699 0.279051,0.294554 1.012854,0.294554 h 0.320393 v 0.738971 h -0.320393 q -0.733803,0 -1.012854,0.299722 -0.279052,0.299723 -0.279052,1.080034 v 1.235063 q 0,1.142046 -0.434081,1.52445 -0.428913,0.382404 -1.715652,0.382404 h -0.325561 z"
+         id="path89816-5-4"
+         style="fill:#c2c2c2;fill-opacity:1;stroke:none" />
+    </g>
+    <g
+       aria-label="}"
+       id="text85780-7"
+       style="font-size:10.5833px;stroke-width:0.26493618;stroke-dasharray:none"
+       transform="matrix(1,0,0,1.4955725,10.160961,-12.192437)">
+      <path
+         d="m 88.540238,51.150814 h 0.361734 q 0.723468,0 0.940508,-0.252627 0.222208,-0.252626 0.222208,-1.092756 v -1.45701 q 0,-0.916506 0.232544,-1.333633 0.232543,-0.417128 0.806149,-0.575755 -0.573606,-0.146875 -0.806149,-0.564003 -0.232544,-0.417127 -0.232544,-1.339509 v -1.457008 q 0,-0.834256 -0.222208,-1.086882 -0.21704,-0.258503 -0.940508,-0.258503 h -0.361734 v -0.840129 h 0.325561 q 1.286739,0 1.715652,0.434752 0.434081,0.428878 0.434081,1.727261 v 1.41001 q 0,0.87538 0.279052,1.216133 0.279051,0.334876 1.012854,0.334876 h 0.320393 v 0.840131 h -0.320393 q -0.733803,0 -1.012854,0.340751 -0.279052,0.340753 -0.279052,1.227883 v 1.404134 q 0,1.298384 -0.434081,1.733137 -0.428913,0.434752 -1.715652,0.434752 h -0.325561 z"
+         id="path89816-6"
+         style="opacity:1;fill:url(#linearGradient90016);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.26493618;stroke-opacity:1;stroke-dasharray:none" />
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;line-height:1.15;font-family:'Saira Condensed';-inkscape-font-specification:'Saira Condensed, ';fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="63.788483"
+       y="133.03401"
+       id="text6959-3"><tspan
+         sodipodi:role="line"
+         id="tspan6957-2"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;font-family:'Saira Condensed';-inkscape-font-specification:'Saira Condensed, ';text-align:end;text-anchor:end;stroke-width:0.264583"
+         x="63.788483"
+         y="133.03401">10% des entreprises</tspan><tspan
+         sodipodi:role="line"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;font-family:'Saira Condensed';-inkscape-font-specification:'Saira Condensed, ';text-align:end;text-anchor:end;stroke-width:0.264583"
+         x="63.788483"
+         y="137.90234"
+         id="tspan314834">ont une valeur inférieure</tspan></text>
+    <g
+       aria-label="}"
+       id="text85780-1-5-3"
+       style="font-size:10.5833px;stroke-width:0.264583"
+       transform="matrix(1.0465661,0,0,1.0117653,5.9383815,75.537953)">
+      <path
+         d="m 88.635412,51.252681 h 0.361734 q 0.723468,0 0.940508,-0.222208 0.222208,-0.222208 0.222208,-0.961178 v -1.281572 q 0,-0.80615 0.232544,-1.173051 0.232543,-0.366902 0.806149,-0.506428 -0.573606,-0.12919 -0.806149,-0.496092 -0.232544,-0.366901 -0.232544,-1.178219 v -1.281571 q 0,-0.733803 -0.222208,-0.956011 -0.21704,-0.227376 -0.940508,-0.227376 h -0.361734 v -0.73897 h 0.325561 q 1.286739,0 1.715652,0.382404 0.434081,0.377237 0.434081,1.519282 v 1.240231 q 0,0.769976 0.279052,1.069699 0.279051,0.294554 1.012854,0.294554 h 0.320393 v 0.738971 h -0.320393 q -0.733803,0 -1.012854,0.299722 -0.279052,0.299723 -0.279052,1.080034 v 1.235063 q 0,1.142046 -0.434081,1.52445 -0.428913,0.382404 -1.715652,0.382404 h -0.325561 z"
+         id="path89816-5-4-6"
+         style="fill:#c2c2c2;fill-opacity:1;stroke:none" />
+    </g>
+    <path
+       style="opacity:0.875;fill:none;stroke:#c2c2c2;stroke-width:0.819926;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#TriangleInS-3-5)"
+       d="M 76.505615,79.517492 65.850816,75.605746 v 0"
+       id="path92816-3-8-2"
+       sodipodi:nodetypes="ccc" />
+    <path
+       style="opacity:0.875;fill:none;stroke:#c2c2c2;stroke-width:0.819926;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#TriangleInS-3-9)"
+       d="m 76.386913,100.34947 -10.416371,-0.0289 v 0"
+       id="path92816-3-8-27"
+       sodipodi:nodetypes="ccc" />
+    <path
+       style="opacity:0.875;fill:none;stroke:#c2c2c2;stroke-width:0.819926;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#TriangleInS-3-0)"
+       d="m 76.440971,119.41688 -10.590155,3.7946 v 0"
+       id="path92816-3-8-3"
+       sodipodi:nodetypes="ccc" />
+    <path
+       style="opacity:0.875;fill:none;stroke:#c2c2c2;stroke-width:0.855359;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#TriangleInS-3-6)"
+       d="m 78.686817,128.52733 -12.836001,5.62319 v 0"
+       id="path92816-3-8-6"
+       sodipodi:nodetypes="ccc" />
+    <path
+       style="opacity:0.875;fill:none;stroke:#c2c2c2;stroke-width:0.819926;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#TriangleInS-3-9-2)"
+       d="M 78.896246,65.093471 65.850816,61.07748 v 0"
+       id="path92816-3-8-27-1"
+       sodipodi:nodetypes="ccc" />
+    <path
+       style="opacity:0.875;fill:none;stroke:#c2c2c2;stroke-width:0.819926;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#TriangleInS-3-0-8)"
+       d="m 84.116967,105.35551 -23.818813,5.90155 v 0"
+       id="path92816-3-8-3-9"
+       sodipodi:nodetypes="ccc" />
+    <text
+       xml:space="preserve"
+       transform="scale(0.26458333)"
+       id="text422136"
+       style="fill:black;fill-opacity:1;line-height:1.25;stroke:none;font-family:sans-serif;font-style:normal;font-weight:normal;font-size:40px;white-space:pre;shape-inside:url(#rect422138)" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 66.448167,134.5168 v 0"
+       id="path426176" />
+  </g>
+</svg>

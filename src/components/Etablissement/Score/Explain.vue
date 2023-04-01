@@ -8,7 +8,7 @@
         Cette entreprise est portée à votre attention car elle présente des signes d'alerte {{ this.alert === "Alerte seuil F2"?' modérés':' importants'}} détaillés ci-dessous.<br/>
         <p/>
         <span>
-          <Gitbook target="f.a.q.#comment-sont-obtenues-les-listes-comment-fonctionne-le-modele-algorithmique"/>
+          <Gitbook target="f.a.q./les-caracteristiques-des-listes"/>
         </span>
         <ExplainConjoncturel
             :signalAugmentationUrssaf="signalAugmentationUrssaf"
@@ -184,7 +184,7 @@ export default {
     },
     signalFinancier() {
       return ((this.hasRedressement("solvabilité_faible")?1:0) +
-      (this.hasRedressement("k_propres_negatifs")?1:0) +
+      (this.hasRedressement("k_propres_négatifs")?1:0) +
       (this.hasRedressement("rentabilité_faible")?1:0) +
       (this.hasRedressement("tva_rar_elevé")?1:0)) > 1
     },

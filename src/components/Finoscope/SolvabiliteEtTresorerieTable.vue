@@ -2,54 +2,66 @@
   <div>
     <table>
       <tr>
-        <th style="min-width: 240px">Exercice (Date de clôture)</th>
+        <th>
+          Exercice (Date de clôture)
+        </th>
         <th v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
           {{ exercice.exercice }} ({{ exercice.dateClotureExercice.toLocaleDateString() }})
         </th>
       </tr>
       <tr>
         <th>
-          Besoin fonds de roulement exploitation / CA (%)
-          <Info id="poidsBfrExploitationSurCAPourcent"/>
+          Taux d'endettement
+          <Info id="tauxDEndettement"/>
         </th>
         <td v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
-          {{ printNumber(Math.round(exercice.gestion.poidsBfrExploitationSurCAJours/0.365)/10, ' %') }}
+          {{ printNumber(exercice.solvabiliteEtTresorerie.tauxDEndettement, ' %') }}
         </td>
       </tr>
       <tr>
         <th>
-          Besoin fonds de roulement exploitation / CA (jours)
-          <Info id="poidsBfrExploitationSurCAJours"/>
+          Autonomie financière
+          <Info id="autonomieFinanciere"/>
         </th>
         <td v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
-          {{ printNumber(exercice.gestion.poidsBfrExploitationSurCAJours, ' j.') }}
+          {{ printNumber(exercice.solvabiliteEtTresorerie.autonomieFinanciere, ' %') }}
         </td>
       </tr>
       <tr>
         <th>
-          Rotation des stocks
-          <Info id="rotationDesStocks"/>
+          Ratio de vétusté
+          <Info id="ratioDeVetuste"/>
         </th>
         <td v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
-          {{ printNumber(exercice.gestion.rotationDesStocks, ' j.') }}
+          {{ printNumber(exercice.solvabiliteEtTresorerie.ratioDeVetuste, ' %') }}
         </td>
       </tr>
       <tr>
         <th>
-          Crédit Clients
-          <Info id="creditClients"/>
+          Capacité d'autofinancement / CA
+          <Info id="cafSurCA"/>
         </th>
         <td v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
-          {{ printNumber(exercice.gestion.creditClients, ' j.') }}
+          {{ printNumber(exercice.solvabiliteEtTresorerie.cafSurCA, ' %') }}
+        </td>
+      </tr>
+      <tr>
+      <tr>
+        <th>
+          Capacité de remboursement
+          <Info id="capaciteDeRemboursement"/>
+        </th>
+        <td v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
+          {{ printNumber(exercice.solvabiliteEtTresorerie.capaciteDeRemboursement, '') }}
         </td>
       </tr>
       <tr>
         <th>
-          Crédit Fournisseurs
-          <Info id="creditFournisseurs"/>
+          Ratio de liquidité
+          <Info id="ratioDeLiquidite"/>
         </th>
         <td v-for="exercice in localRatios" :key="exercice.dateClotureExercice.getTime()">
-          {{ printNumber(exercice.gestion.creditFournisseurs, ' j.') }}
+          {{ printNumber(exercice.solvabiliteEtTresorerie.ratioDeLiquidite, ' %') }}
         </td>
       </tr>
     </table>
@@ -57,9 +69,10 @@
 </template>
 
 <script>
-import Info from '@/components/Finoscope/Info.vue'
+import Info from "@/components/Finoscope/Info.vue"
+
 export default {
-  name: 'GestionTable',
+  name: 'SolvabiliteEtTresorerieTable',
   components: {Info},
   props: ['ratios', 'siren'],
   computed: {
@@ -75,7 +88,7 @@ export default {
         return 'n/c'
       }
     }
-  }
+  },
 }
 </script>
 
@@ -110,5 +123,8 @@ table tr:first-child td, table tr:first-child th {
   border-bottom: 2px solid rgba(0,0,0,0.20);
   background-color: rgba(0,0,0,0.08);
   text-align: center;
+}
+.negative {
+  color: rgba(210,0,0,1);
 }
 </style>

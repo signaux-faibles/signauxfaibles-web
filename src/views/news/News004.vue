@@ -1,7 +1,7 @@
 <template>
   <v-expansion-panel>
     <v-expansion-panel-header ripple>
-      <h1>Publication de signalements — Mars 2023</h1>
+      <h1>Signalements — Mars 2023</h1>
     </v-expansion-panel-header>
     <v-expansion-panel-content>
       <v-card flat>
@@ -11,7 +11,7 @@
           <ul>
             <li>Les 3 nouveaux critères experts portant sur la santé financière de l'entreprise ont été conservés et apportent de nouveaux signalements à la faveur des nouvelles liasses disponibles.</li>
           </ul>
-          <Gitbook target="f.a.q.#listes-de-detection-le-modele-signaux-faibles"/>
+          <Gitbook target="f.a.q./les-caracteristiques-des-listes"/>
           <p/>
           <h2>Statistiques de la nouvelle liste</h2>
           <v-row>
