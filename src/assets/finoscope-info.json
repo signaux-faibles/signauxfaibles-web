@@ -3,27 +3,27 @@
     "id":"chiffreDAffaires",
     "title": "Chiffres d'affaires",
     "definition": "Le Chiffre d'affaires (CA) indique le niveau d'activité d'une entreprise sur une période donnée.",
-    "link": "https://signaux-faibles.gitbook.io/guide-dutilisation-et-faq/consultation/ratios-financiers/les-principes-de-la-comptabilite"
+    "link": "https://signaux-faibles.gitbook.io/guide-dutilisation-et-faq/consultation/ratios-financiers/les-principes-de-la-comptabilite#le-chiffre-daffaires"
   },  {
     "id": "margeCommerciale",
     "title": "Marge commerciale",
     "definition": "La marge commerciale permet de mesurer la capacité de l'entreprise à dégager des profits.",
-    "link": "https://signaux-faibles.gitbook.io/guide-dutilisation-et-faq/consultation/ratios-financiers/les-principes-de-la-comptabilite"
+    "link": "https://signaux-faibles.gitbook.io/guide-dutilisation-et-faq/consultation/ratios-financiers/les-principes-de-la-comptabilite#la-marge-commerciale-ou-marge-brute"
   },  {
     "id": "ebe",
     "title": "Excédent brut d'exploitation (EBE)",
     "definition": "L'excédent brut d'exploitation exprime la capacité d'une entreprise à générer des ressources de trésorerie grâce à son exploitation.",
-    "link": "https://signaux-faibles.gitbook.io/guide-dutilisation-et-faq/consultation/ratios-financiers/les-principes-de-la-comptabilite"
+    "link": "https://signaux-faibles.gitbook.io/guide-dutilisation-et-faq/consultation/ratios-financiers/les-principes-de-la-comptabilite#lexcedent-brut-dexploitation-ebe"
   },  {
     "id": "ebit",
     "title": "Résultat d'exploitation",
     "definition": "Le résultat d'exploitation mesure la capacité de l'entreprise à générer des ressources avec son activité principale, sans prendre en compte les éléments financiers ni exceptionnels.",
-    "link": "https://signaux-faibles.gitbook.io/guide-dutilisation-et-faq/consultation/ratios-financiers/les-principes-de-la-comptabilite"
+    "link": "https://signaux-faibles.gitbook.io/guide-dutilisation-et-faq/consultation/ratios-financiers/les-principes-de-la-comptabilite#lexcedent-brut-dexploitation-ebe"
   },  {
     "id": "resultatNet",
     "title": "Résultat net",
     "definition": "Le résultat net caractérise l'enrichissement ou l'appauvrissement de l'entreprise au cours d'une période considérée.",
-    "link": "https://signaux-faibles.gitbook.io/guide-dutilisation-et-faq/consultation/ratios-financiers/les-principes-de-la-comptabilite"
+    "link": "https://signaux-faibles.gitbook.io/guide-dutilisation-et-faq/consultation/ratios-financiers/les-principes-de-la-comptabilite#le-resultat-net"
   },  {
     "id": "tauxDEndettement",
     "title": "Taux d'endettement",
