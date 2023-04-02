@@ -1,9 +1,7 @@
 import Vue from 'vue'
-import Vuex, { ActionContext } from 'vuex'
+import Vuex from 'vuex'
 import axios from 'axios'
 import createPersistedState from 'vuex-persistedstate'
-
-const refreshRate = 60000
 
 Vue.use(Vuex)
 
@@ -34,9 +32,11 @@ const localStore = new Vuex.Store({
     procol: ['In bonis', 'Sauvegarde', 'Plan de sauvegarde'],
     expiredSession: false,
     typeSuivi: 'my-cards',
+    boardsSuivi: ['*'],
     statutSuivi: ['Suivi en cours'],
     zoneSuivi: [],
     labelsSuivi: [],
+    labelModeSuivi: true,
     currentBoard: '',
   },
   mutations: {
@@ -54,9 +54,11 @@ const localStore = new Vuex.Store({
     setSecurityConsent(state, value) { state.securityConsent = value },
     setExpiredSession(state, value) { state.expiredSession = value },
     setTypeSuivi(state, value) { state.typeSuivi = value },
+    setBoardsSuivi(state, value) { state.boardsSuivi = value },
     setStatutSuivi(state, value) { state.statutSuivi = value },
     setZoneSuivi(state, value) { state.zoneSuivi = value },
     setLabelsSuivi(state, value) { state.labelsSuivi = value },
+    setLabelModeSuivi(state, value) { state.labelModeSuivi = value },
     setCurrentBoard(state, value) { state.currentBoard = value },
   },
 })
@@ -72,7 +74,7 @@ const sessionStore = new Vuex.Store({
     batches: [] as any[],
     departements: [] as any[],
     region: [] as any[],
-    wekanConfig: {} as any,
+    kanbanConfig: {} as any,
     zone: {},
     height: 0,
     scrollTop: 0,
@@ -103,8 +105,8 @@ const sessionStore = new Vuex.Store({
       state.region = reference.regions
       state.departements = reference.departements
     },
-    updateWekanConfig(state, wekanConfig) {
-      state.wekanConfig = wekanConfig
+    updateKanbanConfig(state, kanbanConfig) {
+      state.kanbanConfig = kanbanConfig
     },
     setHeight(state, height) {
       state.height = height
@@ -151,9 +153,9 @@ const sessionStore = new Vuex.Store({
         context.commit('updateReference', reference)
       }))
     },
-    updateWekanConfig(context) {
-      axiosClient.get('/wekan/config').then((response) => {
-        context.commit('updateWekanConfig', response.data)
+    updateKanbanConfig(context) {
+      axiosClient.get('/kanban/config').then((response) => {
+        context.commit('updateKanbanConfig', response.data)
       })
     },
     setLeftDrawer(context, val) {
