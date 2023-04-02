@@ -1,7 +1,6 @@
 import PredictionWidget from '@/components/PredictionWidget.vue'
 import Toolbar from '@/components/Toolbar.vue'
 import Help from '@/components/Help.vue'
-import Label from '@/components/Follow/Label.vue'
 
 const colors = {
     white: {background: '#ffffff', front: '#000'},
@@ -33,7 +32,7 @@ const colors = {
 
 export default {
     name: 'Follow',
-    components: {PredictionWidget, Toolbar, Help, Label},
+    components: {PredictionWidget, Toolbar, Help},
     data() {
         return {
             init: true,
@@ -248,7 +247,7 @@ export default {
         zoneItems() {
             const departements = Object.entries(this.$store.state.kanbanConfig.departements)
             const swimlanes = departements.filter(
-                ([codeDepartement, boards]) => {
+                ([_, boards]) => {
                     for (const b of boards) {
                         if (this.boards.includes(b.boardID) || this.boards.includes('*')) {
                             return true
@@ -292,10 +291,10 @@ export default {
         labelItems() {
             const boards = Object
                 .entries(this.$store.state.kanbanConfig.boards)
-                .filter(([boardID, board]) => (this.boards.includes(boardID) || this.boards.includes('*')))
+                .filter(([boardID, _]) => (this.boards.includes(boardID) || this.boards.includes('*')))
             const labels = boards.reduce((m, [_, board]) => {
-                Object.entries(board.labels).forEach(([labelID, label]) => {
-                    if (label.name != '') {
+                Object.entries(board.labels).forEach(([_, label]) => {
+                    if (label.name !== '') {
                         m[label.name] = colors[label.color]
                     }
                 })
@@ -315,9 +314,9 @@ export default {
         statutItems() {
             const boards = Object
                 .entries(this.$store.state.kanbanConfig.boards)
-                .filter(([boardID, board]) => (this.boards.includes(boardID) || this.boards.includes('*')))
+                .filter(([boardID, _]) => (this.boards.includes(boardID) || this.boards.includes('*')))
             const dupItems = boards
-                .flatMap(([boardID, board]) => {
+                .flatMap(([_, board]) => {
                     return Object.values(board.lists)
                         .sort((list1, list2) => {
                             return (list1.sort < list2.sort) ? -1 : 1
