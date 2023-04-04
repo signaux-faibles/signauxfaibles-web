@@ -81,6 +81,11 @@ const sessionStore = new Vuex.Store({
     prediction: [],
     loading: false,
     newsDialog: null,
+    createCardSequence: 1,
+    createCardSwimlaneID: null,
+    createCardDialog: false,
+    createCardProblems: [],
+    createCardActions: [],
   },
   mutations: {
     setNewsDialog(state, value) {
@@ -117,6 +122,21 @@ const sessionStore = new Vuex.Store({
     setCurrentBatchKey(state, value) {
       state.currentBatchKey = value
     },
+    setCreateCardSequence(state, value) {
+      state.createCardSequence = value
+    },
+    setCreateCardSwimlaneID(state, value) {
+      state.createCardSwimlaneID = value
+    },
+    setCreateCardDialog(state, value) {
+      state.createCardDialog = value
+    },
+    setCreateCardProblems(state, value) {
+      state.createCardProblems = value
+    },
+    setCreateCardActions(state, value) {
+      state.createCardActions = value
+    },
   },
   getters: {
     batches(state) {
@@ -129,6 +149,21 @@ const sessionStore = new Vuex.Store({
     },
   },
   actions: {
+    setCreateCardSwimlaneID(context, value) {
+      context.commit('setCreateCardSwimlaneID', value)
+    },
+    setCreateCardDialog(context, value) {
+      context.commit('setCreateCardDialog', value)
+    },
+    setCreateCardSequence(context, value) {
+      context.commit('setCreateCardSequence', value)
+    },
+    setCreateCardProblems(context, value) {
+      context.commit('setCreateCardProblems', value)
+    },
+    setCreateCardActions(context, value) {
+      context.commit('setCreateCardActions', value)
+    },
     setCurrentBatchKey(context, batchKey) {
       context.commit('setCurrentBatchKey', batchKey)
     },

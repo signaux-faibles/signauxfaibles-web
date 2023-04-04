@@ -86,7 +86,7 @@
             <span v-if="cards.length==0">
               Cet établissement ne fait l'objet d'aucune carte de suivi.
             </span><br/>
-            <v-btn v-if="followed" outlined color="indigo" class="pa-2" @click="showBoardDialog()">
+            <v-btn v-if="followed" outlined color="indigo" class="pa-2" @click="showCreateCardDialog()">
               <v-icon>edit</v-icon>
               créer une carte de suivi<br/>
             </v-btn>
@@ -117,8 +117,8 @@ export default {
   props: ['boards'],
   components: { Help },
   methods: {
-    showBoardDialog() {
-      this.boardDialog = true
+    showCreateCardDialog() {
+      this.createCardDialog = true
     },
     unarchiveCard(cardId) {
       this.$axios(`/wekan/unarchive/${cardId}`).then(() => {
@@ -150,13 +150,13 @@ export default {
         return c
       })) 
     },
-    boardDialog: {
+    createCardDialog: {
       get() {
-        return this.$parent.boardDialog
+        return this.$store.state.createCardDialog
       },
-      set(val) {
-        this.$parent.boardDialog = val
-      },
+      set(value) {
+        this.$store.dispatch('setCreateCardDialog', value)
+      }
     },
   },
 }

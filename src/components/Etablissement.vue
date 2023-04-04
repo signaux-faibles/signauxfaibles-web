@@ -148,7 +148,7 @@
           </v-flex>
           <FollowDialog/>
           <UnfollowDialog/>
-          <BoardDialog v-if="wekanUser"/>
+          <NewCardDialog v-if="wekanUser && codeDepartement" :siret="siret" :code-departement="codeDepartement"/>
 
 
           <v-dialog fullscreen v-model="entrepriseDialog">
@@ -189,7 +189,7 @@ import libellesProcols from '@/assets/libelles_procols.json'
 import Boards from '@/components/Etablissement/Boards.vue'
 import FollowDialog from '@/components/Etablissement/FollowDialog.vue'
 import UnfollowDialog from '@/components/Etablissement/UnfollowDialog.vue'
-import BoardDialog from '@/components/Etablissement/BoardDialog.vue'
+import NewCardDialog from '@/components/Etablissement/NewCardDialog/NewCardDialog.vue'
 import Help from '@/components/Help.vue'
 
 export default {
@@ -197,7 +197,7 @@ export default {
   name: 'Etablissement',
   components: { Effectif, Urssaf, Help, Identite, Map,
     Commentaire, EtablissementEntreprise, Entreprise, Historique,
-    Boards, FollowDialog, UnfollowDialog, BoardDialog },
+    Boards, FollowDialog, UnfollowDialog, NewCardDialog },
   data() {
     return {
       axios: axios.create(),
@@ -209,7 +209,7 @@ export default {
       unfollowDialog: false,
       entrepriseDialog: false,
       followDialog: false,
-      boardDialog: false,
+      newCardDialog: false,
       boards: [],
       effectifClass: [10, 20, 50, 100],
       creatingCard: false,
