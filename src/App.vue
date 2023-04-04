@@ -87,11 +87,7 @@ export default {
       window.innerHeight || 0,
     )
     this.$store.dispatch('updateReference')
-    if (this.roles.includes('wekan')) {
-      this.$store.dispatch('updateWekanConfig')
-    } else {
-      this.$store.commit('updateWekanConfig', {})
-    }
+    this.$store.dispatch('updateKanbanConfig')
   },
   name: 'App',
 }
