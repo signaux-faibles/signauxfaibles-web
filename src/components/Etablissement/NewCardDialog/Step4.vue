@@ -2,11 +2,47 @@
   <div>
     <v-card>
       <v-card-title>
-        Étape 4: Récapitulatif
+        Étape 4: Choix des catégories
+
       </v-card-title>
       <v-card-text>
-        Vous êtes sur le point de créer une nouvelle carte de suivi, prenez quelques seconde pour vérifier les informations que
-        vous allez transmettre
+        Il vous est possible de fixer immédiatement des catégories qui seront appliquées sur le suivi à sa création.
+        Sélectionnez ces catégories parmis celles disponibles dans le tableau choisi:
+
+        <v-select
+            ref="labelMenu"
+            v-model="createCardLabels"
+            :items="newCardLabelItems"
+            :menu-props="{ maxHeight: 400 }"
+            label="Étiquettes"
+            multiple
+            prepend-icon="mdi-label"
+            style="margin-bottom: -30px"
+        >
+          <template v-if="createCardLabels.length > 0" v-slot:prepend-inner>
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on, attrs }">
+                <v-icon v-bind="attrs" @click="resetLabels" v-on="on">
+                  mdi-close
+                </v-icon>
+              </template>
+              Réinitialiser la sélection
+            </v-tooltip>
+          </template>
+          <template v-slot:selection="{ item, index }">
+            <v-chip :color="item.background" :text-color="item.front">
+              {{ item.text }}
+            </v-chip>
+          </template>
+          <template v-slot:item="{ active, item, attrs, on }">
+            <v-chip :color="item.background" :text-color="item.front">{{ item.text }}</v-chip>
+          </template>
+          <template v-slot:append-item>
+            <div class="text-center my-2">
+              <v-btn color="primary" @click="$refs.labelMenu.isMenuActive = false">OK</v-btn>
+            </div>
+          </template>
+        </v-select>
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
@@ -15,9 +51,8 @@
           retour
         </v-btn>
         <v-btn color="indigo" dark
-               @click="createCard">
-          Créer la carte
-          <v-icon class="ml-3" left>mdi-tray-arrow-up</v-icon>
+               @click="createCardSequence=5">
+          Étape suivante
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -25,18 +60,90 @@
 </template>
 
 <script>
+import labelColors from "@/assets/labels.json";
+import newCardConfigBase from "@/assets/new_card_config.json";
+
 export default {
   name: 'Step4',
   methods: {
-    createCard() {alert('plop')}
+    resetLabels(event) {
+      this.createCardLabels = []
+      event.stopPropagation()
+    },
   },
   computed: {
+    currentBoard() {
+      const currentSwimlaneID = this.createCardSwimlaneID
+      for (const board of Object.values(this.kanbanConfig.boards)) {
+        if (currentSwimlaneID in board.swimlanes) {
+          return board
+        }
+      }
+      return null
+    },
+    currentBoardSlug() {
+      const currentSwimlaneID = this.createCardSwimlaneID
+      for (const board of Object.values(this.kanbanConfig.boards)) {
+        if (currentSwimlaneID in board.swimlanes) {
+          return board.slug
+        }
+      }
+      return null
+    },
+    currentBoardType() {
+      const typeRegexp = /^(tableau-.*)-.*/
+      const match = this.currentBoardSlug.match(typeRegexp)
+      return (match.length>1)?match[1]:null
+    },
+    newCardConfig() {
+      return newCardConfigBase[this.currentBoardType] || []
+    },
+    newCardConfigBase() {
+      return newCardConfigBase
+    },
+    newCardLabelItems() {
+      const labels = Object.values(this.currentBoard.labels).reduce((m, label) => {
+          if (label.name !== '') {
+            m[label.name] = labelColors[label.color]
+          }
+          return m
+        }, {})
+      return Object.entries(labels).map(([name, color]) => {
+        return {
+          text: name,
+          background: color.background,
+          front: color.front,
+          value: name,
+        }
+      }).sort((label1, label2) => {
+        return (label1.background + label1.name < label2.background + label2.name) ? -1 : 1
+      })
+    },
+    createCardLabels: {
+      get() {
+        return this.$store.state.createCardLabels
+      },
+      set(value) {
+        this.$store.commit('setCreateCardLabels', value)
+      },
+    },
     createCardSequence: {
       get() {
         return this.$store.state.createCardSequence
       },
       set(value) {
         this.$store.commit('setCreateCardSequence', value)
+      },
+    },
+    kanbanConfig() {
+      return this.$store.state.kanbanConfig
+    },
+    createCardSwimlaneID: {
+      get() {
+        return this.$store.state.createCardSwimlaneID
+      },
+      set(value) {
+        this.$store.commit('setCreateCardSwimlaneID', value)
       },
     },
   },

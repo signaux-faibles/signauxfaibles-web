@@ -7,8 +7,8 @@
       <v-card-text>
         <h3>
           Quelles actions ont déjà été menées ou sont envisagées ?
-          <Help titre="Actions menées ou envisagées" :big="true">
-            <div v-html="newCardConfig.actionHelpContent" />
+          <Help :big="true" titre="Actions menées ou envisagées">
+            <div v-html="newCardConfig.actionHelpContent"/>
           </Help>
         </h3>
         <v-select
@@ -16,12 +16,12 @@
             v-model="createCardActions"
             :items="newCardConfig.actionItems"
             :menu-props="{ maxHeight: 400 }"
-            multiple
             chips
+            multiple
         >
           <template v-slot:append-item>
             <div class="text-center my-2">
-              <v-btn @click="$refs.actions.isMenuActive = false" color="primary">OK</v-btn>
+              <v-btn color="primary" @click="$refs.actions.isMenuActive = false">OK</v-btn>
             </div>
           </template>
         </v-select>
@@ -35,8 +35,7 @@
         </v-btn>
         <v-btn color="indigo" dark
                @click="createCardSequence=4">
-          Suivant
-          <v-icon class="ml-3" left>mdi-page-next</v-icon>
+          Étape suivante
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -49,13 +48,30 @@ import Help from '@/components/Help.vue'
 
 export default {
   name: 'Step3',
-  components: { Help },
+  components: {Help},
   computed: {
+    currentBoard() {
+      const currentSwimlaneID = this.createCardSwimlaneID
+      for (const board of Object.values(this.kanbanConfig.boards)) {
+        if (currentSwimlaneID in board.swimlanes) {
+          return board.slug
+        }
+      }
+      return currentSwimlaneID
+    },
+    currentBoardType() {
+      const typeRegexp = /^(tableau-.*)-.*/
+      const match = this.currentBoard.match(typeRegexp)
+      return (match.length > 1) ? match[1] : null
+    },
     newCardConfig() {
-      return this.newCardConfigBase['tableau-crp']
+      return newCardConfigBase[this.currentBoardType] || []
     },
     newCardConfigBase() {
       return newCardConfigBase
+    },
+    kanbanConfig() {
+      return this.$store.state.kanbanConfig
     },
     createCardSequence: {
       get() {
@@ -63,6 +79,22 @@ export default {
       },
       set(value) {
         this.$store.commit('setCreateCardSequence', value)
+      },
+    },
+    createCardActions: {
+      get() {
+        return this.$store.state.createCardActions
+      },
+      set(value) {
+        this.$store.commit('setCreateCardActions', value)
+      },
+    },
+    createCardSwimlaneID: {
+      get() {
+        return this.$store.state.createCardSwimlaneID
+      },
+      set(value) {
+        this.$store.commit('setCreateCardSwimlaneID', value)
       },
     },
   },

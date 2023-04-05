@@ -1,34 +1,7 @@
 import PredictionWidget from '@/components/PredictionWidget.vue'
 import Toolbar from '@/components/Toolbar.vue'
 import Help from '@/components/Help.vue'
-
-const colors = {
-    white: {background: '#ffffff', front: '#000'},
-    green: {background: '#3cb500', front: '#fff'},
-    yellow: {background: '#fad900', front: '#000'},
-    orange: {background: '#ff9f19', front: '#000'},
-    red: {background: '#eb4646', front: '#fff'},
-    purple: {background: '#a632db', front: '#fff'},
-    blue: {background: '#0079bf', front: '#fff'},
-    sky: {background: '#00c2e0', front: '#000'},
-    lime: {background: '#51e898', front: '#000'},
-    pink: {background: '#ff78cb', front: '#000'},
-    black: {background: '#4d4d4d', front: '#fff'},
-    silver: {background: '#c0c0c0', front: '#000'},
-    peachpuff: {background: '#ffdab9', front: '#000'},
-    crimson: {background: '#dc143c', front: '#fff'},
-    plum: {background: '#dda0dd', front: '#000'},
-    darkgreen: {background: '#006400', front: '#fff'},
-    slateblue: {background: '#6a5acd', front: '#fff'},
-    magenta: {background: '#ff00ff', front: '#000'},
-    gold: {background: '#ffd700', front: '#000'},
-    navy: {background: '#000080', front: '#fff'},
-    gray: {background: '#808080', front: '#fff'},
-    saddlebrown: {background: '#8b4513', front: '#fff'},
-    paleturquoise: {background: '#afeeee', front: '#000'},
-    mistyrose: {background: '#ffe4e1', front: '#000'},
-    indigo: {background: '#4b0082', front: '#fff'},
-}
+import labelColors from '@/assets/labels.json'
 
 export default {
     name: 'Follow',
@@ -55,7 +28,6 @@ export default {
             this.labels = []
             this.getFollowedEtablissements()
             event.stopPropagation()
-
         },
         showFollowHelp() {
             this.$refs.followHelp.clickButton()
@@ -295,7 +267,7 @@ export default {
             const labels = boards.reduce((m, [_, board]) => {
                 Object.entries(board.labels).forEach(([_, label]) => {
                     if (label.name !== '') {
-                        m[label.name] = colors[label.color]
+                        m[label.name] = labelColors[label.color]
                     }
                 })
                 return m
