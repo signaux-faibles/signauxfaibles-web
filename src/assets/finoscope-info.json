@@ -57,7 +57,7 @@
   },  {
     "id": "poidsBfrExploitationSurCAPourcent",
     "title": "Besoin fonds de roulement exploitation / CA (%)",
-    "definition": "Le BFR / CA mesure le besoin de trésorerie généré par le décalage entre les décaissements et les encaissements liés à l'exploitation courante en pourcentage du chiffre d'affaire.",
+    "definition": "Le BFR / CA mesure le besoin de trésorerie généré par le décalage entre les décaissements et les encaissements liés à l'exploitation courante en pourcentage du chiffre d'affaires.",
     "link": "https://signaux-faibles.gitbook.io/guide-dutilisation-et-faq/consultation/ratios-financiers/poids-besoin-en-fonds-de-roulement-bfr-exploitation-sur-ca"
   },  {
     "id": "poidsBfrExploitationSurCAJours",

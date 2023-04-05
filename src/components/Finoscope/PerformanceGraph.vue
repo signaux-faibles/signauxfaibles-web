@@ -216,7 +216,7 @@ export default {
             x: ["Résultat d'exploitation", "sur chiffre d'affaires"],
             y: this.sectors[this.perimeter].performance.partCaEbit
           }, {
-            x: ["Résultat net", "sur chiffre d'affaire"],
+            x: ["Résultat net", "sur chiffre d'affaires"],
             y: this.sectors[this.perimeter].performance.partCaResultatNet
           }]
         }, {
@@ -232,7 +232,7 @@ export default {
               x: ["Résultat d'exploitation", "sur chiffre d'affaires"],
               y: this.ratios[0].performance.partCaEbit,
             }, {
-              x: ["Résultat net", "sur chiffre d'affaire"],
+              x: ["Résultat net", "sur chiffre d'affaires"],
               y: this.ratios[0].performance.partCaResultatNet,
             },
           ]
@@ -253,7 +253,7 @@ export default {
               })
         },
         {
-          name: "Excédent brut d'exploitation sur chiffre d'affaire",
+          name: "Excédent brut d'exploitation sur chiffre d'affaires",
           data: [...this.ratios]
               .sort(this.sortCloture)
               .map((exercice) => {
@@ -422,7 +422,7 @@ export default {
         yaxis: [
           {
             title: {
-              text: "Chiffre d'affaire"
+              text: "Chiffre d'affaires"
             },
             labels: {
               formatter: this.euroAxisFormatter
