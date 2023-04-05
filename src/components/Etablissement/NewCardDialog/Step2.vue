@@ -3,8 +3,8 @@
     <v-card>
       <v-card-title>
         Étape 2: Problématiques de l'entreprise
+        {{ currentBoardType }}
       </v-card-title>
-    {{ typeCurrentBoard }}
       <v-card-text>
         Vous pouvez dès à présent commencer à renseigner des informations sur le suivi de cette entreprise.
         <p/>
@@ -62,13 +62,13 @@ export default {
       }
       return currentSwimlaneID
     },
-    typeCurrentBoard() {
+    currentBoardType() {
       const typeRegexp = /^(tableau-.*)-.*/
       const match = this.currentBoard.match(typeRegexp)
       return (match.length>1)?match[1]:null
     },
     newCardConfig() {
-      return newCardConfigBase[this.typeCurrentBoard]
+      return newCardConfigBase[this.currentBoardType] || []
     },
     newCardConfigBase() {
       return newCardConfigBase
@@ -90,14 +90,6 @@ export default {
       },
       set(value) {
         this.$store.commit('setCreateCardProblems', value)
-      },
-    },
-    createCardActions: {
-      get() {
-        return this.$store.state.createCardActions
-      },
-      set(value) {
-        this.$store.commit('setCreateCardActions', value)
       },
     },
     createCardSwimlaneID: {

@@ -17,6 +17,7 @@
     <Step2 v-if="createCardSequence===2"/>
     <Step3 v-if="createCardSequence===3"/>
     <Step4 v-if="createCardSequence===4"/>
+    <Step5 v-if="createCardSequence===5"/>
   </v-dialog>
 </template>
 

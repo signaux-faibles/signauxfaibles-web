@@ -66,5 +66,11 @@
       "Mise en relation"
     ],
     "actionHelpContent": "<b>Diagnostic de l'entreprise et de ses besoins</b>: Visite de l'entreprise devant permettre de repérer ses principaux besoins en RH/Formation et d'identifier les solutions possibles<br/><b>Mise en relation avec des acteurs du territoire</b>: Opérateurs (Pôle Emploi), partenaires sociaux, plateformes<br/><b>Échange et suivi de la démarche Transitions Collective</b>: prescription, suivi, bilans<br/><b>Mobilisation d’un ou plusieurs dispositifs publics</b>: AP, APLD, FNE, PRO-A, PCRH<br/><b>Mobilisation des services internes</b>: travail avec les services MUTECO (PSE/RCC), CDET, Médiateur des entreprises, CRP, inspection du travail<br/><b>Mobilisation d'outils externes</b>: outils Pôle Emploi / OPCO<br/>"
+  },
+  "tableau-eti": {
+    "problemItems": [],
+    "problemHelpContent": "",
+    "actionItems": [],
+    "actionHelpContent": ""
   }
 }

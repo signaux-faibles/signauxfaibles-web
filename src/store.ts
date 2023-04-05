@@ -86,6 +86,7 @@ const sessionStore = new Vuex.Store({
     createCardDialog: false,
     createCardProblems: [],
     createCardActions: [],
+    createCardLabels: [],
   },
   mutations: {
     setNewsDialog(state, value) {
@@ -137,6 +138,9 @@ const sessionStore = new Vuex.Store({
     setCreateCardActions(state, value) {
       state.createCardActions = value
     },
+    setCreateCardLabels(state, value) {
+      state.createCardLabels = value
+    },
   },
   getters: {
     batches(state) {
@@ -163,6 +167,9 @@ const sessionStore = new Vuex.Store({
     },
     setCreateCardActions(context, value) {
       context.commit('setCreateCardActions', value)
+    },
+    setCreateCardLabels(context, value){
+      context.commit('setCreateCardLabels', value)
     },
     setCurrentBatchKey(context, batchKey) {
       context.commit('setCurrentBatchKey', batchKey)
