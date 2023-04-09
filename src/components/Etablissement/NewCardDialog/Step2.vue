@@ -2,14 +2,11 @@
   <div>
     <v-card>
       <v-card-title>
-        Étape 2: Problématiques de l'entreprise
-        {{ currentBoardType }}
+        Problémes identifiés de cette entreprise
       </v-card-title>
       <v-card-text>
-        Vous pouvez dès à présent commencer à renseigner des informations sur le suivi de cette entreprise.
-        <p/>
         <h3>
-          Quelles problématiques avez vous identifiées à ce stade ?
+          Faites votre choix parmis ces propositions
           <Help titre="Problématiques identifiées" :big="true">
             <div v-html="newCardConfig.problemHelpContent" />
           </Help>
@@ -28,6 +25,12 @@
             </div>
           </template>
         </v-select>
+        <v-alert
+            colored-border
+            type="info"
+        >
+          Ces informations restent modifiables à tout moment
+        </v-alert>
       </v-card-text>
 
       <v-card-actions>

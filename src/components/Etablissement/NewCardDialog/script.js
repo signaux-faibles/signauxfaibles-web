@@ -47,11 +47,11 @@ export default {
             this.boardAlertError = ''
             this.boardAlert = false
         },
-        boardFromID(boardID) {
-            return this.kanbanConfig.boards[boardID]
-        }
     },
     computed: {
+        kanbanConfig() {
+            return this.$store.state.kanbanConfig
+        },
         createCardSequence: {
             get() {
                 return this.$store.state.createCardSequence
@@ -83,23 +83,6 @@ export default {
             set(value) {
                 this.$store.commit('setCreateCardActions', value)
             }
-        },
-        kanbanConfig() {
-          return this.$store.state.kanbanConfig
-        },
-        availableSwimlanes() {
-          const swimlanes = this.kanbanConfig.departements[this.codeDepartement]
-            return swimlanes.map((s) => {
-                return {
-                    boardTitle: this.boardFromID(s.boardID).title,
-                    boardSlug: this.boardFromID(s.boardID).slug,
-                    title: this.boardFromID(s.boardID).swimlanes[s.swimlaneID].title,
-                    id: s.swimlaneID,
-                }
-            })
-        },
-        boards() {
-
         },
         // formattedDescription() {
         //     let formattedDescription = '**Difficultés :**\n'

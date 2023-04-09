@@ -2,13 +2,16 @@
   <div>
     <v-card>
       <v-card-title>
-        Étape 4: Choix des catégories
+        Catégories
 
       </v-card-title>
       <v-card-text>
-        Il vous est possible de fixer immédiatement des catégories qui seront appliquées sur le suivi à sa création.
-        Sélectionnez ces catégories parmis celles disponibles dans le tableau choisi:
-
+        <h3>
+          Dans quelles catégories situez vous cette prise en charge ?
+          <Help :big="true" titre="Actions menées ou envisagées">
+              <div>coucou</div>
+          </Help>
+        </h3>
         <v-select
             ref="labelMenu"
             v-model="createCardLabels"
@@ -43,6 +46,14 @@
             </div>
           </template>
         </v-select>
+
+        <v-alert
+            style="top: 30px"
+            colored-border
+            type="info"
+        >
+          Les catégories dépendant du tableau prise en charge, si certaines étiquettes vous semblent manquer à l'appel, vérifiez que vous avez bien sélectionné le tableau adéquat
+        </v-alert>
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
@@ -62,9 +73,11 @@
 <script>
 import labelColors from "@/assets/labels.json";
 import newCardConfigBase from "@/assets/new_card_config.json";
+import Help from "@/components/Help.vue";
 
 export default {
   name: 'Step4',
+  components: {Help},
   methods: {
     resetLabels(event) {
       this.createCardLabels = []

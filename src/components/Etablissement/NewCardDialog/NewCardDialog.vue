@@ -11,9 +11,9 @@
       >
         <v-icon>mdi-close</v-icon>
       </v-btn>
-      <v-toolbar-title>Créer une carte de suivi</v-toolbar-title>
+      <v-toolbar-title>Nouvelle prise en charge</v-toolbar-title>
     </v-toolbar>
-    <Step1 v-if="createCardSequence===1" :swimlanes="availableSwimlanes"/>
+    <Step1 v-if="createCardSequence===1" :codeDepartement="codeDepartement"/>
     <Step2 v-if="createCardSequence===2"/>
     <Step3 v-if="createCardSequence===3"/>
     <Step4 v-if="createCardSequence===4"/>
