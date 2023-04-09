@@ -2,11 +2,11 @@
   <div>
     <v-card>
       <v-card-title>
-        Étape 3: Actions à entreprendre
+        Vos actions
       </v-card-title>
       <v-card-text>
         <h3>
-          Quelles actions ont déjà été menées ou sont envisagées ?
+          Quelles actions sont menées ou envisagées ?
           <Help :big="true" titre="Actions menées ou envisagées">
             <div v-html="newCardConfig.actionHelpContent"/>
           </Help>
@@ -25,7 +25,12 @@
             </div>
           </template>
         </v-select>
-
+        <v-alert
+            colored-border
+            type="info"
+        >
+          Ces informations restent modifiables à tout moment
+        </v-alert>
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
@@ -69,6 +74,9 @@ export default {
     },
     newCardConfigBase() {
       return newCardConfigBase
+    },
+    createCardLabels() {
+      return this.$store.state.createCardLabels
     },
     kanbanConfig() {
       return this.$store.state.kanbanConfig
