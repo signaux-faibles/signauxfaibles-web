@@ -2,11 +2,11 @@
   <div>
     <v-card>
       <v-card-title>
-        Problémes identifiés de cette entreprise
+        Problèmes identifiés
       </v-card-title>
       <v-card-text>
         <h3>
-          Faites votre choix parmis ces propositions
+          Faites votre choix parmi ces propositions
           <Help titre="Problématiques identifiées" :big="true">
             <div v-html="newCardConfig.problemHelpContent" />
           </Help>

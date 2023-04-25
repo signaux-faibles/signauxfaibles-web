@@ -146,7 +146,7 @@ export default {
   props: ['prediction', 'social', 'activitePartielle', 'detteSociale'],
   components: {
     ScoreWidget,
-    Etablissement: () => import('@/components/Etablissement'),
+    Etablissement: () => import('@/components/Etablissement/Main.vue'),
     Entreprise: () => import('@/components/Entreprise'),
   },
   data() {

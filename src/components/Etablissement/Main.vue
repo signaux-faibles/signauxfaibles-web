@@ -130,7 +130,7 @@
                       </div>
                     </v-flex>
                 </v-layout>
-                <Boards v-if="wekanUser" :boards="boards"/>
+                <Cards v-if="wekanUser" :siret="siret" :denomination="denomination" :codeDepartement="sirene.codeDepartement"/>
               </v-flex>
             </v-layout>
           </v-flex>
@@ -186,7 +186,7 @@ import Historique from '@/components/Etablissement/Score/Historique.vue'
 import axios from 'axios'
 import fr from 'apexcharts/dist/locales/fr.json'
 import libellesProcols from '@/assets/libelles_procols.json'
-import Boards from '@/components/Etablissement/Boards.vue'
+import Cards from '@/components/Etablissement/Cards.vue'
 import FollowDialog from '@/components/Etablissement/FollowDialog.vue'
 import UnfollowDialog from '@/components/Etablissement/UnfollowDialog.vue'
 import NewCardDialog from '@/components/Etablissement/NewCardDialog/NewCardDialog.vue'
@@ -197,7 +197,7 @@ export default {
   name: 'Etablissement',
   components: { Effectif, Urssaf, Help, Identite, Map,
     Commentaire, EtablissementEntreprise, Entreprise, Historique,
-    Boards, FollowDialog, UnfollowDialog, NewCardDialog },
+    Cards, FollowDialog, UnfollowDialog, NewCardDialog },
   data() {
     return {
       axios: axios.create(),
@@ -241,19 +241,6 @@ export default {
         this.historique = []
         this.sirene = {}
       }) 
-    },
-    getBoards() {
-      if (this.wekanUser) {
-        this.$axios.get(`/wekan/cards/${this.siret}`).then((response) => {
-          this.boards = response.data
-          const myBoardIds =  this.boards.filter((b) => b.isMember).map((b) => b.id)
-          if (myBoardIds.length>0 && !myBoardIds.includes(this.currentBoard)) {
-            this.currentBoard = myBoardIds[0]
-          }
-        }).catch((_) => {
-          this.boards = []
-        })
-      }
     },
     closeJoinCardDialog() {
       this.joinCardDialog = false
@@ -344,7 +331,6 @@ export default {
   mounted() {
     this.getEtablissement()
     this.getLienVisiteFCE()
-    this.getBoards()
   },
   watch: {
     localSiret(val) {
@@ -414,24 +400,6 @@ export default {
           return null
         }
       }).filter(Boolean)
-    },
-    zipDianeBDF() {
-      const entreprise = (this.etablissement || {}).entreprise || {}
-      if (entreprise.bdf || entreprise.diane) {
-        const bdf = entreprise.bdf || []
-        const diane = entreprise.diane || []
-        const annees = [...new Set(bdf.map((b) => b.arrete_bilan_bdf)
-          .concat(diane.map((d) => d.arrete_bilan_diane)))].sort((a1, a2) => (a1 > a2) ? 1 : -1)
-        return annees.map((a) => {
-          return {
-            annee: a.slice(0, 10),
-            bdf: bdf.filter((b) => b.arrete_bilan_bdf === a)[0] || {},
-            diane: diane.filter((d) => d.arrete_bilan_diane === a)[0] || {},
-          }
-        })
-      } else {
-        return []
-      }
     },
     etablissementsSummary() {
       return (this.etablissement.entreprise || {}).etablissementsSummary || []

@@ -35,9 +35,10 @@ export default {
         getFollowedEtablissements() {
             this.loading = true
             if (this.wekanUser) {
-                this.$axios.post('/follow', this.params).then((response) => {
+                this.$axios.post('/kanban/follow', this.params).then((response) => {
                     if (response.status === 200) {
                         this.follow = response.data
+                        console.log(follow)
                     } else {
                         this.follow = []
                     }
@@ -119,17 +120,19 @@ export default {
         params() {
             const params = {}
             params.type = this.type
-            if (!this.statut.includes('*')) {
-                params.statut = this.statut
+            if (!this.lists.includes('*')) {
+                params.lists = this.lists
             }
             if (!this.boards.includes('*')) {
-                params.boards = this.boards
+                params.boardIDs = this.boards
             }
             if (!this.zone.includes('*')) {
                 params.zone = this.zone
             }
-            params.labelMode = this.labelMode
+
+
             if (this.labels.length > 0) {
+                params.labelMode = this.labelMode
                 params.labels = this.labels
             }
             if (this.since) {
@@ -138,7 +141,7 @@ export default {
             return params
         },
         etablissements() {
-            return this.follow.map((f) => f.etablissementSummary)
+            return this.follow
         },
         leftDrawer: {
             get() {
@@ -176,14 +179,14 @@ export default {
                 this.$localStore.commit('setBoardsSuivi', (value.includes('*')) ? ['*'] : value)
             },
         },
-        statut: {
+        lists: {
             get() {
-                const statutSuivi = this.$localStore.state.statutSuivi
-                return (statutSuivi.includes('*')) ? ['*'] : statutSuivi
+                const listsSuivi = this.$localStore.state.listsSuivi
+                return (listsSuivi.includes('*')) ? ['*'] : listsSuivi
             },
             set(value) {
                 this.$localStore.commit(
-                    'setStatutSuivi',
+                    'setListsSuivi',
                     (value.includes('*')) ? ['*'] : value
                 )
             },
@@ -283,7 +286,7 @@ export default {
                 return (label1.background + label1.name < label2.background + label2.name) ? -1 : 1
             })
         },
-        statutItems() {
+        listsItems() {
             const boards = Object
                 .entries(this.$store.state.kanbanConfig.boards)
                 .filter(([boardID, _]) => (this.boards.includes(boardID) || this.boards.includes('*')))
@@ -302,7 +305,7 @@ export default {
                 .map((item) => {
                     return {
                         text: item,
-                        disabled: (this.statut.includes('*')),
+                        disabled: (this.lists.includes('*')),
                     }
                 })
             const all = [
