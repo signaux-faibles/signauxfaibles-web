@@ -7,17 +7,17 @@
       </v-card-title>
       <v-card-text>
         <h3>
-          Dans quelles catégories situez vous cette prise en charge ?
-          <Help :big="true" titre="Actions menées ou envisagées">
-              <div>coucou</div>
-          </Help>
+          Dans quelles catégories souhaitez vous classer cette intervention ?
+<!--          <Help :big="true" titre="Actions menées ou envisagées">-->
+<!--              <div>coucou</div>-->
+<!--          </Help>-->
         </h3>
         <v-select
             ref="labelMenu"
             v-model="createCardLabels"
             :items="newCardLabelItems"
             :menu-props="{ maxHeight: 400 }"
-            label="Étiquettes"
+            label="Catégories"
             multiple
             prepend-icon="mdi-label"
             style="margin-bottom: -30px"
@@ -52,7 +52,8 @@
             colored-border
             type="info"
         >
-          Les catégories dépendant du tableau prise en charge, si certaines étiquettes vous semblent manquer à l'appel, vérifiez que vous avez bien sélectionné le tableau adéquat
+          Les catégories facilitent la classification et le suivi de vos interventions,
+            notamment par des filtres et des statistiques.
         </v-alert>
       </v-card-text>
       <v-card-actions>

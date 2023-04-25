@@ -1,12 +1,13 @@
 <template>
   <v-card>
     <v-card-title>
-      Tableau de prise en charge
+
     </v-card-title>
     <v-card-text height="300px">
-      Plusieurs tableaux de prise en charge correspondent à cet établissement, veuillez sélectionner le couloir dans lequel vous souhaitez créer la carte de suivi.
+      <h3>À quel titre souhaitez vous prendre en charge cet établissement ?</h3>
       <v-radio-group
           v-model="createCardSwimlaneID"
+          @change="resetCreateCard"
           mandatory
       >
         <v-radio v-for="swimlane in availableSwimlanes" :key="swimlane.index"
@@ -18,8 +19,7 @@
           colored-border
           type="info"
       >
-        Seuls les tableaux correspondant à l'implantation géographique de l'établissement vous sont ici présentés.
-        Le choix que vous opérez ici va définir le cercle de personnes avec lesquels vous partagez vos informations au sujet de cette entreprise.
+        Le choix que vous opérez ici définit l'ensemble des personnes avec lesquelles vous partagez les informations de suivi.
 
       </v-alert>
     </v-card-text>
@@ -39,6 +39,11 @@
     methods: {
       boardFromID(boardID) {
         return this.kanbanConfig.boards[boardID]
+      },
+      resetCreateCard() {
+        this.$store.commit('setCreateCardLabels', [])
+        this.$store.commit('setCreateCardProblems', [])
+        this.$store.commit('setCreateCardActions', [])
       }
     },
     computed: {

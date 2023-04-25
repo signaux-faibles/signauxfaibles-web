@@ -1,77 +1,174 @@
 <template>
-  <div>
-    <v-card>
-      <v-card-title>
-        Récapitulatif
-      </v-card-title>
-      <v-card-text>
-        Avant de terminer, faisons le point sur les informations que vous allez enregistrer
-        <h3>Tableau sélectionné: {{ currentBoard.title }}</h3>
-        <h3>Couloir: {{ currentSwimlane }}</h3>
-        <h3>Description: {{ createCardDescription }}</h3>
-      </v-card-text>
+    <div>
+        <v-card>
+            <v-card-title>
+                Avant de terminer, faisons le point
+            </v-card-title>
+            <v-card-text>
+                <table>
+                    <tr>
+                        <th>
+                            Tableau
+                        </th>
+                        <td>
+                            {{ currentBoard.title }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Territoire
+                        </th>
+                        <td>
+                            {{ currentSwimlane }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Catégories
+                        </th>
+                        <td>
+                            <v-chip
+                                v-for="label in createCardLabels"
+                                :id="label"
+                                :color="newCardLabelItems[label].background"
+                                :text-color="newCardLabelItems[label].front"
+                                class="ma-1"
+                            >
+                                {{ label }}
+                            </v-chip>
 
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn color="indigo" outlined
-               @click="createCardSequence=4">
-          retour
-        </v-btn>
-        <v-btn color="indigo" dark
-               @click="createCard">
-          Terminer
-        </v-btn>
-      </v-card-actions>
-    </v-card>
-  </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Description
+                        </th>
+                        <td class="description" v-html="description">
+                        </td>
+                    </tr>
+                </table>
+
+
+            </v-card-text>
+
+            <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="indigo" outlined
+                       @click="createCardSequence=4">
+                    retour
+                </v-btn>
+                <v-btn color="indigo" dark
+                       @click="createCard">
+                    Terminer
+                </v-btn>
+            </v-card-actions>
+        </v-card>
+    </div>
 </template>
 
 <script>
+import MarkdownIt from "markdown-it";
+import labelColors from "@/assets/labels.json";
+
+const md = new MarkdownIt()
+
 export default {
-  name: 'Step5',
-  methods: {
-    createCard() {alert('plop')}
-  },
-  computed: {
-    currentBoard() {
-      const currentSwimlaneID = this.createCardSwimlaneID
-      for (const board of Object.values(this.kanbanConfig.boards)) {
-        if (currentSwimlaneID in board.swimlanes) {
-          return board
+    name: 'Step5',
+    data() {
+        return {
+            customDescription: null
         }
-      }
-      return null
     },
-    currentSwimlane() {
-      return this.currentBoard.swimlanes[this.createCardSwimlaneID].title
+    methods: {
+        createCard() {
+            this.$axios.post("/kanban/card", this.params).catch(e => {
+                alert("cassé")
+            })
+        }
     },
-    kanbanConfig() {
-      return this.$store.state.kanbanConfig
+    computed: {
+        newCardLabelItems() {
+            return Object.values(this.currentBoard.labels).reduce((m, label) => {
+                if (label.name !== '') {
+                    m[label.name] = labelColors[label.color]
+                }
+                return m
+            }, {})
+        },
+        description() {
+            let lines = []
+            lines.push("### Difficultés  ")
+            this.createCardProblems.forEach((problem) => {
+                lines.push("- " + problem + "  ")
+            })
+            lines.push("### Actions  ")
+            this.createCardActions.forEach((action) => {
+                lines.push("- " + action + "  ")
+            })
+            return md.render(lines.join("\n"))
+        },
+        params() {
+          return {
+              swimlaneID: this.createCardSwimlaneID,
+              description: this.description,
+              labelIDs: this.createCardLabels
+          }
+        },
+        currentBoard() {
+            const currentSwimlaneID = this.createCardSwimlaneID
+            for (const board of Object.values(this.kanbanConfig.boards)) {
+                if (currentSwimlaneID in board.swimlanes) {
+                    return board
+                }
+            }
+            return null
+        },
+        currentSwimlane() {
+            return this.currentBoard.swimlanes[this.createCardSwimlaneID].title
+        },
+        kanbanConfig() {
+            return this.$store.state.kanbanConfig
+        },
+        createCardSequence: {
+            get() {
+                return this.$store.state.createCardSequence
+            },
+            set(value) {
+                this.$store.commit('setCreateCardSequence', value)
+            },
+        },
+        createCardProblems() {
+            return this.$store.state.createCardProblems
+        },
+        createCardActions() {
+            return this.$store.state.createCardActions
+        },
+        createCardSwimlaneID() {
+            return this.$store.state.createCardSwimlaneID
+        },
+        createCardLabels() {
+            return this.$store.state.createCardLabels
+        }
     },
-    createCardSequence: {
-      get() {
-        return this.$store.state.createCardSequence
-      },
-      set(value) {
-        this.$store.commit('setCreateCardSequence', value)
-      },
-    },
-    createCardProblems: {
-      get() {
-        return this.$store.state.createCardProblems
-      },
-      set(value) {
-        this.$store.commit('setCreateCardProblems', value)
-      },
-    },
-    createCardSwimlaneID: {
-      get() {
-        return this.$store.state.createCardSwimlaneID
-      },
-      set(value) {
-        this.$store.commit('setCreateCardSwimlaneID', value)
-      },
-    },
-  },
 }
 </script>
+
+<style scoped>
+table {
+    border-collapse: collapse;
+}
+
+th, td {
+    padding-top: 20px;
+    padding-right: 50px;
+    font-size: 20px;
+}
+th {
+    vertical-align: top;
+    text-align: left;
+    border-collapse: collapse;
+}
+td.description {
+    font-size: 15px
+}
+</style>

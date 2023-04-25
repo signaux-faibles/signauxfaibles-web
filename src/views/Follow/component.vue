@@ -87,7 +87,7 @@
               :items="boardsItems"
               :menu-props="{ maxHeight: 400 }"
               chips
-              label="Tableau de suivi"
+              label="Tableaux de suivi"
               multiple
               prepend-icon="fab fa-trello"
               @change="getFollowedEtablissements"
@@ -99,7 +99,7 @@
             </template>
             <template v-slot:append-item>
               <div class="text-center my-2">
-                <v-btn color="primary" @click="$refs.statutMenu.isMenuActive = false">OK</v-btn>
+                <v-btn color="primary" @click="$refs.listsMenu.isMenuActive = false">OK</v-btn>
               </div>
             </template>
           </v-select>
@@ -109,7 +109,7 @@
           <v-select
               v-model="zone"
               :items="zoneItems"
-              label="Zones Géographiques"
+              label="Départements"
               multiple
               prepend-icon="mdi-map-marker"
               @change="getFollowedEtablissements"
@@ -124,13 +124,13 @@
         <v-divider class="mb-3"/>
         <div class="mt-2" style="display: flex; flex-direction: column; vertical-align: middle; padding: 0 15px;">
           <v-select
-              ref="statutMenu"
-              v-model="statut"
+              ref="listsMenu"
+              v-model="lists"
               :disabled="type === 'no-card'"
-              :items="statutItems"
+              :items="listsItems"
               :menu-props="{ maxHeight: 400 }"
               chips
-              label="Statut du suivi"
+              label="Statut"
               multiple
               prepend-icon="mdi-playlist-check"
               @change="getFollowedEtablissements"
@@ -142,7 +142,7 @@
             </template>
             <template v-slot:append-item>
               <div class="text-center my-2">
-                <v-btn color="primary" @click="$refs.statutMenu.isMenuActive = false">OK</v-btn>
+                <v-btn color="primary" @click="$refs.listsMenu.isMenuActive = false">OK</v-btn>
               </div>
             </template>
           </v-select>
@@ -193,11 +193,11 @@
                 @change="getFollowedEtablissements"
             >
               <v-radio
-                  :value="true"
+                  value="and"
                   label="Toutes les étiquettes"
               />
               <v-radio
-                  :value="false"
+                  value="or"
                   label="Au moins une étiquette"
               />
             </v-radio-group>
@@ -315,11 +315,6 @@
         </div>
       </v-flex>
     </v-layout>
-    <!--    <v-snackbar v-if="wekanUser" v-model="snackbar" :bottom="true" :timeout="-1">-->
-    <!--      Le suivi d'établissements a beaucoup évolué !-->
-    <!--      <v-btn color="primary" text @click="showFollowHelp()">En savoir plus</v-btn>-->
-    <!--      <v-btn icon @click="snackbar = false"><v-icon>clear</v-icon></v-btn>-->
-    <!--    </v-snackbar>-->
   </div>
 </template>
 <script src="./script.js"/>
