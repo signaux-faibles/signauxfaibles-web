@@ -142,6 +142,9 @@ export default {
     sortSectorsCA(sectors1, sectors2) {
       return (sectors1.classeCA > sectors2.classeCA)?-1:1
     },
+    filterRatios(element) {
+      return element.typeBilan == this.typeBilan
+    },
     filterSectors(element, index, array) {
       return (index == array.findIndex(a => a.classeCA != '*') || index == array.findIndex(a => a.classeCA == '*'))
     },
@@ -170,8 +173,6 @@ export default {
             }
             this.getSectors()
           })
-
-
     },
     getSectors() {
       this.axios
@@ -201,7 +202,7 @@ export default {
           exercice: fields.exercice,
           cohorte: fields.cohorte,
           performance: {
-            partCaMargeCommerciale: this.quantiles(fields, 'part_ca_marge_brute'),
+            partCaMargeBrute: this.quantiles(fields, 'part_ca_marge_brute'),
             partCaEbe: this.quantiles(fields, 'part_ca_ebe'),
             partCaEbit: this.quantiles(fields, 'part_ca_ebit'),
             partCaResultatNet: this.quantiles(fields, 'part_ca_resultat_net'),
@@ -232,10 +233,11 @@ export default {
           dateClotureExercice: dateClotureExercice,
           exercice: this.exerciceFromDateCloture(dateClotureExercice),
           siren: fields.siren,
-          performance: {
+          typeBilan: fields.type_bilan,
+            performance: {
             chiffreDAffaires: this.roundAt(fields.chiffre_d_affaires, 1),
-            margeCommerciale: this.roundAt(fields.marge_brute, 1),
-            partCaMargeCommerciale: this.roundAt(fields.marge_brute/fields.chiffre_d_affaires*100, 1),
+            margeBrute: this.roundAt(fields.marge_brute, 1),
+            partCaMargeBrute: this.roundAt(fields.marge_brute/fields.chiffre_d_affaires*100, 1),
             ebe: this.roundAt(fields.ebe, 1),
             margeEBE: this.roundAt(fields.marge_ebe, 1),
             partCaEBE: this.roundAt(fields.ebe/fields.chiffre_d_affaires*100, 1),
@@ -320,12 +322,21 @@ export default {
     odsSectorsDataset() {
       return process.env.VUE_APP_ODS_SECTORS_DATASET
     },
+    typeBilan() {
+      if (this.odsRatiosPayload == null) {
+          return ''
+      }
+      return (this.odsRatiosPayload.records.filter((record) => record.record.fields.type_bilan == 'K'))?'K':
+      (this.odsRatiosPayload.records.filter((record) => record.record.fields.type_bilan == 'C'))?'C':
+      (this.odsRatiosPayload.records.filter((record) => record.record.fields.type_bilan == 'S'))?'S':''
+    },
     ratios() {
       if (this.odsRatiosPayload == null) {
         return []
       } else {
         return this.odsRatiosPayload.records
             .map(this.ratiosTransform)
+            .filter(this.filterRatios)
             .sort(this.sortRatios)
             .slice(0,5)
       }

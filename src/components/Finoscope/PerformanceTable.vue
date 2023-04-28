@@ -22,15 +22,15 @@
       </tr>
       <tr>
         <th>
-          Marge commerciale <Info id="margeCommerciale"/><br/>
+          Marge brute <Info id="margeBrute"/><br/>
           <span class="left-offset percentage">en % de CA</span></th>
         <td
             v-for="exercice in localRatios"
             :key="exercice.dateClotureExercice.getTime()"
-            :class="(exercice.performance.margeCommerciale < 0)?'negative':''"
+            :class="(exercice.performance.margeBrute < 0)?'negative':''"
         >
-          {{ printNumber(exercice.performance.margeCommerciale, ' €') }}<br/>
-          <span class="percentage">{{ printNumber(exercice.performance.partCaMargeCommerciale, ' %') }}</span>
+          {{ printNumber(exercice.performance.margeBrute, ' €') }}<br/>
+          <span class="percentage">{{ printNumber(exercice.performance.partCaMargeBrute, ' %') }}</span>
         </td>
       </tr>
       <tr>

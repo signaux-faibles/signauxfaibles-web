@@ -122,7 +122,7 @@ export default {
           }
         },
         labels: [
-          ['Marge Commerciale'],
+          ['Marge Brute'],
           ['Excédent Brut d\'Exploitation'],
           ['Résultat d\'Exploitation'],
           ['Résultat Net']
@@ -207,8 +207,8 @@ export default {
         {
           type: 'boxPlot',
           data: [{
-            x: ["Marge commerciale", "sur chiffre d'affaires"],
-            y: this.sectors[this.perimeter].performance.partCaMargeCommerciale,
+            x: ["Marge brute", "sur chiffre d'affaires"],
+            y: this.sectors[this.perimeter].performance.partCaMargeBrute,
           }, {
             x: ["Excédent brut d'exploitation", "sur chiffre d'affaires"],
             y: this.sectors[this.perimeter].performance.partCaEbe,
@@ -223,8 +223,8 @@ export default {
           type: 'scatter',
           data: [
             {
-              x: ["Marge commerciale", "sur chiffre d'affaires"],
-              y: this.ratios[0].performance.partCaMargeCommerciale,
+              x: ["Marge brute", "sur chiffre d'affaires"],
+              y: this.ratios[0].performance.partCaMargeBrute,
             }, {
               x: ["Excédent brut d'exploitation", "sur chiffre d'affaires"],
               y: this.ratios[0].performance.partCaEBE,
@@ -274,7 +274,7 @@ export default {
                   name: exercice.exercice,
                   data:
                       [
-                        exercice.performance.margeCommerciale,
+                        exercice.performance.margeBrute,
                         exercice.performance.ebe,
                         exercice.performance.ebit,
                         exercice.performance.resultatNet,
@@ -288,7 +288,7 @@ export default {
           Math.min(
               ...Object.values(this.sectors[0].performance).map(s => s[0]),
               ...Object.values(this.sectors[1].performance).map(s => s[0]),
-              this.ratios[0].performance.partCaMargeCommerciale,
+              this.ratios[0].performance.partCaMargeBrute,
               this.ratios[0].performance.partCaEBE,
               this.ratios[0].performance.partCaResultatNet,
               this.ratios[0].performance.partCaEbit,
@@ -300,7 +300,7 @@ export default {
           Math.max(
               ...Object.values(this.sectors[0].performance).map(s => s[4]),
               ...Object.values(this.sectors[1].performance).map(s => s[4]),
-              this.ratios[0].performance.partCaMargeCommerciale,
+              this.ratios[0].performance.partCaMargeBrute,
               this.ratios[0].performance.partCaEBE,
               this.ratios[0].performance.partCaResultatNet,
               this.ratios[0].performance.partCaEbit,
