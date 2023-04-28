@@ -10,7 +10,7 @@ export default {
         return {
             init: true,
             loading: false,
-            follow: [],
+            followPayload: {},
             snackbar: true,
             exportXSLXLoading: false,
             exportDOCXLoading: false,
@@ -37,10 +37,9 @@ export default {
             if (this.wekanUser) {
                 this.$axios.post('/kanban/follow', this.params).then((response) => {
                     if (response.status === 200) {
-                        this.follow = response.data
-                        console.log(follow)
+                        this.followPayload = response.data
                     } else {
-                        this.follow = []
+                        this.followPayload = {}
                     }
                 }).finally(() => {
                     this.init = false
@@ -50,9 +49,9 @@ export default {
             } else {
                 this.$axios.get('/follow').then((response) => {
                     if (response.status === 200) {
-                        this.follow = response.data
+                        this.etablissements = response.data
                     } else {
-                        this.follow = []
+                        this.etablissements = []
                     }
                 }).finally(() => {
                     this.init = false
@@ -117,6 +116,9 @@ export default {
         }
     },
     computed: {
+        etablissements() {
+          return this.followPayload.summaries || []
+        },
         params() {
             const params = {}
             params.type = this.type
@@ -139,9 +141,6 @@ export default {
                 params.since = new Date(this.since)
             }
             return params
-        },
-        etablissements() {
-            return this.follow
         },
         leftDrawer: {
             get() {

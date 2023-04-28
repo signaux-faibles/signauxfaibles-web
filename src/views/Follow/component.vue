@@ -259,7 +259,7 @@
         </v-btn-toggle>
       </v-flex>
       <v-flex grow px-2>
-        <div v-if="!loading && follow.length === 0 && init === false" id="nodata">
+        <div v-if="!loading && etablissements.length === 0 && init === false" id="nodata">
           <div v-if="wekanUser">
             Vous ne suivez aucun établissement ou aucun établissement suivi ne correspond à vos critères de
             filtrage.<br/>
@@ -270,16 +270,23 @@
             <a href="mailto:contact@signaux-faibles.beta.gouv.fr?subject=Import massif d'établissements"
                target="_blank"><code>contact@signaux-faibles.beta.gouv.fr</code></a></div>
         </div>
-        <div v-if="follow.length > 0" class="py-3 px-3 text-center">
-          <span v-if="wekanUser && type==='my-cards'"
-                class="intro">Vous suivez {{ this.follow.length | pluralizeEtablissement }} associés à des cartes dont vous êtes le créateur ou un des participants selon les filtres sélectionnés.</span>
-          <span v-if="wekanUser && type==='all-cards'" class="intro">Le ou les tableaux régionaux auxquels vous êtes habilités référencent {{
-              this.follow.length | pluralizeEtablissement
-            }} selon les filtres sélectionnés.</span>
+        <div v-if="etablissements.length > 0" class="py-3 px-3 text-center">
+          <span v-if="wekanUser && type==='my-cards'" class="intro">
+              Vous suivez {{
+                this.followPayload.stats.count | pluralizeEtablissement }}
+              associés à des cartes dont vous êtes le créateur ou un des participants selon les filtres sélectionnés.
+          </span>
+          <span v-if="wekanUser && type==='all-cards'" class="intro">
+              Le ou les tableaux régionaux auxquels vous êtes habilités référencent {{
+                this.followPayload.stats.count | pluralizeEtablissement
+              }} selon les filtres sélectionnés.
+          </span>
           <span v-if="wekanUser && type==='no-card'"
-                class="intro">Vous suivez {{ this.follow.length | pluralizeEtablissement }} associés à aucune carte de suivi ou à une carte inaccessible.</span>
+                class="intro">Vous suivez {{ this.followPayload.stats.count | pluralizeEtablissement }} associés à aucune carte de suivi ou à une carte inaccessible.
+          </span>
           <span v-if="!wekanUser"
-                class="intro">Vous suivez {{ this.follow.length | pluralizeEtablissement }}.</span><br/>
+                class="intro">Vous suivez {{ this.etablissements.length | pluralizeEtablissement }}.
+          </span><br/>
           <v-btn :dark="!exportXSLXLoading" :disabled="loading || exportXSLXLoading" :loading="exportXSLXLoading"
                  class="mr-4" color="indigo"
                  outlined @click="exportXSLX">
