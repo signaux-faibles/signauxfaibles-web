@@ -21,7 +21,9 @@
       <v-tab @click="trackMatomoEvent('finoscope', 'performance_table', siren)">Performance</v-tab>
       <v-tab @click="trackMatomoEvent('finoscope', 'solvabilite_tresorerie_table', siren)">Solvabilité et Trésorerie</v-tab>
       <v-tab @click="trackMatomoEvent('finoscope', 'gestion_table', siren)">Gestion</v-tab>
+        <v-spacer></v-spacer><v-chip class="ma-3">nature des bilans: {{ libelleTypeBilan }}</v-chip>
     </v-tabs>
+
     <v-tabs-items v-model="tab">
       <v-tab-item>
         <v-layout mt-4 wrap width="100%">
@@ -322,13 +324,18 @@ export default {
     odsSectorsDataset() {
       return process.env.VUE_APP_ODS_SECTORS_DATASET
     },
+    libelleTypeBilan() {
+        return (this.typeBilan == 'K')?'consolidés':
+        (this.typeBilan == 'C')?'complets':
+        (this.typeBilan == 'S')?'simplifiés':''
+    },
     typeBilan() {
       if (this.odsRatiosPayload == null) {
           return ''
       }
-      return (this.odsRatiosPayload.records.filter((record) => record.record.fields.type_bilan == 'K'))?'K':
-      (this.odsRatiosPayload.records.filter((record) => record.record.fields.type_bilan == 'C'))?'C':
-      (this.odsRatiosPayload.records.filter((record) => record.record.fields.type_bilan == 'S'))?'S':''
+      return (this.odsRatiosPayload.records.filter((record) => record.record.fields.type_bilan == 'K').length > 0)?'K':
+      (this.odsRatiosPayload.records.filter((record) => record.record.fields.type_bilan == 'C').length > 0)?'C':
+      (this.odsRatiosPayload.records.filter((record) => record.record.fields.type_bilan == 'S').length > 0)?'S':''
     },
     ratios() {
       if (this.odsRatiosPayload == null) {
