@@ -29,7 +29,7 @@
             colored-border
             type="info"
         >
-          Ces informations restent modifiables à tout moment
+          Ces informations restent modifiables à tout moment.
         </v-alert>
       </v-card-text>
 

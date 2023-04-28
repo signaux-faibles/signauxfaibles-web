@@ -1,5 +1,6 @@
 <template>
     <div>
+        <NewCardDialog v-if="codeDepartement" :siret="siret" :codeDepartement="codeDepartement" :cards="cards"/>
         <h2>
             Prise en charge de l'établissement
             <Help titre="Prise en charge de l'établissement">
@@ -24,12 +25,11 @@
             </v-btn>
         </div>
         <div v-if="canCreateCard && !followed">
-            Pour déclarer une prise ne charge, veuillez suivre cet établissement.
+            Pour déclarer une prise en charge, veuillez suivre cet établissement.
         </div>
         <div v-if="!canCreateCard">
             Vous avez la possibilité de déclarer une prise en charge
         </div>
-
     </div>
 </template>
 
@@ -49,11 +49,12 @@ tbody {
 <script>
 import Help from '@/components/Help.vue'
 import CardSummary from '@/components/Etablissement/CardSummary.vue'
+import NewCardDialog from "@/components/Etablissement/NewCardDialog/NewCardDialog.vue";
 
 export default {
     name: 'Cards',
     props: ['siret', 'denomination', 'codeDepartement'],
-    components: {Help, CardSummary},
+    components: {NewCardDialog, Help, CardSummary},
     data() {
         return {
             cards: []
@@ -78,10 +79,10 @@ export default {
             }).catch((_) => {
                 this.boards = []
             })
-
         },
     },
     mounted() {
+        this.$bus.$on('create-card', this.getCardPayloads)
         this.getCardPayloads()
     },
     computed: {

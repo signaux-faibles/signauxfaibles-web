@@ -8,7 +8,7 @@ import Step5 from './Step5.vue'
 export default {
     components: {Help, Step1, Step2, Step3, Step4, Step5},
     name: 'NewCardDialog',
-    props: ['codeDepartement', 'siret'],
+    props: ['codeDepartement', 'siret', 'cards'],
     data() {
         return {
             boardAlert: false,
@@ -49,6 +49,9 @@ export default {
         },
     },
     computed: {
+        wekanUser() {
+            return this.roles.includes('wekan')
+        },
         kanbanConfig() {
             return this.$store.state.kanbanConfig
         },

@@ -29,7 +29,7 @@
                         <td>
                             <v-chip
                                 v-for="label in createCardLabels"
-                                :id="label"
+                                :key="label"
                                 :color="newCardLabelItems[label].background"
                                 :text-color="newCardLabelItems[label].front"
                                 class="ma-1"
@@ -43,7 +43,7 @@
                         <th>
                             Description
                         </th>
-                        <td class="description" v-html="description">
+                        <td class="description" v-html="markdownDescription">
                         </td>
                     </tr>
                 </table>
@@ -62,6 +62,9 @@
                     Terminer
                 </v-btn>
             </v-card-actions>
+            <v-card-actions v-if="createCardFailedError">
+                <v-alert width="100%" type="error">{{ createCardFailedError }}</v-alert>
+            </v-card-actions>
         </v-card>
     </div>
 </template>
@@ -76,13 +79,25 @@ export default {
     name: 'Step5',
     data() {
         return {
-            customDescription: null
+            createCardFailedError: null,
+            customDescription: null,
         }
     },
+    props: ['siret'],
     methods: {
         createCard() {
-            this.$axios.post("/kanban/card", this.params).catch(e => {
-                alert("cassé")
+            this.$axios.post("/kanban/card", this.params)
+                .then(() => {
+                    this.createCardFailedError = false
+                    this.$store.commit('setCreateCardLabels', [])
+                    this.$store.commit('setCreateCardProblems', [])
+                    this.$store.commit('setCreateCardActions', [])
+                    this.$store.commit('setCreateCardSequence', 1)
+                    this.createCardDialog = false
+                    this.createCardFailedError = null
+                    this.$bus.$emit("create-card")
+                }).catch(e => {
+                    this.createCardFailedError = "Un problème est survenu lors de l'enregistrement."
             })
         }
     },
@@ -95,23 +110,28 @@ export default {
                 return m
             }, {})
         },
+        markdownDescription() {
+          return md.render(this.description)
+        },
         description() {
             let lines = []
             lines.push("### Difficultés  ")
             this.createCardProblems.forEach((problem) => {
                 lines.push("- " + problem + "  ")
             })
+            lines.push("")
             lines.push("### Actions  ")
             this.createCardActions.forEach((action) => {
                 lines.push("- " + action + "  ")
             })
-            return md.render(lines.join("\n"))
+            return lines.join("\n")
         },
         params() {
           return {
               swimlaneID: this.createCardSwimlaneID,
               description: this.description,
-              labelIDs: this.createCardLabels
+              labels: this.createCardLabels,
+              siret: this.siret,
           }
         },
         currentBoard() {
@@ -135,6 +155,14 @@ export default {
             },
             set(value) {
                 this.$store.commit('setCreateCardSequence', value)
+            },
+        },
+        createCardDialog: {
+            get() {
+                return this.$store.state.createCardDialog
+            },
+            set(value) {
+                this.$store.commit('setCreateCardDialog', value)
             },
         },
         createCardProblems() {

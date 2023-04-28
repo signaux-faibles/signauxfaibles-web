@@ -25,7 +25,7 @@
                         <div class="pb-10">
                             <b>suivi depuis:</b> {{ startDate }}<br/>
                             <span v-if="card.endAt"><b>suivi terminé:</b>
-                                {{ endAt }} <br/>
+                                {{ card.endAt }} <br/>
                             </span>
                             <b>dernière activité:</b> {{ lastActivityDate }}<br/>
                         </div>

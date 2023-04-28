@@ -148,9 +148,6 @@
           </v-flex>
           <FollowDialog/>
           <UnfollowDialog/>
-          <NewCardDialog v-if="wekanUser && codeDepartement" :siret="siret" :code-departement="codeDepartement"/>
-
-
           <v-dialog fullscreen v-model="entrepriseDialog">
             <div style="height: 100%; width: 100%; font-weight: 800; font-family: 'Oswald', sans;">
               <v-toolbar
