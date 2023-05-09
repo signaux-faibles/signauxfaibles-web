@@ -1,5 +1,5 @@
 <template>
-  <div style="min-height: 100%; background: #fff; font-weight: 800; font-family: 'Oswald', sans;">
+  <div style="min-height: 100%; background: #fff; font-weight: 800; font-family: 'Oswald', sans-serif;">
     <div>
       <v-container>
         <v-layout wrap style="margin-top: 3em">
@@ -55,7 +55,7 @@
                                 Jugements de procédure collective
                               </v-card-title>
                               <v-card-text style="font-size: 17px">
-                                <v-expansion-panel v-model="jugementsPanel" expand style="font-weight: 800; font-family: 'Oswald', sans;">
+                                <v-expansion-panel v-model="jugementsPanel" expand style="font-weight: 800; font-family: 'Oswald', sans-serif;">
                                   <v-expansion-panel-content v-if="liquidationJugements.length > 0">
                                     <template v-slot:header>
                                       <div>Liquidation</div>
@@ -149,7 +149,7 @@
           <FollowDialog/>
           <UnfollowDialog/>
           <v-dialog fullscreen v-model="entrepriseDialog">
-            <div style="height: 100%; width: 100%; font-weight: 800; font-family: 'Oswald', sans;">
+            <div style="height: 100%; width: 100%; font-weight: 800; font-family: 'Oswald', sans-serif;">
               <v-toolbar
                 fixed
                 class="toolbar"
@@ -233,7 +233,7 @@ export default {
         this.historique = (this.etablissement.scores || []).sort((d1, d2) => d1.batch < d2.batch)
         this.sirene = this.etablissement.sirene
         this.followed = this.etablissement.followed
-      }).catch((error) => {
+      }).catch(() => {
         this.etablissement = {}
         this.historique = []
         this.sirene = {}
@@ -291,15 +291,14 @@ export default {
       const lienVisiteFCE = `https://fce.fabrique.social.gouv.fr/establishment/${this.siret}`
       this.$axios.get(`/fce/${this.siret}`).then((response) => {
         this.lienVisiteFCE = response.data || lienVisiteFCE
-      }).catch((error) => {
+      }).catch(() => {
         this.lienVisiteFCE = lienVisiteFCE
       })
     },
-    download(response, siret) {
+    download(response) {
       const blob = new Blob([response.data])
       const link = document.createElement('a')
       link.href = URL.createObjectURL(blob)
-        console.log(response.headers)
       const filename = response.headers['content-disposition'].split('=')[1]
       link.setAttribute('download', filename)
       link.click()
@@ -312,7 +311,7 @@ export default {
       this.$axios.get(`/export/docx/siret/${this.siret}`, {responseType: 'blob', timeout: 120000}).then((response) => {
         this.download(response, this.siret)
         this.exportDOCXLoading = false
-      }).catch((error) => {
+      }).catch(() => {
         this.exportDOCXLoading = false
         this.alertExport = true
       })
@@ -329,7 +328,7 @@ export default {
     this.getLienVisiteFCE()
   },
   watch: {
-    localSiret(val) {
+    localSiret() {
       this.getEtablissement()
     },
     etablissement(val) {
@@ -444,8 +443,7 @@ export default {
       return process.env.VUE_APP_WEB_BASE_URL + 'ets/' + this.siret
     },
     username() {
-      const username = this.jwt.preferred_username
-      return username
+      return this.jwt.preferred_username
     },
     codeDepartement() {
       return this.sirene.codeDepartement
@@ -469,12 +467,10 @@ export default {
       return effectifIndex
     },
     statutJuridique() {
-      const statutJuridique = ((this.etablissement.entreprise || {}).Sirene || {}).statutJuridiqueN2
-      return statutJuridique
+      return ((this.etablissement.entreprise || {}).Sirene || {}).statutJuridiqueN2
     },
     lienBODACC() {
-      const lienBODACC = `https://www.bodacc.fr/pages/annonces-commerciales/?disjunctive.typeavis&disjunctive.familleavis&disjunctive.publicationavis&disjunctive.region_min&disjunctive.nom_dep_min&disjunctive.numerodepartement&sort=dateparution&q.registre=registre:${this.etablissement.siren}&refine.familleavis=collective#resultarea`
-      return lienBODACC
+      return `https://www.bodacc.fr/pages/annonces-commerciales/?disjunctive.typeavis&disjunctive.familleavis&disjunctive.publicationavis&disjunctive.region_min&disjunctive.nom_dep_min&disjunctive.numerodepartement&sort=dateparution&q.registre=registre:${this.etablissement.siren}&refine.familleavis=collective#resultarea`
     },
     showFCE() {
       return process.env.VUE_APP_FCE_ENABLED && !!JSON.parse(process.env.VUE_APP_FCE_ENABLED)
@@ -488,17 +484,11 @@ export default {
 </script>
 
 <style scoped>
-.gray {
-  color: #aaa;
-}
-.down {
-  color: rgb(244, 67, 54);
-}
 ::v-deep .followCard .description p {
   margin: 8px 0;
 }
 .chip {
-  font-family: "Roboto";
+  font-family: 'Roboto', sans-serif;
   font-size: 13px;
   font-weight: 400;
   vertical-align: text-bottom;
