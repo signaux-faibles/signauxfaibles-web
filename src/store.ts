@@ -1,9 +1,7 @@
 import Vue from 'vue'
-import Vuex, { ActionContext } from 'vuex'
+import Vuex from 'vuex'
 import axios from 'axios'
 import createPersistedState from 'vuex-persistedstate'
-
-const refreshRate = 60000
 
 Vue.use(Vuex)
 
@@ -33,10 +31,12 @@ const localStore = new Vuex.Store({
     securityConsent: new Date('1970-01-01'),
     procol: ['In bonis', 'Sauvegarde', 'Plan de sauvegarde'],
     expiredSession: false,
-    typeSuivi: 'my-cards',
-    statutSuivi: ['Suivi en cours'],
-    zoneSuivi: [],
-    labelsSuivi: [],
+    typeFollow: 'my-cards',
+    boardsFollow: ['*'],
+    listsFollow: ['*'],
+    zoneFollow: ['*'],
+    labelsFollow: [],
+    labelModeFollow: "and",
     currentBoard: '',
   },
   mutations: {
@@ -53,10 +53,12 @@ const localStore = new Vuex.Store({
     setNewsRead(state, val) { state.newsRead = val },
     setSecurityConsent(state, value) { state.securityConsent = value },
     setExpiredSession(state, value) { state.expiredSession = value },
-    setTypeSuivi(state, value) { state.typeSuivi = value },
-    setStatutSuivi(state, value) { state.statutSuivi = value },
-    setZoneSuivi(state, value) { state.zoneSuivi = value },
-    setLabelsSuivi(state, value) { state.labelsSuivi = value },
+    setTypeFollow(state, value) { state.typeFollow = value },
+    setBoardsFollow(state, value) { state.boardsFollow = value },
+    setListsFollow(state, value) { state.listsFollow = value },
+    setZoneFollow(state, value) { state.zoneFollow = value },
+    setLabelsFollow(state, value) { state.labelsFollow = value },
+    setLabelModeFollow(state, value) { state.labelModeFollow = value },
     setCurrentBoard(state, value) { state.currentBoard = value },
   },
 })
@@ -72,13 +74,19 @@ const sessionStore = new Vuex.Store({
     batches: [] as any[],
     departements: [] as any[],
     region: [] as any[],
-    wekanConfig: {} as any,
+    kanbanConfig: {} as any,
     zone: {},
     height: 0,
     scrollTop: 0,
     prediction: [],
     loading: false,
     newsDialog: null,
+    createCardSequence: 1,
+    createCardSwimlaneID: null,
+    createCardDialog: false,
+    createCardProblems: [],
+    createCardActions: [],
+    createCardLabels: [],
   },
   mutations: {
     setNewsDialog(state, value) {
@@ -103,8 +111,8 @@ const sessionStore = new Vuex.Store({
       state.region = reference.regions
       state.departements = reference.departements
     },
-    updateWekanConfig(state, wekanConfig) {
-      state.wekanConfig = wekanConfig
+    updateKanbanConfig(state, kanbanConfig) {
+      state.kanbanConfig = kanbanConfig
     },
     setHeight(state, height) {
       state.height = height
@@ -114,6 +122,24 @@ const sessionStore = new Vuex.Store({
     },
     setCurrentBatchKey(state, value) {
       state.currentBatchKey = value
+    },
+    setCreateCardSequence(state, value) {
+      state.createCardSequence = value
+    },
+    setCreateCardSwimlaneID(state, value) {
+      state.createCardSwimlaneID = value
+    },
+    setCreateCardDialog(state, value) {
+      state.createCardDialog = value
+    },
+    setCreateCardProblems(state, value) {
+      state.createCardProblems = value
+    },
+    setCreateCardActions(state, value) {
+      state.createCardActions = value
+    },
+    setCreateCardLabels(state, value) {
+      state.createCardLabels = value
     },
   },
   getters: {
@@ -127,6 +153,24 @@ const sessionStore = new Vuex.Store({
     },
   },
   actions: {
+    setCreateCardSwimlaneID(context, value) {
+      context.commit('setCreateCardSwimlaneID', value)
+    },
+    setCreateCardDialog(context, value) {
+      context.commit('setCreateCardDialog', value)
+    },
+    setCreateCardSequence(context, value) {
+      context.commit('setCreateCardSequence', value)
+    },
+    setCreateCardProblems(context, value) {
+      context.commit('setCreateCardProblems', value)
+    },
+    setCreateCardActions(context, value) {
+      context.commit('setCreateCardActions', value)
+    },
+    setCreateCardLabels(context, value){
+      context.commit('setCreateCardLabels', value)
+    },
     setCurrentBatchKey(context, batchKey) {
       context.commit('setCurrentBatchKey', batchKey)
     },
@@ -151,9 +195,9 @@ const sessionStore = new Vuex.Store({
         context.commit('updateReference', reference)
       }))
     },
-    updateWekanConfig(context) {
-      axiosClient.get('/wekan/config').then((response) => {
-        context.commit('updateWekanConfig', response.data)
+    updateKanbanConfig(context) {
+      axiosClient.get('/kanban/config').then((response) => {
+        context.commit('updateKanbanConfig', response.data)
       })
     },
     setLeftDrawer(context, val) {

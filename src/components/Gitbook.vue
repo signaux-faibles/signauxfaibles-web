@@ -5,7 +5,7 @@
       class="ml-4"
       target="_blank"
       :href="'https://signaux-faibles.gitbook.io/guide-dutilisation-et-faq/' + target">
-    <v-icon>mdi-library-books</v-icon> En savoir plus
+    <v-icon>fa-book</v-icon> En savoir plus
   </v-btn>
 </template>
 

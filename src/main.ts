@@ -46,6 +46,7 @@ if (process.env.VUE_APP_MATOMO_ENABLED && !!JSON.parse(process.env.VUE_APP_MATOM
   })
 }
 
+Vue.prototype.$bus = new Vue();
 
 Vue.use(VueKeyCloak, {
   init: {

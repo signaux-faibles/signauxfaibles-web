@@ -1,5 +1,5 @@
 <template>
-  <div style="min-height: 100%; background: #fff; font-weight: 800; font-family: 'Oswald', sans;">
+  <div style="min-height: 100%; background: #fff; font-weight: 800; font-family: 'Oswald', sans-serif;">
     <div>
       <v-container>
         <v-layout wrap style="margin-top: 3em">
@@ -55,7 +55,7 @@
                                 Jugements de procédure collective
                               </v-card-title>
                               <v-card-text style="font-size: 17px">
-                                <v-expansion-panel v-model="jugementsPanel" expand style="font-weight: 800; font-family: 'Oswald', sans;">
+                                <v-expansion-panel v-model="jugementsPanel" expand style="font-weight: 800; font-family: 'Oswald', sans-serif;">
                                   <v-expansion-panel-content v-if="liquidationJugements.length > 0">
                                     <template v-slot:header>
                                       <div>Liquidation</div>
@@ -130,7 +130,7 @@
                       </div>
                     </v-flex>
                 </v-layout>
-                <Boards v-if="wekanUser" :boards="boards"/>
+                <Cards v-if="wekanUser" :siret="siret" :denomination="denomination" :codeDepartement="sirene.codeDepartement"/>
               </v-flex>
             </v-layout>
           </v-flex>
@@ -148,11 +148,8 @@
           </v-flex>
           <FollowDialog/>
           <UnfollowDialog/>
-          <BoardDialog v-if="wekanUser"/>
-
-
           <v-dialog fullscreen v-model="entrepriseDialog">
-            <div style="height: 100%; width: 100%; font-weight: 800; font-family: 'Oswald', sans;">
+            <div style="height: 100%; width: 100%; font-weight: 800; font-family: 'Oswald', sans-serif;">
               <v-toolbar
                 fixed
                 class="toolbar"
@@ -186,10 +183,10 @@ import Historique from '@/components/Etablissement/Score/Historique.vue'
 import axios from 'axios'
 import fr from 'apexcharts/dist/locales/fr.json'
 import libellesProcols from '@/assets/libelles_procols.json'
-import Boards from '@/components/Etablissement/Boards.vue'
+import Cards from '@/components/Etablissement/Cards.vue'
 import FollowDialog from '@/components/Etablissement/FollowDialog.vue'
 import UnfollowDialog from '@/components/Etablissement/UnfollowDialog.vue'
-import BoardDialog from '@/components/Etablissement/BoardDialog.vue'
+import NewCardDialog from '@/components/Etablissement/NewCardDialog/NewCardDialog.vue'
 import Help from '@/components/Help.vue'
 
 export default {
@@ -197,7 +194,7 @@ export default {
   name: 'Etablissement',
   components: { Effectif, Urssaf, Help, Identite, Map,
     Commentaire, EtablissementEntreprise, Entreprise, Historique,
-    Boards, FollowDialog, UnfollowDialog, BoardDialog },
+    Cards, FollowDialog, UnfollowDialog, NewCardDialog },
   data() {
     return {
       axios: axios.create(),
@@ -209,7 +206,7 @@ export default {
       unfollowDialog: false,
       entrepriseDialog: false,
       followDialog: false,
-      boardDialog: false,
+      newCardDialog: false,
       boards: [],
       effectifClass: [10, 20, 50, 100],
       creatingCard: false,
@@ -236,24 +233,11 @@ export default {
         this.historique = (this.etablissement.scores || []).sort((d1, d2) => d1.batch < d2.batch)
         this.sirene = this.etablissement.sirene
         this.followed = this.etablissement.followed
-      }).catch((error) => {
+      }).catch(() => {
         this.etablissement = {}
         this.historique = []
         this.sirene = {}
       }) 
-    },
-    getBoards() {
-      if (this.wekanUser) {
-        this.$axios.get(`/wekan/cards/${this.siret}`).then((response) => {
-          this.boards = response.data
-          const myBoardIds =  this.boards.filter((b) => b.isMember).map((b) => b.id)
-          if (myBoardIds.length>0 && !myBoardIds.includes(this.currentBoard)) {
-            this.currentBoard = myBoardIds[0]
-          }
-        }).catch((_) => {
-          this.boards = []
-        })
-      }
     },
     closeJoinCardDialog() {
       this.joinCardDialog = false
@@ -307,18 +291,16 @@ export default {
       const lienVisiteFCE = `https://fce.fabrique.social.gouv.fr/establishment/${this.siret}`
       this.$axios.get(`/fce/${this.siret}`).then((response) => {
         this.lienVisiteFCE = response.data || lienVisiteFCE
-      }).catch((error) => {
+      }).catch(() => {
         this.lienVisiteFCE = lienVisiteFCE
       })
     },
-    download(response, defaultFilename) {
+    download(response) {
       const blob = new Blob([response.data])
       const link = document.createElement('a')
       link.href = URL.createObjectURL(blob)
-      const filename = response.headers['content-disposition'] ? response.headers['content-disposition'].split('filename=')[1] : defaultFilename
-      if (filename) {
-        link.setAttribute('download', filename)
-      }
+      const filename = response.headers['content-disposition'].split('=')[1]
+      link.setAttribute('download', filename)
       link.click()
       link.remove()
     },
@@ -327,9 +309,9 @@ export default {
       this.exportDOCXLoading = true
       this.alertExport = false
       this.$axios.get(`/export/docx/siret/${this.siret}`, {responseType: 'blob', timeout: 120000}).then((response) => {
-        this.download(response, 'export-' + this.siret + '.docx')
+        this.download(response, this.siret)
         this.exportDOCXLoading = false
-      }).catch((error) => {
+      }).catch(() => {
         this.exportDOCXLoading = false
         this.alertExport = true
       })
@@ -344,10 +326,9 @@ export default {
   mounted() {
     this.getEtablissement()
     this.getLienVisiteFCE()
-    this.getBoards()
   },
   watch: {
-    localSiret(val) {
+    localSiret() {
       this.getEtablissement()
     },
     etablissement(val) {
@@ -415,24 +396,6 @@ export default {
         }
       }).filter(Boolean)
     },
-    zipDianeBDF() {
-      const entreprise = (this.etablissement || {}).entreprise || {}
-      if (entreprise.bdf || entreprise.diane) {
-        const bdf = entreprise.bdf || []
-        const diane = entreprise.diane || []
-        const annees = [...new Set(bdf.map((b) => b.arrete_bilan_bdf)
-          .concat(diane.map((d) => d.arrete_bilan_diane)))].sort((a1, a2) => (a1 > a2) ? 1 : -1)
-        return annees.map((a) => {
-          return {
-            annee: a.slice(0, 10),
-            bdf: bdf.filter((b) => b.arrete_bilan_bdf === a)[0] || {},
-            diane: diane.filter((d) => d.arrete_bilan_diane === a)[0] || {},
-          }
-        })
-      } else {
-        return []
-      }
-    },
     etablissementsSummary() {
       return (this.etablissement.entreprise || {}).etablissementsSummary || []
     },
@@ -480,8 +443,7 @@ export default {
       return process.env.VUE_APP_WEB_BASE_URL + 'ets/' + this.siret
     },
     username() {
-      const username = this.jwt.preferred_username
-      return username
+      return this.jwt.preferred_username
     },
     codeDepartement() {
       return this.sirene.codeDepartement
@@ -505,12 +467,10 @@ export default {
       return effectifIndex
     },
     statutJuridique() {
-      const statutJuridique = ((this.etablissement.entreprise || {}).Sirene || {}).statutJuridiqueN2
-      return statutJuridique
+      return ((this.etablissement.entreprise || {}).Sirene || {}).statutJuridiqueN2
     },
     lienBODACC() {
-      const lienBODACC = `https://www.bodacc.fr/pages/annonces-commerciales/?disjunctive.typeavis&disjunctive.familleavis&disjunctive.publicationavis&disjunctive.region_min&disjunctive.nom_dep_min&disjunctive.numerodepartement&sort=dateparution&q.registre=registre:${this.etablissement.siren}&refine.familleavis=collective#resultarea`
-      return lienBODACC
+      return `https://www.bodacc.fr/pages/annonces-commerciales/?disjunctive.typeavis&disjunctive.familleavis&disjunctive.publicationavis&disjunctive.region_min&disjunctive.nom_dep_min&disjunctive.numerodepartement&sort=dateparution&q.registre=registre:${this.etablissement.siren}&refine.familleavis=collective#resultarea`
     },
     showFCE() {
       return process.env.VUE_APP_FCE_ENABLED && !!JSON.parse(process.env.VUE_APP_FCE_ENABLED)
@@ -524,17 +484,11 @@ export default {
 </script>
 
 <style scoped>
-.gray {
-  color: #aaa;
-}
-.down {
-  color: rgb(244, 67, 54);
-}
 ::v-deep .followCard .description p {
   margin: 8px 0;
 }
 .chip {
-  font-family: "Roboto";
+  font-family: 'Roboto', sans-serif;
   font-size: 13px;
   font-weight: 400;
   vertical-align: text-bottom;

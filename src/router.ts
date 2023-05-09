@@ -3,9 +3,9 @@ import Router from 'vue-router'
 import Prediction from '@/views/Prediction.vue'
 import Goup from '@/views/Goup.vue'
 import Browse from '@/views/Browse.vue'
-import Follow from '@/views/Follow.vue'
+import Follow from '@/views/Follow/component.vue'
 import PageNotFound from '@/views/PageNotFound.vue'
-import Etablissement from '@/components/Etablissement.vue'
+import Etablissement from '@/components/Etablissement/Main.vue'
 
 Vue.use(Router)
 

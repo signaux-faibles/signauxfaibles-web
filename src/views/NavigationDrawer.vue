@@ -57,20 +57,12 @@
           <v-list-item-title>Kanban de suivi</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
-      <v-list-item to="/goup" v-if="jwt.goup_path">
-        <v-list-item-action>
-          <v-icon>cloud_upload</v-icon>
-        </v-list-item-action>
-        <v-list-item-content>
-          <v-list-item-title>Envoi de données manuel</v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
       <v-list-item
           href="https://signaux-faibles.gitbook.io/guide-dutilisation-et-faq/"
           target="_blank">
         <v-list-item-action>
           <v-icon>
-            mdi-library-books
+              fa-book
           </v-icon>
         </v-list-item-action>
         <v-list-item-content>
