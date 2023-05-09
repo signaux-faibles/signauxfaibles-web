@@ -295,14 +295,13 @@ export default {
         this.lienVisiteFCE = lienVisiteFCE
       })
     },
-    download(response, defaultFilename) {
+    download(response, siret) {
       const blob = new Blob([response.data])
       const link = document.createElement('a')
       link.href = URL.createObjectURL(blob)
-      const filename = response.headers['content-disposition'] ? response.headers['content-disposition'].split('filename=')[1] : defaultFilename
-      if (filename) {
-        link.setAttribute('download', filename)
-      }
+        console.log(response.headers)
+      const filename = response.headers['content-disposition'].split('=')[1]
+      link.setAttribute('download', filename)
       link.click()
       link.remove()
     },
@@ -311,7 +310,7 @@ export default {
       this.exportDOCXLoading = true
       this.alertExport = false
       this.$axios.get(`/export/docx/siret/${this.siret}`, {responseType: 'blob', timeout: 120000}).then((response) => {
-        this.download(response, 'export-' + this.siret + '.docx')
+        this.download(response, this.siret)
         this.exportDOCXLoading = false
       }).catch((error) => {
         this.exportDOCXLoading = false

@@ -17,7 +17,7 @@ export default {
             menuSince: false,
             alertExport: false,
             since: null,
-            zoneSuivi: [],
+            zoneFollow: [],
         }
     },
     mounted() {
@@ -163,59 +163,59 @@ export default {
         },
         type: {
             get() {
-                return this.$localStore.state.typeSuivi
+                return this.$localStore.state.typeFollow
             },
             set(value) {
-                this.$localStore.commit('setTypeSuivi', value)
+                this.$localStore.commit('setTypeFollow', value)
             },
         },
         boards: {
             get() {
-                const boardsSuivi = this.$localStore.state.boardsSuivi
-                return (boardsSuivi.includes('*')) ? ['*'] : boardsSuivi
+                const boardsFollow = this.$localStore.state.boardsFollow
+                return (boardsFollow.includes('*')) ? ['*'] : boardsFollow
             },
             set(value) {
-                this.$localStore.commit('setBoardsSuivi', (value.includes('*')) ? ['*'] : value)
+                this.$localStore.commit('setBoardsFollow', (value.includes('*')) ? ['*'] : value)
             },
         },
         lists: {
             get() {
-                const listsSuivi = this.$localStore.state.listsSuivi
-                return (listsSuivi.includes('*')) ? ['*'] : listsSuivi
+                const listsFollow = this.$localStore.state.listsFollow
+                return (listsFollow.includes('*')) ? ['*'] : listsFollow
             },
             set(value) {
                 this.$localStore.commit(
-                    'setListsSuivi',
+                    'setListsFollow',
                     (value.includes('*')) ? ['*'] : value
                 )
             },
         },
         zone: {
             get() {
-                const zoneSuivi = this.$localStore.state.zoneSuivi
-                return (zoneSuivi.includes('*')) ? ['*'] : zoneSuivi
+                const zoneFollow = this.$localStore.state.zoneFollow
+                return (zoneFollow.includes('*')) ? ['*'] : zoneFollow
             },
             set(value) {
                 this.$localStore.commit(
-                    'setZoneSuivi',
+                    'setZoneFollow',
                     (value.includes('*')) ? ['*'] : value
                 )
             },
         },
         labels: {
             get() {
-                return this.$localStore.state.labelsSuivi
+                return this.$localStore.state.labelsFollow
             },
             set(value) {
-                this.$localStore.commit('setLabelsSuivi', value)
+                this.$localStore.commit('setLabelsFollow', value)
             },
         },
         labelMode: {
             get() {
-                return this.$localStore.state.labelModeSuivi
+                return this.$localStore.state.labelModeFollow
             },
             set(value) {
-                this.$localStore.commit('setLabelModeSuivi', value)
+                this.$localStore.commit('setLabelModeFollow', value)
             },
         },
         zoneItems() {

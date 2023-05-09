@@ -64,11 +64,6 @@ export default {
         showCreateCardDialog() {
             this.createCardDialog = true
         },
-        unarchiveCard(cardId) {
-            this.$axios(`/wekan/unarchive/${cardId}`).then(() => {
-                this.$parent.getBoards()
-            })
-        },
         getCardPayloads() {
             this.$axios.get(`/kanban/cards/${this.siret}`).then((response) => {
                 this.cards = response.data
@@ -83,6 +78,7 @@ export default {
     },
     mounted() {
         this.$bus.$on('create-card', this.getCardPayloads)
+        this.$bus.$on('unarchive-card', this.getCardPayloads)
         this.getCardPayloads()
     },
     computed: {

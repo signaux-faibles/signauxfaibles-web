@@ -90,6 +90,13 @@ export default {
     name: 'Boards',
     props: ['card', 'denomination'],
     components: {Help},
+    methods: {
+        unarchiveCard(cardId) {
+            this.$axios(`/kanban/unarchive/${this.card.id}`).then(() => {
+                this.$bus.$emit('unarchive-card')
+            })
+        },
+    },
     computed: {
         startDate() {
             return new Date(this.card.startAt).toLocaleDateString()
@@ -103,27 +110,6 @@ export default {
         description() {
             return md.render(this.card.description || "")
         }
-        // cards() {
-        //     const md = new MarkdownIt()
-        //     return this.cardPayloads
-        //         .filter((b) => b.cards)
-        //         .flatMap((b) => b.cards.map((c) => {
-        //             if (c.cardDescription) {
-        //                 c.cardDescriptionMD = md.render(c.cardDescription)
-        //             }
-        //             c.board = {
-        //                 id: b.id,
-        //                 title: b.title,
-        //                 isMember: b.isMember,
-        //                 slug: b.slug,
-        //                 url: process.env.VUE_APP_WEKAN_URL + b.url,
-        //             }
-        //             c.startAtDate = new Date(c.startAt)
-        //             c.endAtDate = new Date(c.endAt)
-        //             c.lastActivityDate = new Date(c.lastActivity)
-        //             return c
-        //         }))
-        // },
     }
 }
 </script>
