@@ -1,7 +1,7 @@
 <template>
   <div>
       <CampaignsAppBar/>
-      <CampaignsRightDrawer/>
+      <CampaignsRightDrawer :campaigns="campaigns"/>
   </div>
 </template>
 
