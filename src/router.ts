@@ -3,9 +3,10 @@ import Router from 'vue-router'
 import Prediction from '@/views/Prediction.vue'
 import Goup from '@/views/Goup.vue'
 import Browse from '@/views/Browse.vue'
-import Follow from '@/views/Follow/component.vue'
+import Follow from '@/views/follow/component.vue'
 import PageNotFound from '@/views/PageNotFound.vue'
 import Etablissement from '@/components/Etablissement/Main.vue'
+import Campaigns from '@/views/campaigns/main/main.vue'
 
 Vue.use(Router)
 
@@ -36,6 +37,11 @@ const router = new Router({
       path: '/follow',
       name: 'follow',
       component: Follow,
+    },
+    {
+      path: '/campaigns',
+      name: 'campaigns',
+      component: Campaigns,
     },
     {
       path: '/ets/:siret',

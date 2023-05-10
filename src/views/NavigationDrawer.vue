@@ -41,6 +41,14 @@
           <v-list-item-title>Listes de détection</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
+      <v-list-item to="/campaigns">
+          <v-list-item-action>
+              <v-icon>mdi-briefcase-outline</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+              <v-list-item-title>Traitement des entreprises</v-list-item-title>
+          </v-list-item-content>
+      </v-list-item>
       <v-list-item to="/follow">
         <v-list-item-action>
           <v-icon>mdi-star</v-icon>
