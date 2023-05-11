@@ -87,8 +87,16 @@ const sessionStore = new Vuex.Store({
     createCardProblems: [],
     createCardActions: [],
     createCardLabels: [],
+    campaignsMenu: 'todo',
+    campaignsSelectedID: null,
   },
   mutations: {
+    setCampaignsSelectedID(state, value) {
+      state.campaignsSelectedID = value
+    },
+    setCampaignsMenu(state, value) {
+      state.campaignsMenu = value
+    },
     setNewsDialog(state, value) {
       state.newsDialog = value
     },
@@ -153,6 +161,12 @@ const sessionStore = new Vuex.Store({
     },
   },
   actions: {
+    setCampaignsSelectedID(context, value) {
+      context.commit('setCampaignsSelectedID', value)
+    },
+    setCampaignsMenu(context, value) {
+      context.commit('setCampaignsMenu', value)
+    },
     setCreateCardSwimlaneID(context, value) {
       context.commit('setCreateCardSwimlaneID', value)
     },

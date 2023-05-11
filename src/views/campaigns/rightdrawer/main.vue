@@ -10,25 +10,22 @@
             <v-icon :class="loading?'rotate':''" @click="closeRightDrawer()">mdi-briefcase-outline</v-icon>
 
         </v-toolbar>
+
         <div class="ma-3">
-            <v-select :items="campaignsSelectItems" v-model="selectedCampaignID" label="Traitement"></v-select>
+            <v-select :items="campaignsSelectItems" v-model="campaignsSelectedID" label="Campagne"></v-select>
         </div>
 
-        <div class="ma-3" v-if="selectedCampaignID">
+        <div class="ma-3" v-if="campaignsSelectedID">
             <h3>En bref</h3>
             <ul>
-                <li>{{ selectedCampaignStatus }}</li>
-                <li>échéance: {{ selectedCampaignDueDate }}</li>
-                <li>nombre d'entreprises total: {{ selectedCampaignStats.total }} </li>
-                <li>traitements non affectés: {{ selectedCampaignStats.blank }} </li>
-                <li>traitements en cours: {{ selectedCampaignStats.pending }} </li>
-                <li>traitements terminés: {{ selectedCampaignStats.done }} </li>
-                <li>traitements rejetés: {{ selectedCampaignStats.done }} </li>
+                <li>{{ campaignsSelectedStats.total }} entreprises au total</li>
+                <li>{{ campaignsSelectedStats.done }} entreprises déjà traitées</li>
+                <li>{{ campaignsSelectedStats.mine }} à votre charge</li>
+                <li>{{ campaignsSelectedStats.pending }} en attente</li>
             </ul>
         </div>
-        <div class="ma-2" v-if="selectedCampaignID">
-            <h3>Objectifs</h3>
-            <div v-html="selectedCampaignManifest"/>
+        <div class="ma-2" v-if="campaignsSelectedID">
+            <Markdown :text="campaignsSelectedManifest"/>
         </div>
     </v-navigation-drawer>
 </template>

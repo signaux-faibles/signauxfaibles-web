@@ -32,6 +32,7 @@ export default {
       set(value) {
         this.$store.dispatch('setLeftDrawer', value)
       }
-    }
+    },
+
   }
 }

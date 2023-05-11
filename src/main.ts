@@ -102,5 +102,8 @@ Vue.mixin({
       const roles = (Vue.prototype.$keycloak.tokenParsed.resource_access.signauxfaibles || {}).roles || []
       return roles
     },
+    username() {
+      return Vue.prototype.$k
+    },
   },
 })

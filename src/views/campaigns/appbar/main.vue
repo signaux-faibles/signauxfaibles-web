@@ -17,8 +17,7 @@
                 class="toolbar_titre"
                 style="width: 100%; text-align: center;"
         >
-            Traitement des entreprises
-
+            Campagne de ciblage des entreprises
         </div>
         <v-spacer></v-spacer>
         <v-icon

@@ -1,0 +1,64 @@
+.etablissement-card {
+    background: linear-gradient(#fff, #eee 45%, #ccc);
+    display: flex;
+    flex-direction: row;
+    min-height: 80px;
+}
+.entete {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: linear-gradient(
+            270deg,
+            rgba(119, 122, 170, 0.219),
+            rgba(119, 122, 170, 0)
+    );
+    border-right: solid 1px #3334;
+    text-align: center;
+    width: 80px;
+}
+.corps {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background: linear-gradient(45deg, rgba(50, 51, 121, 0.212), #0000);
+}
+.corps > div:first-child {
+    flex: 1 1 auto;
+    overflow: hidden;
+}
+
+.raison-sociale {
+    font-family: "Oswald";
+    font-size: 25px;
+    color: #333;
+}
+
+
+.chip {
+    font-family: "Roboto";
+    font-size: 13px;
+    vertical-align: text-bottom;
+}
+.fade-enter-active, .fade-leave-active {
+    transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to {
+    opacity: 0;
+}
+.corner-ribbon {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
+}
+.corner-ribbon::before {
+    position: absolute;
+    z-index: -1;
+    border-width: 16px;
+    border-style: solid;
+    border-color: #3f51b5 transparent transparent #3f51b5;
+    content: '';
+}

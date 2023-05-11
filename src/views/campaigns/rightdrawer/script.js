@@ -1,10 +1,11 @@
+import Markdown from "@/components/Markdown.vue"
 export default {
   name: "CampaignsRightDrawer",
+  components: {Markdown},
   props: ['campaigns'],
   data() {
     return {
       loading: false,
-      selectedCampaignID: null,
     }
   },
   methods: {
@@ -16,6 +17,14 @@ export default {
     }
   },
   computed: {
+    campaignsSelectedID: {
+      get() {
+        return this.$store.state.campaignsSelectedID
+      },
+      set(value) {
+        return this.$store.dispatch('setCampaignsSelectedID', value)
+      }
+    },
     campaignsSelectItems() {
       return Object.entries(this.campaigns).map(([k,v]) => {
         return {
@@ -24,26 +33,25 @@ export default {
         }
       })
     },
-    selectedCampaign() {
-      return this.campaigns[this.selectedCampaignID] || {}
+    campaignsSelected() {
+      return this.campaigns[this.campaignsSelectedID] || {}
     },
-    selectedCampaignDueDate() {
-      return this.selectedCampaign.due.toLocaleString('fr-FR').slice(0,10)
+    campaignsSelectedDueDate() {
+      return this.campaignsSelected.due.toLocaleString('fr-FR').slice(0,10)
     },
-    selectedCampaignStatus() {
-      return this.selectedCampaign.active ? "en cours de traitement" : "traitement terminé"
+    campaignSelectedStatus() {
+      return this.campaignsSelected.active ? "en cours de traitement" : "traitement terminé"
     },
-    selectedCampaignStats() {
+    campaignsSelectedStats() {
       return {
-        total: this.selectedCampaign.cards.length,
-        blank: this.selectedCampaign.cards.filter(c => c.status == "blank").length,
-        pending: this.selectedCampaign.cards.filter(c => c.status == "pending").length,
-        done: this.selectedCampaign.cards.filter(c => c.status == "done").length,
-        rejected: this.selectedCampaign.cards.filter(c => c.status == "rejected").length,
+        total: this.campaignsSelected.cards.length,
+        pending: this.campaignsSelected.cards.filter(c => c.status == "pending").length,
+        mine: this.campaignsSelected.cards.filter(c => c.status == 'mine').length,
+        done: this.campaignsSelected.cards.filter(c => c.status == "done").length,
       }
     },
-    selectedCampaignManifest() {
-      return this.selectedCampaign.manifest
+    campaignsSelectedManifest() {
+      return this.campaignsSelected.manifest
     },
     rightDrawer: {
       get() {
