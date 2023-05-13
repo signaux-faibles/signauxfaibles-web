@@ -45,9 +45,10 @@ export default {
     campaignsSelectedStats() {
       return {
         total: this.campaignsSelected.cards.length,
-        pending: this.campaignsSelected.cards.filter(c => c.status == "pending").length,
-        mine: this.campaignsSelected.cards.filter(c => c.status == 'mine').length,
-        done: this.campaignsSelected.cards.filter(c => c.status == "done").length,
+        pending: this.campaignsSelected.cards.filter(c => c.assignee == "nobody" && !c.done).length,
+        mine: this.campaignsSelected.cards.filter(c => c.assignee == this.jwt.email && !c.done).length,
+        workinprogress: this.campaignsSelected.cards.filter(c => (c.assignee != 'nobody' && !c.done)).length,
+        done: this.campaignsSelected.cards.filter(c => c.done).length,
       }
     },
     campaignsSelectedManifest() {

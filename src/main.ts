@@ -99,11 +99,7 @@ Vue.mixin({
       return jwt
     },
     roles() {
-      const roles = (Vue.prototype.$keycloak.tokenParsed.resource_access.signauxfaibles || {}).roles || []
-      return roles
-    },
-    username() {
-      return Vue.prototype.$k
-    },
+      return (Vue.prototype.$keycloak.tokenParsed.resource_access.signauxfaibles || {}).roles || []
+    }
   },
 })

@@ -2,7 +2,7 @@ import Toolbar from "@/components/Toolbar.vue"
 import CampaignsRightDrawer from "@/views/campaigns/rightdrawer/main.vue"
 import CampaignsAppBar from "@/views/campaigns/appbar/main.vue"
 import CampaignsMenu from "@/views/campaigns/menu/main.vue"
-import CampaignsCard from "@/components/campaigns/card/main.vue"
+import CampaignsCard from "@/components/card/main.vue"
 import CampaignsWelcome from "@/views/campaigns/welcome/main.vue"
 import CampaignsMyCards from "@/views/campaigns/mycards/main.vue"
 import CampaignsPendingCards from "@/views/campaigns/pendingcards/main.vue"
@@ -10,7 +10,7 @@ import CampaignsAllCards from "@/views/campaigns/allcards/main.vue"
 
 export default {
   name: "Campaigns",
-  components: {CampaignsRightDrawer, Toolbar, CampaignsAppBar, CampaignsMenu, CampaignsCard, CampaignsWelcome, CampaignsMyCards, CampaignsPendingCards, CampaignsAllCards},
+  components: {CampaignsRightDrawer, Toolbar, CampaignsAppBar, CampaignsMenu, CampaignsWelcome, CampaignsMyCards, CampaignsPendingCards, CampaignsAllCards},
   mounted() {
     this.campaignsMenu = 'pending'
     // this.campaignsSelectedID = null
@@ -33,6 +33,9 @@ export default {
       set(value) {
         return this.$store.commit('setCampaignsSelectedID')
       },
+    },
+    cards() {
+      return this.campaignsSelected.cards
     },
     campaignsSelected() {
       return this.campaigns[this.campaignsSelectedID]

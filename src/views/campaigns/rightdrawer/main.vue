@@ -17,9 +17,11 @@
 
         <div class="ma-3" v-if="campaignsSelectedID">
             <h3>En bref</h3>
+            {{ jwt.email }}
             <ul>
                 <li>{{ campaignsSelectedStats.total }} entreprises au total</li>
                 <li>{{ campaignsSelectedStats.done }} entreprises déjà traitées</li>
+                <li>{{ campaignsSelectedStats.workinprogress }} entreprises en cours</li>
                 <li>{{ campaignsSelectedStats.mine }} à votre charge</li>
                 <li>{{ campaignsSelectedStats.pending }} en attente</li>
             </ul>

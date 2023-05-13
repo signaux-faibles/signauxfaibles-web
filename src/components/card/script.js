@@ -1,4 +1,4 @@
 export default {
-    name: "CampaignsCard",
+    name: "Card",
     props: ['card'],
 }
