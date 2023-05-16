@@ -15,6 +15,13 @@ export default {
     }
   },
   methods: {
+    detteSociale(siret) {
+      if (siret.slice(0,1) == '8') {
+        return 'oui'
+      } else {
+        return 'non'
+      }
+    },
     showEtablissement(siret) {
       this.siret = siret
       this.dialogEtablissement = true
