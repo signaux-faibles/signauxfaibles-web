@@ -51,6 +51,8 @@
                 portent, soit parce qu'elles portent toutes les étiquettes que vous aurez sélectionnées, ou au moins une
                 d'entre elles.
               </li>
+              <li><strong>raison sociale</strong> retient les entreprises dont la raison sociale contient le texte saisi
+              </li>
               <li><strong>Modifiée depuis</strong> sélectionne les cartes qui ont été modifiées depuis la date que vous
                 choisissez
               </li>
@@ -202,6 +204,10 @@
               />
             </v-radio-group>
           </div>
+        </div>
+        <v-divider class="mb-3"/>
+        <div style="display: flex; flex-direction: row; vertical-align: middle; padding: 0 15px;">
+          <v-text-field label="raison sociale" v-model="raisonSociale" @keypress="debounce(getFollowedEtablissements, 500)"/>
         </div>
         <v-divider class="mb-3"/>
         <div style="display: flex; flex-direction: row; vertical-align: middle; padding: 0 15px;">
