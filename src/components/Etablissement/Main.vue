@@ -414,7 +414,7 @@ export default {
       return ((this.etablissement.entreprise || {}).groupe || {}).raison_sociale_groupe
     },
     terrind() {
-      return (this.etablissement.territoireIndustrie ||  {}).libelle
+      return (this.etablissement.territoireIndustrie || {}).libelle
     },
     creation() {
       const creation = new Date(((this.etablissement.entreprise || {}).Sirene || {}).creation)
