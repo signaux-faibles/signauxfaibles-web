@@ -51,7 +51,7 @@
                 portent, soit parce qu'elles portent toutes les étiquettes que vous aurez sélectionnées, ou au moins une
                 d'entre elles.
               </li>
-              <li><strong>raison sociale</strong> retient les entreprises dont la raison sociale contient le texte saisi
+              <li><strong>Raison sociale</strong> limite la sélection aux entreprises dont la raison sociale contient le texte saisi
               </li>
               <li><strong>Modifiée depuis</strong> sélectionne les cartes qui ont été modifiées depuis la date que vous
                 choisissez
@@ -92,7 +92,7 @@
               label="Tableaux de suivi"
               multiple
               prepend-icon="fab fa-trello"
-              @change="getFollowedEtablissements"
+              @change="debounce(clearAndGetFollowedEtablissements, 500)"
           >
             <template v-slot:selection="{ item, index }">
               <v-chip small>
@@ -114,7 +114,7 @@
               label="Départements"
               multiple
               prepend-icon="mdi-map-marker"
-              @change="debounce(clearAndGetFollowedEtablissements, 500)"
+              @change="debounce(getFollowedEtablissements, 500)"
           >
             <template v-slot:selection="{ item, index }">
               <v-chip small>
@@ -135,7 +135,7 @@
               label="Statut"
               multiple
               prepend-icon="mdi-playlist-check"
-              @change="getFollowedEtablissements"
+              @change="debounce(getFollowedEtablissements, 500)"
           >
             <template v-slot:selection="{ item, index }">
               <v-chip small>
@@ -162,7 +162,7 @@
               multiple
               prepend-icon="mdi-label"
               style="margin-bottom: -30px"
-              @change="getFollowedEtablissements"
+              @change="debounce(getFollowedEtablissements,500)"
           >
             <template v-if="labels.length > 0" v-slot:prepend-inner>
               <v-tooltip bottom>
@@ -227,14 +227,13 @@
                   readonly
                   v-bind="attrs"
                   v-on="on"
-                  @click:clear="() => {since=null; getFollowedEtablissements()}"
+                  @click:clear="() => {since=null; debounce(getFollowedEtablissements, 500)}"
               ></v-text-field>
             </template>
             <v-date-picker
                 v-model="since"
                 locale="fr"
                 scrollable
-                @change="getFollowedEtablissements"
             >
               <v-spacer></v-spacer>
               <v-btn

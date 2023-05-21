@@ -24,6 +24,11 @@ export default {
   mounted() {
     this.getFollowedEtablissements()
   },
+  watch: {
+    since() {
+      this.debounce(this.getFollowedEtablissements, 500)
+    }
+  },
   methods: {
     resetLabels(event) {
       this.labels = []
@@ -38,7 +43,7 @@ export default {
       this._timerID = setTimeout(fn, timeout)
     },
     clearAndGetFollowedEtablissements() {
-      this.labels = ['*']
+      this.labels = []
       this.departements = ['*']
       this.lists = ['*']
       this.raisonSociale = null
@@ -218,7 +223,7 @@ export default {
     },
     labels: {
       get() {
-        return this.$localStore.state.labelsFollow
+        return this.$localStore.state.labelsFollow || []
       },
       set(value) {
         this.$localStore.commit('setLabelsFollow', value)
