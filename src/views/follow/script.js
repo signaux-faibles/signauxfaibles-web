@@ -47,7 +47,6 @@ export default {
       this.zone = ['*']
       this.lists = ['*']
       this.raisonSociale = null
-      this.since = null
       this.getFollowedEtablissements()
     },
     getFollowedEtablissements() {
