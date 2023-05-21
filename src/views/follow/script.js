@@ -39,7 +39,19 @@ export default {
     },
     getFollowedEtablissements() {
       this.loading = true
-      this.$axios.post('/kanban/follow', this.params).then((response) => {
+      if (this._abortController) {
+        this._abortController.abort()
+        this._abortController = null
+      }
+
+      this._abortController = new AbortController();
+      this.$axios.post(
+        '/kanban/follow',
+        this.params,
+        {
+          signal: this._abortController.signal
+        }
+      ).then((response) => {
         if (response.status === 200) {
           this.followPayload = response.data
         } else {

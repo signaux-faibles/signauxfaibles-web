@@ -1,0 +1,439 @@
+import Spinner from '@/components/Spinner.vue'
+import PredictionWidget from '@/components/PredictionWidget.vue'
+import Help from '@/components/Help.vue'
+import axios from 'axios'
+import libellesProcols from '@/assets/libelles_procols.json'
+
+export default {
+  // TODO: right drawer in component
+  data() {
+    return {
+      effectifClass: [10, 20, 50, 100],
+      secteursCovid: ['s1', 's1bis', 's2'],
+      init: true,
+      filter: '',
+      prediction: [],
+      predictionAlerts: 0,
+      predictionWarnings: 0,
+      nafDialog: false,
+      nextNaf: [],
+      timer: null,
+      page: 0,
+      listHeight: 0,
+      complete: false,
+      errorOccured: false,
+      followStateChanged: false,
+      snackbar: true,
+      procolItems: Object.values(libellesProcols),
+      procolParams: Object.keys(libellesProcols),
+      source: axios.CancelToken.source(),
+    }
+  },
+  mounted() {
+    this.getPrediction()
+  },
+  methods: {
+    showModelHelp() {
+      this.$refs.modelHelp.clickButton()
+    },
+    onHideEtablissement() {
+      if (this.followStateChanged) {
+        this.getPrediction()
+      }
+    },
+    applyNaf() {
+      this.currentNaf = this.nextNaf
+      this.getPrediction()
+    },
+    copyNaf() {
+      this.nextNaf = this.currentNaf.map((n) => n)
+    },
+    toggleNaf(value) {
+      if (this.nextNaf.includes(value)) {
+        this.nextNaf = this.nextNaf.filter((n) => (n !== value))
+      } else {
+        this.nextNaf.push(value)
+      }
+    },
+    selectAllNaf() {
+      if (!this.allNextNaf) {
+        this.nextNaf = this.naf1.map((n) => n.value)
+      } else {
+        this.nextNaf = []
+      }
+    },
+    format(v) {
+      let data = '"'
+      data += this.currentBatchKey + '";"'
+      data += v.siren + '";"' + v.siret + '";"'
+      data += v.departement + '";"'
+      data += v.raison_sociale.replace('"', '\"') + '";"'
+      data += v.dernier_effectif + '";"'
+      data += v.code_activite + '";"'
+      data += v.libelle_activite + '";"'
+      data += v.alert + '"'
+      return data
+    },
+    download() {
+      this.trackMatomoEvent('listes', 'extraire', this.eventName)
+      this.$axios(
+        {
+          url: `/scores/xls/${this.currentBatchKey}`,
+          method: 'post',
+          responseType: 'arraybuffer',
+          data: this.params,
+        },
+      ).then((r) => {
+        const url = window.URL.createObjectURL(new Blob([r.data]))
+        const element = document.createElement('a')
+        element.setAttribute('href', url)
+        element.setAttribute('download', 'extract.xlsx')
+        element.style.display = 'none'
+        document.body.appendChild(element)
+        element.click()
+        document.body.removeChild(element)
+      })
+    },
+    getPrediction() {
+      clearTimeout(this.timer)
+      this.timer = setTimeout(() => {
+        this.prediction = []
+        this.page = 0
+        this.complete = false
+        this.trackMatomoEvent('listes', 'charger_liste', this.eventName)
+        this.cancel()
+        this.getPredictionPage()
+      }, 500)
+    },
+    getPredictionPage() {
+      if (this.currentBatchKey) {
+        this.loading = true
+        this.errorOccured = false
+        this.$axios.post(`/scores/liste/${this.currentBatchKey}`,
+          this.params, {cancelToken: this.source.token}).then((response) => {
+          if (response.status === 200) {
+            this.prediction = this.prediction.concat(response.data.scores)
+            this.predictionWarnings = response.data.nbF2
+            this.predictionAlerts = response.data.nbF1
+            const p = response.data.page ? response.data.page : 0
+            const pageMax = response.data.pageMax ? response.data.pageMax : 0
+            if (p === pageMax) {
+              this.complete = true
+            }
+          } else if (response.status === 204) {
+            this.complete = true
+          } else {
+            this.errorOccured = true
+          }
+          this.loading = false
+        }).catch((error) => {
+          if (!axios.isCancel(error)) {
+            this.errorOccured = true
+            this.loading = false
+          }
+        }).finally(() => {
+          this.init = false
+          this.followStateChanged = false
+        })
+        this.page += 1
+      }
+    },
+    openLeftDrawer() {
+      this.trackMatomoEvent('general', 'ouvrir_menu')
+      this.leftDrawer = !this.leftDrawer
+    },
+    openRightDrawer() {
+      this.trackMatomoEvent('general', 'ouvrir_volet_filtrage')
+      this.rightDrawer = !this.rightDrawer
+    },
+    closeRightDrawer() {
+      this.trackMatomoEvent('general', 'fermer_volet_filtrage')
+      this.rightDrawer = !this.rightDrawer
+    },
+    toggleExcludeSecteursCovid() {
+      this.excludeSecteursCovid = !this.excludeSecteursCovid
+      this.getPrediction()
+    },
+    toggleFirstAlert() {
+      this.firstAlert = !this.firstAlert
+      this.getPrediction()
+    },
+    toggleIgnoreZone() {
+      this.ignorezone = !this.ignorezone
+      this.getPrediction()
+    },
+    toggleInclureEtablissementsFermes() {
+      this.inclureEtablissementsFermes = !this.inclureEtablissementsFermes
+      this.getPrediction()
+    },
+    toggleExclureSuivi() {
+      this.exclureSuivi = !this.exclureSuivi
+      this.getPrediction()
+    },
+    cancel() {
+      this.source.cancel()
+      this.source = axios.CancelToken.source()
+    },
+  },
+  watch: {
+    scrollTop() {
+      this.listHeight = this.$el.getBoundingClientRect().bottom
+    },
+    predictionIsEnough() {
+      if (!this.predictionIsEnough) {
+        this.trackMatomoEvent('listes', 'voir_page_suivante', this.currentBatchKey, this.page)
+        this.getPredictionPage()
+      }
+    },
+    prediction() {
+      this.listHeight = this.$el.getBoundingClientRect().bottom
+    },
+  },
+  computed: {
+    predictionIsEnough() {
+      return this.complete || this.loading || this.height * 2 < this.listHeight || this.errorOccured
+    },
+    params() {
+      const params = {}
+      if (!this.currentNaf.includes('NON')) {
+        params.activite = this.currentNaf
+      }
+      if (this.excludeSecteursCovid) {
+        params.excludeSecteursCovid = this.secteursCovid
+      }
+      if (this.zone.length > 0) {
+        params.zone = this.zone
+      }
+      if (this.caMin) {
+        params.caMin = parseInt(this.caMin, 10)
+      }
+      params.effectifMinEntreprise = parseInt(this.minEffectif, 10)
+      if (this.firstAlert) {
+        params.firstAlert = true
+      }
+      if (this.ignorezone) {
+        params.ignorezone = this.ignorezone
+      }
+      params.procol = []
+      this.procolItems.forEach((p, i) => {
+        if (this.procol.includes(p)) {
+          params.procol.push(this.procolParams[i])
+        }
+      })
+      if (this.exclureSuivi) {
+        params.exclureSuivi = this.exclureSuivi
+      }
+      if (!this.inclureEtablissementsFermes) {
+        params.etatAdministratif = 'A'
+      }
+      if (this.filter || '' !== '') {
+        params.filter = this.filter
+      }
+      params.page = this.page
+      return params
+    },
+    excludeSecteursCovid: {
+      get() {
+        return this.$localStore.state.excludeSecteursCovid
+      },
+      set(value) {
+        this.$localStore.commit('setexcludeSecteursCovid', value)
+      },
+    },
+    inclureEtablissementsFermes: {
+      get() {
+        return this.$localStore.state.inclureEtablissementsFermes
+      },
+      set(value) {
+        this.$localStore.commit('setinclureEtablissementsFermes', value)
+      },
+    },
+    exclureSuivi: {
+      get() {
+        return this.$localStore.state.exclureSuivi
+      },
+      set(value) {
+        this.$localStore.commit('setexclureSuivi', value)
+      },
+    },
+    ignorezone: {
+      get() {
+        return this.$localStore.state.ignorezone
+      },
+      set(value) {
+        this.$localStore.commit('setignorezone', value)
+      },
+    },
+    firstAlert: {
+      get() {
+        return this.$localStore.state.firstAlert
+      },
+      set(value) {
+        this.$localStore.commit('setfirstAlert', value)
+      },
+    },
+    procol: {
+      get() {
+        return this.$localStore.state.procol
+      },
+      set(value) {
+        this.$localStore.commit('setprocol', value)
+      },
+    },
+    currentNaf: {
+      get() {
+        // TODO: NON, unselect does not work
+        const naf = this.$localStore.state.currentNaf
+        if ((typeof naf) === 'string') {
+          if (naf === 'NON') {
+            return ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
+              'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U']
+          } else {
+            return [naf]
+          }
+        }
+        return naf
+      },
+      set(value) {
+        this.$localStore.commit('setcurrentNaf', value)
+      },
+    },
+    currentNafLibelle() {
+      return this.currentNaf.map((n) => {
+        return this.naf1.filter((n1) => (n1.value === n))[0].text
+      })
+    },
+    zone: {
+      get() {
+        return this.$localStore.state.zone
+      },
+      set(value) {
+        this.$localStore.commit('setzone', value)
+      },
+    },
+    caMin: {
+      get() {
+        return this.$localStore.state.caMin
+      },
+      set(value) {
+        this.$localStore.commit('setcaMin', value)
+      },
+    },
+    minEffectif: {
+      get() {
+        return this.$localStore.state.minEffectif
+      },
+      set(value) {
+        this.$localStore.commit('setminEffectif', value)
+      },
+    },
+    loading: {
+      get() {
+        return this.$store.state.loading
+      },
+      set(value) {
+        this.$store.commit('setLoading', value)
+      },
+    },
+    naf1() {
+      // TODO: clean naf structure
+      return Object.keys(this.$store.state.naf).map((n) => {
+        return {
+          text: n + '\u00a0-\u00a0' + this.$store.state.naf[n],
+          value: n,
+        }
+      })
+    },
+    allNaf() {
+      return this.currentNaf.length === this.naf1.length
+    },
+    allNextNaf() {
+      return this.nextNaf.length === this.naf1.length
+    },
+    someNextNaf() {
+      return this.nextNaf.length > 0 && !this.allNextNaf
+    },
+    batches() {
+      const batches = this.$store.getters.batches
+      return batches
+
+    },
+    scrollTop() {
+      return this.$store.state.scrollTop
+    },
+    height: {
+      get() {
+        return this.$store.state.height
+      },
+      set(height) {
+        this.$store.dispatch('setHeight', height)
+      },
+    },
+    leftDrawer: {
+      get() {
+        return this.$store.state.leftDrawer
+      },
+      set(val) {
+        this.$store.dispatch('setLeftDrawer', val)
+      },
+    },
+    rightDrawer: {
+      get() {
+        return this.$store.state.rightDrawer
+      },
+      set(val) {
+        this.$store.dispatch('setRightDrawer', val)
+      },
+    },
+    currentBatchKey: {
+      get() {
+        return this.$store.state.currentBatchKey
+      },
+      set(value) {
+        this.$store.dispatch('setCurrentBatchKey', value)
+      },
+    },
+    subzones() {
+      let all = [
+        {
+          text: 'Toute zone',
+          value: [],
+        },
+      ]
+      const region = Object.keys(this.$store.state.region).map((r) => {
+        return {
+          text: r,
+          value: this.$store.state.region[r],
+        }
+      }).sort((r1, r2) => r1.text > r2.text)
+      all = all.concat(region)
+      const departement = Object.keys(this.$store.state.departements).map((d) => {
+        return {
+          text: d + ' ' + this.$store.state.departements[d],
+          value: [d],
+        }
+      }).sort((d1, d2) => {
+        return d1.value[0].replace('2A', '200').replace('2B', '201') >
+        d2.value[0].replace('2A', '200').replace('2B', '201') ? 1 : -1
+      })
+      all = all.concat(departement)
+      return all
+    },
+    currentBatch() {
+      return (this.batches.filter((b) => b.value === this.currentBatchKey)[0] || {text: 'chargement'}).text
+    },
+    currentBatchDescription() {
+      const batches = this.$store.state.batches
+      return (batches.filter((b) => b.id === this.currentBatchKey)[0]).description
+    },
+    eventName() {
+      let eventName = this.currentBatchKey
+      if (this.filter || '' !== '') {
+        eventName = eventName.concat(',' + this.filter)
+      }
+      return eventName
+    },
+  },
+  components: {PredictionWidget, Spinner, Help},
+  name: 'Prediction',
+}
