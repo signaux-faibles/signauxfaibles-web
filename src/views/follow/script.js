@@ -44,7 +44,7 @@ export default {
     },
     clearAndGetFollowedEtablissements() {
       this.labels = []
-      this.departements = ['*']
+      this.zone = ['*']
       this.lists = ['*']
       this.raisonSociale = null
       this.since = null
