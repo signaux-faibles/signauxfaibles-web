@@ -114,7 +114,7 @@
               label="Départements"
               multiple
               prepend-icon="mdi-map-marker"
-              @change="getFollowedEtablissements"
+              @change="debounce(clearAndGetFollowedEtablissements, 500)"
           >
             <template v-slot:selection="{ item, index }">
               <v-chip small>

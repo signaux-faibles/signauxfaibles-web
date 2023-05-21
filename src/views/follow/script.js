@@ -37,6 +37,14 @@ export default {
       clearTimeout(this._timerID)
       this._timerID = setTimeout(fn, timeout)
     },
+    clearAndGetFollowedEtablissements() {
+      this.labels = ['*']
+      this.departements = ['*']
+      this.lists = ['*']
+      this.raisonSociale = null
+      this.since = null
+      this.getFollowedEtablissements()
+    },
     getFollowedEtablissements() {
       this.loading = true
       if (this._abortController) {
