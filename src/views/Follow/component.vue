@@ -207,7 +207,7 @@
         </div>
         <v-divider class="mb-3"/>
         <div style="display: flex; flex-direction: row; vertical-align: middle; padding: 0 15px;">
-          <v-text-field label="raison sociale" v-model="raisonSociale" @keypress="debounce(getFollowedEtablissements, 500)"/>
+          <v-text-field label="raison sociale" v-model="raisonSociale" @keydown="debounce(getFollowedEtablissements, 500)"/>
         </div>
         <v-divider class="mb-3"/>
         <div style="display: flex; flex-direction: row; vertical-align: middle; padding: 0 15px;">

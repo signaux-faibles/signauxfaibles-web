@@ -18,7 +18,7 @@ export default {
       alertExport: false,
       since: null,
       zoneFollow: [],
-      raisonSociale: "",
+      raisonSociale: null,
     }
   },
   mounted() {
@@ -130,6 +130,9 @@ export default {
       }
       if (this.since) {
         params.since = new Date(this.since)
+      }
+      if (this.raisonSociale) {
+        params.raisonSociale = this.raisonSociale
       }
       return params
     },
