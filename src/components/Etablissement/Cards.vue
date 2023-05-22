@@ -62,7 +62,9 @@ export default {
     },
     methods: {
         showCreateCardDialog() {
-            this.createCardDialog = true
+            if (this.canCreateCard) {
+                this.createCardDialog = true
+            }
         },
         getCardPayloads() {
             this.$axios.get(`/kanban/cards/${this.siret}`).then((response) => {

@@ -29,7 +29,6 @@
       </v-card-actions>
       <v-alert :value="followAlert" type="error" transition="scale-transition">{{ followAlertError }}</v-alert>
     </v-card>
-    <v-alert :value="followAlert" type="error" transition="scale-transition">{{ followAlertError }}</v-alert>
   </v-dialog>
 </template>
 
