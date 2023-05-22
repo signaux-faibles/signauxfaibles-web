@@ -44,9 +44,6 @@ export default {
     }
   },
   methods: {
-    showBoardDialog() {
-      this.boardDialog = true
-    },
     closeFollowDialog() {
       this.followAlert = false
       this.followAlertError = ''
@@ -68,10 +65,9 @@ export default {
             this.followAlertError = ''
             this.followAlert = false
             this.$parent.getEtablissement()
-            if (this.$parent.boards.filter((b) => !b.card && b.isMember).length > 0) {
-                this.$parent.boardDialog = true
-            }
+            this.$bus.$emit("follow-dialog-if-needed")
           }
+
         }).catch((error) => {
           this.followAlertError = 'Une erreur est survenue lors du suivi'
           this.followAlert = true
@@ -95,14 +91,6 @@ export default {
       },
       set(val) {
         this.$parent.followDialog = val
-      },
-    },
-    boardDialog: {
-      get() {
-        return this.$parent.boardDialog
-      },
-      set(val) {
-        this.$parent.boardDialog = val
       },
     },
     siret() {return this.$parent.siret},

@@ -1,5 +1,6 @@
 <template>
     <div>
+        {{ createCardDialog }}
         <NewCardDialog v-if="codeDepartement" :siret="siret" :codeDepartement="codeDepartement" :cards="cards"/>
         <h2>
             Prise en charge de l'établissement
@@ -20,7 +21,6 @@
         </span>
         <div v-if="canCreateCard && followed">
             <v-btn v-if="followed && canCreateCard" class="pa-2" color="indigo" outlined @click="showCreateCardDialog()">
-                <v-icon>fa-handshake-angle</v-icon>
                 nouvelle prise en charge<br/>
             </v-btn>
         </div>
@@ -49,7 +49,7 @@ tbody {
 <script>
 import Help from '@/components/Help.vue'
 import CardSummary from '@/components/Etablissement/CardSummary.vue'
-import NewCardDialog from "@/components/Etablissement/NewCardDialog/NewCardDialog.vue";
+import NewCardDialog from "@/components/Etablissement/CreateCardDialog/CreateCardDialog.vue";
 
 export default {
     name: 'Cards',
@@ -66,19 +66,20 @@ export default {
         },
         getCardPayloads() {
             this.$axios.get(`/kanban/cards/${this.siret}`).then((response) => {
-                this.cards = response.data
+                this.cards = response.data || []
                 const myBoardIds = this.boards.filter((b) => b.isMember).map((b) => b.id)
                 if (myBoardIds.length > 0 && !myBoardIds.includes(this.currentBoard)) {
                     this.currentBoard = myBoardIds[0]
                 }
             }).catch((_) => {
-                this.boards = []
+                this.cards = []
             })
         },
     },
     mounted() {
         this.$bus.$on('create-card', this.getCardPayloads)
         this.$bus.$on('unarchive-card', this.getCardPayloads)
+        this.$bus.$on('follow-dialog-if-needed', this.showCreateCardDialog)
         this.getCardPayloads()
     },
     computed: {
