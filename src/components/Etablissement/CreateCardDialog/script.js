@@ -87,49 +87,5 @@ export default {
                 this.$store.commit('setCreateCardActions', value)
             }
         },
-        // formattedDescription() {
-        //     let formattedDescription = '**Difficultés :**\n'
-        //     this.problems.forEach((p, i) => {
-        //         formattedDescription += '- ' + p + '\n'
-        //     })
-        //     formattedDescription += '\n'
-        //     formattedDescription += '**Actions :**\n'
-        //     this.actions.forEach((a, i) => {
-        //         formattedDescription += '- ' + a + '\n'
-        //     })
-        //     return formattedDescription
-        // },
-        // followCardConfig() {
-        //     const board = this.boards.filter((b) => b.id === this.currentBoard)[0]
-        //     if (board) {
-        //         const base = board.slug.split('-')
-        //         return followCardConfigBase[base[0] + '-' + base[1]]
-        //     }
-        //     return {
-        //         problemHelpContent: {},
-        //     }
-        // },
-        // currentBoard: {
-        //     get() {
-        //         return this.$parent.currentBoard
-        //     },
-        //     set(val) {
-        //         this.$parent.currentBoard = val
-        //     },
-        // },
-        // currentBoardHasCard() {
-        //     return this.boards.filter(b => b.id == this.currentBoard && (b.cards || []).filter(c => !c.archived).length > 0).length > 0
-        // },
-        // currentBoardHasArchive() {
-        //     return this.boards.filter(b => b.id == this.currentBoard && (b.cards || []).filter(c => c.archived).length > 0).length > 0
-        // },
-        // siret: {
-        //     get() {
-        //         return this.$parent.siret
-        //     },
-        //     set(val) {
-        //         this.$parent.currentBoard = val
-        //     },
-        // },
     },
 }

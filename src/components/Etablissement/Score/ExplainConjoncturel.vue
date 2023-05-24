@@ -6,6 +6,22 @@
     <v-card outlined v-if="typeExplication==='mixte' || typeExplication==='conjoncturel'">
       <v-card-text>
         <span>Les données récentes impactent le niveau d'alerte.</span>
+        <div class="align-center d-flex justify-start mb-1" v-if="signalConfidentiel">
+            <div class="pa-2">
+                <v-icon large color="indigo">fa-low-vision</v-icon>
+            </div>
+            <div class="pa-2">
+                Certains signaux, notamment financiers, ne peuvent être révélés en raison du caractère confidentiel des données qui fondent leur calcul
+            </div>
+        </div>
+        <div class="align-center d-flex justify-start mb-1" v-if="signalFinancier">
+            <div class="pa-2">
+                <v-icon large color="indigo">fa-eye</v-icon>
+            </div>
+            <div class="pa-2">
+                Les informations financières présentées ici vous sont révélées sur la base de la publication récente des bilans et comptes de résultat de l'entreprise
+            </div>
+        </div>
         <Redressement up v-if="signalFinancier">
           La lecture des bilans annuels révèle :
           <ul>
@@ -47,6 +63,7 @@ export default {
     signalDiminutionUrssaf: Boolean,
     signalActivitePartielle: Boolean,
     signalFinancier: Boolean,
+    signalConfidentiel: Boolean,
     redressements: Array,
     typeExplication: String,
   },

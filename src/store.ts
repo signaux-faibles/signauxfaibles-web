@@ -212,7 +212,7 @@ const sessionStore = new Vuex.Store({
     updateKanbanConfig(context) {
       axiosClient.get('/kanban/config').then((response) => {
         context.commit('updateKanbanConfig', response.data)
-      })
+      }).catch()
     },
     setLeftDrawer(context, val) {
       context.commit('leftDrawer', val)

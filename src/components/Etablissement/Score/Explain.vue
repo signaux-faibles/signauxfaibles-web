@@ -15,6 +15,7 @@
             :signalDiminutionUrssaf="signalDiminutionUrssaf"
             :signalActivitePartielle="signalActivitePartielle"
             :signalFinancier="signalFinancier"
+            :signalConfidentiel="signalConfidentiel"
             :redressements="redressements"
             :typeExplication="typeExplication"
         />
@@ -168,6 +169,7 @@ export default {
         this.signalDiminutionUrssaf,
         this.signalActivitePartielle,
         this.signalFinancier,
+        this.signalConfidentiel,
       ]
     },
     signalAugmentationUrssaf() {
@@ -185,8 +187,11 @@ export default {
     signalFinancier() {
       return ((this.hasRedressement("solvabilité_faible")?1:0) +
       (this.hasRedressement("k_propres_négatifs")?1:0) +
-      (this.hasRedressement("rentabilité_faible")?1:0) +
+      (this.hasRedressement("confidentiel")?1:0) +
       (this.hasRedressement("tva_rar_elevé")?1:0)) > 1
+    },
+    signalConfidentiel() {
+      return this.hasRedressement("confidentiel")
     },
     typeExplication() {
       if (this.crash) {
