@@ -1,6 +1,5 @@
 <template>
     <div>
-        {{ createCardDialog }}
         <NewCardDialog v-if="codeDepartement" :siret="siret" :codeDepartement="codeDepartement" :cards="cards"/>
         <h2>
             Prise en charge de l'établissement
