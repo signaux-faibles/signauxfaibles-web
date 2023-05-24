@@ -6,7 +6,7 @@
     <v-card outlined v-if="typeExplication==='mixte' || typeExplication==='conjoncturel'">
       <v-card-text>
         <span>Les données récentes impactent le niveau d'alerte.</span>
-        <div class="align-top d-flex justify-start mb-1" v-if="signalConfidentiel">
+        <div class="align-center d-flex justify-start mb-1" v-if="signalConfidentiel">
             <div class="pa-2">
                 <v-icon large color="indigo">fa-low-vision</v-icon>
             </div>

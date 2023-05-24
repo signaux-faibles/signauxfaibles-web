@@ -18,11 +18,16 @@ export default {
       alertExport: false,
       since: null,
       zoneFollow: [],
-      raisonSociale: "",
+      raisonSociale: null,
     }
   },
   mounted() {
     this.getFollowedEtablissements()
+  },
+  watch: {
+    since() {
+      this.debounce(this.getFollowedEtablissements, 500)
+    }
   },
   methods: {
     resetLabels(event) {
@@ -37,9 +42,28 @@ export default {
       clearTimeout(this._timerID)
       this._timerID = setTimeout(fn, timeout)
     },
+    clearAndGetFollowedEtablissements() {
+      this.labels = []
+      this.zone = ['*']
+      this.lists = ['*']
+      this.raisonSociale = null
+      this.getFollowedEtablissements()
+    },
     getFollowedEtablissements() {
       this.loading = true
-      this.$axios.post('/kanban/follow', this.params).then((response) => {
+      if (this._abortController) {
+        this._abortController.abort()
+        this._abortController = null
+      }
+
+      this._abortController = new AbortController();
+      this.$axios.post(
+        '/kanban/follow',
+        this.params,
+        {
+          signal: this._abortController.signal
+        }
+      ).then((response) => {
         if (response.status === 200) {
           this.followPayload = response.data
         } else {
@@ -131,6 +155,9 @@ export default {
       if (this.since) {
         params.since = new Date(this.since)
       }
+      if (this.raisonSociale) {
+        params.raisonSociale = this.raisonSociale
+      }
       return params
     },
     leftDrawer: {
@@ -195,7 +222,7 @@ export default {
     },
     labels: {
       get() {
-        return this.$localStore.state.labelsFollow
+        return this.$localStore.state.labelsFollow || []
       },
       set(value) {
         this.$localStore.commit('setLabelsFollow', value)

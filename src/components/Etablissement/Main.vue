@@ -186,7 +186,7 @@ import libellesProcols from '@/assets/libelles_procols.json'
 import Cards from '@/components/Etablissement/Cards.vue'
 import FollowDialog from '@/components/Etablissement/FollowDialog.vue'
 import UnfollowDialog from '@/components/Etablissement/UnfollowDialog.vue'
-import NewCardDialog from '@/components/Etablissement/NewCardDialog/NewCardDialog.vue'
+import CreateCardDialog from '@/components/Etablissement/CreateCardDialog/CreateCardDialog.vue'
 import Help from '@/components/Help.vue'
 
 export default {
@@ -194,7 +194,7 @@ export default {
   name: 'Etablissement',
   components: { Effectif, Urssaf, Help, Identite, Map,
     Commentaire, EtablissementEntreprise, Entreprise, Historique,
-    Cards, FollowDialog, UnfollowDialog, NewCardDialog },
+    Cards, FollowDialog, UnfollowDialog, CreateCardDialog },
   data() {
     return {
       axios: axios.create(),
