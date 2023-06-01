@@ -28,7 +28,7 @@ function responseInterceptor() {
   Vue.prototype.$axios.interceptors.response.use((response: any) => {
     return Promise.resolve(response)
   }, (error: any) => {
-    if (error.response.status === 401) {
+    if (error.response && error.response.status === 401) {
       Vue.prototype.$localStore.commit('setExpiredSession', true)
     }
     return Promise.reject(error)
@@ -92,6 +92,9 @@ Vue.mixin({
         Vue.prototype.$matomo.trackEvent(category, action, name, value)
       }
     },
+    gitbookPath(section: string): string {
+      return process.env['VUE_APP_GITBOOK_' + section]
+    }
   },
   computed: {
     jwt() {

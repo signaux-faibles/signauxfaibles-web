@@ -5,18 +5,7 @@
       color='indigo'>
       <v-toolbar-title class="localtoolbar">Informations financières</v-toolbar-title>
       <v-spacer/>
-      <v-btn
-          icon
-          dark
-          target="_blank"
-          href="https://signaux-faibles.gitbook.io/guide-dutilisation-et-faq/ratios-financiers"
-          text
-          style="position: relative; top: -2px;"
-      >
-        <v-icon dark>
-          mdi-library-books
-        </v-icon>
-      </v-btn>
+      <Gitbook icon :target="gitbookPath('LISTES')"/>
     </v-toolbar>
     <div>
       <Finoscope :siren="siren" :naf="naf"/>
@@ -26,11 +15,12 @@
 
 <script>
 import Finoscope from '@/components/Finoscope/Finoscope.vue'
+import Gitbook from "@/components/Gitbook.vue";
 
 export default {
   name: 'EntrepriseFinoscope',
   props: ['siren', 'naf'],
-  components: { Finoscope },
+  components: {Gitbook, Finoscope },
   created() {
     if (process.env.VUE_APP_BILANS_ENABLED && !!JSON.parse(process.env.VUE_APP_BILANS_ENABLED)) {
       this.getBilansExercices()

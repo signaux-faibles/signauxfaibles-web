@@ -18,47 +18,10 @@
           class="toolbar_titre"
           style="width: 100%; text-align: center;"
       >
-        Suivi d'établissements
-        <Help v-if="wekanUser" ref="followHelp" :big="true" :dark="true" titre="Suivi d'établissements">
-          <template>
-            <p>Compte tenu de votre niveau d'habilitation, trois types de suivi d'établissements sont possibles :</p>
-            <p>
-            <ul>
-              <li><strong>Mes cartes de suivi</strong> contient les cartes de suivis dont
-                vous êtes le créateur ou un des participants.
-              </li>
-              <li><strong>Toutes les cartes</strong> vous donne accès à toutes les cartes des
-                tableaux de suivi auxquels vous pouvez accéder.
-              </li>
-              <li><strong>Mon suivi sans carte</strong> regroupe les établissements que vous avez souhaité suivre sans
-                créer de carte.
-              </li>
-            </ul>
-            <p>
-            <p>Plusieurs critères supplémentaires permettent de filtrer la liste de suivi affichée :</p>
-            <p/>
-            <ul>
-              <li><strong>Tableau de suivi</strong> vous permet de limiter la consultation aux tableaux qui vous
-                intéressent
-              </li>
-              <li><strong>Zones Géographiques</strong> vous offre la possibilité de restreindre encore la sélection à
-                quelques départements
-              </li>
-              <li><strong>Statut du suivi</strong> donne la possibilité d'inclure les cartes des colonnes que vous
-                choisissez
-              </li>
-              <li><strong>Étiquettes</strong> permet de sélectionner les cartes en fonction des étiquettes qu'elles
-                portent, soit parce qu'elles portent toutes les étiquettes que vous aurez sélectionnées, ou au moins une
-                d'entre elles.
-              </li>
-              <li><strong>Raison sociale</strong> limite la sélection aux entreprises dont la raison sociale contient le texte saisi
-              </li>
-              <li><strong>Modifiée depuis</strong> sélectionne les cartes qui ont été modifiées depuis la date que vous
-                choisissez
-              </li>
-            </ul>
-          </template>
-        </Help>
+        <span style="display: inline-flex">
+          Suivi d'établissements
+          <Gitbook icon :target="gitbookPath('SUIVI')"/>
+        </span>
       </div>
       <v-spacer></v-spacer>
       <v-icon

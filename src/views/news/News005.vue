@@ -6,7 +6,6 @@
     <v-expansion-panel-content>
       <v-card flat>
         <v-card-text class="text">
-
           <v-row>
             <v-col class="col-8">
               <h3>
