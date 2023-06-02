@@ -8,6 +8,8 @@ import store from './store'
 import VueApexCharts from 'vue-apexcharts'
 // @ts-ignore
 import VueMatomo from 'vue-matomo'
+import globals from '@/globals'
+
 
 Vue.config.productionTip = true
 
@@ -85,6 +87,7 @@ Vue.use(VueKeyCloak, {
   },
 })
 
+
 Vue.mixin({
   methods: {
     trackMatomoEvent(category, action, name, value) {
@@ -93,7 +96,10 @@ Vue.mixin({
       }
     },
     gitbookPath(section: string): string {
-      return process.env['VUE_APP_GITBOOK_' + section]
+      if (globals.gitbook) {
+        return globals.gitbook[section]
+      }
+      return ''
     }
   },
   computed: {
