@@ -12,7 +12,7 @@
             <li>Les 3 critères experts de la liste précédente ont été maintenus et actualisés avec les dernières données disponibles.</li>
             <li>3 nouveaux critères experts portant sur la santé financière de l'entreprise ont été introduits</li>
           </ul>
-          <Gitbook target="f.a.q.#comment-sont-obtenues-les-listes-comment-fonctionne-le-modele-algorithmique"/>
+          <Gitbook :target="gitbookPath('LISTES')"/>
           <p/>
           <h2>Statistiques de la nouvelle liste</h2>
           <v-row>
@@ -34,7 +34,6 @@
                   type="donut"
                   :options="options"
                   :series="series"
-                  :labels="labels"
               ></apexchart>
             </v-col>
           </v-row>

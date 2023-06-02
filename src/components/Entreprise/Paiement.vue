@@ -3,14 +3,7 @@
     <v-toolbar dark color="indigo">
       <v-toolbar-title class="localtoolbar">Comportement de paiement</v-toolbar-title>
       <v-spacer />
-      <Help titre="Comportement de paiement">
-        <template>
-          <p>Les données de comportement de paiement sont des informations exclusives de la société <em>Altarès D&B</em>, qui construit depuis des années une base intitulée « Paydex ».<p>
-          <p>La base est constituée grâce des informations liées à la comptabilité client de sociétés participantes au partenariat « DunTrade » qui s’appuie sur un tissu large et étendu de partenaires en France et à l’international.</p>
-          <p>Si, à l’échelle de la France, ce sont ainsi des millions d’éléments de facturation qui sont annuellement pris en compte, le nombre de fournisseurs reportés est toutefois un sous-ensemble du nombre de fournisseurs total de l’entreprise.</p>
-          <p>Par définition, il pourrait ne pas être représentatif de l’ensemble des relations clients-fournisseurs d’une entreprise. Néanmoins, l’objectif est de donner une représentation fidèle du comportement de paiement plus que du niveau exact de retard réel de l’entreprise étudiée.</p>
-        </template>
-      </Help>
+      <Gitbook icon :target="gitbookPath('PAYDEX')"/>
     </v-toolbar>
     <div>
       <v-layout mt-4 wrap style="font-size: 17px">
@@ -35,11 +28,12 @@
 
 <script>
 import Help from '@/components/Help.vue'
+import Gitbook from "@/components/Gitbook.vue";
 
 export default {
   name: 'Paiement',
   props: ['siren', 'paydex'],
-  components: { Help },
+  components: {Gitbook, Help },
   data() {
     return {
       tiers: [0, 15, 30, 60],

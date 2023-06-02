@@ -11,7 +11,7 @@
           <ul>
             <li>Les 3 nouveaux critères experts portant sur la santé financière de l'entreprise ont été conservés et apportent de nouveaux signalements à la faveur des nouvelles liasses disponibles.</li>
           </ul>
-          <Gitbook target="f.a.q./les-caracteristiques-des-listes"/>
+          <Gitbook :target="gitbookPath('DETECTION')"/>
           <p/>
           <h2>Statistiques de la nouvelle liste</h2>
           <v-row>
@@ -33,7 +33,6 @@
                   type="donut"
                   :options="options"
                   :series="series"
-                  :labels="labels"
               ></apexchart>
             </v-col>
           </v-row>

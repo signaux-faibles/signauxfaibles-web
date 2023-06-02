@@ -1,0 +1,10 @@
+{
+  "gitbook": {
+    "ROOT": "https://signaux-faibles.gitbook.io/guide-dutilisation-et-faq/",
+    "DETECTION": "/consulter-des-informations-dentreprises/fiche-etablissement/explication-de-la-detection",
+    "LISTES": "/informations-generales/f.a.q./les-caracteristiques-des-listes",
+    "PAYDEX": "/consulter-des-informations-dentreprises/fiche-entreprise/les-retards-de-paiement-aux-fournisseurs",
+    "INTERPRETATION_FINANCE": "/consulter-des-informations-dentreprises/analyse-financiere/interpretation-des-ratios-en-un-coup-doeil",
+    "SUIVI": "/consulter-des-informations-dentreprises/suivi-detablissements"
+  }
+}

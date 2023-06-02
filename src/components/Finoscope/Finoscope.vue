@@ -189,7 +189,7 @@ export default {
           })
     },
     exerciceFromDateCloture(dateClotureExercice) {
-      if (dateClotureExercice.getMonth() < 6) {
+      if (dateClotureExercice.getMonth() <= 6) {
         return dateClotureExercice.getFullYear() - 1
       } else {
         return dateClotureExercice.getFullYear()
