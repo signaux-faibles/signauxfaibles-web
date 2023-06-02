@@ -8,6 +8,8 @@ import store from './store'
 import VueApexCharts from 'vue-apexcharts'
 // @ts-ignore
 import VueMatomo from 'vue-matomo'
+import globals from '@/globals'
+
 
 Vue.config.productionTip = true
 
@@ -28,7 +30,7 @@ function responseInterceptor() {
   Vue.prototype.$axios.interceptors.response.use((response: any) => {
     return Promise.resolve(response)
   }, (error: any) => {
-    if (error.response.status === 401) {
+    if (error.response && error.response.status === 401) {
       Vue.prototype.$localStore.commit('setExpiredSession', true)
     }
     return Promise.reject(error)
@@ -85,6 +87,7 @@ Vue.use(VueKeyCloak, {
   },
 })
 
+
 Vue.mixin({
   methods: {
     trackMatomoEvent(category, action, name, value) {
@@ -92,6 +95,12 @@ Vue.mixin({
         Vue.prototype.$matomo.trackEvent(category, action, name, value)
       }
     },
+    gitbookPath(section: string): string {
+      if (globals.gitbook) {
+        return globals.gitbook[section]
+      }
+      return ''
+    }
   },
   computed: {
     jwt() {

@@ -1,11 +1,12 @@
 import PredictionWidget from '@/components/PredictionWidget.vue'
 import Toolbar from '@/components/Toolbar.vue'
 import Help from '@/components/Help.vue'
+import Gitbook from "@/components/Gitbook.vue";
 import labelColors from '@/assets/labels.json'
 
 export default {
   name: 'Follow',
-  components: {PredictionWidget, Toolbar, Help},
+  components: {PredictionWidget, Toolbar, Help, Gitbook},
   data() {
     return {
       init: true,

@@ -8,7 +8,7 @@
         Cette entreprise est portée à votre attention car elle présente des signes d'alerte {{ this.alert === "Alerte seuil F2"?' modérés':' importants'}} détaillés ci-dessous.<br/>
         <p/>
         <span>
-          <Gitbook target="f.a.q./les-caracteristiques-des-listes"/>
+          <Gitbook :target="gitbookPath('DETECTION')"/>
         </span>
         <ExplainConjoncturel
             :signalAugmentationUrssaf="signalAugmentationUrssaf"
