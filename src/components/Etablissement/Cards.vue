@@ -67,11 +67,8 @@ export default {
         },
         getCardPayloads() {
             this.$axios.get(`/kanban/cards/${this.siret}`).then((response) => {
+                console.log(response.data)
                 this.cards = response.data || []
-                const myBoardIds = this.boards.filter((b) => b.isMember).map((b) => b.id)
-                if (myBoardIds.length > 0 && !myBoardIds.includes(this.currentBoard)) {
-                    this.currentBoard = myBoardIds[0]
-                }
             }).catch((_) => {
                 this.cards = []
             })
