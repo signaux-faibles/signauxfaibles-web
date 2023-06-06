@@ -21,7 +21,7 @@
         </div>
         <v-spacer></v-spacer>
         <v-icon
-                v-if="!rightDrawer"
+                v-if="!rightDrawer && !welcome"
                 :class="loading?'rotate':''"
                 color="#ffffff"
                 @click="openRightDrawer()"

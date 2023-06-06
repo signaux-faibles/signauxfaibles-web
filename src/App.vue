@@ -87,6 +87,7 @@ export default {
       window.innerHeight || 0,
     )
     this.$store.dispatch('updateReference')
+    this.$store.dispatch('updateCampaigns')
     if (this.roles.includes('wekan')) {
       this.$store.dispatch('updateKanbanConfig')
     }

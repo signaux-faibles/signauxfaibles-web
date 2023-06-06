@@ -69,9 +69,4 @@ export default {
       }
     }
   },
-  computed: {
-    myCards() {
-      return this.cards.filter((c) => c.assignee == this.jwt.email && !c.done )
-    }
-  }
 }

@@ -1,35 +1,23 @@
 <template>
   <div>
-    <!--    <v-container>-->
-    <!--      <v-layout>-->
-    <!--        <v-flex xs12 md12 style="text-align: center">-->
-    <!--          <v-btn-->
-    <!--            class="mr-4" color="indigo"-->
-    <!--            outlined >-->
-    <!--            <v-icon class="mr-2" small>fa-file-excel</v-icon>-->
-    <!--            Exporter en XLSX (Excel)-->
-    <!--          </v-btn>-->
-    <!--        </v-flex>-->
-    <!--      </v-layout>-->
-    <!--    </v-container>-->
-    <Card v-for="card in myCards" @key="card.siret">
+    <Card v-for="etablissement in etablissements" @key="etablissement.siret">
       <template v-slot:entete>
         <div>
-          <ScoreWidget :prediction="prediction(card.siret)" :tooltip="true"/>
+          <ScoreWidget :prediction="prediction(etablissement.siret)" :tooltip="true"/>
         </div>
       </template>
       <template v-slot:corps>
         <div class="ml-4">
           <span class="raison-sociale">
-              {{ card.raison_sociale }}
+              {{ etablissement.raison_sociale }}
           </span><br/>
             <span>
-              {{ card.siret }}
+              {{ etablissement.siret }}
           </span>
         </div>
         <div style="text-align: right" class="mr-4">
-          <v-btn color="indigo lighten-1" dark block small style="text-transform: none" class="mb-2" @click="showEtablissement(card.siret)">Fiche Établissement</v-btn>
-          <v-btn color="indigo lighten-1" dark block small  style="text-transform: none" @click="showEntreprise(card.siret)">Fiche Entreprise</v-btn>
+          <v-btn color="indigo lighten-1" dark block small style="text-transform: none" class="mb-2" @click="showEtablissement(etablissement.siret)">Fiche Établissement</v-btn>
+          <v-btn color="indigo lighten-1" dark block small  style="text-transform: none" @click="showEntreprise(etablissement.siret)">Fiche Entreprise</v-btn>
         </div>
         <div class="mr-4">
           <v-btn rounded @click="showFailed()" dark color="red accent-2">

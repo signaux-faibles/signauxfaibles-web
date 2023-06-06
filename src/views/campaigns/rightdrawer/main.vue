@@ -11,9 +11,6 @@
 
         </v-toolbar>
 
-        <div class="ma-3">
-            <v-select :items="campaignsSelectItems" v-model="campaignsSelectedID" label="Campagne"></v-select>
-        </div>
         <div class="ma-2" v-if="campaignsSelectedID">
             <Markdown :text="campaignsSelectedManifest"/>
         </div>

@@ -5,6 +5,7 @@ export default {
       loading: false,
     }
   },
+  props: ['welcome'],
   methods: {
     closeRightDrawer() {
       this.rightDrawer = false

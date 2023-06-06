@@ -87,10 +87,14 @@ const sessionStore = new Vuex.Store({
     createCardProblems: [],
     createCardActions: [],
     createCardLabels: [],
+    campaigns: [],
     campaignsMenu: 'todo',
     campaignsSelectedID: null,
   },
   mutations: {
+    setCampaigns(state, value) {
+      state.campaigns = value
+    },
     setCampaignsSelectedID(state, value) {
       state.campaignsSelectedID = value
     },
@@ -161,6 +165,11 @@ const sessionStore = new Vuex.Store({
     },
   },
   actions: {
+    updateCampaigns(context) {
+      axiosClient.get('/campaign/list').then((r) => {
+        context.commit('setCampaigns', r.data)
+      })
+    },
     setCampaignsSelectedID(context, value) {
       context.commit('setCampaignsSelectedID', value)
     },

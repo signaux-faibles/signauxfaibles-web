@@ -44,6 +44,12 @@ const router = new Router({
       component: Campaigns,
     },
     {
+      path: '/campaigns/:urlCampaignID',
+      name: 'campaignDetails',
+      component: Campaigns,
+      props: true,
+    },
+    {
       path: '/ets/:siret',
       name: 'etablissement',
       component: Etablissement,

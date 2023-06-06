@@ -12,15 +12,14 @@ export default {
       dialogEntreprise: false,
       siret: null,
       siren: null,
+      etablissements: [],
     }
   },
   methods: {
-    detteSociale(siret) {
-      if (siret.slice(0,1) == '8') {
-        return 'oui'
-      } else {
-        return 'non'
-      }
+    getPendingEtablissements() {
+      this.$axios.get('/campaign/pending/1').then((r) => {
+        this.etablissements = r.data
+      })
     },
     showEtablissement(siret) {
       this.siret = siret
@@ -37,29 +36,6 @@ export default {
     hideEntreprise() {
       this.siret = null
       this.dialogEntreprise = false
-    },
-    prediction(siret) {
-      return {
-        "alert": "Alerte seuil F" + (siret%2 + 1),
-        "visible": true,
-        "inZone": true,
-        "followed": false,
-        "followedEntreprise": false,
-        "firstAlert": false,
-        "siege": true,
-        "permUrssaf": true,
-        "permDGEFP": true,
-        "permScore": true,
-        "permBDF": true,
-        "secteurCovid": "nonSecteurCovid",
-        "etatAdministratif": "A",
-        "etatAdministratifEntreprise": "A"
-      }
-    }
-  },
-  computed: {
-    pendingCards() {
-      return this.cards.filter((c) => c.assignee == 'nobody' && !c.done )
     }
   },
 }
