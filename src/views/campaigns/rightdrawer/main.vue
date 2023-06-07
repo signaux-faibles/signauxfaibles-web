@@ -11,17 +11,17 @@
 
         </v-toolbar>
 
-        <div class="ma-2" v-if="campaignsSelectedID">
-            <Markdown :text="campaignsSelectedManifest"/>
-        </div>
-        <div class="ma-3" v-if="campaignsSelectedID">
-            <h3>En bref</h3>
-            <ul>
-                <li>il reste {{ campaignsSelectedStats.pending }} entreprises en attente</li>
-                <li>{{ campaignsSelectedStats.done }} prises en charge sont terminées</li>
-                <li>{{ campaignsSelectedStats.mine }} entreprises sont encore à votre charge</li>
-            </ul>
-        </div>
+<!--        <div class="ma-2" v-if="campaignsSelectedID">-->
+<!--            <Markdown :text="campaignsSelectedManifest"/>-->
+<!--        </div>-->
+<!--        <div class="ma-3" v-if="campaignsSelectedID">-->
+<!--            <h3>En bref</h3>-->
+<!--            <ul>-->
+<!--                <li>il reste {{ campaignsSelectedStats.pending }} entreprises en attente</li>-->
+<!--                <li>{{ campaignsSelectedStats.done }} prises en charge sont terminées</li>-->
+<!--                <li>{{ campaignsSelectedStats.mine }} entreprises sont encore à votre charge</li>-->
+<!--            </ul>-->
+<!--        </div>-->
     </v-navigation-drawer>
 </template>
 

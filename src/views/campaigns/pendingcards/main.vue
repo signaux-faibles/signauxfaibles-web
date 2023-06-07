@@ -1,17 +1,16 @@
 <template>
   <div>
-      <v-btn @click="getPendingEtablissements">refresh</v-btn><br/>
-      {{ JSON.stringify(etablissements, 2, 2) }}
-    <Card v-for="etablissement in etablissements" :key="etablissement.siret">
+    <Card v-for="etablissement in pending.etablissements" :key="etablissement.siret">
         <template v-slot:entete>
           <div>
-            <ScoreWidget :prediction="prediction(etablissement.siret)" :tooltip="true"/>
+            <div v-if="etablissement.followed" class="corner-ribbon"><v-icon dark small>mdi-star</v-icon></div>
+            <ScoreWidget :prediction="etablissement" :key="etablissement.id" :tooltip="true"/>
           </div>
         </template>
         <template v-slot:corps>
             <div class="ml-4">
                 <span class="raison-sociale">
-                    {{ etablissement.raison_sociale }}
+                    {{ etablissement.raisonSociale }}
                 </span><br/>
                 <span>
                     {{ etablissement.siret }}
@@ -20,10 +19,6 @@
             <div style="text-align: right" class="mr-4">
                 <v-btn color="indigo lighten-1" dark block small style="text-transform: none" class="mb-2" @click="showEtablissement(etablissement.siret)">Fiche Établissement</v-btn>
                 <v-btn color="indigo lighten-1" dark block small  style="text-transform: none" @click="showEntreprise(etablissement.siret)">Fiche Entreprise</v-btn>
-            </div>
-            <div class="mr-4" style="text-align: center">
-                <span class="raison-sociale">Dette Sociale</span><br/>
-                <span>{{ detteSociale(etablissement.siret) }}</span>
             </div>
             <div class="mr-4">
                 <v-btn dark rounded color="green">

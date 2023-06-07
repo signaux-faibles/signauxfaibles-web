@@ -12,14 +12,23 @@ export default {
       dialogEntreprise: false,
       siret: null,
       siren: null,
-      etablissements: [],
+      pending: [],
     }
+  },
+  mounted() {
+    this.getPendingEtablissements()
+  },
+  computed: {
+    campaignsSelectedID() { return this.$store.state.campaignsSelectedID }
   },
   methods: {
     getPendingEtablissements() {
-      this.$axios.get('/campaign/pending/1').then((r) => {
-        this.etablissements = r.data
+      this.$axios.get('/campaign/pending/' + this.campaignsSelectedID).then((r) => {
+        this.pending = r.data
       })
+    },
+    etablissements() {
+      return this.pending.etablissements
     },
     showEtablissement(siret) {
       this.siret = siret
