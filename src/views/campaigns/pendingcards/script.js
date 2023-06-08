@@ -27,6 +27,9 @@ export default {
         this.pending = r.data
       })
     },
+    take(campaignID, id) {
+      this.$axios.get('/campaign/take/' + campaignID + '/' + id)
+    },
     etablissements() {
       return this.pending.etablissements
     },
