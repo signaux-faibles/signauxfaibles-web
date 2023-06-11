@@ -1,6 +1,6 @@
 <template>
   <div v-if="myActions">
-    <Card  v-for="etablissement in myActions.etablissements" @key="etablissement.siret">
+    <Card  v-for="etablissement in myActions.etablissements" :key="etablissement.siret">
       <template v-slot:entete>
         <div>
           <ScoreWidget :prediction="etablissement" :tooltip="true"/>
@@ -59,7 +59,7 @@
           <v-card-text>
             Vous avez réussi à contacter cette entreprise, pouvez vous indiquer les conclusions de cet entretien ?
             <v-radio-group v-model="successRadio">
-              <v-radio v-for="(label, value) in successLabels" :label="label" :value="value"/>
+              <v-radio v-for="(label, value) in successLabels" :key="value" :label="label" :value="value"/>
             </v-radio-group>
             <div style="text-align: right">
               <v-btn @click="hideSuccess" color="red accent-2" dark class="mr-4">
@@ -83,7 +83,7 @@
                 <v-card-text>
                   Vous ne pensez plus pouvoir contacter cette entreprise, pouvez vous en expliquer la raison ?
                   <v-radio-group v-model="cancelRadio">
-                    <v-radio v-for="(label, value) in cancelLabels" :label="label" :value="value"/>
+                    <v-radio v-for="(label, value) in cancelLabels" :key="value" :label="label" :value="value"/>
                   </v-radio-group>
                   <div style="text-align: right">
                     <v-btn @click="hideCancel" color="red accent-2" dark class="mr-4">
