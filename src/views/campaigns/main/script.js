@@ -3,9 +3,9 @@ import CampaignsRightDrawer from "@/views/campaigns/rightdrawer/main.vue"
 import CampaignsAppBar from "@/views/campaigns/appbar/main.vue"
 import CampaignsMenu from "@/views/campaigns/menu/main.vue"
 import CampaignsWelcome from "@/views/campaigns/welcome/main.vue"
-import CampaignsMyCards from "@/views/campaigns/mycards/main.vue"
+import CampaignsMyCards from "@/views/campaigns/myactions/main.vue"
 import CampaignsPendingCards from "@/views/campaigns/pendingcards/main.vue"
-import CampaignsAllCards from "@/views/campaigns/allcards/main.vue"
+import CampaignsAllCards from "@/views/campaigns/allactions/main.vue"
 
 export default {
   name: "Campaigns",

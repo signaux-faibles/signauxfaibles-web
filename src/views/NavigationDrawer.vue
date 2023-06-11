@@ -33,7 +33,7 @@
           <v-list-item-title>Consultation</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
-      <v-list-item to="/campaigns">
+      <v-list-item v-if="hasCampaigns" to="/campaigns">
           <v-list-item-action>
               <v-icon>mdi-briefcase-outline</v-icon>
           </v-list-item-action>
@@ -152,6 +152,9 @@ export default {
         this.$store.dispatch('setLeftDrawer', val)
       },
     },
+    hasCampaigns() {
+      return this.$store.state.campaigns.length > 0
+    }
   },
 }
 </script>

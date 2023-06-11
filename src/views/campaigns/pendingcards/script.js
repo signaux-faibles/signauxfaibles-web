@@ -17,18 +17,24 @@ export default {
   },
   mounted() {
     this.getPendingEtablissements()
+    this.subscribe(this.campaignsSelectedID)
   },
   computed: {
     campaignsSelectedID() { return this.$store.state.campaignsSelectedID }
   },
   methods: {
+    subscribe(campaignID) {
+      const evtSource = new EventSource("/campaign/event/" + campaignID);
+    },
     getPendingEtablissements() {
       this.$axios.get('/campaign/pending/' + this.campaignsSelectedID).then((r) => {
         this.pending = r.data
       })
     },
     take(campaignID, id) {
-      this.$axios.get('/campaign/take/' + campaignID + '/' + id)
+      this.$axios.get('/campaign/take/' + campaignID + '/' + id).then((r) => {
+        this.getPendingEtablissements()
+      })
     },
     etablissements() {
       return this.pending.etablissements

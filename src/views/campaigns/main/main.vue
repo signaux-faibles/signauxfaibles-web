@@ -9,7 +9,7 @@
       <br/>
       <CampaignsPendingCards v-if="campaignsMenu == 'pending-cards'"/>
       <CampaignsMyCards v-if="campaignsMenu == 'my-cards'"/>
-      <CampaignsAllCards v-if="campaignsMenu == 'all-cards'" :cards="cards"/>
+      <CampaignsAllCards v-if="campaignsMenu == 'all-cards'"/>
     </div>
   </div>
 </template>
