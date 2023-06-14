@@ -135,6 +135,14 @@ export default {
     etablissements() {
       return this.followPayload.summaries || []
     },
+    uniqEtablissements() {
+      // TODO: déplacer cette logique dans le backend
+      const map = this.etablissements.reduce((m, e) => {
+        m[e.siret] = e
+        return m
+      }, {})
+      return Object.values(map)
+    },
     params() {
       const params = {}
       params.type = this.type
