@@ -136,6 +136,7 @@ export default {
       return this.followPayload.summaries || []
     },
     uniqEtablissements() {
+      // TODO: déplacer cette logique dans le backend
       const map = this.etablissements.reduce((m, e) => {
         m[e.siret] = e
         return m
