@@ -135,6 +135,13 @@ export default {
     etablissements() {
       return this.followPayload.summaries || []
     },
+    uniqEtablissements() {
+      const map = this.etablissements.reduce((m, e) => {
+        m[e.siret] = e
+        return m
+      }, {})
+      return Object.values(map)
+    },
     params() {
       const params = {}
       params.type = this.type

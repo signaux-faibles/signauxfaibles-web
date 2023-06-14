@@ -272,7 +272,7 @@
           </v-alert>
         </div>
         <PredictionWidget
-            v-for="e in etablissements.slice(0,100)"
+            v-for="e in uniqEtablissements"
             :key="e.siret"
             :prediction="e"
             @follow-etablissement="getFollowedEtablissements"
