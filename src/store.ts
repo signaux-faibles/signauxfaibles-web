@@ -15,6 +15,10 @@ const axiosClient = axios.create(
   },
 )
 
+
+
+
+
 const localStore = new Vuex.Store({
   plugins: [createPersistedState({ storage: window.localStorage })],
   state: {

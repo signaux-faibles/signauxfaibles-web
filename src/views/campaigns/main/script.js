@@ -6,6 +6,7 @@ import CampaignsWelcome from "@/views/campaigns/welcome/main.vue"
 import CampaignsMyCards from "@/views/campaigns/myactions/main.vue"
 import CampaignsPendingCards from "@/views/campaigns/pendingcards/main.vue"
 import CampaignsAllCards from "@/views/campaigns/allactions/main.vue"
+import { fetchEventSource } from "@microsoft/fetch-event-source";
 
 export default {
   name: "Campaigns",
@@ -13,13 +14,14 @@ export default {
   mounted() {
     this.campaignsMenu = 'pending'
     // this.campaignsSelectedID = null
-    this.rightDrawer = false
     if (this.urlCampaignID) {
       this.campaignsSelectedID = this.urlCampaignID
-      this.rightDrawer = true
     } else {
       this.campaignsSelectedID = null
     }
+    this.rightDrawer = false
+
+    this.watchSSE(this.$bus)
   },
   props: ['urlCampaignID'],
   watch: {
@@ -28,15 +30,43 @@ export default {
       this.campaignsSelectedID=newID
     }
   },
+  beforeDestroy() {
+    this.SSESignal.abort()
+  },
+  methods: {
+    async watchSSE(bus) {
+      await fetchEventSource(`http://localhost:3000/campaign/stream/1`, {
+        method: "GET",
+        headers: {
+          Accept: "text/event-stream",
+          Authorization: `Bearer ${this.$keycloak.token}`
+        },
+        signal: this.SSESignal.signal,
+        onopen(res) {
+          if (res.ok && res.status === 200) {
+            console.log("Connection made ", res);
+          } else if (
+            res.status >= 400 &&
+            res.status < 500 &&
+            res.status !== 429
+          ) {
+            console.log("Client side error ", res);
+          }
+        },
+        onmessage(event) {
+          const message = JSON.parse(event.data)
+          bus.$emit("campaign-message", message)
+        },
+        onclose() {
+          console.log("Connection closed by the server");
+        },
+        onerror(err) {
+          console.log("There was an error from server", err);
+        },
+      });
+    }
+  },
   computed: {
-    rightDrawer: {
-      get() {
-        return this.$store.state.rightDrawer
-      },
-      set(value) {
-        return this.$store.dispatch("setRightDrawer", value)
-      }
-    },
     welcome() { return this.campaignsSelectedID == null },
     campaignsSelectedID: {
       get() {
@@ -58,6 +88,7 @@ export default {
   data() {
     return {
       type: "blank",
+      SSESignal: new AbortController()
     }
   }
 }

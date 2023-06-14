@@ -17,14 +17,17 @@ export default {
   },
   mounted() {
     this.getPendingEtablissements()
-    this.subscribe(this.campaignsSelectedID)
+    this.$bus.$on('campaign-message', this.processMessage)
+  },
+  beforeDestroy() {
+    this.$bus.$off()
   },
   computed: {
     campaignsSelectedID() { return this.$store.state.campaignsSelectedID }
   },
   methods: {
-    subscribe(campaignID) {
-      const evtSource = new EventSource("/campaign/event/" + campaignID);
+    processMessage(message) {
+ki      console.log(message)
     },
     getPendingEtablissements() {
       this.$axios.get('/campaign/pending/' + this.campaignsSelectedID).then((r) => {
