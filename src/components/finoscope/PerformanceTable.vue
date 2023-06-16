@@ -81,7 +81,7 @@
 </template>
 
 <script>
-import Info from "@/components/Finoscope/Info.vue"
+import Info from "@/components/finoscope/Info.vue"
 
 export default {
   name: 'PerformanceTable',

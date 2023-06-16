@@ -1,10 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Prediction from '@/views/prediction/main.vue'
-import Goup from '@/views/Goup.vue'
-import Browse from '@/views/Browse.vue'
-import Follow from '@/views/follow/main.vue'
-import PageNotFound from '@/views/PageNotFound.vue'
+import Prediction from '@/components/prediction/main.vue'
+import Browse from '@/components/Browse.vue'
+import Follow from '@/components/follow/main/main.vue'
+import PageNotFound from '@/components/PageNotFound.vue'
 import Etablissement from '@/components/Etablissement/Main.vue'
 import Campaigns from '@/components/campaigns/main/main.vue'
 
@@ -22,11 +21,6 @@ const router = new Router({
       path: '/',
       name: 'browse',
       component: Browse,
-    },
-    {
-      path: '/goup',
-      name: 'goup',
-      component: Goup,
     },
     {
       path: '*',

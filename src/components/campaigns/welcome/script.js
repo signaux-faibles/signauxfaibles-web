@@ -1,12 +1,10 @@
 import CampaignsHeader from '@/components/campaigns/header/main.vue'
 import '@toast-ui/editor/dist/toastui-editor.css';
 
-import { Editor } from '@toast-ui/vue-editor';
-import '@toast-ui/editor/dist/i18n/fr-fr';
 
 export default {
     name: "CampaignsWelcome",
-    components: {CampaignsHeader, Editor},
+    components: {CampaignsHeader},
     computed: {
         campaigns() {return this.$store.state.campaigns},
         rightDrawer: {

@@ -99,7 +99,7 @@
 </template>
 
 <script>
-import News from '@/views/News.vue'
+import News from '@/components/News.vue'
 
 export default {
   components: { News },

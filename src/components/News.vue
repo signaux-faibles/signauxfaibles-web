@@ -44,12 +44,12 @@
 </template>
 
 <script>
-import News001 from '@/views/news/News001.vue'
-import News002 from '@/views/news/News002.vue'
-import News003 from '@/views/news/News003.vue'
-import News004 from '@/views/news/News004.vue'
-import News005 from '@/views/news/News005.vue'
-import News006 from '@/views/news/News006.vue'
+import News001 from '@/components/news/News001.vue'
+import News002 from '@/components/news/News002.vue'
+import News003 from '@/components/news/News003.vue'
+import News004 from '@/components/news/News004.vue'
+import News005 from '@/components/news/News005.vue'
+import News006 from '@/components/news/News006.vue'
 
 
 export default {

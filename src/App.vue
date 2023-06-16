@@ -23,8 +23,8 @@
 </template>
 
 <script>
-import NavigationDrawer from '@/views/NavigationDrawer'
-import Security from '@/views/Security'
+import NavigationDrawer from '@/components/NavigationDrawer.vue'
+import Security from '@/components/Security.vue'
 
 export default {
   components: { NavigationDrawer, Security },

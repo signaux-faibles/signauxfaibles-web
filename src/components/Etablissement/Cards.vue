@@ -47,7 +47,7 @@ tbody {
 
 <script>
 import Help from '@/components/Help.vue'
-import CardSummary from '@/components/Etablissement/CardSummary.vue'
+import CardSummary from '@/components/follow/summary/main.vue'
 import NewCardDialog from "@/components/Etablissement/CreateCardDialog/CreateCardDialog.vue";
 
 export default {

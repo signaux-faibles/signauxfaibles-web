@@ -147,7 +147,7 @@ export default {
   components: {
     ScoreWidget,
     Etablissement: () => import('@/components/Etablissement/Main.vue'),
-    Entreprise: () => import('@/components/Entreprise'),
+    Entreprise: () => import('@/components/Entreprise/main.vue'),
   },
   data() {
     return {

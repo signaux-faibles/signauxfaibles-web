@@ -63,13 +63,13 @@
 
 <script>
 import axios from 'axios'
-import PerformanceTable from "@/components/Finoscope/PerformanceTable.vue";
-import PerformanceGraph from "@/components/Finoscope/PerformanceGraph.vue";
-import SolvabiliteEtTresorerieTable from "@/components/Finoscope/SolvabiliteEtTresorerieTable.vue";
-import SolvabiliteEtTresorerieGraph from "@/components/Finoscope/SolvabiliteEtTresorerieGraph.vue";
-import GestionTable from "@/components/Finoscope/GestionTable.vue";
-import GestionGraph from "@/components/Finoscope/GestionGraph.vue";
-import DataSource from "@/components/Finoscope/DataSource.vue"
+import PerformanceTable from "@/components/finoscope/PerformanceTable.vue";
+import PerformanceGraph from "@/components/finoscope/PerformanceGraph.vue";
+import SolvabiliteEtTresorerieTable from "@/components/finoscope/SolvabiliteEtTresorerieTable.vue";
+import SolvabiliteEtTresorerieGraph from "@/components/finoscope/SolvabiliteEtTresorerieGraph.vue";
+import GestionTable from "@/components/finoscope/GestionTable.vue";
+import GestionGraph from "@/components/finoscope/GestionGraph.vue";
+import DataSource from "@/components/finoscope/DataSource.vue"
 import Spinner from "@/components/Spinner.vue"
 import Gitbook from "@/components/Gitbook.vue"
 

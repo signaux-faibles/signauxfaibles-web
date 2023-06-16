@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import Finoscope from '@/components/Finoscope/Finoscope.vue'
+import Finoscope from '@/components/finoscope/Finoscope.vue'
 import Gitbook from "@/components/Gitbook.vue";
 
 export default {
