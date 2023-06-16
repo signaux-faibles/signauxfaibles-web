@@ -17,7 +17,8 @@ export default {
   },
   mounted() {
     this.getPendingEtablissements()
-e  },
+    this.$bus.$on('campaign-message', this.processMessage)
+  },
   beforeDestroy() {
     console.log()
     this.$bus.$off()

@@ -2,16 +2,11 @@
     <div>
         <NewCardDialog v-if="codeDepartement" :siret="siret" :codeDepartement="codeDepartement" :cards="cards"/>
         <h2>
-            Prise en charge de l'établissement
-            <Help titre="Prise en charge de l'établissement">
-                <template>
-
-                </template>
-            </Help>
+            Fiches de suivi de l'établissement
         </h2>
         <v-simple-table v-if="cards.length>0">
             <tbody>
-                <CardSummary v-for="card in cards" :key="card.id" :card="card" :denomination="denomination"/>
+                <FollowSummary v-for="card in cards" :key="card.id" :card="card" :denomination="denomination"/>
             </tbody>
         </v-simple-table>
 
@@ -47,13 +42,13 @@ tbody {
 
 <script>
 import Help from '@/components/Help.vue'
-import CardSummary from '@/components/follow/summary/main.vue'
-import NewCardDialog from "@/components/Etablissement/CreateCardDialog/CreateCardDialog.vue";
+import FollowSummary from '@/components/follow/summary/main.vue'
+import NewCardDialog from "@/components/follow/createcard/CreateCardDialog.vue";
 
 export default {
     name: 'Cards',
     props: ['siret', 'denomination', 'codeDepartement'],
-    components: {NewCardDialog, Help, CardSummary},
+    components: {NewCardDialog, Help, FollowSummary},
     data() {
         return {
             cards: []
@@ -67,11 +62,7 @@ export default {
         },
         getCardPayloads() {
             this.$axios.get(`/kanban/cards/${this.siret}`).then((response) => {
-                this.cards = response.data || []
-                const myBoardIds = this.boards.filter((b) => b.isMember).map((b) => b.id)
-                if (myBoardIds.length > 0 && !myBoardIds.includes(this.currentBoard)) {
-                    this.currentBoard = myBoardIds[0]
-                }
+               this.cards = response.data || []
             }).catch((_) => {
                 this.cards = []
             })
@@ -86,6 +77,9 @@ export default {
     computed: {
         canCreateCard() {
             return (this.codeDepartement in this.kanbanConfig.departements)
+        },
+        boards() {
+
         },
         kanbanConfig() {
             return this.$store.state.kanbanConfig

@@ -128,12 +128,12 @@ export default {
           enabled: true,
           x: {
             formatter(val) {
-              return new Date(val).toLocaleDateString()
+              return new Date(val || '').toLocaleDateString()
             },
           },
            y: {
             formatter(val, { series, seriesIndex, dataPointIndex, w }) {
-              let y = parseFloat(val.toFixed(1)).toLocaleString()
+              let y = parseFloat(val||"0").toFixed(1).toLocaleString()
               const etpIndex = 1
               y += (seriesIndex === etpIndex) ? ' ETP' : ' salariés'
               return y
