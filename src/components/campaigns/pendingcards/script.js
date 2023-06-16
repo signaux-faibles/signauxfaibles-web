@@ -1,4 +1,4 @@
-import Card from "@/components/card/main"
+import Card from "@/components/card/main.vue"
 import ScoreWidget from "@/components/ScoreWidget.vue"
 import Etablissement from "@/components/Etablissement/Main.vue"
 import Entreprise from "@/components/Entreprise.vue"

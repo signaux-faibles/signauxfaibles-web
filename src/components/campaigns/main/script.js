@@ -1,11 +1,11 @@
 import Toolbar from "@/components/Toolbar.vue"
-import CampaignsRightDrawer from "@/views/campaigns/rightdrawer/main.vue"
-import CampaignsAppBar from "@/views/campaigns/appbar/main.vue"
-import CampaignsMenu from "@/views/campaigns/menu/main.vue"
-import CampaignsWelcome from "@/views/campaigns/welcome/main.vue"
-import CampaignsMyCards from "@/views/campaigns/myactions/main.vue"
-import CampaignsPendingCards from "@/views/campaigns/pendingcards/main.vue"
-import CampaignsAllCards from "@/views/campaigns/allactions/main.vue"
+import CampaignsRightDrawer from "@/components/campaigns/rightdrawer/main.vue"
+import CampaignsAppBar from "@/components/campaigns/appbar/main.vue"
+import CampaignsMenu from "@/components/campaigns/menu/main.vue"
+import CampaignsWelcome from "@/components/campaigns/welcome/main.vue"
+import CampaignsMyCards from "@/components/campaigns/myactions/main.vue"
+import CampaignsPendingCards from "@/components/campaigns/pendingcards/main.vue"
+import CampaignsAllCards from "@/components/campaigns/allactions/main.vue"
 import { fetchEventSource } from "@microsoft/fetch-event-source";
 
 export default {

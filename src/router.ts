@@ -6,7 +6,7 @@ import Browse from '@/views/Browse.vue'
 import Follow from '@/views/follow/main.vue'
 import PageNotFound from '@/views/PageNotFound.vue'
 import Etablissement from '@/components/Etablissement/Main.vue'
-import Campaigns from '@/views/campaigns/main/main.vue'
+import Campaigns from '@/components/campaigns/main/main.vue'
 
 Vue.use(Router)
 

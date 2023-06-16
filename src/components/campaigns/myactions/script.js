@@ -1,5 +1,5 @@
 import ScoreWidget from "@/components/ScoreWidget.vue";
-import Card from "@/components/card/main";
+import Card from "@/components/card/main.vue";
 import Etablissement from "@/components/Etablissement/Main.vue";
 import Entreprise from "@/components/Entreprise.vue";
 import Toolbar from "@/components/Toolbar.vue";
