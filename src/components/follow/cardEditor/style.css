@@ -1,7 +1,11 @@
 .viewer {
-    height: 400px;
+    height: 380px;
 }
 
 .textblock::v-deep {
     font-weight: 100;
+}
+
+.scroll {
+    overflow-y: scroll
 }

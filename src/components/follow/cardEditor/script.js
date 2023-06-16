@@ -1,31 +1,28 @@
+import FollowLabel from '@/components/follow/label/main.vue'
+import MarkdownIt from 'markdown-it';
+
+const md = new MarkdownIt()
+
 export default {
-  name: "FollowCardEditor",
+  name: 'FollowCardEditor',
   props: ['card'],
-  data() {
-    return {
-      content: "coucou"
-    }
-  },
-  mounted() {
-  },
-  watch: {
-  },
+  components: {FollowLabel},
   computed: {
-    editCardID() {
-      return this.$store.state.editCardID
+    mdDescription() {
+      return md.render(this.card.description)
+    },
+    kanbanConfig() {
+      return this.$store.state.kanbanConfig
+    },
+    labels() {
+      const boardID = this.card.boardID
+      const board = this.kanbanConfig.boards[boardID]
+      if (board) {
+        return (this.card['labelIDs'] || []).map((labelID) => {
+          return board.labels[labelID]
+        })
+      }
+      return []
     }
-  },
-  methods: {
-    nullFunction(evt) {
-      return evt
-    },
-    hideEditor(evt) {
-      this.edit = false
-      return evt
-    },
-    showEditor(evt) {
-      this.edit = true
-      return evt
-    },
   }
 }
