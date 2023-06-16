@@ -17,9 +17,9 @@ export default {
   },
   mounted() {
     this.getPendingEtablissements()
-    this.$bus.$on('campaign-message', this.processMessage)
-  },
+e  },
   beforeDestroy() {
+    console.log()
     this.$bus.$off()
   },
   computed: {
@@ -27,7 +27,8 @@ export default {
   },
   methods: {
     processMessage(message) {
-ki      console.log(message)
+      this.getPendingEtablissements()
+      this.$store.dispatch('updateCampaigns')
     },
     getPendingEtablissements() {
       this.$axios.get('/campaign/pending/' + this.campaignsSelectedID).then((r) => {
@@ -35,8 +36,7 @@ ki      console.log(message)
       })
     },
     take(campaignID, id) {
-      this.$axios.get('/campaign/take/' + campaignID + '/' + id).then((r) => {
-        this.getPendingEtablissements()
+        this.$axios.get('/campaign/take/' + campaignID + '/' + id).then((r) => {
       })
     },
     etablissements() {

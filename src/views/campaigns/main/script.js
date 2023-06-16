@@ -22,6 +22,7 @@ export default {
     this.rightDrawer = false
 
     this.watchSSE(this.$bus)
+    this.$bus.$on('campaign-message', this.updateCampaigns)
   },
   props: ['urlCampaignID'],
   watch: {
@@ -34,6 +35,10 @@ export default {
     this.SSESignal.abort()
   },
   methods: {
+    updateCampaigns(event) {
+      console.log("update campaign")
+      this.$store.dispatch('updateCampaigns')
+    },
     async watchSSE(bus) {
       await fetchEventSource(`http://localhost:3000/campaign/stream/1`, {
         method: "GET",

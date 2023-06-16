@@ -8,9 +8,6 @@
       <v-card-text>
         <h3>
           Dans quelles catégories souhaitez vous classer cette intervention ?
-<!--          <Help :big="true" titre="Actions menées ou envisagées">-->
-<!--              <div>coucou</div>-->
-<!--          </Help>-->
         </h3>
         <v-select
             ref="labelMenu"

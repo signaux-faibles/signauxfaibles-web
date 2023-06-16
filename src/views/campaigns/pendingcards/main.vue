@@ -22,7 +22,7 @@
         </div>
         <div class="mr-4">
           <v-btn @click="take(etablissement.campaignID, etablissement.id)" dark rounded color="green">
-            Je m'en charge
+            Je contacte
           </v-btn>
         </div>
       </template>

@@ -1,7 +1,7 @@
 <template>
   <div>
     <CampaignsAppBar :welcome="welcome"/>
-    <CampaignsRightDrawer/>
+<!--    <CampaignsRightDrawer/>-->
     <br/>
     <CampaignsWelcome v-if="welcome"/>
     <div v-if="!welcome">

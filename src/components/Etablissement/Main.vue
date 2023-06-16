@@ -134,9 +134,6 @@
               </v-flex>
             </v-layout>
           </v-flex>
-          <v-flex xs12 md12 class="text-right pa-3">
-            <Commentaire :siret="siret" />
-          </v-flex>
           <v-flex md6 xs12 class="pr-1" style="min-height: 200px">    
             <Effectif :effectif="effectif" :apconso="apconso" :apdemande="apdemande" :permDGEFP="perms.permDGEFP" />
           </v-flex>

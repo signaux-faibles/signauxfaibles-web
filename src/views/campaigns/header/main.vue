@@ -14,15 +14,15 @@
             <li>{{ campaign.nbPerimetre }} établissements</li>
           </ul>
         </v-flex>
-        <v-flex class="align-content-center" md7 xs12>
+        <v-flex class="pt-2" md7 xs12>
           <v-chip color="indigo darken-2" class="mr-2" outlined>
-            12 en cours
+            {{ campaign.nbTake }} en cours
           </v-chip>
           <v-chip color="grey darken-3" class="mr-2" outlined>
-            5 en attente
+            {{ campaign.nbPending }} en attente
           </v-chip>
           <v-chip color="green darken-3" class="mr-2" outlined>
-            5 effectués
+            {{ campaign.nbDone }} effectués
           </v-chip>
         </v-flex>
         <v-flex style="text-align: right; vertical-align: center" md2 xs12>

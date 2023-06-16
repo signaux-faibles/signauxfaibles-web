@@ -2,8 +2,13 @@ export default {
   name: "CampaignsAllActions",
   mounted() {
     this.getAllActions()
+    this.$bus.$on('campaign-message', this.processMessage)
   },
   methods: {
+    processMessage(message) {
+      this.getAllActions()
+      this.$store.dispatch('updateCampaigns')
+    },
     getAllActions() {
       this.$axios.get('/campaign/allactions/' + this.campaignsSelectedID).then((r) => {
         this.allActionsPayload = r.data

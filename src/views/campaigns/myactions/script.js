@@ -25,8 +25,13 @@ export default {
   },
   mounted() {
     this.getMyActions(this.campaignSelectedID)
+    this.$bus.$on('campaign-message', this.processMessage)
   },
   methods: {
+    processMessage(message) {
+      this.getMyActions()
+      this.$store.dispatch('updateCampaigns')
+    },
     showSuccess(id) {
       this.campaignEtablissementSelectedID = id
       this.successDialog = true
