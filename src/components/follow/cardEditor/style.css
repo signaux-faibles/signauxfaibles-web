@@ -1,0 +1,7 @@
+.viewer {
+    height: 400px;
+}
+
+.textblock::v-deep {
+    font-weight: 100;
+}

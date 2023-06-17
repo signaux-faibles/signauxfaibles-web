@@ -15,12 +15,8 @@ const axiosClient = axios.create(
   },
 )
 
-
-
-
-
 const localStore = new Vuex.Store({
-  plugins: [createPersistedState({ storage: window.localStorage })],
+  plugins: [createPersistedState({storage: window.localStorage})],
   state: {
     excludeSecteursCovid: false,
     inclureEtablissementsFermes: false,
@@ -44,31 +40,71 @@ const localStore = new Vuex.Store({
     currentBoard: '',
   },
   mutations: {
-    setexcludeSecteursCovid(state, val: boolean) { state.excludeSecteursCovid = val },
-    setinclureEtablissementsFermes(state, val: boolean) { state.inclureEtablissementsFermes = val },
-    setexclureSuivi(state, val: boolean) { state.exclureSuivi = val },
-    setfirstAlert(state, val: boolean) { state.firstAlert = val },
-    setignorezone(state, val: boolean) { state.ignorezone = val },
-    setprocol(state, val) { state.procol = val },
-    setcurrentNaf(state, val: string) { state.currentNaf = val },
-    setzone(state, val) { state.zone = val },
-    setcaMin(state, val) { state.caMin = val },
-    setminEffectif(state, val) { state.minEffectif = val },
-    setNewsRead(state, val) { state.newsRead = val },
-    setSecurityConsent(state, value) { state.securityConsent = value },
-    setExpiredSession(state, value) { state.expiredSession = value },
-    setTypeFollow(state, value) { state.typeFollow = value },
-    setBoardsFollow(state, value) { state.boardsFollow = value },
-    setListsFollow(state, value) { state.listsFollow = value },
-    setZoneFollow(state, value) { state.zoneFollow = value },
-    setLabelsFollow(state, value) { state.labelsFollow = value },
-    setLabelModeFollow(state, value) { state.labelModeFollow = value },
-    setCurrentBoard(state, value) { state.currentBoard = value },
+    setexcludeSecteursCovid(state, val: boolean) {
+      state.excludeSecteursCovid = val
+    },
+    setinclureEtablissementsFermes(state, val: boolean) {
+      state.inclureEtablissementsFermes = val
+    },
+    setexclureSuivi(state, val: boolean) {
+      state.exclureSuivi = val
+    },
+    setfirstAlert(state, val: boolean) {
+      state.firstAlert = val
+    },
+    setignorezone(state, val: boolean) {
+      state.ignorezone = val
+    },
+    setprocol(state, val) {
+      state.procol = val
+    },
+    setcurrentNaf(state, val: string) {
+      state.currentNaf = val
+    },
+    setzone(state, val) {
+      state.zone = val
+    },
+    setcaMin(state, val) {
+      state.caMin = val
+    },
+    setminEffectif(state, val) {
+      state.minEffectif = val
+    },
+    setNewsRead(state, val) {
+      state.newsRead = val
+    },
+    setSecurityConsent(state, value) {
+      state.securityConsent = value
+    },
+    setExpiredSession(state, value) {
+      state.expiredSession = value
+    },
+    setTypeFollow(state, value) {
+      state.typeFollow = value
+    },
+    setBoardsFollow(state, value) {
+      state.boardsFollow = value
+    },
+    setListsFollow(state, value) {
+      state.listsFollow = value
+    },
+    setZoneFollow(state, value) {
+      state.zoneFollow = value
+    },
+    setLabelsFollow(state, value) {
+      state.labelsFollow = value
+    },
+    setLabelModeFollow(state, value) {
+      state.labelModeFollow = value
+    },
+    setCurrentBoard(state, value) {
+      state.currentBoard = value
+    },
   },
 })
 
 const sessionStore = new Vuex.Store({
-  plugins: [createPersistedState({ storage: window.sessionStorage })],
+  plugins: [createPersistedState({storage: window.sessionStorage})],
   state: {
     currentBatchKey: null as unknown as string,
     leftDrawer: true,
@@ -78,7 +114,7 @@ const sessionStore = new Vuex.Store({
     batches: [] as any[],
     departements: [] as any[],
     region: [] as any[],
-    kanbanConfig: {} as any,
+    kanbanConfig: {} as KanbanConfig,
     zone: {},
     height: 0,
     scrollTop: 0,
@@ -94,8 +130,12 @@ const sessionStore = new Vuex.Store({
     campaigns: [],
     campaignsMenu: 'todo',
     campaignsSelectedID: null,
+    editCardID: null,
   },
   mutations: {
+    setEditCardID(state, value) {
+      state.editCardID = value
+    },
     setCampaigns(state, value) {
       state.campaigns = value
     },
@@ -122,12 +162,12 @@ const sessionStore = new Vuex.Store({
     },
     updateReference(state, reference) {
       state.batches = reference.listes
-      state.currentBatchKey = state.currentBatchKey || (state.batches[0] || { id: '' }).id
+      state.currentBatchKey = state.currentBatchKey || (state.batches[0] || {id: ''}).id
       state.naf = reference.naf
       state.region = reference.regions
       state.departements = reference.departements
     },
-    updateKanbanConfig(state, kanbanConfig) {
+    updateKanbanConfig(state, kanbanConfig: KanbanConfig) {
       state.kanbanConfig = kanbanConfig
     },
     setHeight(state, height) {
@@ -156,7 +196,7 @@ const sessionStore = new Vuex.Store({
     },
     setCreateCardLabels(state, value) {
       state.createCardLabels = value
-    },
+    }
   },
   getters: {
     batches(state) {
@@ -169,6 +209,9 @@ const sessionStore = new Vuex.Store({
     },
   },
   actions: {
+    setEditCardID(context, value) {
+      context.commit('setEditCardID', value)
+    },
     updateCampaigns(context) {
       axiosClient.get('/campaign/list').then((r) => {
         context.commit('setCampaigns', r.data)
@@ -195,7 +238,7 @@ const sessionStore = new Vuex.Store({
     setCreateCardActions(context, value) {
       context.commit('setCreateCardActions', value)
     },
-    setCreateCardLabels(context, value){
+    setCreateCardLabels(context, value) {
       context.commit('setCreateCardLabels', value)
     },
     setCurrentBatchKey(context, batchKey) {

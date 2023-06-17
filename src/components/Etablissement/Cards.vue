@@ -1,100 +1,109 @@
 <template>
-    <div>
-        <NewCardDialog v-if="codeDepartement" :siret="siret" :codeDepartement="codeDepartement" :cards="cards"/>
-        <h2>
-            Fiches de suivi de l'établissement
-        </h2>
-        <v-simple-table v-if="cards.length>0">
+  <div>
+    <NewCardDialog v-if="codeDepartement" :cards="cards" :codeDepartement="codeDepartement" :siret="siret"/>
+    <v-toolbar class="mr-1"
+      color='indigo'
+      dark>
+      <v-toolbar-title class="localtoolbar">
+        Fiches d'accompagnement
+      </v-toolbar-title>
+    </v-toolbar>
+
+    <v-container>
+      <v-layout>
+        <v-flex md6>
+          <v-simple-table class="pr-4"  v-if="cards.length>0">
             <tbody>
-                <FollowSummary v-for="card in cards" :key="card.id" :card="card" :denomination="denomination"/>
+            <FollowSummary v-for="card in cards" :key="card.id" :card="card" :denomination="denomination"/>
             </tbody>
-        </v-simple-table>
+          </v-simple-table>
 
-        <span v-if="cards.length==0">
+          <span v-if="cards.length==0">
             Aucune prise en charge de cet établissement pour le moment.
-        </span>
-        <div v-if="canCreateCard && followed">
-            <v-btn v-if="followed && canCreateCard" class="pa-2" color="indigo" outlined @click="showCreateCardDialog()">
-                nouvelle prise en charge<br/>
+          </span>
+          <div v-if="canCreateCard && followed">
+            <v-btn v-if="followed && canCreateCard" class="pa-2" color="indigo" outlined
+                   @click="showCreateCardDialog()">
+              nouvelle prise en charge<br/>
             </v-btn>
-        </div>
-        <div v-if="canCreateCard && !followed">
+          </div>
+          <div v-if="canCreateCard && !followed">
             Pour déclarer une prise en charge, veuillez suivre cet établissement.
-        </div>
-        <div v-if="!canCreateCard">
+          </div>
+          <div v-if="!canCreateCard">
             Vous avez la possibilité de déclarer une prise en charge
-        </div>
-    </div>
+          </div>
+        </v-flex>
+        <v-flex md6 xs12>
+          <FollowCardEditor v-if="currentCard" :card="currentCard"/>
+        </v-flex>
+      </v-layout>
+    </v-container>
+  </div>
 </template>
-
-<style lang="scss" scoped>
-tbody {
-  tr:hover {
-    background-color: transparent !important;
-    border: none;
-  }
-
-  td {
-    border: none;
-  }
-}
-</style>
 
 <script>
 import Help from '@/components/Help.vue'
 import FollowSummary from '@/components/follow/summary/main.vue'
 import NewCardDialog from "@/components/follow/createcard/CreateCardDialog.vue";
+import FollowCardEditor from "@/components/follow/cardEditor/main.vue";
 
 export default {
-    name: 'Cards',
-    props: ['siret', 'denomination', 'codeDepartement'],
-    components: {NewCardDialog, Help, FollowSummary},
-    data() {
-        return {
-            cards: []
-        }
+  name: 'Cards',
+  props: ['siret', 'denomination', 'codeDepartement'],
+  components: {FollowCardEditor, NewCardDialog, Help, FollowSummary},
+  data() {
+    return {
+      cards: []
+    }
+  },
+  methods: {
+    showCreateCardDialog() {
+      if (this.canCreateCard) {
+        this.createCardDialog = true
+      }
     },
-    methods: {
-        showCreateCardDialog() {
-            if (this.canCreateCard) {
-                this.createCardDialog = true
-            }
-        },
-        getCardPayloads() {
-            this.$axios.get(`/kanban/cards/${this.siret}`).then((response) => {
-               this.cards = response.data || []
-            }).catch((_) => {
-                this.cards = []
-            })
-        },
+    getCardPayloads() {
+      this.$axios.get(`/kanban/cards/${this.siret}`).then((response) => {
+        this.cards = response.data || []
+      }).catch((_) => {
+        this.cards = []
+      })
     },
-    mounted() {
-        this.$bus.$on('create-card', this.getCardPayloads)
-        this.$bus.$on('unarchive-card', this.getCardPayloads)
-        this.$bus.$on('follow-dialog-if-needed', this.showCreateCardDialog)
-        this.getCardPayloads()
+  },
+  mounted() {
+    this.$bus.$on('create-card', this.getCardPayloads)
+    this.$bus.$on('unarchive-card', this.getCardPayloads)
+    this.$bus.$on('follow-dialog-if-needed', this.showCreateCardDialog)
+    this.getCardPayloads()
+  },
+  computed: {
+    currentCard() {
+      return this.cards.find((c) => c.id == this.editCardID)
     },
-    computed: {
-        canCreateCard() {
-            return (this.codeDepartement in this.kanbanConfig.departements)
-        },
-        boards() {
+    canCreateCard() {
+      return (this.codeDepartement in this.kanbanConfig.departements)
+    },
+    boards() {
 
-        },
-        kanbanConfig() {
-            return this.$store.state.kanbanConfig
-        },
-        followed() {
-            return this.$parent.followed
-        },
-        createCardDialog: {
-            get() {
-                return this.$store.state.createCardDialog
-            },
-            set(value) {
-                this.$store.dispatch('setCreateCardDialog', value)
-            }
-        },
     },
+    kanbanConfig() {
+      return this.$store.state.kanbanConfig
+    },
+    followed() {
+      return this.$parent.followed
+    },
+    editCardID() {
+      return this.$store.state.editCardID
+    },
+    createCardDialog: {
+      get() {
+        return this.$store.state.createCardDialog
+      },
+      set(value) {
+        this.$store.dispatch('setCreateCardDialog', value)
+      }
+    },
+  },
 }
 </script>

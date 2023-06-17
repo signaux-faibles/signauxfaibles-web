@@ -130,10 +130,13 @@
                       </div>
                     </v-flex>
                 </v-layout>
-                <Cards v-if="wekanUser" :siret="siret" :denomination="denomination" :codeDepartement="sirene.codeDepartement"/>
               </v-flex>
             </v-layout>
           </v-flex>
+          <v-flex md12 xs12>
+            <Cards v-if="wekanUser" :siret="siret" :denomination="denomination" :codeDepartement="sirene.codeDepartement"/>
+          </v-flex>
+
           <v-flex md6 xs12 class="pr-1" style="min-height: 200px">    
             <Effectif :effectif="effectif" :apconso="apconso" :apdemande="apdemande" :permDGEFP="perms.permDGEFP" />
           </v-flex>

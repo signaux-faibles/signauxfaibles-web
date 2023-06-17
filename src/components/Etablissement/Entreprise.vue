@@ -89,6 +89,9 @@ export default {
     },
   },
   methods: {
+    setFollowEditCard() {
+
+    },
     toggle() {
       this.show = !this.show
       if (this.show) {
