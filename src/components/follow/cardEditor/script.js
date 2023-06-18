@@ -22,7 +22,6 @@ export default {
           return board.labels[labelID]
         })
       }
-
       return []
     }
   }

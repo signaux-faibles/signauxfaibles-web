@@ -27,23 +27,23 @@
           </v-simple-table>
 
           <span v-if="cards.length==0">
-            Aucune prise en charge de cet établissement pour le moment.
+            À ce jour, aucune fiche d'accompagnement n'a été renseignée pour cet établissement.
           </span>
-          <div v-if="canCreateCard && followed">
-            <v-btn v-if="followed && canCreateCard" class="pa-2" color="indigo" outlined
+          <div v-if="canCreateCard && followed" style="margin-right: auto; margin-left: auto; text-align: center">
+            <v-btn v-if="followed && canCreateCard" class="pa-2 mt-5" color="indigo" outlined
                    @click="showCreateCardDialog()">
-              nouvelle prise en charge<br/>
+              ajouter une fiche d'accompagnement<br/>
             </v-btn>
           </div>
           <div v-if="canCreateCard && !followed">
-            Pour déclarer une prise en charge, veuillez suivre cet établissement.
+            Pour créer une fiche, veuillez d'abord suivre cet établissement.
           </div>
           <div v-if="!canCreateCard">
-            Vous avez la possibilité de déclarer une prise en charge
+            Vous avez la possibilité de déclarer une prise en charge.
           </div>
         </v-flex>
         <v-flex md6 xs12>
-          <FollowCardEditor v-if="currentCard" :card="currentCard"/>
+          <FollowCardEditor :card="currentCard" v-if="currentCard"/>
         </v-flex>
       </v-layout>
     </v-container>
@@ -74,6 +74,9 @@ export default {
     getCardPayloads() {
       this.$axios.get(`/kanban/cards/${this.siret}`).then((response) => {
         this.cards = response.data || []
+        if (this.cards.length > 0) {
+          this.editCardID = this.cards[0].id
+        }
       }).catch((_) => {
         this.cards = []
       })
@@ -111,9 +114,23 @@ export default {
       }
     },
     editCardID: {
-      get() { return this.$store.state.editCardID },
-      set(value) { this.$store.dispatch('setEditCardID', value)},
+      get() {
+        return this.$store.state.editCardID
+      },
+      set(value) {
+        this.$store.dispatch('setEditCardID', value)
+      },
     }
   },
 }
 </script>
+
+<style>
+thead tr {
+  text-align: center;
+}
+
+thead td {
+  font-size: 17px !important;
+}
+</style>
