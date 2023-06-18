@@ -14,6 +14,8 @@ export default {
       cardMenu: false
     }
   },
+  mounted() {
+  },
   methods: {
     trClass() {
       return (this.card.id == this.editCardID)?"selectedCard":null

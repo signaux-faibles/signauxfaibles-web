@@ -27,8 +27,6 @@
     "markdown-it": "^12.3.2",
     "sass": "~1.32.6",
     "sass-loader": "12.6.0",
-    "tiptap": "^1.26.5",
-    "tiptap-extensions": "^1.28.5",
     "tus-js-client": "^1.8.0-1",
     "uuid": "^3.3.3",
     "vue": "^2.6.10",

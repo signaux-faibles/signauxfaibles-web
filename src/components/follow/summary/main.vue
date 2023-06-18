@@ -75,17 +75,17 @@
         </v-icon>
       </v-btn>
     </td>
-    <td>
-      <v-btn v-if="card.url && !card.archived" :href="card.url" class="px-2 ma-1"
-             color="indigo" dark target="blank"
-             @click="trackMatomoEvent('general', 'visite_carte', card.title)">
-        <v-icon class="mr-2" small>mdi-trello</v-icon>
-        Carte de suivi
-      </v-btn>
-    </td>
+<!--    <td>-->
+<!--      <v-btn v-if="card.url && !card.archived" :href="card.url" class="px-2 ma-1"-->
+<!--             color="indigo" dark target="blank"-->
+<!--             @click="trackMatomoEvent('general', 'visite_carte', card.title)">-->
+<!--        <v-icon class="mr-2" small>mdi-trello</v-icon>-->
+<!--        Carte de suivi-->
+<!--      </v-btn>-->
+<!--    </td>-->
     <td>
       <v-icon v-if="trClass() == 'selectedCard'">
-        fa-arrow-right
+        fa-caret-right
       </v-icon>
     </td>
   </tr>

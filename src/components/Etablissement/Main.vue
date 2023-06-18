@@ -176,7 +176,6 @@ import Effectif from '@/components/Etablissement/Effectif.vue'
 import Urssaf from '@/components/Etablissement/Urssaf.vue'
 import Identite from '@/components/Etablissement/Identite.vue'
 import Map from '@/components/Etablissement/Map.vue'
-import Commentaire from '@/components/Etablissement/Commentaire.vue'
 import EtablissementEntreprise from '@/components/Etablissement/Entreprise.vue'
 import Entreprise from '@/components/Entreprise/main.vue'
 import Historique from '@/components/Etablissement/Score/Historique.vue'
@@ -193,7 +192,7 @@ export default {
   props: ['siret', 'batch'],
   name: 'Etablissement',
   components: { Effectif, Urssaf, Help, Identite, Map,
-    Commentaire, EtablissementEntreprise, Entreprise, Historique,
+    EtablissementEntreprise, Entreprise, Historique,
     Cards, FollowDialog, UnfollowDialog, CreateCardDialog },
   data() {
     return {
