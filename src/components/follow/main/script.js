@@ -135,6 +135,14 @@ export default {
     etablissements() {
       return this.followPayload.summaries || []
     },
+    uniqEtablissements() {
+      // TODO: déplacer cette logique dans le backend
+      const map = this.etablissements.reduce((m, e) => {
+        m[e.siret] = e
+        return m
+      }, {})
+      return Object.values(map)
+    },
     params() {
       const params = {}
       params.type = this.type
@@ -238,7 +246,7 @@ export default {
       },
     },
     zoneItems() {
-      const departements = Object.entries(this.$store.state.kanbanConfig.departements)
+      const departements = Object.entries(this.$store.state.kanbanConfig.departements || {})
       const swimlanes = departements.filter(
         ([_, boards]) => {
           for (const b of boards) {
@@ -266,7 +274,7 @@ export default {
       return this.roles.includes('wekan')
     },
     boardsItems() {
-      const boards = Object.entries(this.$store.state.kanbanConfig.boards)
+      const boards = Object.entries(this.$store.state.kanbanConfig.boards || {})
       const all = [
         {
           text: 'Tous les tableaux',
@@ -283,7 +291,7 @@ export default {
     },
     labelItems() {
       const boards = Object
-        .entries(this.$store.state.kanbanConfig.boards)
+        .entries(this.$store.state.kanbanConfig.boards || {})
         .filter(([boardID, _]) => (this.boards.includes(boardID) || this.boards.includes('*')))
       const labels = boards.reduce((m, [_, board]) => {
         Object.entries(board.labels).forEach(([_, label]) => {
@@ -306,7 +314,7 @@ export default {
     },
     listsItems() {
       const boards = Object
-        .entries(this.$store.state.kanbanConfig.boards)
+        .entries(this.$store.state.kanbanConfig.boards || {})
         .filter(([boardID, _]) => (this.boards.includes(boardID) || this.boards.includes('*')))
       const dupItems = boards
         .flatMap(([_, board]) => {
