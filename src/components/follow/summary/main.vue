@@ -12,13 +12,17 @@
       {{ startDate }}
     </td>
     <td>
-      {{ endDate }}
+      {{ lastActivityDate }}
     </td>
     <td>
-      <v-icon v-if="trClass() == 'selectedCard'">
-        fa-caret-right
+      <v-icon color="green" small v-if="this.card.userIsBoardMember">
+        fa-eye
+      </v-icon>
+      <v-icon color="red accent-2" small v-else>
+        fa-eye-slash
       </v-icon>
     </td>
+
   </tr>
 </template>
 

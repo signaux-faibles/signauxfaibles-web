@@ -1,5 +1,5 @@
 import Help from "@/components/Help.vue";
-import FollowCardEditor from "@/components/follow/cardEditor/main.vue";
+import FollowCardEditor from "@/components/follow/cardViewer/main.vue";
 
 import '@toast-ui/editor/dist/toastui-editor.css'
 import {Editor} from '@toast-ui/vue-editor'

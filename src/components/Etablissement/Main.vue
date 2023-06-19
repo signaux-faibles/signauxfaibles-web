@@ -185,7 +185,7 @@ import libellesProcols from '@/assets/libelles_procols.json'
 import Cards from '@/components/Etablissement/Cards.vue'
 import FollowDialog from '@/components/Etablissement/FollowDialog.vue'
 import UnfollowDialog from '@/components/Etablissement/UnfollowDialog.vue'
-import CreateCardDialog from '@/components/follow/createcard/CreateCardDialog.vue'
+import CreateCardDialog from '@/components/follow/createcard/main.vue'
 import Help from '@/components/Help.vue'
 
 export default {

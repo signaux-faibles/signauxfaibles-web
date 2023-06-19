@@ -21,10 +21,7 @@
         </div>
         <v-spacer></v-spacer>
         <v-icon
-                v-if="!rightDrawer && !welcome"
-                :class="loading?'rotate':''"
                 color="#ffffff"
-                @click="openRightDrawer()"
         >mdi-briefcase-outline
         </v-icon>
     </v-app-bar>
