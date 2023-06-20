@@ -69,7 +69,7 @@ Vue.use(VueKeyCloak, {
       if (_paq) {
         const jwt = Vue.prototype.$keycloak.tokenParsed
         _paq.push(['setUserId', jwt.preferred_username])
-        _paq.push(['setCustomVariable', '1', 'segment', jwt.segment || ''])
+        _paq.push(['setCustomDimension', process.env.VUE_APP_MATOMO_SEGMENT_DIMENSION_ID, jwt.segment || ''])
       }
       tokenInterceptor()
       responseInterceptor()
