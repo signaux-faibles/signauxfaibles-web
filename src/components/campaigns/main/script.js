@@ -7,10 +7,15 @@ import CampaignsMyCards from "@/components/campaigns/myactions/main.vue"
 import CampaignsPendingCards from "@/components/campaigns/pendingcards/main.vue"
 import CampaignsAllCards from "@/components/campaigns/allactions/main.vue"
 import { fetchEventSource } from "@microsoft/fetch-event-source";
+import Entreprise from "@/components/Entreprise/main.vue";
+import Etablissement from "@/components/Etablissement/Main.vue";
 
 export default {
   name: "Campaigns",
-  components: {CampaignsRightDrawer, Toolbar, CampaignsAppBar, CampaignsMenu, CampaignsWelcome, CampaignsMyCards, CampaignsPendingCards, CampaignsAllCards},
+  components: {
+    Etablissement,
+    Entreprise,
+    CampaignsRightDrawer, Toolbar, CampaignsAppBar, CampaignsMenu, CampaignsWelcome, CampaignsMyCards, CampaignsPendingCards, CampaignsAllCards},
   mounted() {
     this.campaignsMenu = 'pending'
     // this.campaignsSelectedID = null

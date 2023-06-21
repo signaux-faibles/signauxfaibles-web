@@ -31,7 +31,7 @@
             Pour créer une fiche, veuillez d'abord suivre cet établissement.
           </div>
           <div v-if="!canCreateCard">
-            Vous avez la possibilité de déclarer une prise en charge.
+            Il ne vous est pas permis de créer une carte pour cet établissement au regard de vos autorisations.
           </div>
         </v-flex>
         <v-flex md6 xs12>

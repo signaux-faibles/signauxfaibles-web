@@ -12,7 +12,7 @@
             >
                 <v-icon>mdi-close</v-icon>
             </v-btn>
-            <v-toolbar-title>Nouvelle prise en charge</v-toolbar-title>
+            <v-toolbar-title>Nouvelle fiche d'accompagnement</v-toolbar-title>
         </v-toolbar>
         <Step1 v-if="createCardSequence===1" :cards="cards" :codeDepartement="codeDepartement"/>
         <Step2 v-if="createCardSequence===2"/>

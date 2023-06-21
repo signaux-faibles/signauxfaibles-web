@@ -1,18 +1,22 @@
-import ScoreWidget from "@/components/ScoreWidget.vue";
 import Card from "@/components/card/main.vue";
+import FollowCardsDialog from "@/components/follow/cardsDialog/main.vue"
 import Etablissement from "@/components/Etablissement/Main.vue";
 import Entreprise from "@/components/Entreprise/main.vue";
 import Toolbar from "@/components/Toolbar.vue";
 import Help from "@/components/Help.vue";
 import StatusLabels from "@/assets/campaignStatus.json"
+import CampaignsEtablissement from '@/components/campaigns/etablissement/main.vue'
+
 export default {
   name: "CampaignsMyActions",
-  components: {Help, Entreprise, Etablissement, Card, ScoreWidget, Toolbar},
+  components: {Help, Entreprise, Etablissement, Card, Toolbar, FollowCardsDialog, CampaignsEtablissement},
   props: ['cards'],
   data() {
     return {
       myActions: null,
       siret: null,
+      denomination: null,
+      codeDepartement: null,
       siren: null,
       campaignEtablissementSelectedID: null,
       entrepriseDialog: false,
@@ -31,6 +35,12 @@ export default {
     processMessage(message) {
       this.getMyActions()
       this.$store.dispatch('updateCampaigns')
+    },
+    showFollowCardsDialog(siret, denomination, codeDepartement) {
+      this.siret = siret
+      this.denomination = denomination
+      this.codeDepartement = codeDepartement
+      this.followCardsDialog = true
     },
     showSuccess(id) {
       this.campaignEtablissementSelectedID = id
@@ -92,6 +102,10 @@ export default {
     }
   },
   computed: {
+    followCardsDialog: {
+      get() { return this.$store.state.followCardsDialog },
+      set(value) { return this.$store.dispatch('setFollowCardsDialog', value)}
+    },
     cancelLabels() {
       return StatusLabels.cancel
     },

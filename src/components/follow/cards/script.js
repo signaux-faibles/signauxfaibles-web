@@ -19,6 +19,15 @@ export default {
       cards: [],
     }
   },
+  watch: {
+    siret(newval,oldval) {
+      if (newval) {
+        this.getCardPayloads()
+      } else {
+        this.cards = []
+      }
+    },
+  },
   methods: {
     followed() {
       return this.$parent.followed

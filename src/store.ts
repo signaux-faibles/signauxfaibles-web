@@ -2,7 +2,8 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
 import createPersistedState from 'vuex-persistedstate'
-import { KanbanConfig } from '@/lib/kanban'
+import {KanbanConfig} from '@/lib/kanban'
+
 Vue.use(Vuex)
 
 const axiosClient = axios.create(
@@ -131,6 +132,7 @@ const sessionStore = new Vuex.Store({
     campaignsMenu: 'todo',
     campaignsSelectedID: null,
     editCardID: null,
+    followCardsDialog: false,
   },
   mutations: {
     setEditCardID(state, value) {
@@ -196,6 +198,9 @@ const sessionStore = new Vuex.Store({
     },
     setCreateCardLabels(state, value) {
       state.createCardLabels = value
+    },
+    setFollowCardsDialog(state, value) {
+      state.followCardsDialog = value
     }
   },
   getters: {
@@ -279,6 +284,9 @@ const sessionStore = new Vuex.Store({
     setFollowRightDrawer(context, val) {
       context.commit('followRightDrawer', val)
     },
+    setFollowCardsDialog(context, val) {
+      context.commit('setFollowCardsDialog', val)
+    }
   },
 })
 
