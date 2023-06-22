@@ -63,31 +63,28 @@ export default {
   components: { Help, PredictionWidget },
   data() {
     return {
-      siegeEntreprise: null,
-      etablissementsDepartement: [],
-      autresEtablissements: [],
       show: false,
     }
   },
-  watch: {
-    etablissementsSummary(val) {
-      val.concat().sort((e1, e2) => {
-        return (e2.dernier_effectif > e1.dernier_effectif ? 1 : -1)
-      }).forEach((e) => {
-        if (e.siret !== this.siret) {
-          if (e.siege === true) {
-            this.siegeEntreprise = e
-          } else {
-            if (e.departement === this.codeDepartement) {
-              this.etablissementsDepartement.push(e)
-            } else {
-              this.autresEtablissements.push(e)
-            }
-          }
-        }
-      })
-    },
-  },
+  // watch: {
+  //   etablissementsSummary(val) {
+  //     val.concat().sort((e1, e2) => {
+  //       return (e2.dernier_effectif > e1.dernier_effectif ? 1 : -1)
+  //     }).forEach((e) => {
+  //       if (e.siret !== this.siret) {
+  //         if (e.siege === true) {
+  //           this.siegeEntreprise = e
+  //         } else {
+  //           if (e.departement === this.codeDepartement) {
+  //             this.etablissementsDepartement.push(e)
+  //           } else {
+  //             this.autresEtablissements.push(e)
+  //           }
+  //         }
+  //       }
+  //     })
+  //   },
+  // },
   methods: {
     setFollowEditCard() {
 
@@ -102,6 +99,22 @@ export default {
     },
   },
   computed: {
+    autresEtablissementsSummary() {
+      return this.etablissementsSummary
+        .filter((e) => e.siret !== this.siret)
+    },
+    siegeEntreprise() {
+      return this.autresEtablissementsSummary
+        .find((e) => e.siege === true)
+    },
+    etablissementsDepartement() {
+      return this.autresEtablissementsSummary
+        .filter((e) => e.departement === this.codeDepartement && e.siege !== true)
+    },
+    autresEtablissements() {
+      return this.autresEtablissementsSummary
+        .filter((e) => e.departement !== this.codeDepartement && e.siege !== true)
+    },
     siren() {
       return this.siret.slice(0, 9)
     },

@@ -14,7 +14,7 @@
 
     </div>
     <div style="height: 400px" v-if="!ready && !nodata">
-      <Spinner style=""/>
+      <Spinner style="min-height: 400px"/>
     </div>
     <div v-if="ready && !nodata">
     <v-tabs v-model="tab" v-if="ready">

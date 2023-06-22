@@ -1,39 +1,43 @@
 <template>
   <div style="min-height: 100%; background: #fff">
-    <div>
+
+    <Spinner style="min-height: 80vh" v-if="loading" />
+
+    <div :class="'maindiv ' + loadingClass"
+         style="min-height: 100%; background: #fff; font-weight: 800; font-family: 'Oswald', sans-serif;">
       <v-container>
         <v-layout wrap>
-          <v-flex xs12 class="pa-3" style="font-size: 18px; margin-top: 3em;">
+          <v-flex class="pa-3" style="font-size: 18px; margin-top: 3em;" xs12>
             <EntrepriseIdentite
-              :denomination="denomination"
-              :siren="siren"
-              :siege="siege"
-              :groupe="groupe"
-              :terrind="terrind"
-              :pge="pge"
               :creation="creation"
+              :denomination="denomination"
+              :groupe="groupe"
+              :pge="pge"
+              :siege="siege"
+              :siren="siren"
               :statutJuridique="statutJuridique"
+              :terrind="terrind"
             />
           </v-flex>
-          <v-flex xs12 class="pb-3 pr-1">
+          <v-flex class="pb-3 pr-1" xs12>
             <EntrepriseSocial
-              :siren="siren"
-              :etablissementsSummary="etablissementsSummary"
               :etablissements="etablissements"
+              :etablissementsSummary="etablissementsSummary"
+              :siren="siren"
               v-on="$listeners"
             />
           </v-flex>
-          <v-flex xs12 class="pb-3 pr-1">
-            <EntrepriseFinance 
-              :siren="siren"
-              :naf="sirene.naf"
+          <v-flex class="pb-3 pr-1" xs12>
+            <EntrepriseFinance
               v-if="ready"
+              :naf="sirene.naf"
+              :siren="siren"
             />
           </v-flex>
-          <v-flex xs12 class="pr-1">
+          <v-flex class="pr-1" xs12>
             <EntreprisePaiement
-              :siren="siren"
               :paydex="paydex"
+              :siren="siren"
             />
           </v-flex>
         </v-layout>
@@ -49,16 +53,18 @@ import EntrepriseFinance from '@/components/Entreprise/Finance.vue'
 import EntreprisePaiement from '@/components/Entreprise/Paiement.vue'
 import axios from 'axios'
 import fr from 'apexcharts/dist/locales/fr.json'
+import Spinner from "@/components/Spinner.vue";
 
 export default {
   name: 'Entreprise',
   props: ['siren'],
-  components: { EntrepriseIdentite, EntrepriseSocial, EntrepriseFinance, EntreprisePaiement },
+  components: {Spinner, EntrepriseIdentite, EntrepriseSocial, EntrepriseFinance, EntreprisePaiement},
   data() {
     return {
       axios: axios.create(),
       entreprise: {},
       ready: false,
+      loading: true,
     }
   },
   created() {
@@ -72,16 +78,23 @@ export default {
   },
   methods: {
     getEntrepriseEtablissements() {
+      this.loading = true
       this.$axios.get(`/entreprise/all/${this.siren}`).then((response) => {
         this.entreprise = response.data
         this.ready = true
-      }).catch((error) => {
+        this.loading = false
+      }).catch(() => {
         this.entreprise = {}
       })
     },
 
   },
   computed: {
+    loadingClass() {
+      if (!this.ready) {
+        return "loading"
+      }
+    },
     sirene() {
       return (this.entreprise || {}).Sirene || {}
     },
@@ -114,9 +127,18 @@ export default {
       return (this.entreprise || {}).paydex
     },
     statutJuridique() {
-      const statutJuridique = this.sirene.statutJuridiqueN2
-      return statutJuridique
+      return this.sirene.statutJuridiqueN2
     },
   },
 }
 </script>
+
+<style scoped>
+  .maindiv {
+    transition: opacity 0.5s;
+  }
+
+  .loading {
+    opacity: 0;
+  }
+</style>

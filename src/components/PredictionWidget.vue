@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card @click="showEtablissement()" @mouseover="social ? highlightEtablissement() : showRaccourci = true" @mouseout="showRaccourci = false" class="etablissement-card elevation-2 ma-2 pointer">
+    <v-card @click="dialogs.showEtablissement(prediction.siret);" @mouseover="social ? highlightEtablissement() : showRaccourci = true" @mouseout="showRaccourci = false" class="etablissement-card elevation-2 ma-2 pointer">
       <div class="entete">
         <div v-if="prediction.followed" class="corner-ribbon"><v-icon dark small>mdi-star</v-icon></div>
         <ScoreWidget :prediction="prediction" :tooltip="true" />
@@ -34,8 +34,8 @@
         </div>
         <transition name="fade">
           <div  v-show="showRaccourci" style="position: absolute; right: 0">
-            <v-btn class="mx-2" dark color="indigo" @click="showEtablissement">Voir Fiche Etablissement</v-btn>
-            <v-btn class="mx-2" v-if="prediction.siren" dark color="indigo" @click="showEntreprise">Voir Fiche Entreprise</v-btn>
+            <v-btn class="mx-2" dark color="indigo" @click.stop="dialogs.showEtablissement(prediction.siret)">Voir Fiche Etablissement</v-btn>
+            <v-btn class="mx-2" v-if="prediction.siren" dark color="indigo" @click.stop="dialogs.showEntreprise(prediction.siret.slice(0,9))">Voir Fiche Entreprise</v-btn>
           </div>
         </transition>
         <template v-if="social">
@@ -59,24 +59,28 @@
           <div class="social mr-2 text-right">
             <div class="mt-2">
               <img
+                alt=""
                 class="mr-2"
                 height="22"
                 v-if="prediction.activite_partielle && permDGEFP"
                 src="../assets/red_apart.svg"
               />
               <img
+                alt=""
                 class="mr-2"
                 height="22"
                 v-if="!prediction.activite_partielle && permDGEFP"
                 src="../assets/gray_apart.svg"
               />
             <img
+                alt=""
                 class="ml-2"
                 width="70"
                 v-if="!prediction.urssaf && permUrssaf"
                 src="../assets/gray_urssaf.svg"
               />
               <img
+                alt=""
                 class="ml-2"
                 width="70"
                 v-if="prediction.urssaf && permUrssaf"
@@ -102,36 +106,6 @@
             <span class="valeur" :class="diane.resultat_expl_color">{{ diane.resultat_expl }}</span>
           </div>
         </template>
-        <v-dialog fullscreen v-model="dialog">
-          <div style="height: 100%; width: 100%; font-weight: 800; font-family: 'Oswald', sans;">
-            <v-toolbar
-              fixed
-              class="toolbar"
-              height="35px"
-              style="color: #fff; font-size: 22px; z-index: 50;"
-            >
-              <v-spacer />FICHE ETABLISSEMENT
-              <v-spacer />
-              <v-icon @click="hideEtablissement()" style="color: #fff">mdi-close</v-icon>
-            </v-toolbar>
-            <Etablissement v-if="dialog" :siret="prediction.siret" :batch="currentBatchKey" v-on="$listeners"></Etablissement>
-          </div>
-        </v-dialog>
-        <v-dialog fullscreen v-model="entrepriseDialog">
-          <div style="height: 100%; width: 100%; font-weight: 800; font-family: 'Oswald', sans;">
-            <v-toolbar
-              fixed
-              class="toolbar"
-              height="35px"
-              style="color: #fff; font-size: 22px; z-index: 50;"
-            >
-              <v-spacer />FICHE ENTREPRISE
-              <v-spacer />
-              <v-icon @click="hideEntreprise()" style="color: #fff">mdi-close</v-icon>
-            </v-toolbar>
-            <Entreprise v-if="entrepriseDialog" :siren="prediction.siren" v-on="$listeners" />
-          </div>
-        </v-dialog>
       </div>
     </v-card>
   </div>
@@ -140,14 +114,17 @@
 <script>
 import ScoreWidget from '@/components/ScoreWidget'
 import libellesProcols from '@/assets/libelles_procols.json'
+import {useDialogsStore} from "@/stores/dialogs";
 
 export default {
   name: 'PredictionWidget',
   props: ['prediction', 'social', 'activitePartielle', 'detteSociale'],
   components: {
     ScoreWidget,
-    Etablissement: () => import('@/components/Etablissement/Main.vue'),
-    Entreprise: () => import('@/components/Entreprise/main.vue'),
+  },
+  setup() {
+    const dialogs = useDialogsStore()
+    return { dialogs }
   },
   data() {
     return {

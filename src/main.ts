@@ -1,11 +1,19 @@
 // @ts-ignore
 import VueKeyCloak from '@dsb-norge/vue-keycloak-js'
 import Vue from 'vue'
+
+import {createPinia, PiniaVuePlugin} from "pinia";
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
+Vue.use(PiniaVuePlugin)
+const pinia = createPinia()
+pinia.use(piniaPluginPersistedstate)
+
 import App from './App.vue'
 import vuetify from './plugins/vuetify'
 import router from './router'
 import store from './store'
 import VueApexCharts from 'vue-apexcharts'
+
 // @ts-ignore
 import VueMatomo from 'vue-matomo'
 import globals from '@/globals'
@@ -74,6 +82,7 @@ Vue.use(VueKeyCloak, {
             const tslintCantBeDisabledSorryForThis = new Vue({
                 vuetify,
                 el: '#app',
+                pinia,
                 router,
                 template: '<App/>',
                 render: (h) => h(App),
@@ -101,8 +110,7 @@ Vue.mixin({
     },
     computed: {
         jwt() {
-            const jwt = Vue.prototype.$keycloak.tokenParsed
-            return jwt
+            return Vue.prototype.$keycloak.tokenParsed
         },
         roles() {
             return (Vue.prototype.$keycloak.tokenParsed.resource_access.signauxfaibles || {}).roles || []

@@ -180,8 +180,6 @@ export default {
   data() {
     return {
       sort: 'effectif',
-      siegeEntreprise: null,
-      autresEtablissements: [],
       accessToken: process.env.VUE_APP_MAPBOX_TOKEN,
       mapStyle: 'mapbox://styles/mapbox/navigation-guidance-day-v4',
       map: null,
@@ -209,20 +207,6 @@ export default {
     this.map.fitBounds(franceBounds, { padding: 50 })
   },
   watch: {
-    etablissementsSummary(val) {
-      this.siegeEntreprise = null
-      this.autresEtablissements = []
-      val.forEach((e) => {
-        if (e.siege === true) {
-          this.siegeEntreprise = e
-        } else {
-          this.autresEtablissements.push(e)
-        }
-      })
-      this.autresEtablissements.sort((e1, e2) => {
-        return (e2.dernier_effectif > e1.dernier_effectif ? 1 : -1)
-      })
-    },
     etablissements(val) {
       this.bounds = new mapboxgl.LngLatBounds()
       let coordinates = null
@@ -338,6 +322,16 @@ export default {
     },
   },
   computed: {
+    siegeEntreprise() {
+      return this.etablissementsSummary.find((e) => e.siege === true)
+    },
+    autresEtablissements() {
+      var autresEtablissements = this.etablissementsSummary.filter((e) => e.siege !== true)
+      autresEtablissements.sort((e1, e2) => {
+        return (e2.dernier_effectif > e1.dernier_effectif ? 1 : -1)
+      })
+      return autresEtablissements
+    },
     effectifEntreprise() {
       return this.etablissementsSummary.reduce((effectifEntreprise, e) => {
         if (e.etatAdministratif === 'A') {

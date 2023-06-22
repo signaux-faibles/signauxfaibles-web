@@ -4,7 +4,7 @@ import CampaignsAppBar from "@/components/campaigns/appbar/main.vue"
 import CampaignsMenu from "@/components/campaigns/menu/main.vue"
 import CampaignsWelcome from "@/components/campaigns/welcome/main.vue"
 import CampaignsMyCards from "@/components/campaigns/myactions/main.vue"
-import CampaignsPendingCards from "@/components/campaigns/pendingcards/main.vue"
+import CampaignsPendingCards from "@/components/campaigns/pending/main.vue"
 import CampaignsAllCards from "@/components/campaigns/allactions/main.vue"
 import { fetchEventSource } from "@microsoft/fetch-event-source";
 import Entreprise from "@/components/Entreprise/main.vue";
@@ -31,7 +31,7 @@ export default {
   },
   props: ['urlCampaignID'],
   watch: {
-    urlCampaignID(newID, oldID) {
+    urlCampaignID(newID) {
       console.log(newID)
       this.campaignsSelectedID=newID
     }
@@ -40,7 +40,7 @@ export default {
     this.SSESignal.abort()
   },
   methods: {
-    updateCampaigns(event) {
+    updateCampaigns() {
       console.log("update campaign")
       this.$store.dispatch('updateCampaigns')
     },

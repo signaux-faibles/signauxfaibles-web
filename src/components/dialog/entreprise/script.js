@@ -1,11 +1,12 @@
-import Etablissement from '@/components/Etablissement/Score'
+import Entreprise from '@/components/Entreprise/main.vue'
+import {useDialogsStore} from "@/stores/dialogs";
+
+
 export default {
-  name: 'DialogEtablissement',
-  components: { Etablissement },
-  computed: {
-    etablissementDialog: {
-      get() { return this.$store.state.etablissementDialog },
-      set(value) { return this.$store.dispatch('setEtablissementDialog', value)}
-    }
+  name: 'DialogEntreprise',
+  components: {Entreprise},
+  setup() {
+    const dialogs = useDialogsStore()
+    return {dialogs}
   }
 }

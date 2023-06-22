@@ -17,8 +17,8 @@
           </span>
         </div>
         <div style="text-align: right" class="mr-4">
-          <v-btn color="indigo lighten-1" dark block small style="text-transform: none" class="mb-2" @click="showEtablissement(etablissement.siret)">Fiche Établissement</v-btn>
-          <v-btn color="indigo lighten-1" dark block small  style="text-transform: none" @click="showEntreprise(etablissement.siret)">Fiche Entreprise</v-btn>
+          <v-btn color="indigo lighten-1" dark block small style="text-transform: none" class="mb-2" @click="dialogs.showEtablissement(etablissement.siret)">Fiche Établissement</v-btn>
+          <v-btn color="indigo lighten-1" dark block small  style="text-transform: none" @click="dialogs.showEntreprise(etablissement.siret)">Fiche Entreprise</v-btn>
         </div>
         <div class="mr-4">
           <v-btn @click="take(etablissement.campaignID, etablissement.id)" dark rounded color="green">
@@ -27,17 +27,8 @@
         </div>
       </template>
     </Card>
-    <v-dialog fullscreen v-model="dialogEtablissement">
-      <div style="height: 100%; width: 100%; font-weight: 800; font-family: 'Oswald', sans;">
-        <v-toolbar fixed class="toolbar" height="35px" style="color: #fff; font-size: 22px; z-index: 50;">
-          <v-spacer/>FICHE ETABLISSEMENT<v-spacer/>
-          <v-icon @click="hideEtablissement()" style="color: #fff">mdi-close</v-icon>
-        </v-toolbar>
-        <Etablissement v-if="dialogEtablissement" :siret="this.siret"></Etablissement>
-      </div>
-    </v-dialog>
     <v-dialog fullscreen v-model="dialogEntreprise">
-      <div style="height: 100%; width: 100%; font-weight: 800; font-family: 'Oswald', sans;">
+      <div style="height: 100%; width: 100%; font-weight: 800; font-family: 'Oswald', sans-serif;">
         <v-toolbar fixed class="toolbar" height="35px" style="color: #fff; font-size: 22px; z-index: 50;">
           <v-spacer />FICHE ENTREPRISE
           <v-spacer />

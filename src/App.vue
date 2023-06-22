@@ -14,6 +14,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <Dialogs/>
     <Security v-if="!securityConsent" />
     <v-main v-if="securityConsent">
       <NavigationDrawer v-if="login && leftDrawer" />
@@ -25,9 +26,10 @@
 <script>
 import NavigationDrawer from '@/components/NavigationDrawer.vue'
 import Security from '@/components/Security.vue'
+import Dialogs from '@/components/dialog/main/main.vue'
 
 export default {
-  components: { NavigationDrawer, Security },
+  components: { NavigationDrawer, Security, Dialogs },
   methods: {
     handleResize() {
       this.height = Math.max(

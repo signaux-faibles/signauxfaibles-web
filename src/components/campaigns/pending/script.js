@@ -2,13 +2,17 @@ import Card from "@/components/card/main.vue"
 import ScoreWidget from "@/components/ScoreWidget.vue"
 import Etablissement from "@/components/Etablissement/Main.vue"
 import Entreprise from "@/components/Entreprise/main.vue"
+import {useDialogsStore} from "@/stores/dialogs";
 export default {
   name: "CampaignsPendingCards",
   props: ['cards'],
   components: {Card, ScoreWidget, Etablissement, Entreprise},
+  setup() {
+    const dialogs = useDialogsStore()
+    return { dialogs }
+  },
   data() {
     return {
-      dialogEtablissement: false,
       dialogEntreprise: false,
       siret: null,
       siren: null,
@@ -27,7 +31,7 @@ export default {
     campaignsSelectedID() { return this.$store.state.campaignsSelectedID }
   },
   methods: {
-    processMessage(message) {
+    processMessage() {
       this.getPendingEtablissements()
       this.$store.dispatch('updateCampaigns')
     },
@@ -37,27 +41,11 @@ export default {
       })
     },
     take(campaignID, id) {
-        this.$axios.get('/campaign/take/' + campaignID + '/' + id).then((r) => {
+        this.$axios.get('/campaign/take/' + campaignID + '/' + id).then(() => {
       })
     },
     etablissements() {
       return this.pending.etablissements
     },
-    showEtablissement(siret) {
-      this.siret = siret
-      this.dialogEtablissement = true
-    },
-    hideEtablissement() {
-      this.siret = null
-      this.dialogEtablissement = false
-    },
-    showEntreprise(siret) {
-      this.siren = siret.slice(0,9)
-      this.dialogEntreprise = true
-    },
-    hideEntreprise() {
-      this.siret = null
-      this.dialogEntreprise = false
-    }
   },
 }

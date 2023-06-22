@@ -77,11 +77,11 @@
             <li v-for="l in currentNafLibelle.slice(0,4)" :key="l">{{ l }}</li>
           </ul>
           <span
-            style="margin-left: 15px; font-size: 11px; color: #444"
+            style="margin-left: 15px; font-size: 11px; color: #444"
             v-if="currentNaf.length > 4 && !allNaf"
           >+ {{ currentNaf.length - 4 }} autre{{ (currentNaf.length > 5)?'s':'' }}</span>
           <span
-            style="margin-left: 15px; font-size: 11px; color: #444"
+            style="margin-left: 15px; font-size: 11px; color: #444"
             v-if="allNaf"
           >Tout secteur confondu</span>
           <v-dialog v-model="nafDialog" persistent scrollable width="700">
@@ -243,7 +243,7 @@
       </v-navigation-drawer>
     </div>
     <v-card
-      style="height: 80px; text-align: center; vertical-align: top; background-color: #FFF0; position:"
+      style="height: 80px; text-align: center; vertical-align: top; background-color: #FFF0;"
       class="elevation-0 ma-2 pointer"
     >
       <v-container style="position: relative">
@@ -266,7 +266,7 @@
       </v-container>
     </v-card>
     <PredictionWidget v-for="p in prediction" :key="p.siret" :prediction="p" @hide-etablissement="onHideEtablissement" @follow-etablissement="followStateChanged = true" @unfollow-etablissement="followStateChanged = true"/>
-    <Spinner v-if="loading" />
+    <Spinner style="min-height: 60vh" v-if="loading" />
     <v-snackbar v-if="currentBatchDescription" v-model="snackbar" :bottom="true">
       Le modèle de détection a évolué !
       <v-btn color="primary" text @click="showModelHelp()">En savoir plus</v-btn>

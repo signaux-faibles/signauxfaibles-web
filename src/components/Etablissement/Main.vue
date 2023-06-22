@@ -1,171 +1,206 @@
 <template>
-  <div style="min-height: 100%; background: #fff; font-weight: 800; font-family: 'Oswald', sans-serif;">
-    <div>
+  <div style="min-height: 100%;  background: #fff">
+
+    <div v-if="loading" style="min-height: 100%; display: flex; justify-content: center; align-items: center;">
+      <Spinner style="min-height: 80vh" v-if="loading"/>
+    </div>
+    <div :class="'maindiv ' + loadingClass"
+         style="min-height: 100%; background: #fff; font-weight: 800; font-family: 'Oswald', sans-serif;">
       <v-container>
-        <v-layout wrap style="margin-top: 3em">
-          <v-flex xs12 md6 class="pa-3" style="font-size: 18px">
+        <v-layout style="margin-top: 3em" wrap>
+          <v-flex class="pa-3" md6 style="font-size: 18px" xs12>
             <Identite
+              :creation="creation"
               :denomination="denomination"
+              :groupe="groupe"
               :historique="historique"
+              :siege="etablissement.siege"
               :sirene="sirene"
               :siret="siret"
-              :siege="etablissement.siege"
-              :groupe="groupe"
-              :terrind="terrind"
-              :creation="creation"
-              :visiteFCE="visiteFCE"
               :statutJuridique="statutJuridique"
               :summary="summary"
+              :terrind="terrind"
+              :visiteFCE="visiteFCE"
             />
-            <v-btn v-if="etablissement.siren" dark color="indigo" @click="showEntreprise">Voir Fiche Entreprise</v-btn>
-            <v-btn outlined color="indigo" class="ml-4" @click="exportDOCX" :dark="!exportDOCXLoading" :loading="exportDOCXLoading" :disabled="exportDOCXLoading"><v-icon small class="mr-2">fa-file-word</v-icon>Exporter en DOCX (Word)</v-btn>
-            <v-alert :value="alertExport" type="error" transition="scale-transition" dismissible>Un problème est survenu lors de l'export de l’établissement.</v-alert>
+            <v-btn v-if="etablissement.siren" color="indigo" dark @click="dialogs.showEntreprise(etablissement.siren)">
+              Voir Fiche Entreprise
+            </v-btn>
+            <v-btn :dark="!exportDOCXLoading" :disabled="exportDOCXLoading" :loading="exportDOCXLoading" class="ml-4"
+                   color="indigo"
+                   outlined @click="exportDOCX">
+              <v-icon class="mr-2" small>fa-file-word</v-icon>
+              Exporter en DOCX (Word)
+            </v-btn>
+            <v-alert :value="alertExport" dismissible transition="scale-transition" type="error">Un problème est survenu
+              lors de l'export de l’établissement.
+            </v-alert>
           </v-flex>
-          <v-flex xs12 md6 class="text-left pa-3" style="font-size: 17px">
-            <v-layout fill-height align-center>
+          <v-flex class="text-left pa-3" md6 style="font-size: 17px" xs12>
+            <v-layout align-center fill-height>
               <v-flex>
                 <v-layout wrap>
                   <v-flex>
-                    <Historique v-if="summary" :historique="historique || []" :summary="summary" />
+                    <Historique v-if="summary" :historique="historique || []" :summary="summary"/>
                   </v-flex>
                 </v-layout>
                 <v-layout wrap>
-                    <v-flex xl6 lg12>
-                      <h2>
-                        Procédure collective
-                        <Help titre="Procédure collective">
-                          <template>
-                            <p>La dernière procédure collective (ou plan issu d'une procédure collective) connue de l'Urssaf est ici mise en avant.<br />
-                            Vous avez également la possibilité de consulter l’historique des principaux jugements groupés par type de procédure collective : sauvegarde, redressement, liquidation judiciaire.<br />
-                            Pour plus de détails encore, vous serez redirigés vers les annonces publiées au bulletin officiel (BODACC) pour cette entreprise.</p>
-                            <p>Veuillez noter que les plans de cession lors d'un redressement judiciaire ne sont pas indiqués.</p>
-                          </template>
-                        </Help>
-                      </h2>
-                      <div v-if="summary && summary.etat_procol !== 'in_bonis'">
+                  <v-flex lg12 xl6>
+                    <h2>
+                      Procédure collective
+                      <Help titre="Procédure collective">
+                        <template>
+                          <p>La dernière procédure collective (ou plan issu d'une procédure collective) connue de
+                            l'Urssaf
+                            est ici mise en avant.<br/>
+                            Vous avez également la possibilité de consulter l’historique des principaux jugements
+                            groupés
+                            par type de procédure collective : sauvegarde, redressement, liquidation judiciaire.<br/>
+                            Pour plus de détails encore, vous serez redirigés vers les annonces publiées au bulletin
+                            officiel (BODACC) pour cette entreprise.</p>
+                          <p>Veuillez noter que les plans de cession lors d'un redressement judiciaire ne sont pas
+                            indiqués.</p>
+                        </template>
+                      </Help>
+                    </h2>
+                    <div v-if="summary && summary.etat_procol !== 'in_bonis'">
+                      <div>
+                        Cet établissement fait l’objet d’une procédure collective :<br/>
+                        <v-chip class="my-2 chip" outlined small text-color="red darken-1">
+                          {{ libellesProcols[summary.etat_procol] }}
+                        </v-chip>
+                      </div>
+                      <v-btn color="indigo" dark outlined small @click="jugementsDialog = true">Voir historique des
+                        jugements
+                      </v-btn>
+                      <v-dialog v-model="jugementsDialog" max-width="500px" @input="jugementsDialog = false">
                         <div>
-                          Cet établissement fait l’objet d’une procédure collective :<br/>
-                          <v-chip class="my-2 chip" outlined small text-color="red darken-1">{{ libellesProcols[summary.etat_procol] }}</v-chip>
+                          <v-card>
+                            <v-card-title class="headline">
+                              Jugements de procédure collective
+                            </v-card-title>
+                            <v-card-text style="font-size: 17px">
+                              <v-expansion-panel v-model="jugementsPanel" expand
+                                                 style="font-weight: 800; font-family: 'Oswald', sans-serif;">
+                                <v-expansion-panel-content v-if="liquidationJugements.length > 0">
+                                  <template v-slot:header>
+                                    <div>Liquidation</div>
+                                  </template>
+                                  <v-card>
+                                    <v-card-text>
+                                      <ul style="list-style-type: disc">
+                                        <li v-for="j in liquidationJugements" :key="j">{{ j }}</li>
+                                      </ul>
+                                    </v-card-text>
+                                  </v-card>
+                                </v-expansion-panel-content>
+                                <v-expansion-panel-content v-if="redressementJugements.length > 0">
+                                  <template v-slot:header>
+                                    <div>Redressement</div>
+                                  </template>
+                                  <v-card>
+                                    <v-card-text>
+                                      <ul style="list-style-type: disc">
+                                        <li v-for="j in redressementJugements" :key="j">{{ j }}</li>
+                                      </ul>
+                                    </v-card-text>
+                                  </v-card>
+                                </v-expansion-panel-content>
+                                <v-expansion-panel-content v-if="sauvegardeJugements.length > 0">
+                                  <template v-slot:header>
+                                    <div>Sauvegarde</div>
+                                  </template>
+                                  <v-card>
+                                    <v-card-text>
+                                      <ul style="list-style-type: disc">
+                                        <li v-for="j in sauvegardeJugements" :key="j">{{ j }}</li>
+                                      </ul>
+                                    </v-card-text>
+                                  </v-card>
+                                </v-expansion-panel-content>
+                              </v-expansion-panel>
+                              <div class="mt-4"
+                                   style="font-size: 14px; font-weight: 400; font-family: 'Roboto', sans-serif">
+                                Vous pouvez consulter les annonces publiées au bulletin officiel.
+                                <v-btn :href="lienBODACC" class="my-2" color="indigo" outlined rel="noopener" small
+                                       target="_blank">
+                                  <v-icon left small>open_in_new</v-icon>
+                                  Voir annonces BODACC
+                                </v-btn>
+                              </div>
+                            </v-card-text>
+                            <v-card-actions>
+                              <v-spacer></v-spacer>
+                              <v-btn color="primary" text @click="jugementsDialog = false">Fermer</v-btn>
+                            </v-card-actions>
+                          </v-card>
                         </div>
-                        <v-btn outlined small dark color="indigo" @click="jugementsDialog = true">Voir historique des jugements</v-btn>
-                        <v-dialog v-model="jugementsDialog" @input="jugementsDialog = false" max-width="500px">
-                          <div>
-                            <v-card>
-                              <v-card-title class="headline">
-                                Jugements de procédure collective
-                              </v-card-title>
-                              <v-card-text style="font-size: 17px">
-                                <v-expansion-panel v-model="jugementsPanel" expand style="font-weight: 800; font-family: 'Oswald', sans-serif;">
-                                  <v-expansion-panel-content v-if="liquidationJugements.length > 0">
-                                    <template v-slot:header>
-                                      <div>Liquidation</div>
-                                    </template>
-                                    <v-card>
-                                      <v-card-text>
-                                        <ul style="list-style-type: disc">
-                                          <li v-for="j in liquidationJugements" :key="j">{{ j }}</li>
-                                        </ul>
-                                      </v-card-text>
-                                    </v-card>
-                                  </v-expansion-panel-content>
-                                  <v-expansion-panel-content v-if="redressementJugements.length > 0">
-                                    <template v-slot:header>
-                                      <div>Redressement</div>
-                                    </template>
-                                    <v-card>
-                                      <v-card-text>
-                                        <ul style="list-style-type: disc">
-                                          <li v-for="j in redressementJugements" :key="j">{{ j }}</li>
-                                        </ul>
-                                      </v-card-text>
-                                    </v-card>
-                                  </v-expansion-panel-content>
-                                  <v-expansion-panel-content v-if="sauvegardeJugements.length > 0">
-                                    <template v-slot:header>
-                                      <div>Sauvegarde</div>
-                                    </template>
-                                    <v-card>
-                                      <v-card-text>
-                                        <ul style="list-style-type: disc">
-                                          <li v-for="j in sauvegardeJugements" :key="j">{{ j }}</li>
-                                        </ul>
-                                      </v-card-text>
-                                    </v-card>
-                                  </v-expansion-panel-content>
-                                </v-expansion-panel>
-                                <div class="mt-4" style="font-size: 14px; font-weight: 400; font-family: 'Roboto', sans-serif">
-                                  Vous pouvez consulter les annonces publiées au bulletin officiel.
-                                  <v-btn class="my-2" small outlined color="indigo" :href="lienBODACC" target="_blank" rel="noopener"><v-icon small left>open_in_new</v-icon>Voir annonces BODACC</v-btn>
-                                </div>
-                              </v-card-text>
-                              <v-card-actions>
-                                <v-spacer></v-spacer>
-                                <v-btn text color="primary" @click="jugementsDialog = false">Fermer</v-btn>
-                              </v-card-actions>
-                            </v-card>
-                          </div>
-                        </v-dialog>
+                      </v-dialog>
+                    </div>
+                    <div v-else>
+                      Cet établissement ne fait, à notre connaissance, pas l’objet d’une procédure collective.
+                    </div>
+                  </v-flex>
+                  <v-flex v-if="showFCE" lg12 xl6>
+                    <h2>
+                      Visites de la Dreets
+                      <Help titre="Visites de la Dreets">
+                        <template>
+                          Cette information est fournie par <a href="https://fce.fabrique.social.gouv.fr/a-propos"
+                                                               rel="noopener" target="_blank">Fiche Commune
+                          Entreprise</a>.<br>
+                          Vous pouvez consulter ce service édité par l’incubateur des ministères sociaux pour en savoir
+                          davantage sur la date et la nature des visites.<br>
+                          Un compte Fiche Commune Entreprise avec une adresse email spécifique est nécessaire.
+                        </template>
+                      </Help>
+                    </h2>
+                    <div v-if="visiteFCE">
+                      <div class="mb-2">Cet établissement a reçu la visite de la Dreets (ex-Direccte) au cours des 24
+                        derniers mois.
                       </div>
-                      <div v-else>
-                          Cet établissement ne fait, à notre connaissance, pas l’objet d’une procédure collective.
+                      <v-btn v-if="showLienVisiteFCE" :href="lienVisiteFCE" color="indigo" outlined rel="noopener" small
+                             target="_blank" @click="getLienVisiteFCE()">
+                        <v-icon left small>open_in_new</v-icon>
+                        Fiche Commune Entreprise
+                      </v-btn>
+                    </div>
+                    <div v-else>
+                      <div class="mb-2">Cet établissement n’a pas reçu la visite de la Dreets (ex-Direccte) au cours des
+                        24 derniers mois.
                       </div>
-                    </v-flex>
-                    <v-flex xl6 lg12 v-if="showFCE">
-                      <h2>
-                        Visites de la Dreets
-                        <Help titre="Visites de la Dreets">
-                          <template>
-                            Cette information est fournie par <a href="https://fce.fabrique.social.gouv.fr/a-propos" target="_blank" rel="noopener">Fiche Commune Entreprise</a>.<br>
-                            Vous pouvez consulter ce service édité par l’incubateur des ministères sociaux pour en savoir davantage sur la date et la nature des visites.<br>
-                            Un compte Fiche Commune Entreprise avec une adresse email spécifique est nécessaire.
-                          </template>
-                        </Help>
-                      </h2>
-                      <div v-if="visiteFCE">
-                        <div class="mb-2">Cet établissement a reçu la visite de la Dreets (ex-Direccte) au cours des 24 derniers mois.</div>
-                        <v-btn v-if="showLienVisiteFCE" small outlined color="indigo" :href="lienVisiteFCE" target="_blank" rel="noopener" @click="getLienVisiteFCE()"><v-icon small left>open_in_new</v-icon>Fiche Commune Entreprise</v-btn>
-                      </div>
-                      <div v-else>
-                        <div class="mb-2">Cet établissement n’a pas reçu la visite de la Dreets (ex-Direccte) au cours des 24 derniers mois.</div>
-                      </div>
-                    </v-flex>
+                    </div>
+                  </v-flex>
                 </v-layout>
               </v-flex>
             </v-layout>
           </v-flex>
           <v-flex md12 xs12>
-            <Cards v-if="wekanUser" :siret="siret" :denomination="denomination" :codeDepartement="sirene.codeDepartement"/>
+            <Cards v-if="wekanUser" :codeDepartement="sirene.codeDepartement" :denomination="denomination"
+                   :siret="siret"/>
           </v-flex>
 
-          <v-flex md6 xs12 class="pr-1" style="min-height: 200px">    
-            <Effectif :effectif="effectif" :apconso="apconso" :apdemande="apdemande" :permDGEFP="perms.permDGEFP" />
+          <v-flex class="pr-1" md6 style="min-height: 200px" xs12>
+            <Effectif :apconso="apconso" :apdemande="apdemande" :effectif="effectif" :permDGEFP="perms.permDGEFP"/>
           </v-flex>
-          <v-flex md6 xs12 class="pr-1">
-            <Urssaf :debit="debit" :cotisation="cotisation" :permUrssaf="perms.permUrssaf" />
+          <v-flex class="pr-1" md6 xs12>
+            <Urssaf :cotisation="cotisation" :debit="debit" :permUrssaf="perms.permUrssaf"/>
           </v-flex>
-          <v-flex xs12 class="pr-1 pt-3">
-            <EtablissementEntreprise :siret="siret" :siege="etablissement.siege" :codeDepartement="sirene.codeDepartement" :etablissementsSummary="etablissementsSummary" v-on="$listeners" />
+          <v-flex class="pr-1 pt-3" xs12>
+            <EtablissementEntreprise :codeDepartement="sirene.codeDepartement"
+                                     :etablissementsSummary="etablissementsSummary" :siege="etablissement.siege"
+                                     :siret="siret" v-on="$listeners"/>
           </v-flex>
           <FollowDialog/>
           <UnfollowDialog/>
-          <v-dialog fullscreen v-model="entrepriseDialog">
-            <div style="height: 100%; width: 100%; font-weight: 800; font-family: 'Oswald', sans-serif;">
-              <v-toolbar
-                fixed
-                class="toolbar"
-                height="35px"
-                style="color: #fff; font-size: 22px; z-index: 50;"
-              >
-                <v-spacer />FICHE ENTREPRISE
-                <v-spacer />
-                <v-icon @click="hideEntreprise()" style="color: #fff">mdi-close</v-icon>
-              </v-toolbar>
-              <Entreprise v-if="entrepriseDialog" :siren="etablissement.siren" v-on="$listeners" />
-            </div>
-          </v-dialog>
         </v-layout>
-        <v-btn v-if="followed === false" fab fixed bottom right dark color="indigo" class="mr-2" @click="followDialog = true"><v-icon>mdi-star-outline</v-icon></v-btn>
-        <v-btn v-if="followed === true" fab fixed bottom right outlined color="indigo" class="mr-2" @click="unfollowDialog = true"><v-icon>mdi-star</v-icon></v-btn>
+        <v-btn v-if="followed === false" bottom class="mr-2" color="indigo" dark fab fixed right
+               @click="followDialog = true">
+          <v-icon>mdi-star-outline</v-icon>
+        </v-btn>
+        <v-btn v-if="followed === true" bottom class="mr-2" color="indigo" fab fixed outlined right
+               @click="unfollowDialog = true">
+          <v-icon>mdi-star</v-icon>
+        </v-btn>
       </v-container>
     </div>
   </div>
@@ -187,13 +222,22 @@ import FollowDialog from '@/components/Etablissement/FollowDialog.vue'
 import UnfollowDialog from '@/components/Etablissement/UnfollowDialog.vue'
 import CreateCardDialog from '@/components/follow/createcard/main.vue'
 import Help from '@/components/Help.vue'
+import Spinner from '@/components/Spinner.vue'
+import {useDialogsStore} from "@/stores/dialogs";
 
 export default {
   props: ['siret', 'batch'],
   name: 'Etablissement',
-  components: { Effectif, Urssaf, Help, Identite, Map,
+  components: {
+    Effectif, Urssaf, Help, Identite, Map,
     EtablissementEntreprise, Entreprise, Historique,
-    Cards, FollowDialog, UnfollowDialog, CreateCardDialog },
+    Cards, FollowDialog, UnfollowDialog, CreateCardDialog,
+    Spinner
+  },
+  setup() {
+    const dialogs = useDialogsStore()
+    return {dialogs}
+  },
   data() {
     return {
       axios: axios.create(),
@@ -223,11 +267,16 @@ export default {
       joinCardAlert: false,
       joinCardAlertError: '',
       followSwimlane: '',
+      loading: true,
     }
   },
   methods: {
     getEtablissement() {
+      this.loading = true
       this.$axios.get(`/etablissement/get/${this.siret}`).then((response) => {
+        this.etablissement = {}
+        this.historique = []
+        this.sirene = {}
         this.etablissement = response.data
         this.historique = (this.etablissement.scores || []).sort((d1, d2) => d1.batch < d2.batch)
         this.sirene = this.etablissement.sirene
@@ -236,7 +285,9 @@ export default {
         this.etablissement = {}
         this.historique = []
         this.sirene = {}
-      }) 
+      }).finally(() => {
+        this.loading = false
+      })
     },
     closeJoinCardDialog() {
       this.joinCardDialog = false
@@ -341,9 +392,18 @@ export default {
     },
   },
   computed: {
+    loadingClass() {
+      if (this.loading) {
+        return "loading"
+      }
+    },
     currentBoard: {
-      get() { return this.$localStore.state.currentBoard },
-      set(value) { this.$localStore.commit('setCurrentBoard', value) },
+      get() {
+        return this.$localStore.state.currentBoard
+      },
+      set(value) {
+        this.$localStore.commit('setCurrentBoard', value)
+      },
     },
     wekanUser() {
       return this.roles.includes('wekan')
@@ -423,7 +483,7 @@ export default {
       return (this.summary || {}).commune || ''
     },
     visiteFCE() {
-      return this.etablissement.visiteFCE ||  false
+      return this.etablissement.visiteFCE || false
     },
     libelleActivite() {
       return this.naf.libelleActivite
@@ -486,10 +546,19 @@ export default {
 ::v-deep .followCard .description p {
   margin: 8px 0;
 }
+
 .chip {
   font-family: 'Roboto', sans-serif;
   font-size: 13px;
   font-weight: 400;
   vertical-align: text-bottom;
+}
+
+.maindiv {
+  transition: opacity 0.5s;
+}
+
+.loading {
+  opacity: 0;
 }
 </style>

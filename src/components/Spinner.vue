@@ -1,40 +1,23 @@
 <template>
-  <div id="spinner">
-    {{ c }} 
+  <div style="display: flex;
+         min-height: 100%;
+        justify-content: center;
+        align-items: center;">
+    <v-progress-circular
+      size="100"
+      width="10"
+      indeterminate
+      color="blue"
+    ></v-progress-circular>
   </div>
 </template>
 
 <script>
 export default {
   name: 'Spinner',
-  data() {
-    return {
-      c: '.',
-      chars: '⠲⠖⠦⠴',
-    }
-  },
-  mounted() {
-    this.next()
-  },
-  methods: {
-    next(chars) {
-      this.c = this.chars.slice(0, 1)
-      this.chars = this.chars.slice(1) + this.chars.slice(0, 1)
-      setTimeout(this.next, 200)
-    },
-  },
 }
 </script>
 
 <style scoped>
-#spinner {
-  position: relative;
-  width: 100%;
-  height: 250px;
-  vertical-align: middle;
-  text-align: center;
-  font-size: 200px;
-  font-family: Monospace;
-  color: #888;
-}
+
 </style>
