@@ -45,29 +45,7 @@
         </v-toolbar>
 
         <div class="mt-2" style="display: flex; flex-direction: column; vertical-align: middle; padding: 0 15px;">
-          <v-select
-              ref="boardMenu"
-              v-model="boards"
-              :disabled="type === 'no-card'"
-              :items="boardsItems"
-              :menu-props="{ maxHeight: 400 }"
-              chips
-              label="Tableaux de suivi"
-              multiple
-              prepend-icon="fab fa-trello"
-              @change="debounce(clearAndGetFollowedEtablissements, 500)"
-          >
-            <template v-slot:selection="{ item, index }">
-              <v-chip small>
-                {{ item.text }}
-              </v-chip>
-            </template>
-            <template v-slot:append-item>
-              <div class="text-center my-2">
-                <v-btn color="primary" @click="$refs.listsMenu.isMenuActive = false">OK</v-btn>
-              </div>
-            </template>
-          </v-select>
+          <FilterTableaux/>
         </div>
         <v-divider class="mb-3"/>
         <div style="display: flex; flex-direction: row; vertical-align: middle; padding: 0 15px;">

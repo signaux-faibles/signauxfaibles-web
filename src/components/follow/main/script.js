@@ -3,10 +3,16 @@ import Toolbar from '@/components/Toolbar.vue'
 import Help from '@/components/Help.vue'
 import Gitbook from "@/components/Gitbook.vue";
 import labelColors from '@/assets/labels.json'
+import FilterTableaux from '@/components/follow/filters/contexte.vue'
+import {useFollowStore} from "@/stores/followFilters";
 
 export default {
   name: 'Follow',
-  components: {PredictionWidget, Toolbar, Help, Gitbook},
+  components: {PredictionWidget, Toolbar, Help, Gitbook, FilterTableaux},
+  setup() {
+    const follow = useFollowStore()
+    return {follow}
+  },
   data() {
     return {
       init: true,
@@ -23,6 +29,7 @@ export default {
     }
   },
   mounted() {
+    this.$bus.$on('follow-update', this.getFollowedEtablissements)
     this.getFollowedEtablissements()
   },
   watch: {
@@ -149,9 +156,8 @@ export default {
       if (!this.lists.includes('*')) {
         params.lists = this.lists
       }
-      if (!this.boards.includes('*')) {
-        params.boardIDs = this.boards
-      }
+      params.boardIDs = this.follow.contextIDs
+
       if (!this.zone.includes('*')) {
         params.zone = this.zone
       }
@@ -272,22 +278,6 @@ export default {
     },
     wekanUser() {
       return this.roles.includes('wekan')
-    },
-    boardsItems() {
-      const boards = Object.entries(this.$store.state.kanbanConfig.boards || {})
-      const all = [
-        {
-          text: 'Tous les tableaux',
-          value: '*',
-        },
-      ]
-      return all.concat(boards.map(([k, b]) => {
-        return {
-          value: k,
-          text: b.title.slice(8),
-          disabled: (this.boards.includes('*')),
-        }
-      }).sort(this.sortSelect))
     },
     labelItems() {
       const boards = Object
