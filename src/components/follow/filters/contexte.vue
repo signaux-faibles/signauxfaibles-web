@@ -12,13 +12,11 @@
       prepend-icon="fab fa-trello"
       @change="notifyFollowUpdate()"
     >
-<!--      @change="debounce(clearAndGetFollowedEtablissements, 500)"-->
-
       <template v-slot:selection="{ item, index }">
-        <v-chip small v-if="index < 3">
+        <v-chip v-if="index < 3" small>
           {{ item.text }}
         </v-chip>
-        <v-chip small v-if="index === 3 && follow.contextIDs.length === 4">
+        <v-chip v-if="index === 3 && follow.contextIDs.length === 4" small>
           {{ item.text }}
         </v-chip>
         <span
@@ -29,7 +27,7 @@
       </span>
       </template>
       <template v-slot:prepend-item>
-        <v-list-item @click="selectAll()" v-if="!allContextsSelected">
+        <v-list-item v-if="!allContextsSelected" @click="selectAll()">
           <v-list-item-action>
             <v-icon>
               mdi-plus-box
@@ -39,7 +37,7 @@
             cocher tout
           </v-list-item-title>
         </v-list-item>
-        <v-list-item @click="unselectAll()" v-if="allContextsSelected">
+        <v-list-item v-if="allContextsSelected" @click="unselectAll()">
           <v-list-item-action>
             <v-icon>
               mdi-close-box-outline

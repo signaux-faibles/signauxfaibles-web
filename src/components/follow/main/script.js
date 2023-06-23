@@ -4,11 +4,12 @@ import Help from '@/components/Help.vue'
 import Gitbook from "@/components/Gitbook.vue";
 import labelColors from '@/assets/labels.json'
 import FilterTableaux from '@/components/follow/filters/contexte.vue'
+import FilterDepartement from '@/components/follow/filters/departement.vue'
 import {useFollowStore} from "@/stores/followFilters";
 
 export default {
   name: 'Follow',
-  components: {PredictionWidget, Toolbar, Help, Gitbook, FilterTableaux},
+  components: {PredictionWidget, Toolbar, Help, Gitbook, FilterTableaux, FilterDepartement},
   setup() {
     const follow = useFollowStore()
     return {follow}
@@ -158,9 +159,7 @@ export default {
       }
       params.boardIDs = this.follow.contextIDs
 
-      if (!this.zone.includes('*')) {
-        params.zone = this.zone
-      }
+      params.zone = this.follow.departements
 
 
       if (this.labels.length > 0) {
@@ -251,28 +250,7 @@ export default {
         this.$localStore.commit('setLabelModeFollow', value)
       },
     },
-    zoneItems() {
-      const departements = Object.entries(this.$store.state.kanbanConfig.departements || {})
-      const swimlanes = departements.filter(
-        ([_, boards]) => {
-          for (const b of boards) {
-            if (this.boards.includes(b.boardID) || this.boards.includes('*')) {
-              return true
-            }
-          }
-          return false
-        })
-      const zoneItems = swimlanes.map(z => {
-        return {
-          text: `${z[0]} - ${this.departements[z[0]]}`,
-          value: z[0],
-          short: `${this.departements[z[0]]}`,
-          disabled: this.zone.includes('*'),
-        }
-      }).sort((z1, z2) => (z1.text < z2.text) ? -1 : 1)
 
-      return [{text: 'Tous les départements', value: '*', short: 'Tout'}].concat(zoneItems)
-    },
     departements() {
       return this.$store.state.departements
     },

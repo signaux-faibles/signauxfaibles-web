@@ -12,3 +12,10 @@
 .intro {
     font-size: 18px;
 }
+
+.filter {
+    display: flex;
+    flex-direction: column;
+    vertical-align: middle;
+    padding: 0 15px;
+}
