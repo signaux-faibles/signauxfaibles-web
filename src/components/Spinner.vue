@@ -7,7 +7,7 @@
       size="100"
       width="10"
       indeterminate
-      color="blue"
+      color="indigo"
     ></v-progress-circular>
   </div>
 </template>

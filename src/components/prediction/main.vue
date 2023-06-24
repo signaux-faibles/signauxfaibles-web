@@ -47,7 +47,6 @@
       >Les paramètres de filtrage ne font ressortir aucune des entreprises pour lesquelles vous êtes habilité(e).</div>
       <v-navigation-drawer
         :class="(rightDrawer?'elevation-6':'') + ' rightDrawer'"
-        transition="no-transition"
         width="330"
         v-model="rightDrawer"
         right

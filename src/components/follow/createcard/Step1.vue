@@ -44,8 +44,11 @@
         </v-card-text>
         <v-card-actions>
             <v-spacer></v-spacer>
+            <v-btn class="mb-2" color="indigo" outlined @click="closeCreateCardDialog()">
+              Passer la création
+            </v-btn>
             <v-btn class="mb-2" color="indigo" dark @click="createCardSequence=2">
-                Étape suivante
+              Étape suivante
             </v-btn>
         </v-card-actions>
     </v-card>
@@ -63,7 +66,10 @@ export default {
             this.$store.commit('setCreateCardLabels', [])
             this.$store.commit('setCreateCardProblems', [])
             this.$store.commit('setCreateCardActions', [])
-        }
+        },
+        closeCreateCardDialog() {
+          this.createCardDialog = false
+        },
     },
     computed: {
         createCardSwimlaneID: {
@@ -73,6 +79,10 @@ export default {
             set(value) {
                 this.$store.commit('setCreateCardSwimlaneID', value)
             }
+        },
+        createCardDialog: {
+          get() { return this.$store.state.createCardDialog },
+          set(value) { return this.$store.dispatch('setCreateCardDialog', value)},
         },
         createCardSequence: {
             get() {

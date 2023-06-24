@@ -19,3 +19,11 @@
     vertical-align: middle;
     padding: 0 15px;
 }
+
+.maindiv {
+    transition: opacity 0.3s;
+}
+
+.loading {
+    opacity: 0;
+}

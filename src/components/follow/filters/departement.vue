@@ -17,7 +17,7 @@
         </v-chip>
         <span
           v-if="index === 3 && follow.departements.length > 4"
-          class="text-grey text-caption align-self-center"
+          class="ml-1 text-grey text-caption align-self-center"
         >
         (+{{ follow.departements.length - 3 }} autres)
         </span>
@@ -63,9 +63,11 @@ export default {
   methods: {
     unselectAll() {
       this.follow.departements = []
+      this.notifyFollowUpdate()
     },
     selectAll() {
       this.follow.departements = this.zoneItems.map((z) => z.value)
+      this.notifyFollowUpdate()
     },
     notifyFollowUpdate() {
       this.$bus.$emit('follow-update')
@@ -86,7 +88,7 @@ export default {
             boardIDs: departement.map((d) => d.boardID)
           }
         })
-        .filter((departement) => departement.boardIDs.some((d) => this.follow.contextIDs.includes(d)))
+        .filter((departement) => departement.boardIDs.some((d) => this.follow.contextIDs.includes(d) || this.follow.type == 'no-card'))
         .map((d) => {
           return {
             text: `${d.codeDepartement} - ${this.departements[d.codeDepartement]}`,

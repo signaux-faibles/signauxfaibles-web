@@ -38,158 +38,42 @@
         :class="((rightDrawer)?'elevation-6':'') + ' rightDrawer'"
         app
         right
-        transition="no-transition"
       >
         <v-toolbar class="transparent" flat height="40">
           <v-icon :class="loading?'rotate':''" @click="closeRightDrawer()">mdi-target</v-icon>
         </v-toolbar>
-
+        <v-divider class="mb-1"/>
         <div class="mt-2 filter">
-          <FilterTableaux/>
+          <FilterTableaux v-if="follow.type != 'no-card'"/>
         </div>
-        <v-divider class="mb-3"/>
+        <v-divider v-if="follow.type != 'no-card'" class="mb-1"/>
         <div class="mt-2 filter">
           <FilterDepartement/>
         </div>
-        <v-divider class="mb-3"/>
-        <div class="mt-2" style="display: flex; flex-direction: column; vertical-align: middle; padding: 0 15px;">
-          <v-select
-            ref="listsMenu"
-            v-model="lists"
-            :disabled="type === 'no-card'"
-            :items="listsItems"
-            :menu-props="{ maxHeight: 400 }"
-            chips
-            label="Statut"
-            multiple
-            prepend-icon="mdi-playlist-check"
-            @change="debounce(getFollowedEtablissements, 500)"
-          >
-            <template v-slot:selection="{ item, index }">
-              <v-chip small>
-                {{ item.text }}
-              </v-chip>
-            </template>
-            <template v-slot:append-item>
-              <div class="text-center my-2">
-                <v-btn color="primary" @click="$refs.listsMenu.isMenuActive = false">OK</v-btn>
-              </div>
-            </template>
-          </v-select>
+        <v-divider class="mb-1"/>
+        <div class="mt-2 filter">
+          <FilterStatut v-if="follow.type != 'no-card'"/>
+        </div>
+        <v-divider v-if="follow.type != 'no-card'" class="mb-1"/>
+        <div v-if="follow.type != 'no-card'" class="mt-2 filter">
+          <FilterLabels/>
+        </div>
+        <v-divider v-if="follow.type != 'no-card'" class="mb-1 filter"/>
+        <div class="filter">
+          <FilterRaisonSociale/>
         </div>
         <v-divider class="mb-3"/>
-        <div class="mt-2" style="display: flex; flex-direction: column; vertical-align: middle; padding: 0 15px;">
-          <v-select
-            ref="labelMenu"
-            v-model="labels"
-            :disabled="type === 'no-card'"
-            :items="labelItems"
-            :menu-props="{ maxHeight: 400 }"
-            chips
-            label="Étiquettes"
-            multiple
-            prepend-icon="mdi-label"
-            style="margin-bottom: -30px"
-            @change="debounce(getFollowedEtablissements,500)"
-          >
-            <template v-if="labels.length > 0" v-slot:prepend-inner>
-              <v-tooltip bottom>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-icon v-bind="attrs" @click="resetLabels" v-on="on">
-                    mdi-close
-                  </v-icon>
-                </template>
-                Réinitialiser la sélection
-              </v-tooltip>
-            </template>
-            <template v-slot:selection="{ item, index }">
-              <v-chip :color="item.background" :text-color="item.front" small>
-                {{ item.text }}
-              </v-chip>
-            </template>
-            <template v-slot:item="{ active, item, attrs, on }">
-              <v-chip :color="item.background" :text-color="item.front">{{ item.text }}</v-chip>
-            </template>
-            <template v-slot:append-item>
-              <div class="text-center my-2">
-                <v-btn color="primary" @click="$refs.labelMenu.isMenuActive = false">OK</v-btn>
-              </div>
-            </template>
-          </v-select>
-          <div>
-            <v-radio-group
-              v-model="labelMode"
-              :disabled="labels.length<2"
-              @change="getFollowedEtablissements"
-            >
-              <v-radio
-                label="Toutes les étiquettes"
-                value="and"
-              />
-              <v-radio
-                label="Au moins une étiquette"
-                value="or"
-              />
-            </v-radio-group>
-          </div>
-        </div>
-        <v-divider class="mb-3"/>
-        <div style="display: flex; flex-direction: row; vertical-align: middle; padding: 0 15px;">
-          <v-text-field v-model="raisonSociale" label="raison sociale"
-                        @keydown="debounce(getFollowedEtablissements, 500)"/>
-        </div>
-        <v-divider class="mb-3"/>
-        <div style="display: flex; flex-direction: row; vertical-align: middle; padding: 0 15px;">
-          <v-dialog
-            ref="menuSince"
-            v-model="menuSince"
-            :return-value.sync="since"
-            persistent
-            width="290px"
-          >
-            <template v-slot:activator="{ on, attrs }">
-              <v-text-field
-                v-model="since"
-                clearable
-                label="Modifiée depuis"
-                prepend-icon="mdi-calendar"
-                readonly
-                v-bind="attrs"
-                v-on="on"
-                @click:clear="() => {since=null; debounce(getFollowedEtablissements, 500)}"
-              ></v-text-field>
-            </template>
-            <v-date-picker
-              v-model="since"
-              locale="fr"
-              scrollable
-            >
-              <v-spacer></v-spacer>
-              <v-btn
-                color="primary"
-                text
-                @click="menuSince = false"
-              >
-                Cancel
-              </v-btn>
-              <v-btn
-                color="primary"
-                text
-                @click="$refs.menuSince.save(since)"
-              >
-                OK
-              </v-btn>
-            </v-date-picker>
-          </v-dialog>
+        <div v-if="follow.type != 'no-card'" class="filter">
+          <FilterSince/>
         </div>
       </v-navigation-drawer>
     </div>
     <v-layout column fill-height style="font-weight: normal">
       <v-flex v-if="wekanUser" pt-3 shrink text-center>
-        <v-btn-toggle v-model="type" mandatory @change="getFollowedEtablissements">
+        <v-btn-toggle v-model="follow.type" mandatory @change="getFollowedEtablissements">
           <v-btn text value="my-cards">Mes cartes de suivi</v-btn>
           <v-btn text value="all-cards">Toutes les cartes</v-btn>
-          <v-btn text value="no-card" @click="boards = ['*']">Mon suivi sans carte</v-btn>
+          <v-btn text value="no-card">Mon suivi sans carte</v-btn>
         </v-btn-toggle>
       </v-flex>
       <v-flex grow px-2>
@@ -238,13 +122,16 @@
             lors de l’export des établissements suivis.
           </v-alert>
         </div>
-        <PredictionWidget
-          v-for="e in uniqEtablissements"
-          :key="e.siret"
-          :prediction="e"
-          @follow-etablissement="getFollowedEtablissements"
-          @unfollow-etablissement="getFollowedEtablissements"
-        />
+        <div style="position: absolute; top: 300px; width: 100%">
+          <spinner v-show="loading"/>
+        </div>
+        <div :class="'maindiv ' + loadingClass()" style="min-height: 50vh">
+          <PredictionWidget
+            v-for="e in uniqEtablissements"
+            :key="e.siret"
+            :prediction="e"
+          />
+        </div>
         <div v-if="etablissements.length >= 100">
           <v-alert
             :value="true"

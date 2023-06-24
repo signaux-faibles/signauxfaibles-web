@@ -5,11 +5,21 @@ import Gitbook from "@/components/Gitbook.vue";
 import labelColors from '@/assets/labels.json'
 import FilterTableaux from '@/components/follow/filters/contexte.vue'
 import FilterDepartement from '@/components/follow/filters/departement.vue'
+import FilterStatut from '@/components/follow/filters/statut.vue'
+import FilterSince from '@/components/follow/filters/since.vue'
+import FilterRaisonSociale from "@/components/follow/filters/raisonsociale.vue";
+import FilterLabels from "@/components/follow/filters/labels.vue";
 import {useFollowStore} from "@/stores/followFilters";
+import Spinner from "@/components/Spinner.vue";
 
 export default {
   name: 'Follow',
-  components: {PredictionWidget, Toolbar, Help, Gitbook, FilterTableaux, FilterDepartement},
+  components: {
+    Spinner,
+    FilterLabels,
+    FilterRaisonSociale,
+    PredictionWidget, Toolbar, Help, Gitbook, FilterTableaux, FilterDepartement, FilterStatut, FilterSince
+  },
   setup() {
     const follow = useFollowStore()
     return {follow}
@@ -17,7 +27,7 @@ export default {
   data() {
     return {
       init: true,
-      loading: false,
+      loading: true,
       followPayload: {},
       snackbar: true,
       exportXSLXLoading: false,
@@ -30,59 +40,66 @@ export default {
     }
   },
   mounted() {
+    this.loading = true
     this.$bus.$on('follow-update', this.getFollowedEtablissements)
     this.getFollowedEtablissements()
   },
-  watch: {
-    since() {
-      this.debounce(this.getFollowedEtablissements, 500)
-    }
+  beforeDestroy() {
+    this.$bus.$off()
   },
+  watch: {},
   methods: {
+    loadingClass() {
+      if (this.loading) {
+        return "loading"
+      }
+    },
     resetLabels(event) {
       this.labels = []
-      this.getFollowedEtablissements()
+      this.getFollowedEtablissementthithis()
       event.stopPropagation()
     },
     showFollowHelp() {
       this.$refs.followHelp.clickButton()
     },
-    debounce(fn, timeout) {
-      clearTimeout(this._timerID)
-      this._timerID = setTimeout(fn, timeout)
-    },
-    clearAndGetFollowedEtablissements() {
-      this.labels = []
-      this.zone = ['*']
-      this.lists = ['*']
-      this.raisonSociale = null
-      this.getFollowedEtablissements()
-    },
+
     getFollowedEtablissements() {
       this.loading = true
-      if (this._abortController) {
-        this._abortController.abort()
-        this._abortController = null
+      if (this._timerID) {
+        clearTimeout(this._timerID)
+      }
+      const fn = () => {
+        if (this._abortController) {
+          this._abortController.abort()
+          this._abortController = null
+        }
+
+        this._abortController = new AbortController();
+        this.$axios.post(
+          '/kanban/follow',
+          this.follow.params,
+          {
+            signal: this._abortController.signal
+          }
+        )
+          .catch((error) => {})
+          .then((response) => {
+            if (response) {
+              if (response.status === 200) {
+                this.followPayload = response.data
+              }
+            } else {
+              this.followPayload = {}
+            }
+          })
+          .finally(() => {
+            this.init = false
+            this.loading = false
+            this.followStateChanged = false
+          })
       }
 
-      this._abortController = new AbortController();
-      this.$axios.post(
-        '/kanban/follow',
-        this.params,
-        {
-          signal: this._abortController.signal
-        }
-      ).then((response) => {
-        if (response.status === 200) {
-          this.followPayload = response.data
-        } else {
-          this.followPayload = {}
-        }
-      }).finally(() => {
-        this.init = false
-        this.loading = false
-        this.followStateChanged = false
-      })
+      this._timerID = setTimeout(fn, 500)
     },
     openLeftDrawer() {
       this.trackMatomoEvent('general', 'ouvrir_menu')
@@ -152,27 +169,23 @@ export default {
       return Object.values(map)
     },
     params() {
-      const params = {}
-      params.type = this.type
-      if (!this.lists.includes('*')) {
-        params.lists = this.lists
-      }
-      params.boardIDs = this.follow.contextIDs
-
-      params.zone = this.follow.departements
-
-
-      if (this.labels.length > 0) {
-        params.labelMode = this.labelMode
-        params.labels = this.labels
-      }
-      if (this.since) {
-        params.since = new Date(this.since)
-      }
-      if (this.raisonSociale) {
-        params.raisonSociale = this.raisonSociale
-      }
-      return params
+      // const params = {}
+      // params.type = this.type
+      //
+      // params.boardIDs = this.follow.contextIDs
+      // params.zone = this.follow.departements
+      // params.lists = this.follow.statuts
+      //
+      // if (this.labels.length > 0) {
+      //   params.labelMode = this.follow.labelMode
+      //   params.labels = this.follow.labels
+      // }
+      // if (this.follow.since) {
+      //   params.since = new Date(this.follow.since)
+      // }
+      // params.raisonSociale = this.follow.raisonSociale
+      //
+      // return params
     },
     leftDrawer: {
       get() {
@@ -256,59 +269,6 @@ export default {
     },
     wekanUser() {
       return this.roles.includes('wekan')
-    },
-    labelItems() {
-      const boards = Object
-        .entries(this.$store.state.kanbanConfig.boards || {})
-        .filter(([boardID, _]) => (this.boards.includes(boardID) || this.boards.includes('*')))
-      const labels = boards.reduce((m, [_, board]) => {
-        Object.entries(board.labels).forEach(([_, label]) => {
-          if (label.name !== '') {
-            m[label.name] = labelColors[label.color]
-          }
-        })
-        return m
-      }, {})
-      return Object.entries(labels).map(([name, color]) => {
-        return {
-          text: name,
-          background: color.background,
-          front: color.front,
-          value: name,
-        }
-      }).sort((label1, label2) => {
-        return (label1.background + label1.name < label2.background + label2.name) ? -1 : 1
-      })
-    },
-    listsItems() {
-      const boards = Object
-        .entries(this.$store.state.kanbanConfig.boards || {})
-        .filter(([boardID, _]) => (this.boards.includes(boardID) || this.boards.includes('*')))
-      const dupItems = boards
-        .flatMap(([_, board]) => {
-          return Object.values(board.lists)
-            .sort((list1, list2) => {
-              return (list1.sort < list2.sort) ? -1 : 1
-            })
-            .map((list) => {
-              return list.title
-            })
-        })
-      const items = dupItems
-        .filter((v, i, a) => a.indexOf(v) === i)
-        .map((item) => {
-          return {
-            text: item,
-            disabled: (this.lists.includes('*')),
-          }
-        })
-      const all = [
-        {
-          text: 'Tous les statuts',
-          value: '*',
-        },
-      ]
-      return all.concat(items)
     },
   },
   filters: {

@@ -21,10 +21,10 @@
         </v-chip>
         <span
           v-if="index === 3 && follow.contextIDs.length > 4"
-          class="text-grey text-caption align-self-center"
+          class="ml-1 text-grey text-caption align-self-center"
         >
-        (+{{ follow.contextIDs.length - 3 }} autres)
-      </span>
+          (+{{ follow.contextIDs.length - 3 }} autres)
+        </span>
       </template>
       <template v-slot:prepend-item>
         <v-list-item v-if="!allContextsSelected" @click="selectAll()">
@@ -71,9 +71,11 @@ export default {
     },
     unselectAll() {
       this.follow.contextIDs = []
+      this.notifyFollowUpdate()
     },
     selectAll() {
       this.follow.contextIDs = this.allContexts
+      this.notifyFollowUpdate()
     }
   },
   computed: {

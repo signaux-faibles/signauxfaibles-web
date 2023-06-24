@@ -1,11 +1,12 @@
 <template>
-  <v-app id="base">
-    <v-dialog v-model="expiredSession" persistent max-width="500px">
+  <v-app>
+    <div id="base"></div>
+    <v-dialog v-model="expiredSession" max-width="500px" persistent>
       <v-card>
         <v-card-title class="headline">Votre session a expiré</v-card-title>
         <v-card-text>
           Vous avez été inactif pendant une trop longue période.
-          <br />Veuillez vous reconnecter pour accéder de nouveau au service.
+          <br/>Veuillez vous reconnecter pour accéder de nouveau au service.
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -15,10 +16,12 @@
       </v-card>
     </v-dialog>
     <Dialogs/>
-    <Security v-if="!securityConsent" />
+    <Security v-if="!securityConsent"/>
     <v-main v-if="securityConsent">
-      <NavigationDrawer v-if="login && leftDrawer" />
-      <router-view />
+      <v-scroll-x-transition>
+        <NavigationDrawer v-if="login" v-show="leftDrawer"/>
+      </v-scroll-x-transition>
+      <router-view/>
     </v-main>
   </v-app>
 </template>
@@ -29,7 +32,7 @@ import Security from '@/components/Security.vue'
 import Dialogs from '@/components/dialog/main/main.vue'
 
 export default {
-  components: { NavigationDrawer, Security, Dialogs },
+  components: {NavigationDrawer, Security, Dialogs},
   methods: {
     handleResize() {
       this.height = Math.max(
@@ -47,7 +50,7 @@ export default {
   computed: {
     securityConsent() {
       const securityConsent = new Date(this.$localStore.state.securityConsent)
-      const limitConsent = new Date(securityConsent.setMonth(securityConsent.getMonth()+2));
+      const limitConsent = new Date(securityConsent.setMonth(securityConsent.getMonth() + 2));
       return limitConsent.getTime() >= Date.now()
     },
     height: {
@@ -115,38 +118,44 @@ export default {
   font-style: normal;
   font-weight: 350;
   src: local("Oswald"),
-    url(./fonts/SairaCondensed-Medium.ttf) format("truetype");
+  url(./fonts/SairaCondensed-Medium.ttf) format("truetype");
 }
 
 @font-face {
   font-family: "Abel";
   src: local("Abel"),
-    url(./fonts/Abel-Regular.ttf) format("truetype");
+  url(./fonts/Abel-Regular.ttf) format("truetype");
 }
 
 body {
   font-family: "Roboto", sans-serif;
 }
+
 .toolbar {
   background-color: #222;
   text-shadow: 0px 0px 2px rgb(0, 0, 0), 0px 0px 1px rgb(255, 255, 255);
   background: linear-gradient(0deg, #272629, #ffffff00 7%, transparent),
-    radial-gradient(
-      ellipse at top,
-      rgb(164, 155, 189),
-      #70658a 35%,
-      #3a3b4b 75%,
-      #21213b 100%,
-      transparent
-    );
+  radial-gradient(
+    ellipse at top,
+    rgb(184, 175, 209),
+    #70658a 10%,
+    #3a3b4b 55%,
+    #21213b 100%,
+    transparent
+  );
 }
+
 .toolbar_titre {
   color: #fff;
   font-family: "Abel", sans-serif;
   font-weight: 800;
   font-size: 22px;
 }
+
 #base {
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
   background: radial-gradient(
     circle at center,
     rgb(255, 255, 255),
@@ -154,19 +163,13 @@ body {
     rgb(187, 187, 187) 100%
   );
 }
+
 .rightDrawer {
   position: fixed;
   right: 0px;
 }
+
 .span {
   max-height: 10px;
 }
-/* span.fblue {
-  font-family: "Quicksand", sans-serif;
-  color: #20459a;
-}
-span.fred {
-  font-family: "Quicksand", sans-serif;
-  color: #e9222e;
-} */
 </style>

@@ -25,7 +25,7 @@
         <Redressement up v-if="signalFinancier">
           La lecture des bilans annuels révèle :
           <ul>
-            <li v-for="libelle of libelleFinanciers" v-bind="libelle">
+            <li v-for="libelle of libelleFinanciers" @key="libelle">
               {{ libelle }}
             </li>
           </ul>
