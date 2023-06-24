@@ -45,7 +45,7 @@
         <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn class="mb-2" color="indigo" outlined @click="closeCreateCardDialog()">
-              Passer la création
+              ne pas créer
             </v-btn>
             <v-btn class="mb-2" color="indigo" dark @click="createCardSequence=2">
               Étape suivante

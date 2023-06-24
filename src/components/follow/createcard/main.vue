@@ -5,6 +5,8 @@
                 color="indigo"
                 dark
         >
+            <v-toolbar-title>Nouvelle fiche d'accompagnement</v-toolbar-title>
+          <v-spacer/>
             <v-btn
                     dark
                     icon
@@ -12,7 +14,6 @@
             >
                 <v-icon>mdi-close</v-icon>
             </v-btn>
-            <v-toolbar-title>Nouvelle fiche d'accompagnement</v-toolbar-title>
         </v-toolbar>
         <Step1 v-if="createCardSequence===1" :cards="cards" :codeDepartement="codeDepartement"/>
         <Step2 v-if="createCardSequence===2"/>
