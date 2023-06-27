@@ -7,11 +7,11 @@
                height="35px"
     >
       <v-icon
-        v-if="!leftDrawer"
+        v-if="!drawers.left"
         key="toolbar"
         class="fa-rotate-180"
         color="#ffffff"
-        @click="openLeftDrawer()"
+        @click="drawers.showLeft()"
       >mdi-backburger
       </v-icon>
       <div
@@ -25,22 +25,22 @@
       </div>
       <v-spacer></v-spacer>
       <v-icon
-        v-if="wekanUser && !rightDrawer"
+        v-if="wekanUser && !drawers.right"
         :class="loading?'rotate':''"
         color="#ffffff"
-        @click="openRightDrawer()"
+        @click="drawers.showRight()"
       >mdi-target
       </v-icon>
     </v-app-bar>
     <div style="width:100%">
       <v-navigation-drawer
-        v-model="rightDrawer"
-        :class="((rightDrawer)?'elevation-6':'') + ' rightDrawer'"
+        v-model="drawers.right"
+        :class="((drawers.right)?'elevation-6':'') + ' rightDrawer'"
         app
         right
       >
         <v-toolbar class="transparent" flat height="40">
-          <v-icon :class="loading?'rotate':''" @click="closeRightDrawer()">mdi-target</v-icon>
+          <v-icon :class="loading?'rotate':''" @click="drawers.hideRight()">mdi-target</v-icon>
         </v-toolbar>
         <v-divider class="mb-1"/>
         <div class="mt-2 filter">
@@ -139,7 +139,7 @@
             icon="info"
           >
             La sélection a été tronquée à 100 établissements pour des raisons de performance d'affichage, utilisez <a
-            @click="openRightDrawer()">les filtres</a> pour affiner votre sélection.
+            @click="drawers.showRight()">les filtres</a> pour affiner votre sélection.
           </v-alert>
         </div>
       </v-flex>

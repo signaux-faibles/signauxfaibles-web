@@ -42,75 +42,17 @@ export default {
       this.codeDepartement = codeDepartement
       this.followCardsDialog = true
     },
-    showSuccess(id) {
-      this.campaignEtablissementSelectedID = id
-      this.successDialog = true
-    },
-    showCancel(id) {
-      this.campaignEtablissementSelectedID = id
-      this.cancelDialog = true
-    },
-    hideSuccess() {
-      this.successRadio = null
-      this.campaignEtablissementSelectedID = null
-      this.successDialog = false },
-    hideCancel() {
-      this.cancelRadio = null
-      this.campaignEtablissementSelectedID = null
-      this.cancelDialog = false },
-    showEtablissement(siret) {
-      this.siret = siret
-      this.etablissementDialog = true
-    },
-    hideEtablissement() {
-      this.siret = null
-      this.etablissementDialog = false
-    },
-    showEntreprise(siret) {
-      this.siren = siret.slice(0,9)
-      this.entrepriseDialog = true
-    },
-    hideEntreprise() {
-      this.siret = null
-      this.entrepriseDialog = false
-    },
     getMyActions(campaignID) {
       this.$axios.get('/campaign/myactions/' + this.campaignsSelectedID)
         .then((r) => {
           this.myActions = r.data
         })
     },
-    cancel() {
-      this.$axios.post(
-        '/campaign/cancel/' + this.campaignsSelectedID + '/' + this.campaignEtablissementSelectedID,
-        { detail: this.cancelRadio }
-      ).then((r) => {
-          this.hideCancel()
-          this.getMyActions()
-        }
-      )
-    },
-    success() {
-      this.$axios.post(
-        '/campaign/success/' + this.campaignsSelectedID + '/' + this.campaignEtablissementSelectedID,
-        { detail: this.successRadio }
-      ).then((r) => {
-          this.hideSuccess()
-          this.getMyActions()
-        }
-      )
-    }
   },
   computed: {
     followCardsDialog: {
       get() { return this.$store.state.followCardsDialog },
       set(value) { return this.$store.dispatch('setFollowCardsDialog', value)}
-    },
-    cancelLabels() {
-      return StatusLabels.cancel
-    },
-    successLabels() {
-      return StatusLabels.success
     },
     campaignsSelectedID() {
       return this.$store.state.campaignsSelectedID

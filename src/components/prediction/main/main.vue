@@ -7,9 +7,9 @@
       extension-height="48px"
     >
       <v-icon
-        @click="openLeftDrawer()"
+        @click="drawers.showLeft()"
         class="fa-rotate-180"
-        v-if="!leftDrawer"
+        v-if="!drawers.left"
         color="#ffffff"
         key="toolbar"
       >mdi-backburger</v-icon>
@@ -36,8 +36,8 @@
       <v-icon
         :class="loading?'rotate':''"
         color="#ffffff"
-        v-if="!rightDrawer"
-        @click="openRightDrawer()"
+        v-if="!drawers.right"
+        @click="drawers.showRight()"
       >mdi-target</v-icon>
     </v-app-bar>
     <div class="mt-6">
@@ -46,14 +46,14 @@
         v-if="complete && prediction.length == 0"
       >Les paramètres de filtrage ne font ressortir aucune des entreprises pour lesquelles vous êtes habilité(e).</div>
       <v-navigation-drawer
-        :class="(rightDrawer?'elevation-6':'') + ' rightDrawer'"
+        :class="(drawers.right?'elevation-6':'') + ' rightDrawer'"
         width="330"
-        v-model="rightDrawer"
+        v-model="drawers.right"
         right
         app
       >
         <v-toolbar flat class="transparent" height="40">
-          <v-icon :class="loading?'rotate':''" @click="closeRightDrawer()">mdi-target</v-icon>
+          <v-icon :class="loading?'rotate':''" @click="drawers.hideRight()">mdi-target</v-icon>
         </v-toolbar>
         <div class="mt-2" style="padding: 0 15px;">
           <v-select

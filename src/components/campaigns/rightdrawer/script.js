@@ -24,34 +24,5 @@ export default {
         return this.$store.dispatch('setCampaignsSelectedID', value)
       }
     },
-    // campaignsSelected() {
-    //   return this.campaigns[this.campaignsSelectedID] || {}
-    // },
-    // campaignsSelectedDueDate() {
-    //   return this.campaignsSelected.due.toLocaleString('fr-FR').slice(0,10)
-    // },
-    // campaignSelectedStatus() {
-    //   return this.campaignsSelected.active ? "en cours de traitement" : "traitement terminé"
-    // },
-    // campaignsSelectedStats() {
-    //   return {
-    //     total: this.campaignsSelected.cards.length,
-    //     pending: this.campaignsSelected.cards.filter(c => c.assignee == "nobody" && !c.done).length,
-    //     mine: this.campaignsSelected.cards.filter(c => c.assignee == this.jwt.email && !c.done).length,
-    //     workinprogress: this.campaignsSelected.cards.filter(c => (c.assignee != 'nobody' && !c.done)).length,
-    //     done: this.campaignsSelected.cards.filter(c => c.done).length,
-    //   }
-    // },
-    // campaignsSelectedManifest() {
-    //   return this.campaignsSelected.manifest
-    // },
-    rightDrawer: {
-      get() {
-        return this.$store.state.rightDrawer
-      },
-      set(value) {
-        this.$store.dispatch('setRightDrawer', value)
-      }
-    }
   }
 }

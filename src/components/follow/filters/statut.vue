@@ -59,6 +59,7 @@ export default {
     return {follow}
   },
   mounted() {
+    this.$bus.$on('follow-statut-reset', this.selectAll)
     this.selectAll()
   },
   methods: {
@@ -81,7 +82,7 @@ export default {
     listsItems() {
       const boards = Object
         .entries(this.$store.state.kanbanConfig.boards || {})
-        .filter(([boardID, _]) => (this.follow.contextIDs.includes(boardID)))
+        .filter(([boardID, _]) => (this.follow.boardIDs.includes(boardID)))
       const dupItems = boards
         .flatMap(([_, board]) => {
           return Object.values(board.lists)

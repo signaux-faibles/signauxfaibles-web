@@ -16,7 +16,9 @@ export default {
       dialogEntreprise: false,
       siret: null,
       siren: null,
-      pending: [],
+      pending: {
+        etablissements: [],
+      },
     }
   },
   mounted() {
@@ -24,7 +26,6 @@ export default {
     this.$bus.$on('campaign-message', this.processMessage)
   },
   beforeDestroy() {
-    console.log()
     this.$bus.$off()
   },
   computed: {
@@ -38,6 +39,10 @@ export default {
     getPendingEtablissements() {
       this.$axios.get('/campaign/pending/' + this.campaignsSelectedID).then((r) => {
         this.pending = r.data
+      }).catch((e) => {
+        this.pending = {
+          etablissements: [],
+        }
       })
     },
     take(campaignID, id) {

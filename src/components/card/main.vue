@@ -1,7 +1,7 @@
 <template>
   <div>
-    <v-expand-transition>
-      <v-card class="etablissement-card elevation-2 ma-2 pointer">
+    <v-slide-y-transition>
+      <v-card v-show="show" class="etablissement-card elevation-2 ma-2 pointer">
         <div class="entete">
           <slot name="entete"/>
         </div>
@@ -9,7 +9,7 @@
           <slot name="corps"/>
         </div>
       </v-card>
-    </v-expand-transition>
+    </v-slide-y-transition>
   </div>
 </template>
 

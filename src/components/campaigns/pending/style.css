@@ -3,3 +3,17 @@
     font-size: 25px;
     color: #333;
 }
+
+#buttons {
+    text-align: right;
+    max-width: 162px;
+    min-width: 162px;
+}
+
+#empty {
+    position: relative;
+    top: 150px;
+    text-align: center;
+    vertical-align: bottom;
+    font-size: 30px;
+}

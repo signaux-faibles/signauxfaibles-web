@@ -108,9 +108,6 @@ const sessionStore = new Vuex.Store({
   plugins: [createPersistedState({storage: window.sessionStorage})],
   state: {
     currentBatchKey: null as unknown as string,
-    leftDrawer: true,
-    rightDrawer: true,
-    followRightDrawer: true,
     naf: [] as any[],
     batches: [] as any[],
     departements: [] as any[],
@@ -152,15 +149,6 @@ const sessionStore = new Vuex.Store({
     },
     setLoading(state, value) {
       state.loading = value
-    },
-    leftDrawer(state, val) {
-      state.leftDrawer = val
-    },
-    rightDrawer(state, val) {
-      state.rightDrawer = val
-    },
-    followRightDrawer(state, val) {
-      state.followRightDrawer = val
     },
     updateReference(state, reference) {
       state.batches = reference.listes
@@ -274,15 +262,6 @@ const sessionStore = new Vuex.Store({
       axiosClient.get('/kanban/config').then((response) => {
         context.commit('updateKanbanConfig', response.data)
       }).catch()
-    },
-    setLeftDrawer(context, val) {
-      context.commit('leftDrawer', val)
-    },
-    setRightDrawer(context, val) {
-      context.commit('rightDrawer', val)
-    },
-    setFollowRightDrawer(context, val) {
-      context.commit('followRightDrawer', val)
     },
     setFollowCardsDialog(context, val) {
       context.commit('setFollowCardsDialog', val)

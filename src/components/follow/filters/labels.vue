@@ -74,6 +74,9 @@ export default {
     const follow = useFollowStore()
     return {follow}
   },
+  mounted() {
+    this.$bus.$on('follow-labels-reset', this.resetLabels)
+  },
   data() {
     return {
       labelMenu: false,
@@ -91,7 +94,7 @@ export default {
     labelItems() {
       const boards = Object
         .entries(this.$store.state.kanbanConfig.boards || {})
-        .filter(([boardID, _]) => (this.follow.contextIDs.includes(boardID)))
+        .filter(([boardID, _]) => (this.follow.boardIDs.includes(boardID)))
       const labels = boards.reduce((m, [_, board]) => {
         Object.entries(board.labels).forEach(([_, label]) => {
           if (label.name !== '') {

@@ -3,7 +3,7 @@ import Toolbar from '@/components/Toolbar.vue'
 import Help from '@/components/Help.vue'
 import Gitbook from "@/components/Gitbook.vue";
 import labelColors from '@/assets/labels.json'
-import FilterTableaux from '@/components/follow/filters/contexte.vue'
+import FilterTableaux from '@/components/follow/filters/boards.vue'
 import FilterDepartement from '@/components/follow/filters/departement.vue'
 import FilterStatut from '@/components/follow/filters/statut.vue'
 import FilterSince from '@/components/follow/filters/since.vue'
@@ -11,6 +11,7 @@ import FilterRaisonSociale from "@/components/follow/filters/raisonsociale.vue";
 import FilterLabels from "@/components/follow/filters/labels.vue";
 import {useFollowStore} from "@/stores/followFilters";
 import Spinner from "@/components/Spinner.vue";
+import {useDrawersStore} from "@/stores/drawers";
 
 export default {
   name: 'Follow',
@@ -22,7 +23,8 @@ export default {
   },
   setup() {
     const follow = useFollowStore()
-    return {follow}
+    const drawers = useDrawersStore()
+    return {follow, drawers}
   },
   data() {
     return {
@@ -82,11 +84,15 @@ export default {
             signal: this._abortController.signal
           }
         )
-          .catch((error) => {})
+          .catch((error) => {
+            this.followPayload = {}
+          })
           .then((response) => {
             if (response) {
               if (response.status === 200) {
                 this.followPayload = response.data
+              } else if (response.status === 204) {
+                this.followPayload = {}
               }
             } else {
               this.followPayload = {}
@@ -100,16 +106,6 @@ export default {
       }
 
       this._timerID = setTimeout(fn, 500)
-    },
-    openLeftDrawer() {
-      this.trackMatomoEvent('general', 'ouvrir_menu')
-      this.leftDrawer = !this.leftDrawer
-    },
-    openRightDrawer() {
-      this.rightDrawer = true
-    },
-    closeRightDrawer() {
-      this.rightDrawer = false
     },
     download(response, defaultFilename) {
       const blob = new Blob([response.data])
@@ -167,41 +163,6 @@ export default {
         return m
       }, {})
       return Object.values(map)
-    },
-    params() {
-      // const params = {}
-      // params.type = this.type
-      //
-      // params.boardIDs = this.follow.contextIDs
-      // params.zone = this.follow.departements
-      // params.lists = this.follow.statuts
-      //
-      // if (this.labels.length > 0) {
-      //   params.labelMode = this.follow.labelMode
-      //   params.labels = this.follow.labels
-      // }
-      // if (this.follow.since) {
-      //   params.since = new Date(this.follow.since)
-      // }
-      // params.raisonSociale = this.follow.raisonSociale
-      //
-      // return params
-    },
-    leftDrawer: {
-      get() {
-        return this.$store.state.leftDrawer
-      },
-      set(val) {
-        this.$store.dispatch('setLeftDrawer', val)
-      },
-    },
-    rightDrawer: {
-      get() {
-        return this.$store.state.followRightDrawer && this.wekanUser
-      },
-      set(val) {
-        this.$store.dispatch('setFollowRightDrawer', val)
-      },
     },
     wekan_url() {
       return process.env.VUE_APP_WEKAN_URL

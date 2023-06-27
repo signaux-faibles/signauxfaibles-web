@@ -58,6 +58,7 @@ export default {
     return {follow}
   },
   mounted() {
+    this.$bus.$on('follow-departement-reset', this.selectAll)
     this.selectAll()
   },
   methods: {
@@ -88,7 +89,7 @@ export default {
             boardIDs: departement.map((d) => d.boardID)
           }
         })
-        .filter((departement) => departement.boardIDs.some((d) => this.follow.contextIDs.includes(d) || this.follow.type == 'no-card'))
+        .filter((departement) => departement.boardIDs.some((d) => this.follow.boardIDs.includes(d) || this.follow.type == 'no-card'))
         .map((d) => {
           return {
             text: `${d.codeDepartement} - ${this.departements[d.codeDepartement]}`,

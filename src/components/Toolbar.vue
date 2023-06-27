@@ -6,9 +6,9 @@
     extension-height="48px"
   >
     <v-icon
-      @click="openLeftDrawer()"
+      @click="drawers.showLeft()"
       class="fa-rotate-180"
-      v-if="!leftDrawer"
+      v-if="!drawers.left"
       color="#ffffff"
       key="toolbar"
     >
@@ -21,40 +21,25 @@
     <v-spacer></v-spacer>
     <v-icon
       
-      color="#ffffff" v-if="!rightDrawer && drawer" @click="rightDrawer=!rightDrawer">{{ icon }}</v-icon>
+      color="#ffffff" v-if="!drawers.right && drawer" @click="drawers.showRight()">{{ icon }}</v-icon>
   </v-app-bar>
 </template>
 
 <script>
+import {useDrawersStore} from "@/stores/drawers";
+
 export default {
   props: {
     icon: String,
     title: String,
     drawer: Boolean,
   },
-  methods: {
-    openLeftDrawer() {
-      this.trackMatomoEvent('general', 'ouvrir_menu')
-      this.leftDrawer = !this.leftDrawer
-    },
+  setup() {
+    const drawers = useDrawersStore()
+    return {drawers}
   },
   computed: {
-    leftDrawer: {
-      get() {
-        return this.$store.state.leftDrawer
-      },
-      set(drawer) {
-        this.$store.dispatch('setLeftDrawer', drawer)
-      },
-    },
-    rightDrawer: {
-      get() {
-        return this.$store.state.rightDrawer
-      },
-      set(drawer) {
-        this.$store.dispatch('setRightDrawer', drawer)
-      },
-    },
+
   },
 }
 </script>

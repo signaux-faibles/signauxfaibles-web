@@ -6,11 +6,11 @@
                height="35px"
     >
         <v-icon
-                v-if="!leftDrawer"
+                v-if="!drawers.left"
                 key="toolbar"
                 class="fa-rotate-180"
                 color="#ffffff"
-                @click="openLeftDrawer()"
+                @click="drawers.showLeft()"
         >mdi-backburger
         </v-icon>
         <div

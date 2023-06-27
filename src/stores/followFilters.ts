@@ -3,7 +3,7 @@ import {defineStore} from 'pinia'
 const STORE_NAME = 'follow'
 export const useFollowStore = defineStore(STORE_NAME, {
     state: () => ({
-        contextIDs: [],
+        boardIDs: [],
         departements: [],
         statuts: [],
         since: null,
@@ -22,7 +22,7 @@ export const useFollowStore = defineStore(STORE_NAME, {
             params.raisonSociale = this.raisonSociale
 
             if (params.type != 'no-card') {
-                params.boardIDs = this.contextIDs
+                params.boardIDs = this.boardIDs
                 params.lists = this.statuts
 
                 if (this.labels.length > 0) {

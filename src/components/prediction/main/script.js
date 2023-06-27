@@ -3,9 +3,14 @@ import PredictionWidget from '@/components/PredictionWidget.vue'
 import Help from '@/components/Help.vue'
 import axios from 'axios'
 import libellesProcols from '@/assets/libelles_procols.json'
+import {useDrawersStore} from "@/stores/drawers";
 
 export default {
   // TODO: right drawer in component
+  setup() {
+    const drawers = useDrawersStore()
+    return {drawers}
+  },
   data() {
     return {
       effectifClass: [10, 20, 50, 100],
@@ -137,18 +142,6 @@ export default {
         })
         this.page += 1
       }
-    },
-    openLeftDrawer() {
-      this.trackMatomoEvent('general', 'ouvrir_menu')
-      this.leftDrawer = !this.leftDrawer
-    },
-    openRightDrawer() {
-      this.trackMatomoEvent('general', 'ouvrir_volet_filtrage')
-      this.rightDrawer = !this.rightDrawer
-    },
-    closeRightDrawer() {
-      this.trackMatomoEvent('general', 'fermer_volet_filtrage')
-      this.rightDrawer = !this.rightDrawer
     },
     toggleExcludeSecteursCovid() {
       this.excludeSecteursCovid = !this.excludeSecteursCovid
@@ -367,22 +360,6 @@ export default {
       },
       set(height) {
         this.$store.dispatch('setHeight', height)
-      },
-    },
-    leftDrawer: {
-      get() {
-        return this.$store.state.leftDrawer
-      },
-      set(val) {
-        this.$store.dispatch('setLeftDrawer', val)
-      },
-    },
-    rightDrawer: {
-      get() {
-        return this.$store.state.rightDrawer
-      },
-      set(val) {
-        this.$store.dispatch('setRightDrawer', val)
       },
     },
     currentBatchKey: {

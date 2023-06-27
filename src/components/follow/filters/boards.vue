@@ -1,13 +1,12 @@
 <template>
   <div>
     <v-select
-      ref="boardMenu"
-      v-model="follow.contextIDs"
+      v-model="follow.boardIDs"
       :disabled="follow.type === 'no-card'"
-      :items="contextsItems"
+      :items="boardsItems"
       :menu-props="{ maxHeight: 400 }"
       chips
-      label="Contexte"
+      label="Collectif"
       multiple
       prepend-icon="fab fa-trello"
       @change="notifyFollowUpdate()"
@@ -16,18 +15,19 @@
         <v-chip v-if="index < 3" small>
           {{ item.text }}
         </v-chip>
-        <v-chip v-if="index === 3 && follow.contextIDs.length === 4" small>
+        <v-chip v-if="index === 3 && follow.boardIDs.length === 4" small>
           {{ item.text }}
         </v-chip>
         <span
-          v-if="index === 3 && follow.contextIDs.length > 4"
+          v-if="index === 3 && follow.boardIDs.length > 4"
           class="ml-1 text-grey text-caption align-self-center"
         >
-          (+{{ follow.contextIDs.length - 3 }} autres)
+          (+{{ follow.boardIDs.length - 3 }} autres)
         </span>
       </template>
+      <template v-slot:no-data
       <template v-slot:prepend-item>
-        <v-list-item v-if="!allContextsSelected" @click="selectAll()">
+        <v-list-item v-if="!allBoardsSelected" @click="selectAll()">
           <v-list-item-action>
             <v-icon>
               mdi-plus-box
@@ -37,7 +37,7 @@
             cocher tout
           </v-list-item-title>
         </v-list-item>
-        <v-list-item v-if="allContextsSelected" @click="unselectAll()">
+        <v-list-item v-if="allBoardsSelected" @click="unselectAll()">
           <v-list-item-action>
             <v-icon>
               mdi-close-box-outline
@@ -63,31 +63,34 @@ export default {
     return {follow}
   },
   mounted() {
-    this.follow.contextIDs = this.allContexts
+    this.follow.boardIDs = this.allBoards
   },
   methods: {
     notifyFollowUpdate() {
+      this.$bus.$emit('follow-labels-reset')
+      this.$bus.$emit('follow-departement-reset')
+      this.$bus.$emit('follow-statut-reset')
       this.$bus.$emit('follow-update')
     },
     unselectAll() {
-      this.follow.contextIDs = []
+      this.follow.boardIDs = []
       this.notifyFollowUpdate()
     },
     selectAll() {
-      this.follow.contextIDs = this.allContexts
+      this.follow.boardIDs = this.allBoards
       this.notifyFollowUpdate()
     }
   },
   computed: {
-    allContextsSelected() {
-      return this.allContexts.length === this.follow.contextIDs.length
+    allBoardsSelected() {
+      return this.allBoards.length === this.follow.boardIDs.length
     },
-    allContexts() {
-      return this.contextsItems.map((b) => b.value)
+    allBoards() {
+      return this.boardsItems.map((b) => b.value)
     },
-    contextsItems() {
-      const contexts = Object.entries(this.$store.state.kanbanConfig.boards || {})
-      return contexts.map(([k, c]) => {
+    boardsItems() {
+      const boards = Object.entries(this.$store.state.kanbanConfig.boards || {})
+      return boards.map(([k, c]) => {
         return {
           value: k,
           text: c.title.slice(8),

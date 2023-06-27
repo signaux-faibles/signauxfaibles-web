@@ -18,9 +18,7 @@
     <Dialogs/>
     <Security v-if="!securityConsent"/>
     <v-main v-if="securityConsent">
-      <v-scroll-x-transition>
-        <NavigationDrawer v-if="login" v-show="leftDrawer"/>
-      </v-scroll-x-transition>
+      <NavigationDrawer v-if="login && drawers.left"/>
       <router-view/>
     </v-main>
   </v-app>
@@ -30,9 +28,14 @@
 import NavigationDrawer from '@/components/NavigationDrawer.vue'
 import Security from '@/components/Security.vue'
 import Dialogs from '@/components/dialog/main/main.vue'
+import {useDrawersStore} from "@/stores/drawers";
 
 export default {
   components: {NavigationDrawer, Security, Dialogs},
+  setup() {
+    const drawers = useDrawersStore()
+    return {drawers}
+  },
   methods: {
     handleResize() {
       this.height = Math.max(
@@ -71,14 +74,6 @@ export default {
     },
     login() {
       return this.$keycloak.authenticated
-    },
-    leftDrawer: {
-      get() {
-        return this.$store.state.leftDrawer
-      },
-      set(val) {
-        this.$store.dispatch('setLeftDrawer', val)
-      },
     },
     expiredSession() {
       return this.$localStore.state.expiredSession
@@ -126,11 +121,9 @@ export default {
   src: local("Abel"),
   url(./fonts/Abel-Regular.ttf) format("truetype");
 }
-
 body {
   font-family: "Roboto", sans-serif;
 }
-
 .toolbar {
   background-color: #222;
   text-shadow: 0px 0px 2px rgb(0, 0, 0), 0px 0px 1px rgb(255, 255, 255);

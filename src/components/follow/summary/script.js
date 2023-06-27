@@ -24,7 +24,6 @@ export default {
       this.editCardID = this.card.id
     },
     closeCardMenu() {
-      console.log('coucou')
       this.cardMenu = false
     },
     unarchiveCard(cardId) {
