@@ -38,7 +38,7 @@ export default {
     },
     getPendingEtablissements() {
       this.$axios.get('/campaign/pending/' + this.campaignsSelectedID).then((r) => {
-        this.pending = r.data
+        this.pending = r.data || []
       }).catch((e) => {
         this.pending = {
           etablissements: [],
