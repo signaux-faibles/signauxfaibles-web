@@ -47,10 +47,10 @@
 </template>
 
 <script>
-import EntrepriseIdentite from '@/components/Entreprise/Identite.vue'
-import EntrepriseSocial from '@/components/Entreprise/Social.vue'
-import EntrepriseFinance from '@/components/Entreprise/Finance.vue'
-import EntreprisePaiement from '@/components/Entreprise/Paiement.vue'
+import EntrepriseIdentite from '@/components/entreprise/Identite.vue'
+import EntrepriseSocial from '@/components/entreprise/Social.vue'
+import EntrepriseFinance from '@/components/entreprise/Finance.vue'
+import EntreprisePaiement from '@/components/entreprise/Paiement.vue'
 import axios from 'axios'
 import fr from 'apexcharts/dist/locales/fr.json'
 import Spinner from "@/components/Spinner.vue";

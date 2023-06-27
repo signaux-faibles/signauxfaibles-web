@@ -38,8 +38,8 @@
 
 <script>
 import libellesVariablesScores from '@/assets/libelles_variables_scores.json'
-import ExplainConjoncturel from '@/components/Etablissement/Score/ExplainConjoncturel.vue'
-import ExplainStructurel from '@/components/Etablissement/Score/ExplainStructurel.vue'
+import ExplainConjoncturel from '@/components/etablissement/Score/ExplainConjoncturel.vue'
+import ExplainStructurel from '@/components/etablissement/Score/ExplainStructurel.vue'
 import Gitbook from '@/components/Gitbook.vue'
 
 export default {

@@ -17,7 +17,7 @@
                 class="toolbar_titre"
                 style="width: 100%; text-align: center;"
         >
-            Campagne de ciblage des entreprises
+            Campagne de contact des entreprises
         </div>
         <v-spacer></v-spacer>
         <v-icon

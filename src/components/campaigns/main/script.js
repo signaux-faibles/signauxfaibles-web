@@ -7,8 +7,8 @@ import CampaignsMyCards from "@/components/campaigns/myactions/main.vue"
 import CampaignsPendingCards from "@/components/campaigns/pending/main.vue"
 import CampaignsAllCards from "@/components/campaigns/allactions/main.vue"
 import {fetchEventSource} from "@microsoft/fetch-event-source";
-import Entreprise from "@/components/Entreprise/main.vue";
-import Etablissement from "@/components/Etablissement/Main.vue";
+import Entreprise from "@/components/entreprise/main.vue";
+import Etablissement from "@/components/etablissement/Main.vue";
 import {useDrawersStore} from "@/stores/drawers";
 
 export default {

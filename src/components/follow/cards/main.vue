@@ -19,16 +19,16 @@
           </v-simple-table>
 
           <span v-if="cards.length==0">
-            À ce jour, aucune fiche d'accompagnement n'a été renseignée pour cet établissement.
+            À ce jour, aucune fiche de synthèse n'a été rédigée pour cet établissement.
           </span>
           <div v-if="canCreateCard && followed" style="margin-right: auto; margin-left: auto; text-align: center">
             <v-btn v-if="followed && canCreateCard" class="pa-2 mt-5" color="indigo" outlined
                    @click="showCreateCardDialog()">
-              ajouter une fiche d'accompagnement<br/>
+              rédiger une nouvelle fiche de synthèse<br/>
             </v-btn>
           </div>
           <div v-if="canCreateCard && !followed">
-            Pour créer une fiche, veuillez d'abord suivre cet établissement.
+            Pour créer une fiche, veuillez d'abord placer cet établissement dans vos favoris.
           </div>
           <div v-if="!canCreateCard">
             Il ne vous est pas permis de créer une carte pour cet établissement au regard de vos autorisations.

@@ -47,7 +47,7 @@
 
 <script>
 import ScoreWidget from '@/components/ScoreWidget.vue'
-import Explain from '@/components/Etablissement/Score/Explain.vue'
+import Explain from '@/components/etablissement/Score/Explain.vue'
 import Help from '@/components/Help.vue'
 
 export default {

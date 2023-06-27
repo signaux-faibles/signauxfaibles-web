@@ -55,7 +55,7 @@
 
 <script>
 import Help from '@/components/Help.vue'
-import Redressement from '@/components/Etablissement/Score/Redressement.vue'
+import Redressement from '@/components/etablissement/Score/Redressement.vue'
 
 export default {
   props: {

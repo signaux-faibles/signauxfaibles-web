@@ -170,7 +170,7 @@
 
 <script>
 import PredictionWidget from '@/components/PredictionWidget.vue'
-import Map from '@/components/Etablissement/Map.vue'
+import Map from '@/components/etablissement/Map.vue'
 import Help from '@/components/Help.vue'
 
 export default {

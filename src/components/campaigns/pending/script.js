@@ -1,7 +1,7 @@
 import Card from "@/components/card/main.vue"
 import ScoreWidget from "@/components/ScoreWidget.vue"
-import Etablissement from "@/components/Etablissement/Main.vue"
-import Entreprise from "@/components/Entreprise/main.vue"
+import Etablissement from "@/components/etablissement/Main.vue"
+import Entreprise from "@/components/entreprise/main.vue"
 import {useDialogsStore} from "@/stores/dialogs";
 export default {
   name: "CampaignsPendingCards",

@@ -1,4 +1,4 @@
-import Entreprise from '@/components/Entreprise/main.vue'
+import Entreprise from '@/components/entreprise/main.vue'
 import {useDialogsStore} from "@/stores/dialogs";
 
 

@@ -4,7 +4,7 @@
                color='indigo'
                dark>
       <v-toolbar-title class="localtoolbar">
-        Fiches d'accompagnement
+        Fiches de synthèse
       </v-toolbar-title>
     </v-toolbar>
     <FollowCards :siret="siret" :codeDepartement="codeDepartement" :denomination="denomination"/>
