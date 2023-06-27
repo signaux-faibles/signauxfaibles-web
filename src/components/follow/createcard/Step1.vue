@@ -12,7 +12,7 @@
                     @change="resetCreateCard"
             >
                 <v-radio v-for="swimlane in availableSwimlanes" :key="swimlane.index"
-                         :label="swimlane.boardTitle + ', couloir ' + swimlane.title"
+                         :label="swimlane.boardTitle"
                          :value="swimlane.id"
                 ></v-radio>
             </v-radio-group>

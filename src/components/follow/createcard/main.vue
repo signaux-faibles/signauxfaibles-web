@@ -5,7 +5,7 @@
                 color="indigo"
                 dark
         >
-            <v-toolbar-title>Nouvelle fiche d'accompagnement</v-toolbar-title>
+            <v-toolbar-title>Nouvelle fiche de synthèse</v-toolbar-title>
           <v-spacer/>
             <v-btn
                     dark

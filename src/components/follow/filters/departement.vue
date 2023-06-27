@@ -30,7 +30,7 @@
             </v-icon>
           </v-list-item-action>
           <v-list-item-title>
-            cocher tout
+            tout sélectionner
           </v-list-item-title>
         </v-list-item>
         <v-list-item v-if="allDepartementsSelected" @click="unselectAll()">
@@ -40,7 +40,7 @@
             </v-icon>
           </v-list-item-action>
           <v-list-item-title>
-            décocher tout
+            vider la sélection
           </v-list-item-title>
         </v-list-item>
       </template>

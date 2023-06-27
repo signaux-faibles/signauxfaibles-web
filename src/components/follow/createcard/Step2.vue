@@ -2,14 +2,11 @@
   <div>
     <v-card>
       <v-card-title>
-        Problèmes identifiés
+        Identifiez les problématiques de l'entreprise
       </v-card-title>
       <v-card-text>
         <h3>
-          Faites votre choix parmi ces propositions
-          <Help titre="Problématiques identifiées" :big="true">
-            <div v-html="newCardConfig.problemHelpContent" />
-          </Help>
+
         </h3>
         <v-select
           ref="problems"
@@ -66,7 +63,7 @@ export default {
       return currentSwimlaneID
     },
     currentBoardType() {
-      const typeRegexp = /^(tableau-.*)-.*/
+      const typeRegexp = /^((tableau|actions)-.*)-.*/
       const match = this.currentBoard.match(typeRegexp)
       return (match.length>1)?match[1]:null
     },

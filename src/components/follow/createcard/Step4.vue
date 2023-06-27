@@ -2,19 +2,15 @@
   <div>
     <v-card>
       <v-card-title>
-        Catégories
-
+        Quelles étiquettes correspondent à ce dossier ?
       </v-card-title>
       <v-card-text>
-        <h3>
-          Dans quelles catégories souhaitez vous classer cette intervention ?
-        </h3>
         <v-select
             ref="labelMenu"
             v-model="createCardLabels"
             :items="newCardLabelItems"
             :menu-props="{ maxHeight: 400 }"
-            label="Catégories"
+            label="Étiquettes"
             multiple
             prepend-icon="mdi-label"
             style="margin-bottom: -30px"
@@ -49,7 +45,7 @@
             colored-border
             type="info"
         >
-          Les catégories facilitent la classification et le suivi de vos interventions,
+          Les étiquettes facilitent la classification et le suivi de vos interventions,
             notamment par des filtres et des statistiques.
         </v-alert>
       </v-card-text>

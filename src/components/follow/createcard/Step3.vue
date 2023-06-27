@@ -2,15 +2,10 @@
   <div>
     <v-card>
       <v-card-title>
-        Vos actions
+          Quelles actions sont menées ou envisagées ?
       </v-card-title>
       <v-card-text>
-        <h3>
-          Quelles actions sont menées ou envisagées ?
-          <Help :big="true" titre="Actions menées ou envisagées">
-            <div v-html="newCardConfig.actionHelpContent"/>
-          </Help>
-        </h3>
+
         <v-select
             ref="actions"
             v-model="createCardActions"
@@ -65,7 +60,7 @@ export default {
       return currentSwimlaneID
     },
     currentBoardType() {
-      const typeRegexp = /^(tableau-.*)-.*/
+      const typeRegexp = /^((tableau|actions)-.*)-.*/
       const match = this.currentBoard.match(typeRegexp)
       return (match.length > 1) ? match[1] : null
     },
