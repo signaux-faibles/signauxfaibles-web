@@ -42,15 +42,6 @@
       <template v-slot:item="{ active, item, attrs, on }">
         <v-chip :color="item.background" :text-color="item.front">{{ item.text }}</v-chip>
       </template>
-      <template v-slot:prepend-item>
-        <div class="mb-1 ml-3" style="display: flex;">
-          <div style="font-family: Oswald">Étiquettes</div>
-          <div class="pr-2" style="text-align: right; width: 100%">
-            <v-icon small>close</v-icon>
-          </div>
-        </div>
-        <v-divider></v-divider>
-      </template>
     </v-select>
     <div>
       <v-checkbox

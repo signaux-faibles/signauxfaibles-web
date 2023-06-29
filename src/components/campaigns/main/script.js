@@ -56,7 +56,7 @@ export default {
             this.$store.dispatch('updateCampaigns')
         },
         async watchSSE(bus) {
-            await fetchEventSource(`http://localhost:3000/campaign/stream`, {
+            await fetchEventSource(process.env.VUE_APP_DATAPI_BASE_URL + `campaign/stream`, {
                 method: "GET",
                 headers: {
                     Accept: "text/event-stream",
