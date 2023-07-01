@@ -1,5 +1,5 @@
 export default {
-  name: "CampaignsAllActions",
+  name: "CampaignsTakenActions",
   mounted() {
     this.getAllActions()
     this.$bus.$on('campaign-message', this.processMessage)

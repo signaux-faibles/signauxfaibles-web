@@ -6,9 +6,9 @@
     <div v-if="!welcome">
       <CampaignsMenu/>
       <br/>
-      <CampaignsPendingCards v-if="campaignsMenu == 'pending-cards'"/>
-      <CampaignsMyCards v-if="campaignsMenu == 'my-cards'"/>
-      <CampaignsAllCards v-if="campaignsMenu == 'all-cards'"/>
+      <CampaignsPendingActions v-if="campaigns.menu == 'pendingActions'"/>
+      <CampaignsMyActions v-if="campaigns.menu == 'myActions'"/>
+      <CampaignsTakenActions v-if="campaigns.menu == 'takenActions'"/>
     </div>
   </div>
 </template>

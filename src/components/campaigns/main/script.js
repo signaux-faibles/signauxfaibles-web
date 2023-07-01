@@ -3,13 +3,14 @@ import CampaignsRightDrawer from "@/components/campaigns/rightdrawer/main.vue"
 import CampaignsAppBar from "@/components/campaigns/appbar/main.vue"
 import CampaignsMenu from "@/components/campaigns/menu/main.vue"
 import CampaignsWelcome from "@/components/campaigns/welcome/main.vue"
-import CampaignsMyCards from "@/components/campaigns/myactions/main.vue"
-import CampaignsPendingCards from "@/components/campaigns/pending/main.vue"
-import CampaignsAllCards from "@/components/campaigns/allactions/main.vue"
+import CampaignsMyActions from "@/components/campaigns/myactions/main.vue"
+import CampaignsPendingActions from "@/components/campaigns/pendingActions/main.vue"
+import CampaignsTakenActions from "@/components/campaigns/takenactions/main.vue"
 import {fetchEventSource} from "@microsoft/fetch-event-source";
 import Entreprise from "@/components/entreprise/main.vue";
 import Etablissement from "@/components/etablissement/Main.vue";
 import {useDrawersStore} from "@/stores/drawers";
+import {useCampaignsStore} from "@/stores/campaigns";
 
 export default {
     name: "Campaigns",
@@ -21,22 +22,17 @@ export default {
         CampaignsAppBar,
         CampaignsMenu,
         CampaignsWelcome,
-        CampaignsMyCards,
-        CampaignsPendingCards,
-        CampaignsAllCards
+        CampaignsMyActions,
+        CampaignsPendingActions,
+        CampaignsTakenActions
     },
     setup() {
         const drawers = useDrawersStore()
-        return {drawers}
+        const campaigns = useCampaignsStore()
+        return {drawers, campaigns}
     },
     mounted() {
-        this.campaignsMenu = 'pending'
-        // this.campaignsSelectedID = null
-        if (this.urlCampaignID) {
-            this.campaignsSelectedID = this.urlCampaignID
-        } else {
-            this.campaignsSelectedID = null
-        }
+        this.campaigns.selectedID = this.urlCampaignID
         this.drawers.hideRight()
 
         this.watchSSE(this.$bus)
@@ -45,7 +41,7 @@ export default {
     props: ['urlCampaignID'],
     watch: {
         urlCampaignID(newID) {
-            this.campaignsSelectedID = newID
+            this.campaigns.selectedID = newID
         }
     },
     beforeDestroy() {
@@ -89,23 +85,7 @@ export default {
     },
     computed: {
         welcome() {
-            return this.campaignsSelectedID == null
-        },
-        campaignsSelectedID: {
-            get() {
-                return this.$store.state.campaignsSelectedID
-            },
-            set(value) {
-                return this.$store.commit('setCampaignsSelectedID', value)
-            },
-        },
-        campaignsMenu: {
-            get() {
-                return this.$store.state.campaignsMenu
-            },
-            set(value) {
-                return this.$store.dispatch('setCampaignsMenu', value)
-            }
+            return this.campaigns.selectedID == null
         },
     },
     data() {

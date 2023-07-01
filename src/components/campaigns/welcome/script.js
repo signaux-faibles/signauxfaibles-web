@@ -1,12 +1,13 @@
 import CampaignsHeader from '@/components/campaigns/header/main.vue'
 import '@toast-ui/editor/dist/toastui-editor.css';
-
+import {useCampaignsStore} from "@/stores/campaigns";
 
 export default {
     name: "CampaignsWelcome",
     components: {CampaignsHeader},
-    computed: {
-        campaigns() {return this.$store.state.campaigns},
+    setup() {
+        const campaigns = useCampaignsStore()
+        return {campaigns}
     },
     data() {
         return {

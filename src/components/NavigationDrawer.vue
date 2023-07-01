@@ -34,7 +34,7 @@
             <v-list-item-title>Consultation</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item v-if="hasCampaigns" to="/campaigns">
+        <v-list-item v-if="campaigns.hasCampaigns" to="/campaigns">
           <v-list-item-action>
             <v-icon>mdi-briefcase-outline</v-icon>
           </v-list-item-action>
@@ -103,6 +103,7 @@
 <script>
 import News from '@/components/News.vue'
 import {useDrawersStore} from "@/stores/drawers";
+import {useCampaignsStore} from "@/stores/campaigns";
 
 export default {
   components: {News},
@@ -113,7 +114,8 @@ export default {
   },
   setup() {
     const drawers = useDrawersStore()
-    return {drawers}
+    const campaigns = useCampaignsStore()
+    return {drawers, campaigns}
   },
   mounted() {
     this.show = true
@@ -159,9 +161,6 @@ export default {
     wekan_url() {
       return process.env.VUE_APP_WEKAN_URL
     },
-    hasCampaigns() {
-      return this.$store.state.campaigns.length > 0
-    }
   }
 }
 </script>
