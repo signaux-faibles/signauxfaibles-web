@@ -11,7 +11,7 @@
           @click="trackMatomoEvent('follow', 'contacter_createur', card.creator)"
       >
         <v-icon small class="mr-2">
-          email
+          fa-envelope
         </v-icon>
         Contacter le rédacteur de cette fiche
       </v-btn>
@@ -26,7 +26,7 @@
           <v-btn v-if="card.url && !card.archived" :href="card.url" class="px-2 ma-1"
                  color="indigo" dark target="blank"
                  @click="trackMatomoEvent('general', 'visite_carte', card.title)">
-            <v-icon class="mr-2" small>mdi-trello</v-icon>
+            <v-icon class="mr-2" small>fab fa-trello</v-icon>
             carte Kanban
           </v-btn>
         </div>

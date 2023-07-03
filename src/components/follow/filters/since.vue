@@ -12,7 +12,7 @@
         clearable
 
         label="Modifiée depuis"
-        prepend-icon="mdi-calendar"
+        prepend-icon="far fa-calendar"
         readonly
         v-bind="attrs"
         v-on="on"

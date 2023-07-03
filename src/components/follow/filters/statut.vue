@@ -7,7 +7,7 @@
     chips
     label="Statut"
     multiple
-    prepend-icon="mdi-playlist-check"
+    prepend-icon="fa-list-check"
     @change="notifyFollowUpdate()"
   >
     <template v-slot:selection="{ item, index }">
@@ -28,7 +28,7 @@
       <v-list-item v-if="!allStatutsSelected" @click="selectAll()">
         <v-list-item-action>
           <v-icon>
-            mdi-plus-box
+            fa-plus-square
           </v-icon>
         </v-list-item-action>
         <v-list-item-title>
@@ -38,7 +38,7 @@
       <v-list-item v-if="allStatutsSelected" @click="unselectAll()">
         <v-list-item-action>
           <v-icon>
-            mdi-close-box-outline
+            fa-square-xmark
           </v-icon>
         </v-list-item-action>
         <v-list-item-title>

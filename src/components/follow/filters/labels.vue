@@ -9,7 +9,7 @@
       chips
       label="Étiquettes"
       multiple
-      prepend-icon="mdi-label"
+      prepend-icon="fa-tag"
       style="margin-bottom: -30px"
       @change="notifyFollowUpdate()"
     >
@@ -17,7 +17,7 @@
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }">
             <v-icon v-bind="attrs" @click="resetLabels()" v-on="on">
-              mdi-close
+              fa-xmark
             </v-icon>
           </template>
           Réinitialiser la sélection

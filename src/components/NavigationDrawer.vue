@@ -19,7 +19,7 @@
               </v-list-item-title>
             </v-list-item-content>
             <v-list-item-avatar>
-              <v-icon @click="closeDrawer()">mdi-backburger</v-icon>
+              <v-icon @click="closeDrawer()">fa-angles-left</v-icon>
             </v-list-item-avatar>
           </v-list-item>
         </v-list>
@@ -28,7 +28,7 @@
         <v-divider></v-divider>
         <v-list-item to="/">
           <v-list-item-action>
-            <v-icon>search</v-icon>
+            <v-icon>fa-magnifying-glass</v-icon>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>Consultation</v-list-item-title>
@@ -36,7 +36,7 @@
         </v-list-item>
         <v-list-item v-if="campaigns.hasCampaigns" to="/campaigns">
           <v-list-item-action>
-            <v-icon>mdi-briefcase-outline</v-icon>
+            <v-icon>fa-briefcase</v-icon>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>Campagnes</v-list-item-title>
@@ -44,7 +44,7 @@
         </v-list-item>
         <v-list-item to="/prediction">
           <v-list-item-action>
-            <v-icon>mdi-target</v-icon>
+            <v-icon>fa-satellite-dish</v-icon>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>Listes de détection</v-list-item-title>
@@ -52,7 +52,7 @@
         </v-list-item>
         <v-list-item to="/follow">
           <v-list-item-action>
-            <v-icon>mdi-star</v-icon>
+            <v-icon>fa-star</v-icon>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>Suivi d'établissements</v-list-item-title>
@@ -81,7 +81,7 @@
         <v-divider></v-divider>
         <v-list-item @click="logout()">
           <v-list-item-action>
-            <v-icon>logout</v-icon>
+            <v-icon>fa-right-from-bracket</v-icon>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>Se déconnecter</v-list-item-title>

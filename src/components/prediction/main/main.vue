@@ -12,25 +12,15 @@
         v-if="!drawers.left"
         color="#ffffff"
         key="toolbar"
-      >mdi-backburger</v-icon>
+      >fa-bars</v-icon>
 
       <div
-        style="width: 100%; text-align: center;"
+        style="width: 100%; display: flex; justify-content: center"
         class="toolbar_titre"
+
       >
-        Détection - {{ currentBatch }}
-        <v-btn
-          icon
-          dark
-          target="_blank"
-          href="https://signaux-faibles.gitbook.io/guide-dutilisation-et-faq/fiche-etablissement"
-          text
-          style="position: relative; top: -2px;"
-        >
-          <v-icon dark>
-            help
-          </v-icon>
-        </v-btn>
+          Détection - {{ currentBatch }}
+          <Gitbook icon :target="gitbookPath('PAYDEX')"/>
       </div>
       <v-spacer></v-spacer>
       <v-icon
@@ -38,7 +28,7 @@
         color="#ffffff"
         v-if="!drawers.right"
         @click="drawers.showRight()"
-      >mdi-target</v-icon>
+      >fa-satellite-dish</v-icon>
     </v-app-bar>
     <div class="mt-6">
       <div
@@ -53,7 +43,7 @@
         app
       >
         <v-toolbar flat class="transparent" height="40">
-          <v-icon :class="loading?'rotate':''" @click="drawers.hideRight()">mdi-target</v-icon>
+          <v-icon :class="loading?'rotate':''" @click="drawers.hideRight()">fa-satellite-dish</v-icon>
         </v-toolbar>
         <div class="mt-2" style="padding: 0 15px;">
           <v-select
@@ -93,7 +83,7 @@
                 outlined
                 class="mt-3 mx-3"
               >
-                <v-icon>mdi-filter</v-icon>selection des secteurs
+                <v-icon small class="mr-2">fa-filter</v-icon>selection des secteurs
               </v-btn>
             </template>
             <v-card>
@@ -107,7 +97,7 @@
                       <v-icon
                         style="cursor: pointer"
                         @click="selectAllNaf()"
-                      >{{ allNextNaf ? 'mdi-close-box' : 'mdi-plus-box' }}</v-icon>
+                      >{{ allNextNaf ? 'fa-square-xmark' : 'fa-square-plus' }}</v-icon>
                     </v-list-item-action>{{ !allNextNaf ? 'Tout sélectionner' : 'Tout désélectionner' }}
                     <v-list-item-content></v-list-item-content>
                   </v-list-item>
@@ -116,8 +106,8 @@
                     <v-list-item-action @click="toggleNaf(n.value)">
                       <v-icon style="cursor: pointer;">
                         {{ nextNaf.includes(n.value) ?
-                        'mdi-checkbox-marked' :
-                        'mdi-checkbox-blank-outline'
+                        'fa-square-check' :
+                        'far fa-square'
                         }}
                       </v-icon>
                     </v-list-item-action>
@@ -127,8 +117,8 @@
               </v-card-text>
               <v-card-actions style>
                 <v-spacer />
-                <v-btn light color="error" @click="nafDialog=false">annuler</v-btn>
-                <v-btn light color="success" @click="applyNaf(); nafDialog=false">appliquer</v-btn>
+                <v-btn light color="indigo" outlined @click="nafDialog=false">annuler</v-btn>
+                <v-btn light color="indigo" dark @click="applyNaf(); nafDialog=false">appliquer</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>

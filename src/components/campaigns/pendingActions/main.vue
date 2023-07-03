@@ -6,7 +6,7 @@
     <Card v-for="etablissement in pending.etablissements" :key="etablissement.siret">
       <template v-slot:entete>
         <div>
-          <div v-if="etablissement.followed" class="corner-ribbon"><v-icon dark small>mdi-star</v-icon></div>
+          <div v-if="etablissement.followed" class="corner-ribbon"><v-icon style="top: -4px;left: 2px" dark x-small>fa-star</v-icon></div>
           <ScoreWidget :prediction="etablissement" :key="etablissement.id" :tooltip="true"/>
         </div>
       </template>
@@ -23,6 +23,20 @@
             {{ etablissement.siret }}
           </span>
         </div>
+        <div class="ml-2" id="contact">
+          <v-btn
+            @click="dialogs.showCardEditor(etablissement.cardID)"
+            icon x-large>
+            <v-icon color="indigo">fas fa-pen</v-icon>
+          </v-btn>
+        </div>
+        <div class="mr-4" id="contact">
+          <v-btn
+              @click="dialogs.showCards(etablissement.siret, etablissement.codeDepartement, etablissement.raisonSociale)"
+              icon x-large>
+            <v-icon x-large color="indigo">far fa-clipboard</v-icon>
+          </v-btn>
+        </div>
         <div class="mr-4">
           <v-btn @click="take(etablissement.campaignID, etablissement.id)" dark color="indigo">
             Je prends contact
@@ -30,18 +44,8 @@
         </div>
       </template>
     </Card>
-    <v-dialog fullscreen v-model="dialogEntreprise">
-      <div style="height: 100%; width: 100%; font-weight: 800; font-family: 'Oswald', sans-serif;">
-        <v-toolbar fixed class="toolbar" height="35px" style="color: #fff; font-size: 22px; z-index: 50;">
-          <v-spacer />FICHE ENTREPRISE
-          <v-spacer />
-          <v-icon @click="hideEntreprise()" style="color: #fff">mdi-close</v-icon>
-        </v-toolbar>
-        <Entreprise v-if="dialogEntreprise" :siren="this.siren"/>
-      </div>
-    </v-dialog>
   </div>
 </template>
 
 <script lang="js" src="./script.js"/>
-<style src="./style.css"/>
+<style src="./style.css" scoped/>

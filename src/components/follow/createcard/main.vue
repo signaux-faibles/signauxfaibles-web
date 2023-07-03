@@ -12,7 +12,7 @@
                     icon
                     @click="closeCreateCardDialog"
             >
-                <v-icon>mdi-close</v-icon>
+                <v-icon>fa-xmark</v-icon>
             </v-btn>
         </v-toolbar>
         <Step1 v-if="createCardSequence===1" :cards="cards" :codeDepartement="codeDepartement"/>

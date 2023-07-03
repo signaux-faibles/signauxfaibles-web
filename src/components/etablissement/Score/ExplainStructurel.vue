@@ -1,9 +1,10 @@
 <template>
-  <div v-if="permScore && dernierScore && dernierScore.macroRadar && Object.keys(dernierScore.macroRadar).length > 2 && hasAlert">
+  <div>
     <v-toolbar dense flat class="mytoolbar" light>
       <v-toolbar-title class="localtoolbar mytoolbar">Analyse pré-crise (prédiction statistique à mars 2020)</v-toolbar-title>
     </v-toolbar>
-    <v-card v-if="typeExplication==='mixte' || typeExplication==='structurel'"outlined>
+  <div v-if="permScore && dernierScore && dernierScore.macroRadar && Object.keys(dernierScore.macroRadar).length > 2 && hasAlert">
+    <v-card v-if="typeExplication==='mixte' || typeExplication==='structurel'" outlined>
       <v-card-text>
         <div>
           Score pré-crise:
@@ -22,13 +23,14 @@
         </div>
       </v-card-text>
     </v-card>
-    <v-card v-else>
+  </div>
+    <v-card v-if="typeExplication==='conjoncturel'">
       <v-card-text>
         La détection ne se base pas sur des éléments historiques pré-crise, le radar n'est donc pas disponible.<br/>
         <div style="text-align: center">
           <p/>
-          <v-icon size="120px" color="grey lighten-2">
-            mdi-compass-off-outline
+          <v-icon class="ma-4" size="120px" color="grey lighten-2">
+            fa-satellite-dish
           </v-icon>
         </div>
       </v-card-text>

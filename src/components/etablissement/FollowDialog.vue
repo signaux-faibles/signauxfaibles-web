@@ -25,7 +25,7 @@
             color="indigo"
             :disabled="followCategory==''"
             @click="followEtablissement()">
-        <v-icon left class="mr-2">mdi-star-outline</v-icon>Suivre</v-btn>
+        <v-icon left class="mr-2" style="top:-1px" small>far fa-star</v-icon>Suivre</v-btn>
       </v-card-actions>
       <v-alert :value="followAlert" type="error" transition="scale-transition">{{ followAlertError }}</v-alert>
     </v-card>

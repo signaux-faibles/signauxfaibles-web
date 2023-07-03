@@ -12,7 +12,7 @@
         class="fa-rotate-180"
         color="#ffffff"
         @click="drawers.showLeft()"
-      >mdi-backburger
+      >fa-bars
       </v-icon>
       <div
         class="toolbar_titre"
@@ -29,7 +29,8 @@
         :class="loading?'rotate':''"
         color="#ffffff"
         @click="drawers.showRight()"
-      >mdi-target
+        small
+      >fa-star
       </v-icon>
     </v-app-bar>
     <div style="width:100%">
@@ -40,7 +41,7 @@
         right
       >
         <v-toolbar class="transparent" flat height="40">
-          <v-icon :class="loading?'rotate':''" @click="drawers.hideRight()">mdi-target</v-icon>
+          <v-icon :class="loading?'rotate':''" @click="drawers.hideRight()" small>fa-star</v-icon>
         </v-toolbar>
         <v-divider class="mb-1"/>
         <div class="mt-2 filter">

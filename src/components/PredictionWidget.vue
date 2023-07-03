@@ -6,7 +6,7 @@
             @mouseover="social ? highlightEtablissement() : showRaccourci = true">
       <div class="entete">
         <div v-if="prediction.followed" class="corner-ribbon">
-          <v-icon dark small>mdi-star</v-icon>
+          <v-icon style="top: -4px; left: 2px" dark x-small>fa-star</v-icon>
         </div>
         <ScoreWidget :prediction="prediction" :tooltip="true"/>
       </div>
@@ -53,7 +53,7 @@
         </div>
         <div v-show="showRaccourci" style="position: absolute; right: 0">
           <v-btn class="mx-2" color="indigo" dark @click.stop="dialogs.showEtablissement(prediction.siret)">Voir
-            Fiche Etablissement
+            Fiche Établissement
           </v-btn>
           <v-btn v-if="prediction.siren" class="mx-2" color="indigo" dark
                  @click.stop="dialogs.showEntreprise(prediction.siret.slice(0,9))">Voir Fiche Entreprise
@@ -119,7 +119,7 @@
             CA {{ prediction.exerciceDiane }}
             <br/>
             <span :class="diane.ca_color" class="valeur">{{ diane.ca || 'n/c' }}</span>
-            <v-icon v-if="diane.ca_arrow" small>{{ diane.ca_arrow }}</v-icon>
+            <v-icon v-if="diane.ca_arrow" class="ml-1" style="top:-5px;" small>{{ diane.ca_arrow }}</v-icon>
           </div>
           <div class="rex mr-2 text-right">
             EBE
@@ -173,8 +173,8 @@ export default {
     diane() {
       return {
         ca: this.prediction.ca ? this.prediction.ca + ' k€' : 'n/c',
-        ca_arrow: (this.prediction.variation_ca || 1) > 1.05 ? 'mdi-arrow-top-right' :
-          (this.prediction.variation_ca || 1) < 0.95 ? 'mdi-arrow-bottom-right' : null,
+        ca_arrow: (this.prediction.variation_ca || 1) > 1.05 ? 'fa-arrow-trend-up' :
+          (this.prediction.variation_ca || 1) < 0.95 ? 'fa-arrow-trend-down' : null,
         ca_color: this.prediction.ca ? '' : 'unknown',
         excedent_brut_d_exploitation: this.prediction.excedent_brut_d_exploitation ?
           this.prediction.excedent_brut_d_exploitation + ' k€' : 'n/c',

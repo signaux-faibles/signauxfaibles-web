@@ -14,7 +14,7 @@
       <v-card-title>
         <v-toolbar flat>
           <v-toolbar-title class="headline">
-            <v-icon style="margin-right: 25px" color="grey lighten-1" size="35px">feed</v-icon>
+            <v-icon style="margin-right: 25px" color="grey lighten-1" size="35px">fa-rss</v-icon>
             <img height="30" style="position: relative; top: 9px" src="../assets/text_signaux_faibles.svg" />
           </v-toolbar-title>
           <v-spacer></v-spacer>

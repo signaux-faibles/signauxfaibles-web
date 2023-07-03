@@ -9,7 +9,7 @@
         class="ml-4"
         target="_blank"
         :href="gitbookPath('ROOT') + target">
-      <v-icon>fa-book</v-icon><span v-if="!icon"> {{ caption || "En savoir plus" }}</span>
+      <v-icon size="20px" style="top: -3px">fa-book</v-icon><span v-if="!icon"> {{ caption || "En savoir plus" }}</span>
     </v-btn>
   </div>
 </template>

@@ -30,7 +30,7 @@
         <v-list-item v-if="!allBoardsSelected" @click="selectAll()">
           <v-list-item-action>
             <v-icon>
-              mdi-plus-box
+              fa-square-plus
             </v-icon>
           </v-list-item-action>
           <v-list-item-title>
@@ -40,7 +40,7 @@
         <v-list-item v-if="allBoardsSelected" @click="unselectAll()">
           <v-list-item-action>
             <v-icon>
-              mdi-close-box-outline
+              fa-square-xmark
             </v-icon>
           </v-list-item-action>
           <v-list-item-title>

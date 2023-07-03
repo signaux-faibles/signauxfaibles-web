@@ -8,9 +8,9 @@
         style="color: #fff; font-size: 22px; z-index: 50;"
       >
         <v-spacer/>
-        FICHE ENTREPRISE
+        Fiche Entreprise
         <v-spacer/>
-        <v-icon style="color: #fff" @click="dialogs.hideEntreprise()">mdi-close</v-icon>
+        <v-icon style="color: #fff" @click="dialogs.hideEntreprise()">fa-xmark</v-icon>
       </v-toolbar>
       <Entreprise v-if="dialogs.entreprise" :siren="dialogs.entrepriseSiren" v-on="$listeners"/>
     </div>

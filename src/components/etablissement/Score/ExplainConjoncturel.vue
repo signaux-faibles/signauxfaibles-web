@@ -45,7 +45,7 @@
       <v-card-text>
         L'entreprise ne déclenche pas les critères experts du modèle.<br/>
         <div style="text-align: center">
-          <v-icon color="grey lighten-2" size="120px">query_stats</v-icon>
+          <v-icon color="grey lighten-2" size="120px" class="mt-2">fa-chart-line</v-icon>
         </div>
       </v-card-text>
     </v-card>

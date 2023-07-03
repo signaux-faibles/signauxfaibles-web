@@ -4,6 +4,7 @@ import Help from '@/components/Help.vue'
 import axios from 'axios'
 import libellesProcols from '@/assets/libelles_procols.json'
 import {useDrawersStore} from "@/stores/drawers";
+import Gitbook from "@/components/Gitbook.vue";
 
 export default {
   // TODO: right drawer in component
@@ -411,6 +412,6 @@ export default {
       return eventName
     },
   },
-  components: {PredictionWidget, Spinner, Help},
+  components: {Gitbook, PredictionWidget, Spinner, Help},
   name: 'Prediction',
 }

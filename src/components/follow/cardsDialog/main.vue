@@ -11,7 +11,7 @@
               icon
               @click="closeFollowCardsDialog"
             >
-              <v-icon>mdi-close</v-icon>
+              <v-icon>fa-xmark</v-icon>
             </v-btn>
             <v-toolbar-title>Fiches d'accompagnement – {{ denomination }}</v-toolbar-title>
           </v-toolbar>

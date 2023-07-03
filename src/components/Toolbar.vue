@@ -12,7 +12,7 @@
       color="#ffffff"
       key="toolbar"
     >
-      mdi-backburger
+      fa-bars
     </v-icon>
 
     <div style="width: 100%; text-align: center;" class="toolbar_titre">

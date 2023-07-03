@@ -18,7 +18,7 @@ export default {
   },
   computed: {
     arrow() {
-      return (this.up)?"mdi-arrow-top-right-bold-outline":(this.down)?"mdi-arrow-bottom-right-bold-outline":"mdi-information-outline"
+      return (this.up)?"fa-arrow-trend-up":(this.down)?"fa-arrow-trend-down":"far fa-circle-info"
     },
     color() {
       return (this.up)?"red":(this.down)?"green":"indigo"

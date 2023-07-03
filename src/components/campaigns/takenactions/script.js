@@ -10,7 +10,7 @@ export default {
       this.$store.dispatch('updateCampaigns')
     },
     getAllActions() {
-      this.$axios.get('/campaign/allactions/' + this.campaignsSelectedID).then((r) => {
+      this.$axios.get('/campaign/actions/taken/' + this.campaignsSelectedID).then((r) => {
         this.allActionsPayload = r.data
       })
     }

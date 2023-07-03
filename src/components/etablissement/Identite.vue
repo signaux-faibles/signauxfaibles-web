@@ -2,8 +2,8 @@
   <div>
     <h1>
       {{ denomination }}
-      <v-btn v-if="followed === false" dark color="indigo" @click="showFollowDialog"><v-icon left class="mr-2">mdi-star-outline</v-icon>Suivre</v-btn>
-      <v-btn v-if="followed === true" outlined color="indigo" @click="showUnfollowDialog"><v-icon left class="mr-2">mdi-star</v-icon>Ne plus suivre</v-btn>
+      <v-btn v-if="followed === false" dark color="indigo" @click="showFollowDialog"><v-icon left small class="mr-2">fa-star</v-icon>Suivre</v-btn>
+      <v-btn v-if="followed === true" outlined color="indigo" @click="showUnfollowDialog"><v-icon left small class="mr-2">far fa-star</v-icon>Ne plus suivre</v-btn>
     </h1>
     <h3 class="mt-3">
       siren {{ siret.slice(0,9) }}

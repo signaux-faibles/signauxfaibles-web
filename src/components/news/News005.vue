@@ -35,7 +35,7 @@
                       </div>
                       <v-fade-transition>
                         <div v-if="magnify" class="child2">
-                          <v-icon size="60px">mdi-magnify</v-icon>
+                          <v-icon size="60px">fa-magnifying-glass</v-icon>
                         </div>
                       </v-fade-transition>
                     </div>

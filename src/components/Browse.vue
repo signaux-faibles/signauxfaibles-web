@@ -55,7 +55,7 @@
                   outlined
                   class="ma-3"
                 >
-                  <v-icon>mdi-filter</v-icon>selection des secteurs
+                  <v-icon small class="mr-2">fa-industry</v-icon>selection des secteurs
                 </v-btn>
               </template>
               <v-card>
@@ -69,17 +69,17 @@
                       <v-icon
                         style="cursor: pointer"
                         @click="selectAllNaf()"
-                      >{{ allNextNaf ? 'mdi-close-box' : 'mdi-plus-box' }}</v-icon>
+                      >{{ allNextNaf ? 'fa-square-xmark' : 'fa-square-plus' }}</v-icon>
                     </v-list-item-action>{{ !allNextNaf ? 'Tout sélectionner' : 'Tout désélectionner' }}
                     <v-list-item-content></v-list-item-content>
                   </v-list-item>
                   <v-divider />
                   <v-list-item v-for="n in naf1" :key="n.value">
                     <v-list-item-action @click="toggleNaf(n.value)">
-                      <v-icon style="cursor: pointer;">
+                      <v-icon style="cursor: pointer;">md
                         {{ nextNaf.includes(n.value) ?
-                        'mdi-checkbox-marked' :
-                        'mdi-checkbox-blank-outline'
+                        'fa-square-check' :
+                        'far fa-square'
                         }}
                       </v-icon>
                     </v-list-item-action>
@@ -105,7 +105,7 @@
           </v-flex>
         </v-layout>
         <v-btn type="submit" style="width: 150px" :disabled="loading || search.length < 3">
-          <v-icon>search</v-icon>
+          <v-icon>fa-magnifying-glass</v-icon>
         </v-btn>
       </form>
     </div>

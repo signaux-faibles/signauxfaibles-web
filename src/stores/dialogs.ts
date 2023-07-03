@@ -8,6 +8,11 @@ export const useDialogsStore = defineStore('dialogs', {
     entreprise: false,
     entrepriseSiren: null as unknown as string,
     cards: false,
+    cardsSiret: null as unknown as string,
+    cardsCodeDepartement: null as unknown as string,
+    cardsDenomination: null as unknown as string,
+    cardEditor: false,
+    cardEditorID: null as unknown as string,
   }),
   persist: true,
   actions: {
@@ -28,6 +33,22 @@ export const useDialogsStore = defineStore('dialogs', {
     hideEntreprise() {
       this.entreprise = false
       this.entrepriseSiren = null as unknown as string
+    },
+    showCards(siret: string, codeDepartement: string, denomination: string) {
+      this.cardsSiret = siret
+      this.cardsCodeDepartement = codeDepartement
+      this.cardsDenomination = denomination
+      this.cards = true
+    },
+    hideCards() {
+      this.cardsSiret = null as unknown as string
+      this.cardsCodeDepartement = null as unknown as string
+      this.cardsDenomination = null as unknown as string
+      this.cards = false
+    },
+    showCardEditor(cardID: string) {
+      this.cardEditorID = cardID
+      this.cardEditor = true
     },
   },
 })

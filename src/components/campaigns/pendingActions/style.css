@@ -6,8 +6,8 @@
 
 #buttons {
     text-align: right;
-    max-width: 162px;
-    min-width: 162px;
+    max-width: 180px;
+    min-width: 180px;
 }
 
 #empty {
@@ -16,4 +16,11 @@
     text-align: center;
     vertical-align: bottom;
     font-size: 30px;
+}
+
+.v-icon.outlined {
+    border: 1px solid currentColor;
+    border-radius:50%;
+    height: 56px;
+    width: 56px;
 }

@@ -195,11 +195,11 @@
         </v-layout>
         <v-btn v-if="followed === false" bottom class="mr-2" color="indigo" dark fab fixed right
                @click="followDialog = true">
-          <v-icon>mdi-star-outline</v-icon>
+          <v-icon style="top:-1px">far fa-star</v-icon>
         </v-btn>
         <v-btn v-if="followed === true" bottom class="mr-2" color="indigo" fab fixed outlined right
                @click="unfollowDialog = true">
-          <v-icon>mdi-star</v-icon>
+          <v-icon style="top:-1px" small>far fa-star</v-icon>
         </v-btn>
       </v-container>
     </div>

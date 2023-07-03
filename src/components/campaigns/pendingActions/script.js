@@ -3,13 +3,16 @@ import ScoreWidget from "@/components/ScoreWidget.vue"
 import Etablissement from "@/components/etablissement/Main.vue"
 import Entreprise from "@/components/entreprise/main.vue"
 import {useDialogsStore} from "@/stores/dialogs";
+import {useCampaignsStore} from "@/stores/campaigns";
+
 export default {
   name: "CampaignsPendingCards",
   props: ['cards'],
   components: {Card, ScoreWidget, Etablissement, Entreprise},
   setup() {
     const dialogs = useDialogsStore()
-    return { dialogs }
+    const campaigns = useCampaignsStore()
+    return {dialogs, campaigns}
   },
   data() {
     return {
@@ -29,15 +32,17 @@ export default {
     this.$bus.$off()
   },
   computed: {
-    campaignsSelectedID() { return this.$store.state.campaignsSelectedID }
+    campaignsSelectedID() {
+      return this.campaigns.selectedID
+    }
   },
   methods: {
     processMessage() {
       this.getPendingEtablissements()
-      this.$store.dispatch('updateCampaigns')
+      this.campaigns.getCampaigns(this.$axios)
     },
     getPendingEtablissements() {
-      this.$axios.get('/campaign/pending/' + this.campaignsSelectedID).then((r) => {
+      this.$axios.get('/campaign/actions/pending/' + this.campaignsSelectedID).then((r) => {
         this.pending = r.data || []
       }).catch((e) => {
         this.pending = {
@@ -46,7 +51,7 @@ export default {
       })
     },
     take(campaignID, id) {
-        this.$axios.get('/campaign/take/' + campaignID + '/' + id).then(() => {
+      this.$axios.get('/campaign/take/' + campaignID + '/' + id).then(() => {
       })
     },
     etablissements() {
