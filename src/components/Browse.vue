@@ -70,13 +70,13 @@
                         style="cursor: pointer"
                         @click="selectAllNaf()"
                       >{{ allNextNaf ? 'fa-square-xmark' : 'fa-square-plus' }}</v-icon>
-                    </v-list-item-action>{{ !allNextNaf ? 'Tout sélectionner' : 'Tout désélectionner' }}
+                    </v-list-item-action>{{ !allNextNaf ? 'Tout sélectionner' : 'Vider la sélection' }}
                     <v-list-item-content></v-list-item-content>
                   </v-list-item>
                   <v-divider />
                   <v-list-item v-for="n in naf1" :key="n.value">
                     <v-list-item-action @click="toggleNaf(n.value)">
-                      <v-icon style="cursor: pointer;">md
+                      <v-icon style="cursor: pointer;">
                         {{ nextNaf.includes(n.value) ?
                         'fa-square-check' :
                         'far fa-square'
@@ -87,10 +87,10 @@
                   </v-list-item>
                 </v-list>
               </v-card-text>
-                <v-card-actions style>
+                <v-card-actions class="pa-2 elevation-6">
                   <v-spacer />
-                  <v-btn light color="error" @click="nafDialog=false">annuler</v-btn>
-                  <v-btn light color="success" @click="applyNaf(); nafDialog=false">appliquer</v-btn>
+                  <v-btn light color="indigo" outlined @click="nafDialog=false">annuler</v-btn>
+                  <v-btn light color="indigo" dark @click="applyNaf(); nafDialog=false">appliquer</v-btn>
                 </v-card-actions>
               </v-card>
             </v-dialog>
