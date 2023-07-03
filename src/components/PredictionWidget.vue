@@ -1,161 +1,170 @@
 <template>
-  <div>
-    <v-card @click="showEtablissement()" @mouseover="social ? highlightEtablissement() : showRaccourci = true" @mouseout="showRaccourci = false" class="etablissement-card elevation-2 ma-2 pointer">
+  <v-scroll-y-transition>
+    <v-card class="etablissement-card elevation-2 ma-2 pointer"
+            v-show="show"
+            @click="dialogs.showEtablissement(prediction.siret);" @mouseout="showRaccourci = false"
+            @mouseover="social ? highlightEtablissement() : showRaccourci = true">
       <div class="entete">
-        <div v-if="prediction.followed" class="corner-ribbon"><v-icon dark small>mdi-star</v-icon></div>
-        <ScoreWidget :prediction="prediction" :tooltip="true" />
+        <div v-if="prediction.followed" class="corner-ribbon">
+          <v-icon style="top: -4px; left: 2px" dark x-small>fa-star</v-icon>
+        </div>
+        <ScoreWidget :prediction="prediction" :tooltip="true"/>
       </div>
       <div class="corps">
         <div class="mr-2 ml-2">
           <span v-if="social" class="mr-2 commune">ETS {{ prediction.commune }}</span>
           <span v-else class="mr-2 raison-sociale">{{ prediction.raison_sociale }}</span>
-          <v-tooltip bottom v-if="prediction.firstAlert === true">
+          <v-tooltip v-if="prediction.firstAlert === true" bottom>
             <template v-slot:activator="{ on, attrs }">
-              <v-chip v-bind="attrs" v-on="on"  class="ma-0 mr-1 chip" small color="primary" text-color="white">1re alerte</v-chip>
+              <v-chip class="ma-0 mr-1 chip" color="primary" small text-color="white" v-bind="attrs" v-on="on">1re
+                alerte
+              </v-chip>
             </template>
             <span>Cet établissement est pour la première fois en alerte sur une liste de détection</span>
           </v-tooltip>
-          <v-tooltip bottom v-if="prediction.etatAdministratif == 'F'">
+          <v-tooltip v-if="prediction.etatAdministratif == 'F'" bottom>
             <template v-slot:activator="{ on, attrs }">
-              <v-chip v-bind="attrs" v-on="on" class="ma-0 mr-1 chip" small color="grey darken-4" text-color="white">Fermé</v-chip>
+              <v-chip class="ma-0 mr-1 chip" color="grey darken-4" small text-color="white" v-bind="attrs" v-on="on">
+                Fermé
+              </v-chip>
             </template>
             <span>Cet établissement est fermé ou l’activité de l’entreprise a cessé</span>
           </v-tooltip>
-          <v-tooltip bottom v-if="prediction.etat_procol !== 'in_bonis'">
+          <v-tooltip v-if="prediction.etat_procol !== 'in_bonis'" bottom>
             <template v-slot:activator="{ on, attrs }">
-            <v-chip v-bind="attrs" v-on="on" class="ma-0 mr-1 chip" outlined small text-color="red darken-1">{{ libellesProcols[prediction.etat_procol] }}</v-chip>
+              <v-chip class="ma-0 mr-1 chip" outlined small text-color="red darken-1" v-bind="attrs" v-on="on">
+                {{ libellesProcols[prediction.etat_procol] }}
+              </v-chip>
             </template>
-            <span>Cette entreprise fait l’objet d’une procédure collective : {{ libellesProcols[prediction.etat_procol] }}</span>
+            <span>Cette entreprise fait l’objet d’une procédure collective : {{
+                libellesProcols[prediction.etat_procol]
+              }}</span>
           </v-tooltip>
           <div class="identite">
-            {{ prediction.siret.slice(0,9) }} {{ prediction.siret.slice(9,14) }}{{ prediction.siege ? ' (siège)' : '' }}{{ (prediction.groupe && !social) ? ' - TdG. ' + prediction.groupe : ''}}<br />
-            Dép. {{ prediction.departement }}{{ prediction.libelle_activite ? ' - Act. ' + prediction.libelle_activite.slice(0,65) : '' }}
+            {{ prediction.siret.slice(0, 9) }} {{
+              prediction.siret.slice(9, 14)
+            }}{{
+              prediction.siege ? ' (siège)' : ''
+            }}{{ (prediction.groupe && !social) ? ' - TdG. ' + prediction.groupe : '' }}<br/>
+            Dép. {{
+              prediction.departement
+            }}{{ prediction.libelle_activite ? ' - Act. ' + prediction.libelle_activite.slice(0, 65) : '' }}
           </div>
         </div>
-        <transition name="fade">
-          <div  v-show="showRaccourci" style="position: absolute; right: 0">
-            <v-btn class="mx-2" dark color="indigo" @click="showEtablissement">Voir Fiche Etablissement</v-btn>
-            <v-btn class="mx-2" v-if="prediction.siren" dark color="indigo" @click="showEntreprise">Voir Fiche Entreprise</v-btn>
-          </div>
-        </transition>
+        <div v-show="showRaccourci" style="position: absolute; right: 0">
+          <v-btn class="mx-2" color="indigo" dark @click.stop="dialogs.showEtablissement(prediction.siret)">Voir
+            Fiche Établissement
+          </v-btn>
+          <v-btn v-if="prediction.siren" class="mx-2" color="indigo" dark
+                 @click.stop="dialogs.showEntreprise(prediction.siret.slice(0,9))">Voir Fiche Entreprise
+          </v-btn>
+        </div>
         <template v-if="social">
           <div class="eff mr-2 text-right">
             EFFECTIF
-            <br />
-            <span class="valeur" >{{ prediction.dernier_effectif || 'n/c' }}</span>
+            <br/>
+            <span class="valeur">{{ prediction.dernier_effectif || 'n/c' }}</span>
           </div>
           <div v-if="permDGEFP" class="ap mr-2 text-right">
             ACT. PARTIELLE
-            <br />
-            <span class="valeur" :class="prediction.apHeureConsommeAVG12m > 0 ? 'down' : ''" >{{ this.$parent.formatActivitePartielle(this.$parent.equivalentTempsPlein(prediction.apHeureConsommeAVG12m || 0)) }}</span>
+            <br/>
+            <span :class="prediction.apHeureConsommeAVG12m > 0 ? 'down' : ''" class="valeur">{{
+                this.$parent.formatActivitePartielle(this.$parent.equivalentTempsPlein(prediction.apHeureConsommeAVG12m || 0))
+              }}</span>
           </div>
           <div v-if="permUrssaf" class="ds mr-2 text-right">
             DETTE SOC.
-            <br />
-            <span class="valeur" :class="prediction.detteUrssaf > 0 ? 'down' : ''">{{ prediction.detteUrssaf != null ? this.$parent.formatDetteSociale(prediction.detteUrssaf) : 'n/c'}}</span>
+            <br/>
+            <span :class="prediction.detteUrssaf > 0 ? 'down' : ''"
+                  class="valeur">{{
+                prediction.detteUrssaf != null ? this.$parent.formatDetteSociale(prediction.detteUrssaf) : 'n/c'
+              }}</span>
           </div>
         </template>
         <template v-else>
           <div class="social mr-2 text-right">
             <div class="mt-2">
               <img
+                v-if="prediction.activite_partielle && permDGEFP"
+                alt=""
                 class="mr-2"
                 height="22"
-                v-if="prediction.activite_partielle && permDGEFP"
                 src="../assets/red_apart.svg"
               />
               <img
+                v-if="!prediction.activite_partielle && permDGEFP"
+                alt=""
                 class="mr-2"
                 height="22"
-                v-if="!prediction.activite_partielle && permDGEFP"
                 src="../assets/gray_apart.svg"
               />
-            <img
-                class="ml-2"
-                width="70"
+              <img
                 v-if="!prediction.urssaf && permUrssaf"
+                alt=""
+                class="ml-2"
                 src="../assets/gray_urssaf.svg"
+                width="70"
               />
               <img
-                class="ml-2"
-                width="70"
                 v-if="prediction.urssaf && permUrssaf"
+                alt=""
+                class="ml-2"
                 src="../assets/red_urssaf.svg"
+                width="70"
               />
             </div>
             <div class="effectif">{{ this.libelleEffectif }}</div>
           </div>
           <div class="ca mr-2 text-right">
-            CA {{prediction.exerciceDiane}}
-            <br />
-            <span class="valeur" :class="diane.ca_color">{{ diane.ca || 'n/c' }}</span>
-            <v-icon small v-if="diane.ca_arrow">{{ diane.ca_arrow }}</v-icon>
+            CA {{ prediction.exerciceDiane }}
+            <br/>
+            <span :class="diane.ca_color" class="valeur">{{ diane.ca || 'n/c' }}</span>
+            <v-icon v-if="diane.ca_arrow" class="ml-1" style="top:-5px;" small>{{ diane.ca_arrow }}</v-icon>
           </div>
           <div class="rex mr-2 text-right">
             EBE
-            <br />
-            <span class="valeur" :class="diane.excedent_brut_d_exploitation_color">{{ diane.excedent_brut_d_exploitation }}</span>
+            <br/>
+            <span :class="diane.excedent_brut_d_exploitation_color"
+                  class="valeur">{{ diane.excedent_brut_d_exploitation }}</span>
           </div>
           <div class="rex mr-2 text-right">
             REX
-            <br />
-            <span class="valeur" :class="diane.resultat_expl_color">{{ diane.resultat_expl }}</span>
+            <br/>
+            <span :class="diane.resultat_expl_color" class="valeur">{{ diane.resultat_expl }}</span>
           </div>
         </template>
-        <v-dialog fullscreen v-model="dialog">
-          <div style="height: 100%; width: 100%; font-weight: 800; font-family: 'Oswald', sans;">
-            <v-toolbar
-              fixed
-              class="toolbar"
-              height="35px"
-              style="color: #fff; font-size: 22px; z-index: 50;"
-            >
-              <v-spacer />FICHE ETABLISSEMENT
-              <v-spacer />
-              <v-icon @click="hideEtablissement()" style="color: #fff">mdi-close</v-icon>
-            </v-toolbar>
-            <Etablissement v-if="dialog" :siret="prediction.siret" :batch="currentBatchKey" v-on="$listeners"></Etablissement>
-          </div>
-        </v-dialog>
-        <v-dialog fullscreen v-model="entrepriseDialog">
-          <div style="height: 100%; width: 100%; font-weight: 800; font-family: 'Oswald', sans;">
-            <v-toolbar
-              fixed
-              class="toolbar"
-              height="35px"
-              style="color: #fff; font-size: 22px; z-index: 50;"
-            >
-              <v-spacer />FICHE ENTREPRISE
-              <v-spacer />
-              <v-icon @click="hideEntreprise()" style="color: #fff">mdi-close</v-icon>
-            </v-toolbar>
-            <Entreprise v-if="entrepriseDialog" :siren="prediction.siren" v-on="$listeners" />
-          </div>
-        </v-dialog>
       </div>
     </v-card>
-  </div>
+  </v-scroll-y-transition>
+
 </template>
 
 <script>
 import ScoreWidget from '@/components/ScoreWidget'
 import libellesProcols from '@/assets/libelles_procols.json'
+import {useDialogsStore} from "@/stores/dialogs";
 
 export default {
   name: 'PredictionWidget',
   props: ['prediction', 'social', 'activitePartielle', 'detteSociale'],
   components: {
     ScoreWidget,
-    Etablissement: () => import('@/components/Etablissement/Main.vue'),
-    Entreprise: () => import('@/components/Entreprise'),
+  },
+  setup() {
+    const dialogs = useDialogsStore()
+    return {dialogs}
   },
   data() {
     return {
+      show: false,
       dialog: false,
       entrepriseDialog: false,
       showRaccourci: false,
       libellesProcols,
     }
+  },
+  mounted() {
+    this.show = true
   },
   computed: {
     currentBatchKey() {
@@ -164,8 +173,8 @@ export default {
     diane() {
       return {
         ca: this.prediction.ca ? this.prediction.ca + ' k€' : 'n/c',
-        ca_arrow: (this.prediction.variation_ca || 1) > 1.05 ? 'mdi-arrow-top-right' :
-          (this.prediction.variation_ca || 1) < 0.95 ? 'mdi-arrow-bottom-right' : null,
+        ca_arrow: (this.prediction.variation_ca || 1) > 1.05 ? 'fa-arrow-trend-up' :
+          (this.prediction.variation_ca || 1) < 0.95 ? 'fa-arrow-trend-down' : null,
         ca_color: this.prediction.ca ? '' : 'unknown',
         excedent_brut_d_exploitation: this.prediction.excedent_brut_d_exploitation ?
           this.prediction.excedent_brut_d_exploitation + ' k€' : 'n/c',
@@ -184,7 +193,7 @@ export default {
     },
     libelleEffectif() {
       return (this.prediction.dernier_effectif || 'n/c')
-        + (this.prediction.dernier_effectif_entreprise  ? ' / ' + this.prediction.dernier_effectif_entreprise : '')
+        + (this.prediction.dernier_effectif_entreprise ? ' / ' + this.prediction.dernier_effectif_entreprise : '')
     },
   },
   methods: {
@@ -222,6 +231,7 @@ export default {
   flex-direction: row;
   min-height: 80px;
 }
+
 .entete {
   flex: 0 0 auto;
   display: flex;
@@ -236,6 +246,7 @@ export default {
   text-align: center;
   width: 80px;
 }
+
 .corps {
   flex: 1 1 auto;
   display: flex;
@@ -243,69 +254,86 @@ export default {
   align-items: center;
   background: linear-gradient(45deg, rgba(50, 51, 121, 0.212), #0000);
 }
+
 .corps > div:first-child {
   flex: 1 1 auto;
   overflow: hidden;
 }
+
 .commune {
   font-family: "Oswald";
   font-size: 21px;
   color: #333;
 }
+
 .raison-sociale {
   font-family: "Oswald";
   font-size: 25px;
   color: #333;
 }
+
 .identite {
   font-family: "Abel";
   font-size: 14px;
   font-weight: 400;
 }
+
 .effectif {
   font-size: 25px;
   line-height: 34px;
 }
+
 .ca, .rex,
 .eff, .ap, .ds {
   font-family: "Abel";
   font-size: 16px;
 }
+
 .ca {
   min-width: 120px;
 }
+
 .rex, .ap {
   min-width: 100px;
 }
+
 .eff, .ds {
   min-width: 80px;
 }
+
 .valeur {
   font-size: 25px;
 }
+
 .down {
   color: rgb(244, 67, 54);
 }
+
 .unknown {
   color: rgb(150, 150, 150);
 }
+
 .chip {
   font-family: "Roboto";
   font-size: 13px;
   vertical-align: text-bottom;
 }
+
 .fade-enter-active, .fade-leave-active {
   transition: opacity .5s;
 }
+
 .fade-enter, .fade-leave-to {
   opacity: 0;
 }
+
 .corner-ribbon {
   position: absolute;
   top: 0;
   left: 0;
   z-index: 0;
 }
+
 .corner-ribbon::before {
   position: absolute;
   z-index: -1;

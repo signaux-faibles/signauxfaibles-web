@@ -1,11 +1,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Prediction from '@/views/prediction/main.vue'
-import Goup from '@/views/Goup.vue'
-import Browse from '@/views/Browse.vue'
-import Follow from '@/views/follow/main.vue'
-import PageNotFound from '@/views/PageNotFound.vue'
-import Etablissement from '@/components/Etablissement/Main.vue'
+import Prediction from '@/components/prediction/main/main.vue'
+import Browse from '@/components/Browse.vue'
+import Follow from '@/components/follow/main/main.vue'
+import PageNotFound from '@/components/PageNotFound.vue'
+import Etablissement from '@/components/etablissement/Main.vue'
+import Campaigns from '@/components/campaigns/main/main.vue'
 
 Vue.use(Router)
 
@@ -23,11 +23,6 @@ const router = new Router({
       component: Browse,
     },
     {
-      path: '/goup',
-      name: 'goup',
-      component: Goup,
-    },
-    {
       path: '*',
       name: 'collector',
       component: PageNotFound,
@@ -36,6 +31,17 @@ const router = new Router({
       path: '/follow',
       name: 'follow',
       component: Follow,
+    },
+    {
+      path: '/campaigns',
+      name: 'campaigns',
+      component: Campaigns,
+    },
+    {
+      path: '/campaigns/:urlCampaignID',
+      name: 'campaignDetails',
+      component: Campaigns,
+      props: true,
     },
     {
       path: '/ets/:siret',

@@ -1,11 +1,12 @@
 <template>
-  <v-app id="base">
-    <v-dialog v-model="expiredSession" persistent max-width="500px">
+  <v-app>
+    <div id="base"></div>
+    <v-dialog v-model="expiredSession" max-width="500px" persistent>
       <v-card>
         <v-card-title class="headline">Votre session a expiré</v-card-title>
         <v-card-text>
           Vous avez été inactif pendant une trop longue période.
-          <br />Veuillez vous reconnecter pour accéder de nouveau au service.
+          <br/>Veuillez vous reconnecter pour accéder de nouveau au service.
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -14,20 +15,29 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <Security v-if="!securityConsent" />
+    <Dialogs/>
+    <Security v-if="!securityConsent"/>
     <v-main v-if="securityConsent">
-      <NavigationDrawer v-if="login && leftDrawer" />
-      <router-view />
+      <NavigationDrawer v-if="login && drawers.left"/>
+      <router-view/>
     </v-main>
   </v-app>
 </template>
 
 <script>
-import NavigationDrawer from '@/views/NavigationDrawer'
-import Security from '@/views/Security'
+import NavigationDrawer from '@/components/NavigationDrawer.vue'
+import Security from '@/components/Security.vue'
+import Dialogs from '@/components/dialog/main/main.vue'
+import {useDrawersStore} from '@/stores/drawers';
+import {useCampaignsStore} from '@/stores/campaigns';
 
 export default {
-  components: { NavigationDrawer, Security },
+  components: {NavigationDrawer, Security, Dialogs},
+  setup() {
+    const drawers = useDrawersStore()
+    const campaigns = useCampaignsStore()
+    return {drawers, campaigns}
+  },
   methods: {
     handleResize() {
       this.height = Math.max(
@@ -45,7 +55,7 @@ export default {
   computed: {
     securityConsent() {
       const securityConsent = new Date(this.$localStore.state.securityConsent)
-      const limitConsent = new Date(securityConsent.setMonth(securityConsent.getMonth()+2));
+      const limitConsent = new Date(securityConsent.setMonth(securityConsent.getMonth() + 2));
       return limitConsent.getTime() >= Date.now()
     },
     height: {
@@ -67,14 +77,6 @@ export default {
     login() {
       return this.$keycloak.authenticated
     },
-    leftDrawer: {
-      get() {
-        return this.$store.state.leftDrawer
-      },
-      set(val) {
-        this.$store.dispatch('setLeftDrawer', val)
-      },
-    },
     expiredSession() {
       return this.$localStore.state.expiredSession
     },
@@ -87,6 +89,7 @@ export default {
       window.innerHeight || 0,
     )
     this.$store.dispatch('updateReference')
+    this.campaigns.getCampaigns(this.$axios)
     if (this.roles.includes('wekan')) {
       this.$store.dispatch('updateKanbanConfig')
     }
@@ -112,15 +115,14 @@ export default {
   font-style: normal;
   font-weight: 350;
   src: local("Oswald"),
-    url(./fonts/SairaCondensed-Medium.ttf) format("truetype");
+  url(./fonts/SairaCondensed-Medium.ttf) format("truetype");
 }
 
 @font-face {
   font-family: "Abel";
   src: local("Abel"),
-    url(./fonts/Abel-Regular.ttf) format("truetype");
+  url(./fonts/Abel-Regular.ttf) format("truetype");
 }
-
 body {
   font-family: "Roboto", sans-serif;
 }
@@ -128,22 +130,27 @@ body {
   background-color: #222;
   text-shadow: 0px 0px 2px rgb(0, 0, 0), 0px 0px 1px rgb(255, 255, 255);
   background: linear-gradient(0deg, #272629, #ffffff00 7%, transparent),
-    radial-gradient(
-      ellipse at top,
-      rgb(164, 155, 189),
-      #70658a 35%,
-      #3a3b4b 75%,
-      #21213b 100%,
-      transparent
-    );
+  radial-gradient(
+    ellipse at top,
+    rgb(184, 175, 209),
+    #70658a 10%,
+    #3a3b4b 55%,
+    #21213b 100%,
+    transparent
+  );
 }
+
 .toolbar_titre {
   color: #fff;
   font-family: "Abel", sans-serif;
   font-weight: 800;
   font-size: 22px;
 }
+
 #base {
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
   background: radial-gradient(
     circle at center,
     rgb(255, 255, 255),
@@ -151,19 +158,13 @@ body {
     rgb(187, 187, 187) 100%
   );
 }
+
 .rightDrawer {
   position: fixed;
   right: 0px;
 }
+
 .span {
   max-height: 10px;
 }
-/* span.fblue {
-  font-family: "Quicksand", sans-serif;
-  color: #20459a;
-}
-span.fred {
-  font-family: "Quicksand", sans-serif;
-  color: #e9222e;
-} */
 </style>

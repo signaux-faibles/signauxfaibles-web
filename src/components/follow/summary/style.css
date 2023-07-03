@@ -1,0 +1,19 @@
+.selectedCard {
+    background-color: #dddddd;
+}
+
+tr.selectedCard:hover {
+    background-color: #dddddd;
+}
+
+tr {
+    margin: 15px;
+}
+
+tr:hover {
+    border: none;
+}
+
+td {
+    border: none;
+}

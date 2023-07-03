@@ -1,7 +1,7 @@
 <template>
   <v-menu :max-width="big ? '600px' : '400px'" offset-y>
     <template v-slot:activator="{ on, attrs }">
-      <v-btn v-bind="attrs" icon v-on="on" ref="btn" :dark="dark" @click="trackMatomoEvent('general', 'ouvrir_aide', titre)"><v-icon>help</v-icon></v-btn>
+      <v-btn v-bind="attrs" icon v-on="on" ref="btn" :dark="dark" @click="trackMatomoEvent('general', 'ouvrir_aide', titre)"><v-icon style="top: -1px">far fa-circle-question</v-icon></v-btn>
     </template>
     <v-card>
       <v-card-title class="headline">
