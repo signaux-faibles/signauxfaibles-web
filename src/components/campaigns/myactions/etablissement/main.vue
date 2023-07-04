@@ -89,4 +89,4 @@
 </template>
 
 <script src="./script.js"/>
-<style src="./style.css"/>
+<style scoped src="./style.css"/>

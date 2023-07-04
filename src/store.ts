@@ -235,10 +235,11 @@ const sessionStore = new Vuex.Store({
         context.commit('updateReference', reference)
       }))
     },
-    updateKanbanConfig(context) {
-      axiosClient.get('/kanban/config').then((response) => {
-        context.commit('updateKanbanConfig', response.data)
-      }).catch()
+    updateKanbanConfig(context, config) {
+      // axiosClient.get('/kanban/config').then((response) => {
+      //   context.commit('updateKanbanConfig', response.data)
+      // }).catch()
+      context.commit('updateKanbanConfig', config)
     },
     setFollowCardsDialog(context, val) {
       context.commit('setFollowCardsDialog', val)

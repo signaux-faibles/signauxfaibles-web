@@ -2,13 +2,14 @@ import Card from "@/components/card/main.vue"
 import ScoreWidget from "@/components/ScoreWidget.vue"
 import Etablissement from "@/components/etablissement/Main.vue"
 import Entreprise from "@/components/entreprise/main.vue"
+import CampaignsPendingActionsEtablissement from "@/components/campaigns/pendingActions/etablissement/main.vue";
 import {useDialogsStore} from "@/stores/dialogs";
 import {useCampaignsStore} from "@/stores/campaigns";
 
 export default {
   name: "CampaignsPendingCards",
   props: ['cards'],
-  components: {Card, ScoreWidget, Etablissement, Entreprise},
+  components: {CampaignsPendingActionsEtablissement, Card, ScoreWidget, Etablissement, Entreprise},
   setup() {
     const dialogs = useDialogsStore()
     const campaigns = useCampaignsStore()

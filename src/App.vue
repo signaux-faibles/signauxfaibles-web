@@ -30,13 +30,15 @@ import Security from '@/components/Security.vue'
 import Dialogs from '@/components/dialog/main/main.vue'
 import {useDrawersStore} from '@/stores/drawers';
 import {useCampaignsStore} from '@/stores/campaigns';
+import {useKanbanStore} from "@/stores/kanban";
 
 export default {
   components: {NavigationDrawer, Security, Dialogs},
   setup() {
     const drawers = useDrawersStore()
     const campaigns = useCampaignsStore()
-    return {drawers, campaigns}
+    const kanban = useKanbanStore()
+    return {drawers, campaigns, kanban}
   },
   methods: {
     handleResize() {
@@ -91,7 +93,8 @@ export default {
     this.$store.dispatch('updateReference')
     this.campaigns.getCampaigns(this.$axios)
     if (this.roles.includes('wekan')) {
-      this.$store.dispatch('updateKanbanConfig')
+      this.kanban.getConfig(this.$axios, this.$store)
+      this.$store.dispatch('updateKanbanConfig', this.kanban.config)
     }
   },
   name: 'App',

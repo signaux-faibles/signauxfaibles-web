@@ -1,5 +1,11 @@
+import {useCampaignsStore} from "@/stores/campaigns";
+
 export default {
   name: "CampaignsTakenActions",
+  setup() {
+    const campaigns = useCampaignsStore()
+    return {campaigns}
+  },
   mounted() {
     this.getAllActions()
     this.$bus.$on('campaign-message', this.processMessage)
@@ -7,10 +13,10 @@ export default {
   methods: {
     processMessage(message) {
       this.getAllActions()
-      this.$store.dispatch('updateCampaigns')
+      this.campaigns.getCampaigns(this.$axios)
     },
     getAllActions() {
-      this.$axios.get('/campaign/actions/taken/' + this.campaignsSelectedID).then((r) => {
+      this.$axios.get('/campaign/actions/taken/' + this.campaigns.selectedID).then((r) => {
         this.allActionsPayload = r.data
       })
     }
@@ -19,17 +25,9 @@ export default {
     kanbanConfig() {
       return this.$store.state.kanbanConfig
     },
-    campaignsSelectedID() {
-      return this.$store.state.campaignsSelectedID
-    },
     allActions() {
       if (this.allActionsPayload) {
-        return {
-          pending: this.allActionsPayload.etablissements.filter((e) => e.action == null),
-          take: this.allActionsPayload.etablissements.filter((e) => e.action == 'take'),
-          cancel: this.allActionsPayload.etablissements.filter((e) => e.action == 'cancel'),
-          success: this.allActionsPayload.etablissements.filter((e) => e.action == 'success')
-        }
+        return this.allActionsPayload.etablissements.filter((e) => e.action == 'take' || e.action == 'success')
       }
     }
   },
