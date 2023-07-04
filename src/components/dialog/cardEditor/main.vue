@@ -16,6 +16,7 @@
         </template>
       </Help>
     </v-toolbar>
+    <FollowCardEditor/>
   </v-dialog>
 </template>
 

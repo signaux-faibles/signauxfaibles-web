@@ -1,10 +1,10 @@
 import {useDialogsStore} from "@/stores/dialogs";
-import FollowCardViewer from "@/components/follow/cardViewer/script";
 import Help from "@/components/Help.vue";
+import FollowCardEditor from "@/components/follow/cardEditor/main.vue";
 
 export default {
     name: 'DialogCardEditor',
-    components: {Help, FollowCardViewer},
+    components: {FollowCardEditor, Help},
     setup() {
         const dialogs = useDialogsStore()
         return {dialogs}
