@@ -25,6 +25,14 @@
             {{ etablissement.siret }}
           </span>
       </div>
+      <div class="mr-4">
+        <v-chip v-if="etablissement.action=='success'" dark color="indigo">
+          {{ successLabels()[etablissement.detail] }}
+        </v-chip>
+        <v-chip v-if="etablissement.action=='take'" dark color="indigo accent-2">
+          en cours
+        </v-chip>
+      </div>
       <div id="contact" class="ml-2">
         <v-btn
           class="mr-4"
@@ -39,12 +47,6 @@
           <span v-else>
             Je partage mes informations
           </span>
-        </v-btn>
-      </div>
-      <div class="mr-4">
-        <v-btn color="indigo" dark style="text-transform: none"
-               @click="take(etablissement.campaignID, etablissement.id)">
-          Je prends contact
         </v-btn>
       </div>
     </template>

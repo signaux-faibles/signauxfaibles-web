@@ -1,20 +1,41 @@
 import {defineStore} from 'pinia'
 
+interface dialogStore {
+  createCard: boolean,
+  etablissement: boolean,
+  etablissementSiret: string | null,
+  entreprise: boolean,
+  entrepriseSiren: string | null,
+  cards: boolean,
+  cardsSiret: string | null
+  cardsCodeDepartement: string | null,
+  cardsDenomination: string | null,
+  cardEditor: boolean,
+  cardEditorCampaignEtablissementID: string | null,
+  cardEditorDescription: string | null,
+  cardEditorDenomination: string | null,
+  cardEditorCodeDepartement: string | null,
+  cardEditorSiret: string | null,
+}
+
 export const useDialogsStore = defineStore('dialogs', {
-  state: () => ({
+  state: ():dialogStore => ({
     createCard: false,
     etablissement: false,
-    etablissementSiret: null as unknown as string,
+    etablissementSiret: null,
     entreprise: false,
-    entrepriseSiren: null as unknown as string,
+    entrepriseSiren: null,
     cards: false,
-    cardsSiret: null as unknown as string,
-    cardsCodeDepartement: null as unknown as string,
-    cardsDenomination: null as unknown as string,
+    cardsSiret: null,
+    cardsCodeDepartement: null,
+    cardsDenomination: null,
     cardEditor: false,
-    cardEditorID: null as unknown as string,
+    cardEditorCampaignEtablissementID: null,
+    cardEditorDescription: null,
+    cardEditorDenomination: null,
+    cardEditorCodeDepartement: null,
+    cardEditorSiret: null,
   }),
-  persist: true,
   actions: {
     showEtablissement(siret: string) {
       this.hideEntreprise()
@@ -23,7 +44,7 @@ export const useDialogsStore = defineStore('dialogs', {
     },
     hideEtablissement() {
       this.etablissement = false
-      this.etablissementSiret = null as unknown as string
+      this.etablissementSiret = null
     },
     showEntreprise(siren: string) {
       this.hideEtablissement()
@@ -32,7 +53,7 @@ export const useDialogsStore = defineStore('dialogs', {
     },
     hideEntreprise() {
       this.entreprise = false
-      this.entrepriseSiren = null as unknown as string
+      this.entrepriseSiren = null
     },
     showCards(siret: string, codeDepartement: string, denomination: string) {
       this.cardsSiret = siret
@@ -41,14 +62,25 @@ export const useDialogsStore = defineStore('dialogs', {
       this.cards = true
     },
     hideCards() {
-      this.cardsSiret = null as unknown as string
-      this.cardsCodeDepartement = null as unknown as string
-      this.cardsDenomination = null as unknown as string
+      this.cardsSiret = null
+      this.cardsCodeDepartement = null
+      this.cardsDenomination = null
       this.cards = false
     },
-    showCardEditor(cardID: string) {
-      this.cardEditorID = cardID
+    showCardEditor(siret: string, codeDepartement: string, denomination: string, id: string, description: string) {
+      this.cardEditorSiret = siret
+      this.cardEditorCodeDepartement = codeDepartement
+      this.cardEditorDenomination = denomination
+      this.cardEditorCampaignEtablissementID = id
+      this.cardEditorDescription = description
       this.cardEditor = true
     },
+    hideCardEditor() {
+      this.cardEditorSiret = null
+      this.cardEditorCodeDepartement = null
+      this.cardEditorDenomination = null
+      this.cardEditorCampaignEtablissementID = null
+      this.cardEditor = false
+    }
   },
 })

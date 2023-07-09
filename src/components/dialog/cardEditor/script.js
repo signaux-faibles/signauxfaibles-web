@@ -8,5 +8,5 @@ export default {
     setup() {
         const dialogs = useDialogsStore()
         return {dialogs}
-    }
+    },
 }

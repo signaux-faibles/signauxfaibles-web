@@ -12,6 +12,14 @@ export default {
     return { dialogs }
   },
   methods: {
+    showCardEditor() {
+      this.dialogs.showCardEditor(
+        this.etablissement.siret,
+        this.etablissement.codeDepartement,
+        this.etablissement.raisonSociale,
+        this.etablissement.id,
+        this.etablissement.description)
+    },
     showSuccess(id) {
       this.campaignEtablissementSelectedID = id
       this.successDialog = true

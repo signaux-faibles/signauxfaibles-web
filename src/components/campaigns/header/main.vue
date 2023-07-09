@@ -15,14 +15,14 @@
           </ul>
         </v-flex>
         <v-flex class="pt-2" md7 xs12>
+          <v-chip color="grey darken-3" class="mr-2" outlined>
+            {{ campaign.nbPending }} à contacter
+          </v-chip>
           <v-chip color="indigo darken-2" class="mr-2" outlined>
             {{ campaign.nbTake }} en cours
           </v-chip>
-          <v-chip color="grey darken-3" class="mr-2" outlined>
-            {{ campaign.nbPending }} en attente
-          </v-chip>
           <v-chip color="green darken-3" class="mr-2" outlined>
-            {{ campaign.nbDone }} effectués
+            {{ campaign.nbDone }} contactées
           </v-chip>
         </v-flex>
         <v-flex style="text-align: right; vertical-align: center" md2 xs12>

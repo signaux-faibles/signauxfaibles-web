@@ -29,7 +29,7 @@ export const useKanbanStore = defineStore('kanban', {
             }
           }
         }
-        return '<utilisateur non trouvé>' as string
+        return username as string
       }
     },
   //   users(): any {

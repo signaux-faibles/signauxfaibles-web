@@ -1,12 +1,13 @@
 <template>
   <v-dialog
+    persistent
     v-model="dialogs.cardEditor"
   >
     <v-toolbar
       dark
       color='indigo'>
       <v-toolbar-title class="localtoolbar">
-        Fiche de synthèse – {{dialogs.cardsDenomination}} ({{dialogs.cardsSiret}})
+        Informations partagées avec les membres de la campagne – {{dialogs.cardEditorDenomination}} ({{dialogs.cardEditorSiret}})
       </v-toolbar-title>
       <v-spacer/>
       <Help titre="Fiches de synthèse">

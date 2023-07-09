@@ -24,24 +24,41 @@
             {{ etablissement.siret }}
           </span>
       </div>
-      <div class="mr-4">
-        <v-btn big color="indigo" outlined @click="showCancel(etablissement.id)">
-          je ne contacterai pas
+      <div id="contact" class="ml-2">
+        <v-btn
+          class="mr-4"
+          color="indigo"
+          outlined
+          style="text-transform: none"
+          @click="showCardEditor">
+          <v-icon class="mr-2" color="indigo" small>fa-pen</v-icon>
+          <span v-if="etablissement.cardID">
+            Informations partagées
+          </span>
+          <span v-else>
+            Je partage mes informations
+          </span>
         </v-btn>
       </div>
       <div class="mr-4">
-        <v-btn color="indigo" dark @click="showSuccess(etablissement.id)">
+
+        <v-btn big color="indigo accent-3" style="text-transform: none" dark @click="showCancel(etablissement.id)">
+          Je ne contacterai pas
+        </v-btn>
+      </div>
+      <div class="mr-4">
+        <v-btn color="indigo" style="text-transform: none;" dark @click="showSuccess(etablissement.id)">
           J'ai contacté
         </v-btn>
       </div>
       <v-dialog v-model="successDialog" height=50% width=50%>
         <div style="width: 100%; font-weight: 800; font-family: 'Oswald', sans;">
           <v-toolbar color="indigo" dark>
-            <v-toolbar-title class="localtoolbar">Conclure la prise de contact</v-toolbar-title>
+            <v-toolbar-title class="localtoolbar">Valider la prise de contact</v-toolbar-title>
           </v-toolbar>
           <v-card>
             <v-card-text>
-              Vous avez réussi à contacter cette entreprise, pouvez vous indiquer les conclusions de cet entretien ?
+              Vous avez réussi à contacter cette entreprise, quel issue se dessine ?
               <v-radio-group v-model="successRadio">
                 <v-radio v-for="(label, value) in successLabels" :key="value" :label="label" :value="value"/>
               </v-radio-group>

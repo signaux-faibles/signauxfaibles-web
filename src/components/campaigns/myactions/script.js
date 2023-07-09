@@ -5,18 +5,20 @@ import Toolbar from "@/components/Toolbar.vue";
 import Help from "@/components/Help.vue";
 import CampaignsEtablissement from '@/components/campaigns/myactions/etablissement/main.vue'
 import {useCampaignsStore} from "@/stores/campaigns";
+import {useDialogsStore} from "@/stores/dialogs";
+import Spinner from "@/components/Spinner.vue";
 
 export default {
   name: "CampaignsMyActions",
-  components: {Help, Entreprise, Etablissement, Card, Toolbar, CampaignsEtablissement},
+  components: {Spinner, Help, Entreprise, Etablissement, Card, Toolbar, CampaignsEtablissement},
   props: ['cards'],
   setup() {
     const campaigns = useCampaignsStore()
-    return { campaigns }
+    return {campaigns}
   },
   data() {
     return {
-      myActions: null,
+      myActions: {etablissements: []},
       siret: null,
       denomination: null,
       codeDepartement: null,
@@ -28,6 +30,7 @@ export default {
       successRadio: null,
       cancelDialog: false,
       cancelRadio: null,
+      loading: true,
     }
   },
   mounted() {
@@ -43,13 +46,26 @@ export default {
       this.$axios.get('/campaign/actions/mine/' + this.campaigns.selectedID)
         .then((r) => {
           this.myActions = r.data
-        })
+        }).catch(() => {
+        this.myActions = {
+          etablissements: [],
+        }
+      }).finally(() => {
+        this.loading = false
+      })
     },
-  },
+  }
+  ,
   computed: {
     followCardsDialog: {
-      get() { return this.$store.state.followCardsDialog },
-      set(value) { return this.$store.dispatch('setFollowCardsDialog', value)}
-    },
+      get() {
+        return this.$store.state.followCardsDialog
+      }
+      ,
+      set(value) {
+        return this.$store.dispatch('setFollowCardsDialog', value)
+      }
+    }
+    ,
   }
 }

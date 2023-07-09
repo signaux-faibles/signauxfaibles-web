@@ -8,7 +8,7 @@
         dark
         color='indigo'>
         <v-toolbar-title class="localtoolbar">
-          Fiches de synthèse – {{dialogs.cardsDenomination}} ({{dialogs.cardsSiret}})
+          Informations partagées avec les membres de la campagne – {{dialogs.cardsDenomination}} ({{dialogs.cardsSiret}})
         </v-toolbar-title>
         <v-spacer/>
         <Help titre="Fiches de synthèse">
