@@ -1,8 +1,5 @@
 #empty {
-    height: 150px;
-    width: 100%;
+    font-size: 20px;
     text-align: center;
-    font-size: 24px;
-    vertical-align: middle;
-    padding: 10px 10%;
+    margin-top: 100px
 }
