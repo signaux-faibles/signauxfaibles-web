@@ -2,7 +2,6 @@ import PredictionWidget from '@/components/PredictionWidget.vue'
 import Toolbar from '@/components/Toolbar.vue'
 import Help from '@/components/Help.vue'
 import Gitbook from "@/components/Gitbook.vue";
-import labelColors from '@/assets/labels.json'
 import FilterTableaux from '@/components/follow/filters/boards.vue'
 import FilterDepartement from '@/components/follow/filters/departement.vue'
 import FilterStatut from '@/components/follow/filters/statut.vue'
@@ -30,7 +29,7 @@ export default {
     return {
       init: true,
       loading: true,
-      followPayload: {},
+      followPayload: {summaries: []},
       snackbar: true,
       exportXSLXLoading: false,
       exportDOCXLoading: false,
@@ -56,15 +55,9 @@ export default {
         return "loading"
       }
     },
-    resetLabels(event) {
-      this.labels = []
-      this.getFollowedEtablissementthithis()
-      event.stopPropagation()
-    },
     showFollowHelp() {
       this.$refs.followHelp.clickButton()
     },
-
     getFollowedEtablissements() {
       this.loading = true
       if (this._timerID) {
