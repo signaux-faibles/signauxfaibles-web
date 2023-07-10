@@ -122,7 +122,7 @@ export default {
       this.trackMatomoEvent('suivi', 'extraire', 'xlsx')
       this.exportXSLXLoading = true
       this.alertExport = false
-      this.$axios.post('/export/xlsx/follow', this.params, {
+      this.$axios.post('/export/xlsx/follow', this.follow.params, {
         responseType: 'blob',
         timeout: 120000
       }).then((response) => {
@@ -137,7 +137,7 @@ export default {
       this.trackMatomoEvent('suivi', 'extraire', 'docx')
       this.exportDOCXLoading = true
       this.alertExport = false
-      this.$axios.post('/export/docx/follow', this.params, {
+      this.$axios.post('/export/docx/follow', this.follow.params, {
         responseType: 'blob',
         timeout: 120000
       }).then((response) => {
