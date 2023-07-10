@@ -1,0 +1,26 @@
+.raison-sociale {
+    font-family: "Oswald";
+    font-size: 25px;
+    color: #333;
+}
+
+#buttons {
+    text-align: right;
+    max-width: 180px;
+    min-width: 180px;
+}
+
+#empty {
+    position: relative;
+    top: 150px;
+    text-align: center;
+    vertical-align: bottom;
+    font-size: 30px;
+}
+
+.v-icon.outlined {
+    border: 1px solid currentColor;
+    border-radius:50%;
+    height: 56px;
+    width: 56px;
+}

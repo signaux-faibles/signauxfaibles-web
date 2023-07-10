@@ -1,22 +1,22 @@
 <template>
   <div>
-    <Toolbar title="Consultation" drawer />
+    <Toolbar drawer title="Consultation"/>
     <div :class="((result.etablissement || []).length > 0 || searched) ? 'loaded' : 'empty'">
       <form v-on:submit.prevent="load">
         <div
           :class="((result.etablissement || []).length > 0 || searched) ? 'loaded_picto' : 'empty_picto'"
         >
-          <img height="50" src="../assets/text_signaux_faibles.svg" />
+          <img height="50" src="../assets/text_signaux_faibles.svg"/>
         </div>
         <v-text-field
-          solo
-          placeholder="Raison sociale ou SIREN"
           v-model="search"
           :disabled="loading"
+          placeholder="Raison sociale ou SIREN"
+          solo
         ></v-text-field>
-        <v-layout wrap style="margin-top: -16px">
+        <v-layout style="margin-top: -16px" wrap>
           <v-flex>
-            <v-checkbox v-model="siegeUniquement" class="mt-0" :disabled="loading">
+            <v-checkbox v-model="siegeUniquement" :disabled="loading" class="mt-0">
               <template v-slot:label>
                 <span style="font-size: 14px">N'afficher que les sièges des entreprises</span>
               </template>
@@ -26,91 +26,98 @@
             <a @click="avance=!avance">Recherche {{ avance ? 'simple' : 'avancée' }}</a>
           </v-flex>
         </v-layout>
-        <v-layout wrap v-if="avance">
-          <v-flex xs12 md4 pa-2>
+        <v-layout v-if="avance" wrap>
+          <v-flex md4 pa-2 xs12>
             <v-subheader>Secteur d'activité</v-subheader>
             <div
-              style="color: #f00; font-weight: 600;"
               v-if="currentNaf.length == 0"
-            >Aucun secteur sélectionné</div>
-            <ul style="font-size: 11px; text-align: left" v-if="!allNaf">
+              style="color: #f00; font-weight: 600;"
+            >Aucun secteur sélectionné
+            </div>
+            <ul v-if="!allNaf" style="font-size: 11px; text-align: left">
               <li v-for="l in currentNafLibelle.slice(0,4)" :key="l">{{ l }}</li>
             </ul>
             <div
-              style="margin-left: 15px; font-size: 11px; color: #444; text-align: left"
               v-if="currentNaf.length > 4 && !allNaf"
-            >+ {{ currentNaf.length - 4 }} autre{{ (currentNaf.length > 5)?'s':'' }}</div>
+              style="margin-left: 15px; font-size: 11px; color: #444; text-align: left"
+            >+ {{ currentNaf.length - 4 }} autre{{ (currentNaf.length > 5) ? 's' : '' }}
+            </div>
             <div
-              style="margin-left: 15px; font-size: 11px; color: #444"
               v-if="allNaf"
-            >Tout secteur confondu</div>
+              style="margin-left: 15px; font-size: 11px; color: #444"
+            >Tout secteur confondu
+            </div>
             <v-dialog v-model="nafDialog" persistent scrollable width="700">
               <template v-slot:activator="{ on }">
                 <v-btn
-                  light
-                  color="rgba(0,0,0,0.74)"
                   :disabled="loading"
-                  v-on="on"
-                  @click="copyNaf()"
-                  outlined
                   class="ma-3"
+                  color="rgba(0,0,0,0.74)"
+                  light
+                  outlined
+                  @click="copyNaf()"
+                  v-on="on"
                 >
-                  <v-icon small class="mr-2">fa-industry</v-icon>selection des secteurs
+                  <v-icon class="mr-2" small>fa-industry</v-icon>
+                  selection des secteurs
                 </v-btn>
               </template>
               <v-card>
-                <v-toolbar dark dense color="indigo">
+                <v-toolbar color="indigo" dark dense>
                   <v-toolbar-title>Sélectionner les secteurs d'activité</v-toolbar-title>
                 </v-toolbar>
-               <v-card-text>
-                <v-list>
-                  <v-list-item>
-                    <v-list-item-action>
-                      <v-icon
-                        style="cursor: pointer"
-                        @click="selectAllNaf()"
-                      >{{ allNextNaf ? 'fa-square-xmark' : 'fa-square-plus' }}</v-icon>
-                    </v-list-item-action>{{ !allNextNaf ? 'Tout sélectionner' : 'Tout désélectionner' }}
-                    <v-list-item-content></v-list-item-content>
-                  </v-list-item>
-                  <v-divider />
-                  <v-list-item v-for="n in naf1" :key="n.value">
-                    <v-list-item-action @click="toggleNaf(n.value)">
-                      <v-icon style="cursor: pointer;">md
-                        {{ nextNaf.includes(n.value) ?
-                        'fa-square-check' :
-                        'far fa-square'
-                        }}
-                      </v-icon>
-                    </v-list-item-action>
-                    <v-list-item-content>{{ n.text }}</v-list-item-content>
-                  </v-list-item>
-                </v-list>
-              </v-card-text>
-                <v-card-actions style>
-                  <v-spacer />
-                  <v-btn light color="error" @click="nafDialog=false">annuler</v-btn>
-                  <v-btn light color="success" @click="applyNaf(); nafDialog=false">appliquer</v-btn>
+                <v-card-text>
+                  <v-list>
+                    <v-list-item>
+                      <v-list-item-action>
+                        <v-icon
+                          style="cursor: pointer"
+                          @click="selectAllNaf()"
+                        >{{ allNextNaf ? 'fa-square-xmark' : 'fa-square-plus' }}
+                        </v-icon>
+                      </v-list-item-action>
+                      {{ !allNextNaf ? 'Tout sélectionner' : 'Vider la sélection' }}
+                      <v-list-item-content></v-list-item-content>
+                    </v-list-item>
+                    <v-divider/>
+                    <v-list-item v-for="n in naf1" :key="n.value">
+                      <v-list-item-action @click="toggleNaf(n.value)">
+                        <v-icon style="cursor: pointer;">
+                          {{
+                            nextNaf.includes(n.value) ?
+                              'fa-square-check' :
+                              'far fa-square'
+                          }}
+                        </v-icon>
+                      </v-list-item-action>
+                      <v-list-item-content>{{ n.text }}</v-list-item-content>
+                    </v-list-item>
+                  </v-list>
+                </v-card-text>
+                <v-card-actions class="pa-2 elevation-6">
+                  <v-spacer/>
+                  <v-btn color="indigo" light outlined @click="nafDialog=false">annuler</v-btn>
+                  <v-btn color="indigo" dark light @click="applyNaf(); nafDialog=false">appliquer</v-btn>
                 </v-card-actions>
               </v-card>
             </v-dialog>
           </v-flex>
-          <v-flex xs12 md4 pa-2>
+          <v-flex md4 pa-2 xs12>
             <v-subheader>Zone géographique</v-subheader>
-            <v-select :items="subzones" v-model="zone" return-object></v-select>
+            <v-select v-model="zone" :items="subzones" return-object></v-select>
           </v-flex>
-          <v-flex xs12 md4 pa-2>
+          <v-flex md4 pa-2 xs12>
             <v-subheader>Effectif minimum</v-subheader>
-            <v-combobox :items="effectifClass" v-model="effectifMin"></v-combobox>
+            <v-combobox v-model="effectifMin" :items="effectifClass"></v-combobox>
           </v-flex>
         </v-layout>
-        <v-btn type="submit" style="width: 150px" :disabled="loading || search.length < 3">
+        <v-btn :disabled="loading || search.length < 3" style="width: 150px" type="submit">
           <v-icon>fa-magnifying-glass</v-icon>
         </v-btn>
       </form>
     </div>
-    <div v-if="searched && (!loading || page !=0)" class="numbers">{{total | pluralizeResultats}}</div>
-    <PredictionWidget v-for="r in result" :key="r.siret" :prediction="r" />
+    <div v-if="searched && (!loading || page !=0)" class="numbers">{{ total | pluralizeResultats }}</div>
+    <PredictionWidget v-for="r in result" :key="r.siret" :prediction="r"/>
   </div>
 </template>
 
@@ -120,7 +127,7 @@ import PredictionWidget from '@/components/PredictionWidget.vue'
 
 export default {
   name: 'Browse',
-  components: { PredictionWidget, Toolbar },
+  components: {PredictionWidget, Toolbar},
   data() {
     return {
       search: '',
@@ -353,20 +360,24 @@ export default {
   vertical-align: middle;
   padding: 10px 10%;
 }
+
 .empty_picto {
   margin-top: 20%;
   font-size: 40px;
   margin-bottom: 40px;
 }
+
 .loaded_picto {
   visibility: hidden;
 }
+
 .loaded {
   width: 100%;
   text-align: center;
   vertical-align: middle;
   padding: 10px 10%;
 }
+
 div.numbers {
   font-size: 25px;
   width: 100%;

@@ -1,0 +1,17 @@
+.agent {
+    font-family: Oswald;
+    font-size: 30px;
+    text-align: left;
+    margin-top: 50px;
+    margin-left: 20px;
+}
+
+#empty {
+    font-size: 20px;
+    text-align: center;
+    margin-top: 50px
+}
+
+.emph {
+    color: #3D5AFE;
+}

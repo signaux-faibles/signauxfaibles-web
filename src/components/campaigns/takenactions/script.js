@@ -1,5 +1,16 @@
+import {useCampaignsStore} from "@/stores/campaigns";
+import CampaignsTakenActionsEtablissement from "@/components/campaigns/takenactions/etablissement/main.vue";
+import {useKanbanStore} from "@/stores/kanban";
+import Spinner from "@/components/Spinner.vue";
+
 export default {
   name: "CampaignsTakenActions",
+  components: {Spinner, CampaignsTakenActionsEtablissement},
+  setup() {
+    const campaigns = useCampaignsStore()
+    const kanban = useKanbanStore()
+    return {campaigns, kanban}
+  },
   mounted() {
     this.getAllActions()
     this.$bus.$on('campaign-message', this.processMessage)
@@ -7,70 +18,41 @@ export default {
   methods: {
     processMessage(message) {
       this.getAllActions()
-      this.$store.dispatch('updateCampaigns')
+      this.campaigns.getCampaigns(this.$axios)
     },
     getAllActions() {
-      this.$axios.get('/campaign/actions/taken/' + this.campaignsSelectedID).then((r) => {
+      this.$axios.get('/campaign/actions/taken/' + this.campaigns.selectedID).then((r) => {
         this.allActionsPayload = r.data
+      }).catch(() => {
+        this.allActionsPayload = {etablissements: []}
+      }).finally(() => {
+        this.loading = false
       })
-    }
+    },
+    pluriel(nb) {
+      return (nb>1)?'s':''
+    },
   },
   computed: {
     kanbanConfig() {
       return this.$store.state.kanbanConfig
     },
-    campaignsSelectedID() {
-      return this.$store.state.campaignsSelectedID
-    },
     allActions() {
-      if (this.allActionsPayload) {
-        return {
-          pending: this.allActionsPayload.etablissements.filter((e) => e.action == null),
-          take: this.allActionsPayload.etablissements.filter((e) => e.action == 'take'),
-          cancel: this.allActionsPayload.etablissements.filter((e) => e.action == 'cancel'),
-          success: this.allActionsPayload.etablissements.filter((e) => e.action == 'success')
-        }
-      }
+      return this.allActionsPayload.etablissements
+        .filter((e) => e.action == 'take' || e.action == 'success')
+        .reduce((m, e) => {
+          if (m[e.username] == undefined) {
+            m[e.username] = []
+          }
+          m[e.username].push(e)
+          return m
+        }, {})
     }
   },
   data() {
     return {
-      allActionsPayload: null,
-      takeHeaders: [
-        {
-          text: 'Raison Sociale',
-          align: 'start',
-          value: 'raisonSociale',
-        },
-        {text: 'Agent', value: 'username'},
-        {text: 'siret', value: 'siret'},
-      ],
-      successHeaders: [
-        {
-          text: 'Raison Sociale',
-          align: 'start',
-          value: 'raisonSociale',
-        },
-        {text: 'Agent', value: 'username'},
-        {text: 'siret', value: 'siret'},
-      ],
-      cancelHeaders: [
-        {
-          text: 'Raison Sociale',
-          align: 'start',
-          value: 'raisonSociale',
-        },
-        {text: 'Agent', value: 'username'},
-        {text: 'siret', value: 'siret'},
-      ],
-      pendingHeaders: [
-        {
-          text: 'Raison Sociale',
-          align: 'start',
-          value: 'raisonSociale',
-        },
-        {text: 'siret', value: 'siret'},
-      ]
+      allActionsPayload: {etablissements: []},
+      loading: true,
     }
   }
 }

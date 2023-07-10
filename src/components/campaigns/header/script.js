@@ -1,3 +1,5 @@
+import StatusLabels from "@/assets/campaignStatus.json";
+
 export default {
   name: 'CampaignsHeader',
   props: ['campaign'],

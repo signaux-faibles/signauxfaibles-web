@@ -34,7 +34,7 @@ export default {
     mounted() {
         this.campaigns.selectedID = this.urlCampaignID
         this.drawers.hideRight()
-
+        this.campaigns.getCampaigns(this.$axios)
         this.watchSSE(this.$bus)
         this.$bus.$on('campaign-message', this.updateCampaigns)
     },
@@ -48,9 +48,6 @@ export default {
         this.SSESignal.abort()
     },
     methods: {
-        updateCampaigns() {
-            this.$store.dispatch('updateCampaigns')
-        },
         async watchSSE(bus) {
             await fetchEventSource(process.env.VUE_APP_DATAPI_BASE_URL + `campaign/stream`, {
                 method: "GET",

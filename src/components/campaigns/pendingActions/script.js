@@ -2,13 +2,14 @@ import Card from "@/components/card/main.vue"
 import ScoreWidget from "@/components/ScoreWidget.vue"
 import Etablissement from "@/components/etablissement/Main.vue"
 import Entreprise from "@/components/entreprise/main.vue"
+import CampaignsPendingActionsEtablissement from "@/components/campaigns/pendingActions/etablissement/main.vue";
 import {useDialogsStore} from "@/stores/dialogs";
 import {useCampaignsStore} from "@/stores/campaigns";
+import Spinner from "@/components/Spinner.vue";
 
 export default {
   name: "CampaignsPendingCards",
-  props: ['cards'],
-  components: {Card, ScoreWidget, Etablissement, Entreprise},
+  components: {Spinner, CampaignsPendingActionsEtablissement, ScoreWidget, Etablissement, Entreprise},
   setup() {
     const dialogs = useDialogsStore()
     const campaigns = useCampaignsStore()
@@ -19,6 +20,8 @@ export default {
       dialogEntreprise: false,
       siret: null,
       siren: null,
+      cardsPayload: {summaries: []},
+      loading: true,
       pending: {
         etablissements: [],
       },
@@ -34,7 +37,13 @@ export default {
   computed: {
     campaignsSelectedID() {
       return this.campaigns.selectedID
-    }
+    },
+    cards() {
+      return this.cardsPayload.summaries.reduce((m, f) => {
+        m[f.siret] = f
+        return m
+      }, {})
+    },
   },
   methods: {
     processMessage() {
@@ -48,10 +57,8 @@ export default {
         this.pending = {
           etablissements: [],
         }
-      })
-    },
-    take(campaignID, id) {
-      this.$axios.get('/campaign/take/' + campaignID + '/' + id).then(() => {
+      }).finally(() => {
+        this.loading = false
       })
     },
     etablissements() {

@@ -3,15 +3,22 @@ import Etablissement from "@/components/etablissement/Main.vue";
 import Entreprise from "@/components/entreprise/main.vue";
 import Toolbar from "@/components/Toolbar.vue";
 import Help from "@/components/Help.vue";
-import CampaignsEtablissement from '@/components/campaigns/etablissement/main.vue'
+import CampaignsEtablissement from '@/components/campaigns/myactions/etablissement/main.vue'
+import {useCampaignsStore} from "@/stores/campaigns";
+import {useDialogsStore} from "@/stores/dialogs";
+import Spinner from "@/components/Spinner.vue";
 
 export default {
   name: "CampaignsMyActions",
-  components: {Help, Entreprise, Etablissement, Card, Toolbar, CampaignsEtablissement},
+  components: {Spinner, Help, Entreprise, Etablissement, Card, Toolbar, CampaignsEtablissement},
   props: ['cards'],
+  setup() {
+    const campaigns = useCampaignsStore()
+    return {campaigns}
+  },
   data() {
     return {
-      myActions: null,
+      myActions: {etablissements: []},
       siret: null,
       denomination: null,
       codeDepartement: null,
@@ -23,6 +30,7 @@ export default {
       successRadio: null,
       cancelDialog: false,
       cancelRadio: null,
+      loading: true,
     }
   },
   mounted() {
@@ -32,28 +40,32 @@ export default {
   methods: {
     processMessage(message) {
       this.getMyActions()
-      this.$store.dispatch('updateCampaigns')
-    },
-    showFollowCardsDialog(siret, denomination, codeDepartement) {
-      this.siret = siret
-      this.denomination = denomination
-      this.codeDepartement = codeDepartement
-      this.followCardsDialog = true
+      this.campaigns.getCampaigns(this.$axios)
     },
     getMyActions(campaignID) {
-      this.$axios.get('/campaign/actions/mine/' + this.campaignsSelectedID)
+      this.$axios.get('/campaign/actions/mine/' + this.campaigns.selectedID)
         .then((r) => {
           this.myActions = r.data
-        })
+        }).catch(() => {
+        this.myActions = {
+          etablissements: [],
+        }
+      }).finally(() => {
+        this.loading = false
+      })
     },
-  },
+  }
+  ,
   computed: {
     followCardsDialog: {
-      get() { return this.$store.state.followCardsDialog },
-      set(value) { return this.$store.dispatch('setFollowCardsDialog', value)}
-    },
-    campaignsSelectedID() {
-      return this.$store.state.campaignsSelectedID
+      get() {
+        return this.$store.state.followCardsDialog
+      }
+      ,
+      set(value) {
+        return this.$store.dispatch('setFollowCardsDialog', value)
+      }
     }
+    ,
   }
 }

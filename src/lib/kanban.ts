@@ -27,7 +27,8 @@ interface KanbanMember {
     active: boolean,
 }
 
-interface KanbanUser {
+export interface KanbanUser {
+    id: string | null,
     username: string,
     fullname: string,
     active: boolean,
@@ -57,3 +58,4 @@ export function label(kanbanConfig: KanbanConfig, boardID: string, labelID: stri
     const board: KanbanBoard | undefined = kanbanConfig.boards.get(boardID)
     return (board)?board.labels.get(labelID):undefined
 }
+
