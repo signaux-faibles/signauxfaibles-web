@@ -26,7 +26,7 @@
       </v-toolbar>
       <v-list class="pt-0" dense>
         <v-divider></v-divider>
-        <v-list-item to="/">
+         <v-list-item to="/">
           <v-list-item-action>
             <v-icon>fa-magnifying-glass</v-icon>
           </v-list-item-action>
@@ -78,6 +78,16 @@
             <v-list-item-title>Guide utilisateur et FAQ</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+        <v-list-item @click="dialogs.showExportStats">
+          <v-list-item-action>
+            <v-icon>
+              fa-file-excel
+            </v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Extraction des statistiques</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
         <v-divider></v-divider>
         <v-list-item @click="logout()">
           <v-list-item-action>
@@ -104,6 +114,7 @@
 import News from '@/components/News.vue'
 import {useDrawersStore} from "@/stores/drawers";
 import {useCampaignsStore} from "@/stores/campaigns";
+import {useDialogsStore} from "@/stores/dialogs";
 
 export default {
   components: {News},
@@ -115,7 +126,8 @@ export default {
   setup() {
     const drawers = useDrawersStore()
     const campaigns = useCampaignsStore()
-    return {drawers, campaigns}
+    const dialogs = useDialogsStore()
+    return {drawers, campaigns, dialogs}
   },
   mounted() {
     this.show = true
