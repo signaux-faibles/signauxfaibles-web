@@ -3,6 +3,7 @@
     <DialogEtablissement/>
     <DialogEntreprise/>
     <DialogCardEditor/>
+    <DialogExportStats/>
   </div>
 </template>
 

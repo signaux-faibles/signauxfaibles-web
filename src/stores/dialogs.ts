@@ -16,6 +16,9 @@ interface dialogStore {
   cardEditorDenomination: string | null,
   cardEditorCodeDepartement: string | null,
   cardEditorSiret: string | null,
+  exportStats: boolean,
+  exportStatsRangeStart: Date | null,
+  exportStatsRangeEnd: Date | null,
 }
 
 export const useDialogsStore = defineStore('dialogs', {
@@ -35,6 +38,9 @@ export const useDialogsStore = defineStore('dialogs', {
     cardEditorDenomination: null,
     cardEditorCodeDepartement: null,
     cardEditorSiret: null,
+    exportStats: false,
+    exportStatsRangeStart: null,
+    exportStatsRangeEnd: null,
   }),
   actions: {
     showEtablissement(siret: string) {
@@ -81,6 +87,12 @@ export const useDialogsStore = defineStore('dialogs', {
       this.cardEditorDenomination = null
       this.cardEditorCampaignEtablissementID = null
       this.cardEditor = false
+    },
+    showExportStats() {
+      this.exportStats = true
+    },
+    hideExportStats() {
+      this.exportStats = false
     }
   },
 })
