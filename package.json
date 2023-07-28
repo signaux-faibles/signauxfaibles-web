@@ -10,7 +10,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "@babel/core": "^7.4.3",
+    "@babel/core": "^7.22.9",
     "@dsb-norge/vue-keycloak-js": "^1.3.2",
     "@microsoft/fetch-event-source": "^2.0.1",
     "@toast-ui/vue-editor": "^3.2.3",
@@ -19,7 +19,7 @@
     "apexcharts": "^3.37.1",
     "axios": "^0.26.0",
     "core-js": "^3.8.3",
-    "filesize": "^4.1.2",
+    "filesize": "^10.0.8",
     "identicon.js": "^2.3.3",
     "jest": "^27.1.0",
     "js-md5": "^0.7.3",
@@ -29,7 +29,7 @@
     "pinia": "^2.1.4",
     "pinia-plugin-persistedstate": "^3.1.0",
     "sass": "~1.64.1",
-    "sass-loader": "12.6.0",
+    "sass-loader": "13.3.2",
     "uuid": "^3.3.3",
     "vue": "^2.6.10",
     "vue-apexcharts": "^1.5.0",
