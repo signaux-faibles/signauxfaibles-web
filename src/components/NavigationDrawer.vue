@@ -58,7 +58,7 @@
             <v-list-item-title>Suivi d'établissements</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item v-if="roles.includes('wekan')" :href="wekan_url" target="_blank">
+        <v-list-item v-if="roles.includes('wekan') && kanban.visibleWekan" :href="wekan_url" target="_blank">
           <v-list-item-action>
             <v-icon>fab fa-trello</v-icon>
           </v-list-item-action>
@@ -104,6 +104,7 @@
 import News from '@/components/News.vue'
 import {useDrawersStore} from "@/stores/drawers";
 import {useCampaignsStore} from "@/stores/campaigns";
+import {useKanbanStore} from "@/stores/kanban";
 
 export default {
   components: {News},
@@ -115,7 +116,8 @@ export default {
   setup() {
     const drawers = useDrawersStore()
     const campaigns = useCampaignsStore()
-    return {drawers, campaigns}
+    const kanban = useKanbanStore()
+    return {drawers, campaigns, kanban}
   },
   mounted() {
     this.show = true
