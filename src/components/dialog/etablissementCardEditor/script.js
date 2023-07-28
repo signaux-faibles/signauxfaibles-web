@@ -3,7 +3,7 @@ import Help from "@/components/Help.vue";
 import FollowCardEditor from "@/components/follow/cardEditor/main.vue";
 
 export default {
-    name: 'DialogCardEditor',
+    name: 'DialogEtablissementCardEditor',
     components: {FollowCardEditor, Help},
     setup() {
         const dialogs = useDialogsStore()

@@ -1,10 +1,10 @@
 <template>
   <div style="background-color: #fff;">
     <Editor
-      v-if="dialogs.cardEditor"
+      v-if="dialogs.campaignCardEditor"
       ref="editor"
       :options="options"
-      :initialValue="dialogs.cardEditorDescription"
+      :initialValue="dialogs.campaignCardEditorDescription"
       initialEditType="wysiwyg"
       style="height: 70vh; width: 100%"/>
     <v-card class="elevation-3" style="display: flex; justify-content: right; width: 100%">
