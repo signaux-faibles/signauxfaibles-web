@@ -20,7 +20,14 @@
             </tr>
             </thead>
             <tbody>
-            <FollowSummary onMouseOver="this.style.cursor='pointer'" v-for="card in cards" :key="card.id" :card="card" :denomination="denomination"/>
+            <FollowSummary
+              onMouseOver="this.style.cursor='pointer'"
+              v-for="card in cards" :key="card.id"
+              :card="card"
+              :denomination="denomination"
+              :siret="siret"
+              :codeDepartement="codeDepartement"
+            />
             </tbody>
           </v-simple-table>
 
@@ -39,7 +46,12 @@
           </div>
         </v-flex>
         <v-flex md6 xs12 v-if="cards.length>0">
-          <FollowCardViewer v-if="currentCard" :card="currentCard" :denomination="denomination"/>
+          <FollowCardViewer
+            v-if="currentCard"
+            :card="currentCard"
+            :siret="siret"
+            :codeDepartement="codeDepartement"
+            :denomination="denomination"/>
         </v-flex>
 
       </v-layout>

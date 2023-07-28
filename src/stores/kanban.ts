@@ -1,4 +1,4 @@
-import {defineStore} from 'pinia'
+import {defineStore,acceptHMRUpdate} from 'pinia'
 import {AxiosInstance} from "axios";
 import {Store} from 'vuex'
 import {KanbanConfig, KanbanUser} from "@/lib/kanban";
@@ -32,15 +32,10 @@ export const useKanbanStore = defineStore('kanban', {
         return username as string
       }
     },
-  //   users(): any {
-  //     if (this.config.users) {
-  //       const users: any = Object.entries(this.config.users)
-  //       return users.reduce((m: any, [id, user]: [any, any]) => {
-  //         user.id = id
-  //         m[user.username] = user
-  //         return m
-  //       }, {})
-  //     }
-  //   }
+    visibleWekan(): boolean {
+      const visibleWekanRegExp = new RegExp(process.env.VUE_APP_WEKAN_VISIBILITY_REGEXP)
+      return  Object.values(this.config.boards || {}).findIndex((b: any) => visibleWekanRegExp.exec(b.slug)) != -1
+    }
   }
 })
+

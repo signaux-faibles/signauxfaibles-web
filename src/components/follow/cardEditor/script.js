@@ -12,14 +12,14 @@ export default {
   methods: {
     saveCard() {
       const description = this.$refs.editor.invoke('getMarkdown')
-      if (this.dialogs.cardEditorDescription == description) {
+      if (this.dialogs.campaignCardEditorDescription == description) {
         this.dialogs.hideCardEditor()
         return
       }
 
       const params = {
         description: description,
-        campaignEtablissementID: this.dialogs.cardEditorCampaignEtablissementID,
+        campaignEtablissementID: this.dialogs.campaignCardEditorCampaignEtablissementID,
       }
 
       this.$axios.post("/campaign/upsertcard", params)
@@ -35,7 +35,7 @@ export default {
       return {
         minHeight: '400px',
         language: 'fr',
-        initialValue: this.dialogs.cardEditorDescription,
+        initialValue: this.dialogs.campaignCardEditorDescription,
         useCommandShortcut: true,
         usageStatistics: false,
         hideModeSwitch: true,
