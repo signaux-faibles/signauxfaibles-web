@@ -68,6 +68,6 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: ./build-container
-          push: true
+          push: ${{ github.actor != 'dependabot[bot]' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
