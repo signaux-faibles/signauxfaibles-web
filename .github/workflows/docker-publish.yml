@@ -65,6 +65,7 @@ jobs:
             suffix=-${{ matrix.env }}
 
       - name: Build and push Docker image
+        if: ${{ matrix.env != 'production' }} ||  ${{ github.event_name != 'pull_request' }}
         uses: docker/build-push-action@v4
         with:
           context: ./build-container

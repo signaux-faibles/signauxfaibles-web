@@ -78,7 +78,7 @@
             <v-list-item-title>Guide utilisateur et FAQ</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item @click="dialogs.showExportStats">
+        <v-list-item v-if="roles.includes('stats')" @click="dialogs.showExportStats">
           <v-list-item-action>
             <v-icon>
               fa-file-excel
