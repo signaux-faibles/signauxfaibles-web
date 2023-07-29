@@ -82,17 +82,11 @@ export const useDialogsStore = defineStore('dialogs', {
       this.campaignCardEditor = true
     },
     hideCardEditor() {
-      this.campaignCardEditorSiret = null
-      this.campaignCardEditorCodeDepartement = null
-      this.capmaignCardEditorDenomination = null
-      this.campaignCardEditorCampaignEtablissementID = null
-      this.campaignCardEditor = false
-    },
-    showExportStats() {
-      this.exportStats = true
-    },
-    hideExportStats() {
-      this.exportStats = false
+      this.cardEditorSiret = null
+      this.cardEditorCodeDepartement = null
+      this.cardEditorDenomination = null
+      this.cardEditorCampaignEtablissementID = null
+      this.cardEditor = false
     }
   },
 })
