@@ -88,6 +88,16 @@
             <v-list-item-title>Extraction des statistiques</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+        <v-list-item @click="dialogs.showExportStats">
+          <v-list-item-action>
+            <v-icon>
+              fa-file-excel
+            </v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Extraction des statistiques</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
         <v-divider></v-divider>
         <v-list-item @click="logout()">
           <v-list-item-action>
