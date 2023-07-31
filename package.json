@@ -35,7 +35,7 @@
     "vue-apexcharts": "^1.5.0",
     "vue-class-component": "^7.0.2",
     "vue-mapbox": "^0.4.1",
-    "vue-matomo": "^3.14.0-0",
+    "vue-matomo": "^4.2.0",
     "vue-native-websocket": "^2.0.13",
     "vue-property-decorator": "^8.1.0",
     "vue-router": "^3.0.3",
