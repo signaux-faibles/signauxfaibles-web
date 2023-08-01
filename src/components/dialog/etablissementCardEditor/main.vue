@@ -1,14 +1,14 @@
 <template>
   <v-dialog
     persistent
-    v-model="dialogs.campaignCardEditor"
+    v-model="dialogs.etablissementCardEditor"
   >
     <v-toolbar
       dark
       color='indigo'>
       <v-toolbar-title class="localtoolbar">
-        Informations partagées avec les membres de la campagne – {{ dialogs.capmaignCardEditorDenomination }}
-        ({{ dialogs.campaignCardEditorSiret }})
+        Fiche de synthèse – {{ dialogs.etablissementCardEditorDenomination }}
+        ({{ dialogs.etablissementCardEditorSiret }})
       </v-toolbar-title>
       <v-spacer/>
       <Help titre="Fiches de synthèse">
@@ -18,7 +18,7 @@
         </template>
       </Help>
     </v-toolbar>
-    <FollowCardEditor/>
+    <EtablissementCardEditor/>
   </v-dialog>
 </template>
 

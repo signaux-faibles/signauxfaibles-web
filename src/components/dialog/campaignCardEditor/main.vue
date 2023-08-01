@@ -18,7 +18,7 @@
         </template>
       </Help>
     </v-toolbar>
-    <FollowCardEditor/>
+    <CampaignCardEditor/>
   </v-dialog>
 </template>
 

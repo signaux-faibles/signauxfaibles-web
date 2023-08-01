@@ -4,7 +4,7 @@
       <h3>{{ card.boardTitle }}</h3>
     </td>
     <td>
-      <v-chip v-if="card.listTitle" class="chip ml-3" color="indigo" outlined small>
+      <v-chip v-if="card.listTitle" class="chip ml-3" color="indigo" style="background-color: white !important" outlined small>
         {{ card.archived ? "Archivée" : card.listTitle }}
       </v-chip>
     </td>
@@ -15,12 +15,33 @@
       {{ lastActivityDate }}
     </td>
     <td>
-      <v-icon color="green" small v-if="this.card.userIsBoardMember">
-        fa-eye
-      </v-icon>
-      <v-icon color="red accent-2" small v-else>
-        fa-eye-slash
-      </v-icon>
+      <v-tooltip bottom v-if="this.card.userIsBoardMember">
+        <template bottom v-slot:activator="{ on, attrs }">
+          <v-icon
+            color="indigo"
+            small
+            v-bind="attrs"
+            v-on="on"
+          >
+            fa-eye
+          </v-icon>
+        </template>
+        <span>vos permissions vous permettent d'accéder au contenu de cette fiche</span>
+      </v-tooltip>
+
+      <v-tooltip bottom v-else>
+        <template v-slot:activator="{ on, attrs }">
+          <v-icon
+            color="grey lighten-1"
+            small
+            v-bind="attrs"
+            v-on="on"
+          >
+            fa-lock
+          </v-icon>
+        </template>
+        <span>vos permissions ne vous permettent pas d'accéder au contenu de cette fiche</span>
+      </v-tooltip>
     </td>
 
   </tr>

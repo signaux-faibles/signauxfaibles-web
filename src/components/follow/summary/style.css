@@ -1,19 +1,40 @@
-.selectedCard {
-    background-color: #dddddd;
+tr.selectedCard td {
+    background-color: #d4dfff !important;
 }
 
-tr.selectedCard:hover {
-    background-color: #dddddd;
-}
-
-tr {
-    margin: 15px;
-}
-
-tr:hover {
-    border: none;
+tr:hover td {
+    background-color: #e7ebff;
 }
 
 td {
-    border: none;
+    padding: 10px;
+}
+
+tr.selectedCard td:first-child {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-left: 1px #3f51b5 solid;
+}
+
+tr.selectedCard td:last-child {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-right: 1px #3f51b5 solid;
+}
+
+tr.selectedCard td { border-top: 1px indigo solid; }
+tr.selectedCard td { border-bottom: 1px indigo solid;; }
+
+tr td { border-top: 1px transparent solid; }
+tr td { border-bottom: 1px transparent solid; }
+
+tr td:first-child {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-left: 1px transparent solid;
+}
+tr td:last-child {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-right: 1px transparent solid;
 }

@@ -36,7 +36,7 @@ export default {
         this.drawers.hideRight()
         this.campaigns.selectedID = this.urlCampaignID
         this.campaigns.getCampaigns(this.$axios)
-        this.$bus.$on('campaign-message', this.campaigns.getCampaigns(this.$axios))
+        this.$bus.$on('campaign-message', () => {this.campaigns.getCampaigns(this.$axios)})
     },
     props: ['urlCampaignID'],
     watch: {

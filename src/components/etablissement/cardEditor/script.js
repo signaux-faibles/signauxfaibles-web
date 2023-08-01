@@ -13,18 +13,19 @@ export default {
     saveCard() {
       const description = this.$refs.editor.invoke('getMarkdown')
       if (this.dialogs.campaignCardEditorDescription == description) {
-        this.dialogs.hideCardEditor()
+        this.dialogs.hideEtablissementCardEditor()
         return
       }
 
       const params = {
         description: description,
-        campaignEtablissementID: this.dialogs.campaignCardEditorCampaignEtablissementID,
+        cardID: this.dialogs.etablissementCardEditorCardID,
       }
 
-      this.$axios.post("/campaign/upsertcard", params)
+      this.$axios.post("/kanban/updateCard", params)
         .then(() => {
-          this.dialogs.hideCardEditor()
+          this.dialogs.hideEtablissementCardEditor()
+          this.$bus.$emit("create-card")
         }).catch(e => {
         this.createCardFailedError = "Un problème est survenu lors de l'enregistrement."
       })

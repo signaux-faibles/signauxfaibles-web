@@ -18,8 +18,8 @@ export default {
     successLabels() {
       return StatusLabels.success
     },
-    showCardEditor() {
-      this.dialogs.showCardEditor(
+    showCampaignCardEditor() {
+      this.dialogs.showCampaignCardEditor(
         this.etablissement.siret,
         this.etablissement.codeDepartement,
         this.etablissement.raisonSociale,

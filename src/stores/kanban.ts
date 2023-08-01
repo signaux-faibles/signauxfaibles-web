@@ -1,4 +1,4 @@
-import {defineStore,acceptHMRUpdate} from 'pinia'
+import {defineStore} from 'pinia'
 import {AxiosInstance} from "axios";
 import {Store} from 'vuex'
 import {KanbanConfig, KanbanUser} from "@/lib/kanban";

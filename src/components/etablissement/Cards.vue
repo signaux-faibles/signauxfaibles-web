@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import FollowCards from '@/components/follow/cards/main.vue'
+import FollowCards from '@/components/etablissement/cards/main.vue'
 
 export default {
   name: 'Cards',

@@ -12,8 +12,8 @@ export default {
     return { dialogs }
   },
   methods: {
-    showCardEditor() {
-      this.dialogs.showCardEditor(
+    showCampaignCardEditor() {
+      this.dialogs.showCampaignCardEditor(
         this.etablissement.siret,
         this.etablissement.codeDepartement,
         this.etablissement.raisonSociale,
