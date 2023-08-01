@@ -10,12 +10,18 @@ interface dialogStore {
   cardsSiret: string | null
   cardsCodeDepartement: string | null,
   cardsDenomination: string | null,
-  cardEditor: boolean,
-  cardEditorCampaignEtablissementID: string | null,
-  cardEditorDescription: string | null,
-  cardEditorDenomination: string | null,
-  cardEditorCodeDepartement: string | null,
-  cardEditorSiret: string | null,
+  campaignCardEditor: boolean,
+  campaignCardEditorCampaignEtablissementID: string | null,
+  campaignCardEditorDescription: string | null,
+  capmaignCardEditorDenomination: string | null,
+  campaignCardEditorCodeDepartement: string | null,
+  campaignCardEditorSiret: string | null,
+  etablissementCardEditor: boolean,
+  etablissementCardEditorCardID: string | null,
+  etablissementCardEditorDescription: string | null,
+  etablissementCardEditorDenomination: string | null,
+  etablissementCardEditorCodeDepartement: string | null,
+  etablissementCardEditorSiret: string | null,
   exportStats: boolean,
   exportStatsRangeStart: Date | null,
   exportStatsRangeEnd: Date | null,
@@ -32,12 +38,18 @@ export const useDialogsStore = defineStore('dialogs', {
     cardsSiret: null,
     cardsCodeDepartement: null,
     cardsDenomination: null,
-    cardEditor: false,
-    cardEditorCampaignEtablissementID: null,
-    cardEditorDescription: null,
-    cardEditorDenomination: null,
-    cardEditorCodeDepartement: null,
-    cardEditorSiret: null,
+    campaignCardEditor: false,
+    campaignCardEditorCampaignEtablissementID: null,
+    campaignCardEditorDescription: null,
+    capmaignCardEditorDenomination: null,
+    campaignCardEditorCodeDepartement: null,
+    campaignCardEditorSiret: null,
+    etablissementCardEditor: false,
+    etablissementCardEditorCardID: null,
+    etablissementCardEditorDescription: null,
+    etablissementCardEditorDenomination: null,
+    etablissementCardEditorCodeDepartement: null,
+    etablissementCardEditorSiret: null,
     exportStats: false,
     exportStatsRangeStart: null,
     exportStatsRangeEnd: null,
@@ -73,20 +85,35 @@ export const useDialogsStore = defineStore('dialogs', {
       this.cardsDenomination = null
       this.cards = false
     },
-    showCardEditor(siret: string, codeDepartement: string, denomination: string, id: string, description: string) {
-      this.cardEditorSiret = siret
-      this.cardEditorCodeDepartement = codeDepartement
-      this.cardEditorDenomination = denomination
-      this.cardEditorCampaignEtablissementID = id
-      this.cardEditorDescription = description
-      this.cardEditor = true
+    showCampaignCardEditor(siret: string, codeDepartement: string, denomination: string, campaignEtablissementID: string, description: string) {
+      this.campaignCardEditorSiret = siret
+      this.campaignCardEditorCodeDepartement = codeDepartement
+      this.capmaignCardEditorDenomination = denomination
+      this.campaignCardEditorCampaignEtablissementID = campaignEtablissementID
+      this.campaignCardEditorDescription = description
+      this.campaignCardEditor = true
     },
-    hideCardEditor() {
-      this.cardEditorSiret = null
-      this.cardEditorCodeDepartement = null
-      this.cardEditorDenomination = null
-      this.cardEditorCampaignEtablissementID = null
-      this.cardEditor = false
+    hideCampaignCardEditor() {
+      this.campaignCardEditor = false
+      this.campaignCardEditorSiret = null
+      this.campaignCardEditorCodeDepartement = null
+      this.capmaignCardEditorDenomination = null
+      this.campaignCardEditorCampaignEtablissementID = null
+    },
+    showEtablissementCardEditor(siret: string, codeDepartement: string, denomination: string, cardID: string, description: string) {
+      this.etablissementCardEditorSiret = siret
+      this.etablissementCardEditorCodeDepartement = codeDepartement
+      this.etablissementCardEditorDenomination = denomination
+      this.etablissementCardEditorCardID = cardID
+      this.etablissementCardEditorDescription = description
+      this.etablissementCardEditor = true
+    },
+    hideEtablissementCardEditor() {
+      this.etablissementCardEditor = false
+      this.etablissementCardEditorSiret = null
+      this.etablissementCardEditorCodeDepartement = null
+      this.etablissementCardEditorDenomination = null
+      this.etablissementCardEditorCardID = null
     },
     showExportStats() {
       this.exportStats = true

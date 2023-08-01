@@ -30,7 +30,7 @@
           color="indigo"
           outlined
           style="text-transform: none"
-          @click="showCardEditor">
+          @click="showCampaignCardEditor">
           <v-icon class="mr-2" color="indigo" small>fa-pen</v-icon>
           <span v-if="etablissement.cardID">
             Informations partagées
@@ -41,13 +41,12 @@
         </v-btn>
       </div>
       <div class="mr-4">
-
-        <v-btn big color="indigo accent-3" style="text-transform: none" dark @click="showCancel(etablissement.id)">
+        <v-btn big color="indigo" style="text-transform: none" dark @click="showCancel(etablissement.id)">
           Je ne contacterai pas
         </v-btn>
       </div>
       <div class="mr-4">
-        <v-btn color="indigo" style="text-transform: none;" dark @click="showSuccess(etablissement.id)">
+        <v-btn color="green darken-2" style="text-transform: none;" dark @click="showSuccess(etablissement.id)">
           J'ai contacté
         </v-btn>
       </div>
@@ -58,7 +57,7 @@
           </v-toolbar>
           <v-card>
             <v-card-text>
-              Vous avez réussi à contacter cette entreprise, quel issue se dessine ?
+              Vous avez réussi à contacter cette entreprise, quelle issue se dessine ?
               <v-radio-group v-model="successRadio">
                 <v-radio v-for="(label, value) in successLabels" :key="value" :label="label" :value="value"/>
               </v-radio-group>

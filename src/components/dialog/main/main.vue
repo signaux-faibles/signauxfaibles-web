@@ -2,7 +2,8 @@
   <div>
     <DialogEtablissement/>
     <DialogEntreprise/>
-    <DialogCardEditor/>
+    <DialogCampaignCardEditor/>
+    <DialogEtablissementCardEditor/>
     <DialogExportStats/>
   </div>
 </template>

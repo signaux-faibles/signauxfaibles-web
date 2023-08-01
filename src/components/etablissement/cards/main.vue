@@ -10,7 +10,7 @@
         </v-flex>
 
         <v-flex :md6="cards.length>0" :md12="cards.length==0">
-          <v-simple-table v-if="cards.length>0" class="pr-4">
+          <table v-if="cards.length>0" class="pr-4">
             <thead>
             <tr>
               <td></td>
@@ -20,15 +20,23 @@
             </tr>
             </thead>
             <tbody>
-            <FollowSummary onMouseOver="this.style.cursor='pointer'" v-for="card in cards" :key="card.id" :card="card" :denomination="denomination"/>
+            <FollowSummary
+              onMouseOver="this.style.cursor='pointer'"
+              v-for="card in cards" :key="card.id"
+              :card="card"
+              :denomination="denomination"
+              :siret="siret"
+              :codeDepartement="codeDepartement"
+            />
             </tbody>
-          </v-simple-table>
+          </table>
 
 
           <div v-if="canCreateCard && followed" style="margin-right: auto; margin-left: auto; text-align: center">
             <v-btn v-if="followed && canCreateCard" class="pa-2 mt-5" color="indigo" outlined
+                   style="text-transform: none; margin-left: auto; margin-right: auto"
                    @click="showCreateCardDialog()">
-              rédiger une nouvelle fiche de synthèse<br/>
+              Rédiger une nouvelle fiche de synthèse<br/>
             </v-btn>
           </div>
           <div v-if="canCreateCard && !followed">
@@ -39,7 +47,12 @@
           </div>
         </v-flex>
         <v-flex md6 xs12 v-if="cards.length>0">
-          <FollowCardViewer v-if="currentCard" :card="currentCard" :denomination="denomination"/>
+          <FollowCardViewer
+            v-if="currentCard"
+            :card="currentCard"
+            :siret="siret"
+            :codeDepartement="codeDepartement"
+            :denomination="denomination"/>
         </v-flex>
 
       </v-layout>
@@ -47,5 +60,14 @@
   </div>
 </template>
 
+<style scoped>
+  table {
+    border-spacing: 0;
+    border-style: hidden;
+    width: 100%;
+  }
+  td {
+    padding : 10px;
+  }
+</style>
 <script src="./script.js"/>
-<style src="./style.css"/>

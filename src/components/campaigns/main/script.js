@@ -32,11 +32,11 @@ export default {
         return {drawers, campaigns}
     },
     mounted() {
-        this.campaigns.selectedID = this.urlCampaignID
-        this.drawers.hideRight()
-        this.campaigns.getCampaigns(this.$axios)
         this.watchSSE(this.$bus)
-        this.$bus.$on('campaign-message', this.updateCampaigns)
+        this.drawers.hideRight()
+        this.campaigns.selectedID = this.urlCampaignID
+        this.campaigns.getCampaigns(this.$axios)
+        this.$bus.$on('campaign-message', () => {this.campaigns.getCampaigns(this.$axios)})
     },
     props: ['urlCampaignID'],
     watch: {

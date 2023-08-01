@@ -5,7 +5,7 @@
         class="toolbar"
         fixed
         height="35px"
-        style="color: #fff; font-size: 22px; z-index: 50;"
+        style="position: fixed; top: 0px; left: 0px; width: 100%; color: #fff; font-size: 22px; z-index: 50;"
       >
         <v-spacer/>
         Fiche Entreprise

@@ -31,7 +31,7 @@
           color="indigo"
           outlined
           style="text-transform: none"
-          @click="showCardEditor">
+          @click="showCampaignCardEditor">
           <v-icon class="mr-2" color="indigo" small>fa-pen</v-icon>
           <span v-if="etablissement.cardID">
             Informations partagées

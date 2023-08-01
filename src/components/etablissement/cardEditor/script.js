@@ -12,19 +12,20 @@ export default {
   methods: {
     saveCard() {
       const description = this.$refs.editor.invoke('getMarkdown')
-      if (this.dialogs.cardEditorDescription == description) {
-        this.dialogs.hideCardEditor()
+      if (this.dialogs.campaignCardEditorDescription == description) {
+        this.dialogs.hideEtablissementCardEditor()
         return
       }
 
       const params = {
         description: description,
-        campaignEtablissementID: this.dialogs.cardEditorCampaignEtablissementID,
+        cardID: this.dialogs.etablissementCardEditorCardID,
       }
 
-      this.$axios.post("/campaign/upsertcard", params)
+      this.$axios.post("/kanban/updateCard", params)
         .then(() => {
-          this.dialogs.hideCardEditor()
+          this.dialogs.hideEtablissementCardEditor()
+          this.$bus.$emit("create-card")
         }).catch(e => {
         this.createCardFailedError = "Un problème est survenu lors de l'enregistrement."
       })
@@ -35,7 +36,7 @@ export default {
       return {
         minHeight: '400px',
         language: 'fr',
-        initialValue: this.dialogs.cardEditorDescription,
+        initialValue: this.dialogs.campaignCardEditorDescription,
         useCommandShortcut: true,
         usageStatistics: false,
         hideModeSwitch: true,

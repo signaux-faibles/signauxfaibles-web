@@ -34,12 +34,20 @@ export default {
     },
     getCardPayloads() {
       this.$axios.get(`/kanban/cards/${this.siret}`).then((response) => {
-        this.cards = response.data || []
-        this.cards.sort((c1, c2) => ((new Date(c1.lastActivity)).getTime() > (new Date(c2.lastActivity)).getTime())?-1:1 )
-        if (this.cards.length > 0) {
-          this.editCardID = this.cards[0].id
+        const cards = response.data || []
+        if (cards.length > 0) {
+          cards.sort(this.sortCards)
+          this.cards = cards
+          this.editCardID = cards[0].id
         }
       })
+    },
+    sortCards(c1, c2) {
+      const member1 = (c1.userIsBoardMember)?1:0
+      const member2 = (c2.userIsBoardMember)?1:0
+      const time1 = (new Date(c1.lastActivity)).getTime()
+      const time2 = (new Date(c2.lastActivity)).getTime()
+      return (member2 - member1) || (time2 - time1)
     },
     showCreateCardDialog() {
       if (this.canCreateCard) {
