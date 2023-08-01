@@ -4,11 +4,16 @@ import FollowCardEditor from "@/components/follow/cardViewer/main.vue";
 import '@toast-ui/editor/dist/toastui-editor.css'
 import {Editor} from '@toast-ui/vue-editor'
 import '@toast-ui/editor/dist/i18n/fr-fr'
+import {useFollowCardsStore} from "@/stores/followCards";
 
 export default {
   name: 'FollowSummary',
   props: ['card', 'denomination'],
   components: {FollowCardEditor, Help, Editor},
+  setup() {
+    const followCards = useFollowCardsStore()
+    return { followCards }
+  },
   data() {
     return {
       cardMenu: false
@@ -18,10 +23,10 @@ export default {
   },
   methods: {
     trClass() {
-      return (this.card.id == this.editCardID)?"selectedCard":null
+      return (this.card.id == this.followCards.currentCardID)?"selectedCard":null
     },
     setEditCardID() {
-      this.editCardID = this.card.id
+      this.followCards.currentCardID = this.card.id
     },
     closeCardMenu() {
       this.cardMenu = false
@@ -33,14 +38,6 @@ export default {
     },
   },
   computed: {
-    editCardID: {
-      get() {
-        return this.$store.state.editCardID
-      },
-      set(value) {
-        this.$store.dispatch('setEditCardID', value)
-      }
-    },
     editorOptions() {
       return {
         minHeight: '300px',

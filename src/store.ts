@@ -125,13 +125,9 @@ const sessionStore = new Vuex.Store({
     createCardProblems: [],
     createCardActions: [],
     createCardLabels: [],
-    editCardID: null,
     followCardsDialog: false,
   },
   mutations: {
-    setEditCardID(state, value) {
-      state.editCardID = value
-    },
     setNewsDialog(state, value) {
       state.newsDialog = value
     },
@@ -190,9 +186,6 @@ const sessionStore = new Vuex.Store({
     },
   },
   actions: {
-    setEditCardID(context, value) {
-      context.commit('setEditCardID', value)
-    },
     setCreateCardSwimlaneID(context, value) {
       context.commit('setCreateCardSwimlaneID', value)
     },
@@ -236,9 +229,6 @@ const sessionStore = new Vuex.Store({
       }))
     },
     updateKanbanConfig(context, config) {
-      // axiosClient.get('/kanban/config').then((response) => {
-      //   context.commit('updateKanbanConfig', response.data)
-      // }).catch()
       context.commit('updateKanbanConfig', config)
     },
     setFollowCardsDialog(context, val) {
