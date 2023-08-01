@@ -34,10 +34,11 @@ export default {
     },
     getCardPayloads() {
       this.$axios.get(`/kanban/cards/${this.siret}`).then((response) => {
-        this.cards = response.data || []
-        if (this.cards.length > 0) {
-          this.cards.sort(this.sortCards)
-          this.editCardID = this.cards[0].id
+        const cards = response.data || []
+        if (cards.length > 0) {
+          cards.sort(this.sortCards)
+          this.cards = cards
+          this.editCardID = cards[0].id
         }
       })
     },
