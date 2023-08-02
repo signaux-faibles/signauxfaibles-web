@@ -1,5 +1,8 @@
 <template>
-  <tr :class="trClass()" @click="setEditCardID">
+  <tr
+    :class="trClass()"
+    @click="$parent.setCurrentCardID(card.id)"
+  >
     <td>
       <h3>{{ card.boardTitle }}</h3>
     </td>
