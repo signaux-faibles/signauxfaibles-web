@@ -175,8 +175,12 @@
             </v-layout>
           </v-flex>
           <v-flex md12 xs12>
-            <Cards v-if="wekanUser" :codeDepartement="sirene.codeDepartement" :denomination="denomination"
-                   :siret="siret"/>
+            <EtablissementCards
+              v-if="wekanUser"
+              :codeDepartement="sirene.codeDepartement"
+              :denomination="denomination"
+              :siret="siret"
+            />
           </v-flex>
 
           <v-flex class="pr-1" md6 style="min-height: 200px" xs12>
@@ -217,7 +221,7 @@ import Historique from '@/components/etablissement/Score/Historique.vue'
 import axios from 'axios'
 import fr from 'apexcharts/dist/locales/fr.json'
 import libellesProcols from '@/assets/libelles_procols.json'
-import Cards from '@/components/etablissement/Cards.vue'
+import EtablissementCards from '@/components/etablissement/cards/main.vue'
 import FollowDialog from '@/components/etablissement/FollowDialog.vue'
 import UnfollowDialog from '@/components/etablissement/UnfollowDialog.vue'
 import CreateCardDialog from '@/components/follow/createcard/main.vue'
@@ -231,7 +235,7 @@ export default {
   components: {
     Effectif, Urssaf, Help, Identite, Map,
     EtablissementEntreprise, Entreprise, Historique,
-    Cards, FollowDialog, UnfollowDialog, CreateCardDialog,
+    EtablissementCards, FollowDialog, UnfollowDialog, CreateCardDialog,
     Spinner
   },
   setup() {

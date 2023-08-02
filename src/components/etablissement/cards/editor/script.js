@@ -3,12 +3,13 @@ import {Editor} from '@toast-ui/vue-editor';
 import {useDialogsStore} from "@/stores/dialogs";
 
 export default {
-  name: "FollowCardEditor",
+  name: "EtablissementCardsEditor",
   components: {Editor},
   setup() {
     const dialogs = useDialogsStore()
     return {dialogs}
   },
+  props: ['siret'],
   methods: {
     saveCard() {
       const description = this.$refs.editor.invoke('getMarkdown')
@@ -25,7 +26,7 @@ export default {
       this.$axios.post("/kanban/updateCard", params)
         .then(() => {
           this.dialogs.hideEtablissementCardEditor()
-          this.$bus.$emit("create-card")
+          this.$bus.$emit('edit-card')
         }).catch(e => {
         this.createCardFailedError = "Un problème est survenu lors de l'enregistrement."
       })

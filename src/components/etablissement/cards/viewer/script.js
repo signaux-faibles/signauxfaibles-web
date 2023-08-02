@@ -1,25 +1,35 @@
 import FollowLabel from '@/components/follow/label/main.vue'
-import MarkdownIt from 'markdown-it';
 import {useKanbanStore} from "@/stores/kanban";
-import {acceptHMRUpdate} from "pinia";
 import {useDialogsStore} from "@/stores/dialogs";
 
-const md = new MarkdownIt()
+import '@toast-ui/editor/dist/toastui-editor-viewer.css';
+import { Viewer } from '@toast-ui/vue-editor';
 
 export default {
-  name: 'FollowCardViewer',
-  props: ['card', 'denomination', 'codeDepartement', 'siret'
-  ],
-  components: {FollowLabel},
+  name: 'EtablissementCardsViewer',
+  props: ['card', 'denomination', 'codeDepartement', 'siret'],
+  components: {FollowLabel, Viewer},
   setup() {
     const kanban = useKanbanStore()
     const dialogs = useDialogsStore()
-    return { kanban, dialogs }
+    return {kanban, dialogs}
+  },
+  data() {
+    return {
+      editorOptions: {
+        usageStatistics: true,
+        hideModeSwitch: true,
+      },
+    }
+  },
+  watch: {
+    card() {
+      if (this.$refs.viewer) {
+        this.$refs.viewer.invoke('setMarkdown', this.card.description)
+      }
+    },
   },
   computed: {
-    mdDescription() {
-      return md.render(this.card.description || "")
-    },
     kanbanConfig() {
       return this.$store.state.kanbanConfig
     },

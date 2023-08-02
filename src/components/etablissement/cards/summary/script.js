@@ -1,19 +1,14 @@
 import Help from "@/components/Help.vue";
-import FollowCardEditor from "@/components/follow/cardViewer/main.vue";
+import FollowCardEditor from "@/components/etablissement/cards/viewer/main.vue";
 
 import '@toast-ui/editor/dist/toastui-editor.css'
 import {Editor} from '@toast-ui/vue-editor'
 import '@toast-ui/editor/dist/i18n/fr-fr'
-import {useFollowCardsStore} from "@/stores/followCards";
 
 export default {
-  name: 'FollowSummary',
-  props: ['card', 'denomination'],
+  name: 'EtablissementCardsSummary',
+  props: ['card', 'denomination', 'siret', 'currentCardID'],
   components: {FollowCardEditor, Help, Editor},
-  setup() {
-    const followCards = useFollowCardsStore()
-    return { followCards }
-  },
   data() {
     return {
       cardMenu: false
@@ -23,10 +18,7 @@ export default {
   },
   methods: {
     trClass() {
-      return (this.card.id == this.followCards.currentCardID)?"selectedCard":null
-    },
-    setEditCardID() {
-      this.followCards.currentCardID = this.card.id
+      return (this.card.id == this.currentCardID)?"selectedCard":null
     },
     closeCardMenu() {
       this.cardMenu = false

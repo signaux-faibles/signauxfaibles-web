@@ -28,7 +28,13 @@
         </div>
       </v-card-title>
       <v-card-text>
-        <div v-html="mdDescription"/>
+        <Viewer
+          ref="viewer"
+          :initialValue="card.description"
+          :options="editorOptions"
+          initialEditType="wysiwyg"
+        />
+<!--        <div v-html="mdDescription"/>-->
       </v-card-text>
     </div>
     <div v-else style="text-align: center">

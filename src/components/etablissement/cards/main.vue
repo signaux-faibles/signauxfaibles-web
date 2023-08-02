@@ -1,16 +1,24 @@
 <template>
   <div>
-    <FollowCreateCard v-if="codeDepartement" :cards="followCards.cards" :codeDepartement="codeDepartement" :siret="siret"/>
-    <v-container fluid>
+    <v-toolbar class="mr-1"
+               color='indigo'
+               dark>
+      <v-toolbar-title class="localtoolbar">
+        Fiches de synthèse
+      </v-toolbar-title>
+    </v-toolbar>
+    <FollowCreateCard v-if="codeDepartement" :cards="cards" :codeDepartement="codeDepartement" :siret="siret"/>
+    <spinner style="height: 374px" v-if="loading"/>
+    <v-container fluid v-if="!loading">
       <v-layout wrap>
-        <v-flex md12 v-if="followCards.cards.length==0">
-          <div v-if="followCards.cards.length==0" class="mt-5" style="width: 100%; text-align: center; font-size: 24px">
+        <v-flex md12 v-if="cards.length==0">
+          <div v-if="cards.length==0" class="mt-5" style="width: 100%; text-align: center; font-size: 24px">
             À ce jour, aucune fiche de synthèse n'a été rédigée pour cet établissement.
           </div>
         </v-flex>
 
-        <v-flex :md6="followCards.cards.length>0" :md12="followCards.cards.length==0">
-          <table v-if="followCards.cards.length>0" class="pr-4">
+        <v-flex :md6="cards.length>0" :md12="cards.length==0">
+          <table v-if="cards.length>0" class="pr-4">
             <thead>
             <tr>
               <td></td>
@@ -20,13 +28,14 @@
             </tr>
             </thead>
             <tbody>
-            <FollowSummary
+            <EtablissementCardsSummary
               onMouseOver="this.style.cursor='pointer'"
-              v-for="card in followCards.cards" :key="card.id"
+              v-for="card in cards" :key="card.id"
               :card="card"
               :denomination="denomination"
               :siret="siret"
               :codeDepartement="codeDepartement"
+              :currentCardID="currentCard.id"
             />
             </tbody>
           </table>
@@ -46,10 +55,10 @@
             Il ne vous est pas permis de créer une carte pour cet établissement au regard de vos autorisations.
           </div>
         </v-flex>
-        <v-flex md6 xs12 v-if="followCards.cards.length>0">
-          <FollowCardViewer
-            v-if="followCards.currentCard"
-            :card="followCards.currentCard"
+        <v-flex md6 xs12 v-if="cards.length>0">
+          <EtablissementCardsViewer
+            v-if="currentCard"
+            :card="currentCard"
             :siret="siret"
             :codeDepartement="codeDepartement"
             :denomination="denomination"/>
