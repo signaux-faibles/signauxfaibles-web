@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div v-if="paydex">
+    {{ series }}
     <v-toolbar dark color="indigo">
       <v-toolbar-title class="localtoolbar">Comportement de paiement</v-toolbar-title>
       <v-spacer />
@@ -9,7 +10,9 @@
       <v-layout mt-4 wrap style="font-size: 17px">
         <v-flex md6 xs12>
           <div v-html="introPaiement" class="px-3" ></div>
-          <apexchart width="100%" heigth="100%" type="line" :options="options" :series="series"></apexchart>
+          <apexchart width="100%" heigth="100%" type="line" :options="optionsJoursRetard" :series="seriesJoursRetard"></apexchart>
+          <apexchart width="100%" heigth="100%" type="bar" :options="optionsFPI" :series="seriesFPI"></apexchart>
+
         </v-flex>
         <v-flex md6 xs12>
           <v-layout fill-height align-center justify-center>
@@ -30,6 +33,20 @@
 import Help from '@/components/Help.vue'
 import Gitbook from "@/components/Gitbook.vue";
 
+function customTooltipFPI(fournisseurs, encours, dateString, experiencesPaiement, fpi00,  fpi30_90, fpi90) {
+  return `` +
+    `<div class="customTooltipTitle"><span class="apexcharts-tooltip-text-y-label">${dateString}</span></div>` +
+    `<div class="customTooltipBody">` +
+      `${fpi00}% des paiements avant 30 jours de retard<br/>` +
+      `${fpi30_90}% des paiements entre 30 et 90 jours de retard<br/>` +
+      `${fpi90}% des paiements après 90 jours de retard<br style="margin-bottom: 10px"/>` +
+      `<b>statistiques basées sur:<br/></b><ul>` +
+      `<li>${(experiencesPaiement)?experiencesPaiement + ' paiements':'paiements: non connu' }</li>` +
+      `<li>${(fournisseurs)?fournisseurs + ' fournisseurs':'fournisseurs: non connu' }</li>` +
+      `<li>${(encours)?Math.round(encours) + '€ d\'encours fournisseurs':'encours fournisseurs: non connu' }</li><ul/>` +
+    `</div>`
+}
+
 export default {
   name: 'Paiement',
   props: ['siren', 'paydex'],
@@ -47,17 +64,91 @@ export default {
     },
   },
   computed: {
-    series() {
+    seriesFPI() {
+      if (this.paydex) {
+        return [{
+          name: 'moins de 30 jours',
+          data: this.paydex.fpi30.map((p) => {return 100-p}),
+          fournisseurs: this.paydex.fournisseurs,
+          encours: this.paydex.encours,
+          experiencesPaiement: this.paydex.experiencesPaiement,
+        },
+          {
+          name: 'plus de 30 jours',
+          data: this.paydex.fpi30.map((p, i) => {return p-this.paydex.fpi90[i]}),
+        }, {
+          name: 'plus de 90 jours',
+          data: this.paydex.fpi90,
+        }]
+      } else {
+        return []
+      }
+    },
+    optionsFPI() {
+      return {
+        colors: ['#4f8a83', '#fac699', '#e76278'],
+        dataLabels: {
+          enabled: false,
+        },
+        legend: {
+          show: true,
+          showForSingleSeries: false,
+          showForNullSeries: false,
+          showForZeroSeries: false,
+        },
+        tooltip: {
+          custom: function ({series, seriesIndex, dataPointIndex, w}) {
+            const fournisseur = w.config.series[0].fournisseurs[dataPointIndex]
+            const encours = w.config.series[0].encours[dataPointIndex]
+            const experiencesPaiement = w.config.series[0].experiencesPaiement[dataPointIndex]
+            const fpi00 = w.config.series[0].data[dataPointIndex]
+            const fpi30_90 = w.config.series[1].data[dataPointIndex]
+            const fpi90 = w.config.series[2].data[dataPointIndex]
+            const date = new Date(w.config.xaxis.categories[dataPointIndex])
+            const dateString = ('0' + (date.getUTCMonth() + 1)).slice(-2) + '/' + date.getUTCFullYear()
+            return customTooltipFPI(fournisseur, encours, dateString, experiencesPaiement, fpi00, fpi30_90, fpi90)
+          },
+        },
+        theme: {
+          mode: 'light',
+          palette: 'palette7',
+        },
+        chart: {
+          stacked: true,
+          stackType: "100%",
+          toolbar: {
+            show: false,
+          },
+          zoom: {
+            enabled: false,
+          },
+          id: 'répartition des paiement',
+        },
+        xaxis: {
+          type: 'datetime',
+          categories: this.paydex.dateValeur
+        },
+        yaxis: {
+          min: 0,
+        },
+        noData: {
+          text: 'Il n\'y a pas de données associées',
+          align: 'center',
+          verticalAlign: 'middle',
+          offsetX: 0,
+          offsetY: 0,
+        },
+      }
+    },
+    seriesJoursRetard() {
       if (this.paydex) {
         return [{
           name: 'retards de paiement des fournisseurs',
-          data: this.paydex.nb_jours.reduce((data, c, i) => {
-            if (c !== null) {
-              data.push([
-                new Date(this.paydex.date_valeur[i]),
-                Math.round(c),
-              ])
-            }
+          data: this.paydex.joursRetard.reduce((data, c, i) => {
+            data.push([
+              new Date(this.paydex.dateValeur[i]),
+              Math.round(this.paydex.joursRetard[i]),
+            ])
             return data
           }, []),
         }]
@@ -65,7 +156,7 @@ export default {
         return []
       }
     },
-    options() {
+    optionsJoursRetard() {
       return {
         legend: {
           show: true,
@@ -158,26 +249,11 @@ export default {
               },
             },
           }] : [],
-          yaxis: this.paydex ? [{
-            y: this.avg24m,
-            borderColor: '#4f8a83',
-            label: {
-              borderColor: '#4f8a83',
-              style: {
-                color: '#fff',
-                background: '#4f8a83',
-              },
-              text: 'retard moyen de l\'entreprise : ' + this.avg24m.toFixed(0) + ' jours',
-              textAnchor: 'start',
-              position: 'left',
-            },
-          }] : [],
         },
       }
     },
     introPaiement() {
       let introPaiement = ''
-      if (this.paydex) {
         if (this.avg24m === this.tiers[0]) {
           introPaiement += 'Cette entreprise ne présente jamais de retard de paiement sur les 24 derniers mois.'
         } else if (this.avg24m > this.tiers[0] && this.avg24m <= this.tiers[1]) {
@@ -202,18 +278,17 @@ export default {
         } else if (this.variation < -this.variationThresholds[0]) {
           introPaiement += '<br>Son comportement est en amélioration sur les 6 derniers mois.'
         }
-      }
       return introPaiement
     },
     avg24m() {
-      return (this.paydex.nb_jours.length > 0) ? this.average(this.paydex.nb_jours) : null
+      return (this.paydex.joursRetard.length > 0) ? this.average(this.paydex.joursRetard) : null
     },
     avg6m() {
       return (this.nbJours6m.length > 0) ? this.average(this.nbJours6m) : null
     },
     nbJours6m() {
-      return this.paydex.nb_jours.reduce((nbJours6m, nbj, i) => {
-        if (new Date(this.paydex.date_valeur[i]) >= this.date6m) {
+      return this.paydex.joursRetard.reduce((nbJours6m, nbj, i) => {
+        if (new Date(this.paydex.dateValeur[i]) >= this.date6m) {
           nbJours6m = nbJours6m.concat(nbj)
         }
         return nbJours6m
@@ -237,3 +312,22 @@ export default {
   },
 }
 </script>
+
+<style
+>
+.customTooltip {
+  border-radius: 5px;
+}
+.customTooltipTitle {
+  padding:5px;
+  padding-left: 7px;
+  font-family: Helvetica,Arial,sans-serif;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  border-bottom: 1px solid #dddddd;
+  background-color: #eceff1;
+}
+.customTooltipBody {
+  padding: 10px;
+}
+</style>
