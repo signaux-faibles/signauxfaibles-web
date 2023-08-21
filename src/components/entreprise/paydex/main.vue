@@ -74,7 +74,7 @@ export default {
           experiencesPaiement: this.paydex.experiencesPaiement,
         },
           {
-          name: 'plus de 30 jours',
+          name: 'entre 30 et 90 jours',
           data: this.paydex.fpi30.map((p, i) => {return p-this.paydex.fpi90[i]}),
         }, {
           name: 'plus de 90 jours',
