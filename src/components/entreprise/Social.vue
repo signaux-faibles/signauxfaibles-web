@@ -14,25 +14,25 @@
         </template>
       </Help>
     </v-toolbar>
-    <div>
-      <v-layout mt-4 wrap>
+    <div class="pt-3">
+      <v-layout mt-2 wrap>
         <v-flex md6 xs12 grow>
           <v-layout column px-2 fill-height>
-            <v-flex shrink>
+            <v-flex shrink class="pb-2">
               <v-layout px-3 row align-center class="resume">
-                <v-flex text-left class="valeur" style="line-height: 1.2em">
+                <v-flex text-left class="valeur ml-1" style="line-height: 1em">
                   {{ etablissementActif() | pluralizeEtablissement }} en activité
                 </v-flex>
                 <v-flex text-right shrink ml-3>
-                  EFFECTIF
+                  Effectif
                   <div class="valeur">{{ effectifEntreprise }}</div>
                 </v-flex>
                 <v-flex v-if="permDGEFP" text-right shrink ml-3>
-                  ACT. PARTIELLE
+                  Act. Partielle
                   <div class="valeur">{{ activitePartielleEntreprise }}</div>
                 </v-flex>
                 <v-flex v-if="permUrssaf" text-right shrink ml-3>
-                  DETTE SOC.
+                  Dette soc.
                   <div class="valeur">{{ detteSocialeEntreprise }}</div>
                 </v-flex>
               </v-layout>
@@ -45,13 +45,13 @@
             </v-flex>
           </v-layout>
         </v-flex>
-        <v-flex md6 xs12>
-          <v-layout column fill-height style="font-weight: normal">
-            <v-flex v-if="permDGEFP || permUrssaf" py-3 text-center shrink>
+        <v-flex md6 xs12 style="position: relative;top: -3px">
+          <v-layout column style="font-weight: normal">
+            <v-flex v-if="permDGEFP || permUrssaf" text-center class="mb-2">
               <v-btn-toggle mandatory v-model="sort">
-                <v-btn text value="effectif">Trié par effectif</v-btn>
-                <v-btn v-if="permDGEFP" text value="activite-partielle">Par activité partielle</v-btn>
-                <v-btn v-if="permUrssaf" text value="dette-sociale">Par dette sociale</v-btn>
+                <v-btn small text value="effectif" class="selector">Trié par effectif</v-btn>
+                <v-btn small v-if="permDGEFP" class="selector" text value="activite-partielle">Par activité partielle</v-btn>
+                <v-btn small v-if="permUrssaf" class="selector" text value="dette-sociale">Par dette sociale</v-btn>
               </v-btn-toggle>
             </v-flex>
             <v-flex px-2 grow>
@@ -792,12 +792,18 @@ export default {
   font-size: 16px;
 }
 .valeur {
-  font-size: 25px;
+  font-family: "Oswald";
+  font-size: 17px;
 }
 .fade-enter-active, .fade-leave-active {
   transition: opacity .5s;
 }
 .fade-enter, .fade-leave-to {
   opacity: 0;
+}
+.selector {
+  font-family: oswald;
+  font-size: 1em;
+  text-transform:none !important;
 }
 </style>
