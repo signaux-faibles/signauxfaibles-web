@@ -66,6 +66,7 @@
             <v-list-item-title>Kanban de suivi</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+        <v-divider class="ma-2"></v-divider>
         <v-list-item
             href="https://signaux-faibles.gitbook.io/guide-dutilisation-et-faq/"
             target="_blank">
@@ -75,7 +76,7 @@
             </v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title>Guide utilisateur et FAQ</v-list-item-title>
+            <v-list-item-title>Aide en ligne</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
         <v-list-item v-if="roles.includes('stats')" @click="dialogs.showExportStats">
@@ -88,7 +89,6 @@
             <v-list-item-title>Extraction des statistiques</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-divider></v-divider>
         <v-list-item @click="logout()">
           <v-list-item-action>
             <v-icon>fa-right-from-bracket</v-icon>
