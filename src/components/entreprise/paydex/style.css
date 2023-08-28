@@ -1,0 +1,24 @@
+.customTooltip {
+    border-radius: 5px;
+}
+
+.paydexNote {
+    text-align: justify;
+    font-size: 14px;
+    font-weight: 200;
+    font-family: 'Roboto', sans-serif
+}
+
+.customTooltipTitle {
+    padding: 5px;
+    padding-left: 7px;
+    font-family: Helvetica, Arial, sans-serif;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom: 1px solid #dddddd;
+    background-color: #eceff1;
+}
+
+.customTooltipBody {
+    padding: 10px;
+}

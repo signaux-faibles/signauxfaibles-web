@@ -4,7 +4,11 @@
     <Spinner style="min-height: 80vh" v-if="loading" />
 
     <div :class="'maindiv ' + loadingClass"
-         style="min-height: 100%; background: #fff; font-weight: 800; font-family: 'Oswald', sans-serif;">
+         style="min-height: 100%;
+         background: #fff;
+         font-weight: 800;
+         font-family: 'Oswald', sans-serif;"
+    >
       <v-container>
         <v-layout wrap>
           <v-flex class="pa-3" style="font-size: 18px; margin-top: 3em;" xs12>
