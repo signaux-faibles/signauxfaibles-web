@@ -8,7 +8,7 @@ function customTooltipFPI(fournisseurs, encours, dateString, experiencesPaiement
         `${fpi00}% des paiements avant 30 jours de retard<br/>` +
         `${fpi30_90}% des paiements entre 30 et 90 jours de retard<br/>` +
         `${fpi90}% des paiements après 90 jours de retard<br style="margin-bottom: 10px"/>` +
-        `<b>statistiques basées sur:<br/></b><ul>` +
+        `<b>contexte:<br/></b><ul>` +
         `<li>${(experiencesPaiement) ? experiencesPaiement + ' paiements' : 'paiements: non connu'}</li>` +
         `<li>${(fournisseurs) ? fournisseurs + ' fournisseurs' : 'fournisseurs: non connu'}</li>` +
         `<li>${(encours) ? Math.round(encours) + '€ d\'encours fournisseurs' : 'encours fournisseurs: non connu'}</li><ul/>` +
@@ -74,7 +74,8 @@ export default {
                 },
                 tooltip: {
                     custom: function ({series, seriesIndex, dataPointIndex, w}) {
-                        const fournisseur = w.config.series[0].fournisseurs[dataPointIndex]
+
+                        const fournisseur = (w.config.series[0].fournisseurs || {})[dataPointIndex]
                         const encours = w.config.series[0].encours[dataPointIndex]
                         const experiencesPaiement = w.config.series[0].experiencesPaiement[dataPointIndex]
                         const fpi00 = w.config.series[0].data[dataPointIndex]
