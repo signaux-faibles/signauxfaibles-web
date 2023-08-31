@@ -20,19 +20,6 @@ export default {
         offset(value) {
             return Math.round(100 * (1 - value / this.maxRetard))
         },
-        customTooltipFPI() {
-            return ({series, seriesIndex, dataPointIndex, w}) => {
-                const fournisseur = (w.config.series[0].fournisseurs || [])[dataPointIndex]
-                const encours = (w.config.series[0].encours || [])[dataPointIndex]
-                const experiencesPaiement = (w.config.series[0].experiencesPaiement || [])[dataPointIndex]
-                const fpi00 = (w.config.series[0].data || [])[dataPointIndex]
-                const fpi30_90 = (w.config.series[1].data || [])[dataPointIndex]
-                const fpi90 = (w.config.series[2].data || [])[dataPointIndex]
-                const date = new Date((w.config.xaxis.categories || [])[dataPointIndex])
-                const dateString = (date) ? ('0' + (date.getUTCMonth() + 1)).slice(-2) + '/' + date.getUTCFullYear() : 'undefined'
-                return this.customTooltipFPIText(fournisseur, encours, dateString, experiencesPaiement, fpi00, fpi30_90, fpi90)
-            }
-        },
         customTooltipFPIText (fournisseurs, encours, dateString, experiencesPaiement, fpi00, fpi30_90, fpi90) {
             return `` +
               `<div class="customTooltipTitle"><span class="apexcharts-tooltip-text-y-label">${dateString}</span></div>` +
@@ -45,6 +32,19 @@ export default {
               `<li>${(fournisseurs) ? fournisseurs + ' fournisseurs' : 'fournisseurs: non connu'}</li>` +
               `<li>${(encours) ? Math.round(encours) + '€ d\'encours fournisseurs' : 'encours fournisseurs: non connu'}</li><ul/>` +
               `</div>`
+        },
+        customTooltipFPI() {
+            return ({series, seriesIndex, dataPointIndex, w}) => {
+                const fournisseur = (w.config.series[0].fournisseurs || [])[dataPointIndex]
+                const encours = (w.config.series[0].encours || [])[dataPointIndex]
+                const experiencesPaiement = (w.config.series[0].experiencesPaiement || [])[dataPointIndex]
+                const fpi00 = (w.config.series[0].data || [])[dataPointIndex]
+                const fpi30_90 = (w.config.series[1].data || [])[dataPointIndex]
+                const fpi90 = (w.config.series[2].data || [])[dataPointIndex]
+                const date = new Date((w.config.xaxis.categories || [])[dataPointIndex])
+                const dateString = (date) ? ('0' + (date.getUTCMonth() + 1)).slice(-2) + '/' + date.getUTCFullYear() : 'undefined'
+                return this.customTooltipFPIText(fournisseur, encours, dateString, experiencesPaiement, fpi00, fpi30_90, fpi90)
+            }
         },
     },
     computed: {
@@ -74,7 +74,6 @@ export default {
         },
         optionsFPI() {
             return {
-
                 colors: ['#4f8a83', '#fac699', '#e76278'],
                 dataLabels: {
                     enabled: false,
