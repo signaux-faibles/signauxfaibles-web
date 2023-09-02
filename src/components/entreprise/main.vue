@@ -4,7 +4,11 @@
     <Spinner style="min-height: 80vh" v-if="loading" />
 
     <div :class="'maindiv ' + loadingClass"
-         style="min-height: 100%; background: #fff; font-weight: 800; font-family: 'Oswald', sans-serif;">
+         style="min-height: 100%;
+         background: #fff;
+         font-weight: 800;
+         font-family: 'Oswald', sans-serif;"
+    >
       <v-container>
         <v-layout wrap>
           <v-flex class="pa-3" style="font-size: 18px; margin-top: 3em;" xs12>
@@ -50,7 +54,7 @@
 import EntrepriseIdentite from '@/components/entreprise/Identite.vue'
 import EntrepriseSocial from '@/components/entreprise/Social.vue'
 import EntrepriseFinance from '@/components/entreprise/Finance.vue'
-import EntreprisePaiement from '@/components/entreprise/Paiement.vue'
+import EntreprisePaiement from '@/components/entreprise/paydex/main.vue'
 import axios from 'axios'
 import fr from 'apexcharts/dist/locales/fr.json'
 import Spinner from "@/components/Spinner.vue";

@@ -11,7 +11,7 @@
           style="position: relative; top: -2px;"
           color="#999"
       >
-        <v-icon>info</v-icon>
+        <v-icon>fa-circle-info</v-icon>
       </v-btn>
     </template>
     <v-card>
