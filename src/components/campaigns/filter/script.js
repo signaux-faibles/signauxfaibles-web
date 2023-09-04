@@ -1,12 +1,4 @@
-import Card from "@/components/card/main.vue";
-import Etablissement from "@/components/etablissement/Main.vue";
-import Entreprise from "@/components/entreprise/main.vue";
-import Toolbar from "@/components/Toolbar.vue";
-import Help from "@/components/Help.vue";
-import CampaignsEtablissement from '@/components/campaigns/myactions/etablissement/main.vue'
 import {useCampaignsStore} from "@/stores/campaigns";
-import {useDialogsStore} from "@/stores/dialogs";
-import Spinner from "@/components/Spinner.vue";
 
 export default {
   name: "CampaignsMyActions",

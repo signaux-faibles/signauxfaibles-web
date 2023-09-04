@@ -5,6 +5,7 @@ export const useCampaignsStore = defineStore('campaigns', {
   state: () => ({
     campaigns: [] as any,
     selectedID: null as any as number,
+    myActions: {etablissements: []},
     menu: 'pendingActions',
   }),
   actions: {

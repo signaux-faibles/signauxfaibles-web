@@ -7,7 +7,6 @@
         Vous pouvez en ajouter en cliquant sur <span class="emph">Je prends contact</span> dans l'onglet <span class="emph">À contacter</span>.
       </div>
     </div>
-
     <Spinner style="min-height: 60vh" v-if="loading"/>
     <CampaignsEtablissement
       v-for="etablissement in myActions.etablissements"
