@@ -16,6 +16,10 @@ interface dialogStore {
   capmaignCardEditorDenomination: string | null,
   campaignCardEditorCodeDepartement: string | null,
   campaignCardEditorSiret: string | null,
+  campaignWithdrawDialog: boolean,
+  campaignWithdrawDialogCampaignID: number | null,
+  campaignWithdrawDialogEtablissementID: number | null,
+  campaignWithdrawDialogRaisonSociale: string | null,
   etablissementCardEditor: boolean,
   etablissementCardEditorCardID: string | null,
   etablissementCardEditorDescription: string | null,
@@ -44,6 +48,10 @@ export const useDialogsStore = defineStore('dialogs', {
     capmaignCardEditorDenomination: null,
     campaignCardEditorCodeDepartement: null,
     campaignCardEditorSiret: null,
+    campaignWithdrawDialog: false,
+    campaignWithdrawDialogCampaignID: null,
+    campaignWithdrawDialogEtablissementID: null,
+    campaignWithdrawDialogRaisonSociale: null,
     etablissementCardEditor: false,
     etablissementCardEditorCardID: null,
     etablissementCardEditorDescription: null,
@@ -53,6 +61,7 @@ export const useDialogsStore = defineStore('dialogs', {
     exportStats: false,
     exportStatsRangeStart: null,
     exportStatsRangeEnd: null,
+
   }),
   actions: {
     showEtablissement(siret: string) {

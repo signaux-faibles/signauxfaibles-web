@@ -29,8 +29,8 @@ export default {
     logo() {
       const alerts = {
         crash: ['fa-balance-scale', 'grey darken-4'],
-        high: ['fa-exclamation-triangle', 'red accent-2'],
-        low: ['fa-exclamation-triangle', 'amber'],
+        high: ['fa-exclamation-triangle', 'red darken-2'],
+        low: ['fa-exclamation-triangle', 'amber darken-2'],
         none: ['fa-check-circle', 'green'],
         forbidden: ['fa-lock', '#33333358'],
         absent: ['fa-question-circle', '#33333358'],
