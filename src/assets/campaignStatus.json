@@ -2,7 +2,8 @@
   "success": {
     "besoin": "L'entreprise a besoin d'être accompagnée",
     "refus": "L'entreprise ne souhaite pas poursuivre",
-    "indemne": "L'entreprise n'a pas besoin de prise en charge"
+    "indemne": "L'entreprise n'a pas besoin de prise en charge",
+    "injoignable": "L'entreprise est injoignable"
   },
   "cancel": {
     "erreur": "J'ai fait une erreur en sélectionnant cette entreprise",
