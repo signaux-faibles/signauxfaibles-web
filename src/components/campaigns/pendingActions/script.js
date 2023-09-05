@@ -2,14 +2,15 @@ import Card from "@/components/card/main.vue"
 import ScoreWidget from "@/components/ScoreWidget.vue"
 import Etablissement from "@/components/etablissement/Main.vue"
 import Entreprise from "@/components/entreprise/main.vue"
+import CampaignsDepartementFilter from "@/components/campaigns/departementFilter/main.vue"
 import CampaignsPendingActionsEtablissement from "@/components/campaigns/pendingActions/etablissement/main.vue";
 import {useDialogsStore} from "@/stores/dialogs";
 import {useCampaignsStore} from "@/stores/campaigns";
 import Spinner from "@/components/Spinner.vue";
 
 export default {
-  name: "CampaignsPendingCards",
-  components: {Spinner, CampaignsPendingActionsEtablissement, ScoreWidget, Etablissement, Entreprise},
+  name: "CampaignsPendingActions",
+  components: {Spinner, CampaignsPendingActionsEtablissement, ScoreWidget, Etablissement, Entreprise, CampaignsDepartementFilter},
   setup() {
     const dialogs = useDialogsStore()
     const campaigns = useCampaignsStore()
@@ -44,6 +45,14 @@ export default {
         return m
       }, {})
     },
+    selectedEtablissements() {
+      return this.pending.etablissements.filter((e) => {
+        return (this.campaigns.selectedDepartement)?e.codeDepartement==this.campaigns.selectedDepartement:true
+      })
+    },
+    etablissements() {
+      return this.pending.etablissements
+    },
   },
   methods: {
     processMessage() {
@@ -52,7 +61,13 @@ export default {
     },
     getPendingEtablissements() {
       this.$axios.get('/campaign/actions/pending/' + this.campaignsSelectedID).then((r) => {
-        this.pending = r.data || []
+        this.pending = r.data || {etablissements: []}
+        if (
+          !this.pending.etablissements.some((e) => {
+            return (e.codeDepartement == this.campaigns.selectedDepartement)
+          })) {
+          this.campaigns.selectedDepartement = null
+        }
       }).catch((e) => {
         this.pending = {
           etablissements: [],
@@ -60,9 +75,6 @@ export default {
       }).finally(() => {
         this.loading = false
       })
-    },
-    etablissements() {
-      return this.pending.etablissements
     },
   },
 }

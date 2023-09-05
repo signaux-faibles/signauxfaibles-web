@@ -4,7 +4,8 @@
       Il n'y a aucune entreprise en attente de prise de contact.
     </div>
     <Spinner style="min-height: 60vh"  v-if="loading"/>
-    <CampaignsPendingActionsEtablissement v-for="etablissement in etablissements()" :key="etablissement.siret" :etablissement="etablissement"/>
+    <CampaignsDepartementFilter v-if="!loading" :etablissements="etablissements"/>
+    <CampaignsPendingActionsEtablissement v-for="etablissement in selectedEtablissements" :key="etablissement.siret" :etablissement="etablissement"/>
   </div>
 </template>
 

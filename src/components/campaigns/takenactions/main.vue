@@ -8,6 +8,7 @@
         Pour prendre à votre charge des prises de contact, cliquez sur <span class="emph">Je prends contact</span> dans l'onglet <span class="emph">À contacter</span>.
       </div>
     </div>
+    <CampaignsDepartementFilter v-if="!loading" :etablissements="etablissements"/>
     <div v-for="(etablissements, agent) in allActions" :key="agent" >
       <div class="agent">{{ etablissements.length }} prise{{ pluriel(etablissements.length) }} de contact traitée{{ pluriel(etablissements.length) }} par {{ kanban.fullname(agent) }}</div>
       <div v-for="etablissement in etablissements">

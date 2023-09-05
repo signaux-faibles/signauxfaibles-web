@@ -37,7 +37,7 @@
           selon le niveau de retard constaté.
         </v-flex>
       </v-layout>
-          <div class="ml-3" style="FONT-SIZE: 17px;">
+          <div class="ml-3" style="font-size: 17px;">
             Les données sont collectées auprès des adhérents du programme
             <a href="https://www.altares.com/fr/nos-data/duntrade/">Duntrade</a> (70% des entreprises de plus de
             10 salariés)<br/>
