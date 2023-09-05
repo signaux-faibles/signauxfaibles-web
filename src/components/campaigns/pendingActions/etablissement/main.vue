@@ -42,6 +42,12 @@
         </v-btn>
       </div>
       <div class="mr-4">
+        <v-btn color="red darken-4" dark style="text-transform: none"
+               @click="reject(etablissement.campaignID, etablissement.id)">
+          Je repousse
+        </v-btn>
+      </div>
+      <div class="mr-4">
         <v-btn color="indigo" dark style="text-transform: none"
                @click="take(etablissement.campaignID, etablissement.id)">
           Je prends contact

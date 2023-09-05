@@ -10,7 +10,8 @@
     "inadequat": "La prise de contact sera finalement effectuée par quelqu'un d'autre",
     "indisponible": "J'ai changé d'avis, car j'ai de nouvelles priorités"
   },
-  "followup": {
-    "besoin": "followDialog"
+  "withdraw": {
+    "infonde": "L'entreprise ne présente pas de signes inquiétants a priori",
+    "contretemps": "Il est préférable de contacter cet entreprise dans quelques mois"
   }
 }
