@@ -7,10 +7,14 @@ import CampaignsEtablissement from '@/components/campaigns/myactions/etablisseme
 import {useCampaignsStore} from "@/stores/campaigns";
 import {useDialogsStore} from "@/stores/dialogs";
 import Spinner from "@/components/Spinner.vue";
+import CampaignsDepartementFilter from "@/components/campaigns/departementFilter/main.vue";
 
 export default {
   name: "CampaignsMyActions",
-  components: {Spinner, Help, Entreprise, Etablissement, Card, Toolbar, CampaignsEtablissement},
+  components: {
+    CampaignsDepartementFilter,
+    Spinner, Help, Entreprise, Etablissement, Card, Toolbar, CampaignsEtablissement
+  },
   props: ['cards'],
   setup() {
     const campaigns = useCampaignsStore()
@@ -30,6 +34,7 @@ export default {
       cancelDialog: false,
       cancelRadio: null,
       loading: true,
+      myActions: {etablissements: []}
     }
   },
   mounted() {
@@ -45,6 +50,12 @@ export default {
       this.$axios.get('/campaign/actions/mine/' + this.campaigns.selectedID)
         .then((r) => {
           this.myActions = r.data
+          if (
+            !this.myActions.etablissements.some((e) => {
+              return (e.codeDepartement == this.campaigns.selectedDepartement)
+            })) {
+            this.campaigns.selectedDepartement = null
+          }
         }).catch(() => {
         this.myActions = {
           etablissements: [],
@@ -56,6 +67,14 @@ export default {
   }
   ,
   computed: {
+    etablissements() {
+      return this.myActions.etablissements
+    },
+    selectedEtablissements() {
+      return this.etablissements.filter((e) => {
+        return (this.campaigns.selectedDepartement) ? e.codeDepartement == this.campaigns.selectedDepartement : true
+      })
+    },
     followCardsDialog: {
       get() {
         return this.$store.state.followCardsDialog

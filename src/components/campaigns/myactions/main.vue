@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div id="empty" v-if="myActions.etablissements.length == 0 && !loading">
+    <div id="empty" v-if="etablissements.length == 0 && !loading">
       <v-icon size="70px" color="grey" class="mb-10">fa-snowman</v-icon><br/>
       Vous n'avez aucune prise de contact à réaliser.<br/>
       <div v-if="campaigns.campaign.nbPending > 0">
@@ -8,8 +8,9 @@
       </div>
     </div>
     <Spinner style="min-height: 60vh" v-if="loading"/>
+    <CampaignsDepartementFilter v-if="!loading" :etablissements="etablissements"/>
     <CampaignsEtablissement
-      v-for="etablissement in myActions.etablissements"
+      v-for="etablissement in selectedEtablissements"
       :key="etablissement.siret"
       :etablissement="etablissement"
     />

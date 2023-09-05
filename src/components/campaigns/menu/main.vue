@@ -11,7 +11,6 @@
         </v-btn-toggle>
       </v-flex>
     </v-layout>
-
   </v-container>
 </template>
 <script lang="js" src="./script.js"/>
