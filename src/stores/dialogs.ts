@@ -61,7 +61,6 @@ export const useDialogsStore = defineStore('dialogs', {
     exportStats: false,
     exportStatsRangeStart: null,
     exportStatsRangeEnd: null,
-
   }),
   actions: {
     showEtablissement(siret: string) {
