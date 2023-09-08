@@ -11,8 +11,8 @@
     "indisponible": "J'ai changé d'avis, car j'ai de nouvelles priorités."
   },
   "withdraw": {
-    "delai_conditionnel": "proposée à la prochaine alerte",
-    "delai_inconditionnel": "proposée dans la prochaine campagne",
-    "exclusion_definitive": "ignorée définitivement"
+    "delai_inconditionnel": "conservée dans la prochaine campagne",
+    "delai_conditionnel": "conservée seulement si le signalement persiste",
+    "exclusion_definitive": "retirée définitivement des futures campagnes"
   }
 }

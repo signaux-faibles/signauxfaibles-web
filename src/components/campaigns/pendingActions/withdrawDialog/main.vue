@@ -7,7 +7,7 @@
         </v-toolbar>
         <v-card class="pl-2 pr-2 pb-2">
           <v-card-text class="pb-0 mb-0" style="font-size: 17px">
-            Je souhaite que cette prise de contact soit:
+            Concernant cet établissement, je souhaite que cette demande de prise de contact soit:
           </v-card-text>
           <v-card-text class="pt-0 mt-0">
             <v-radio-group v-model="withdrawDialog.radio">
@@ -20,7 +20,7 @@
               type="info"
 
             >
-              Dans l'immédiat, cette prise de contact sera déplacée en pied de liste pour améliorer la lisibilité des autres établissements à contacter.
+              Dans l'immédiat, cette prise de contact sera déplacée en pied de liste.
             </v-alert>
             <div style="text-align: right">
               <v-btn class="mr-4" color="indigo" outlined dark @click="withdrawDialog.hide()">
