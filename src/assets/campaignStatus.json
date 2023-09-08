@@ -11,7 +11,8 @@
     "indisponible": "J'ai changé d'avis, car j'ai de nouvelles priorités."
   },
   "withdraw": {
-    "infonde": "L'entreprise ne présente pas de signes inquiétants a priori.",
-    "contretemps": "Il est préférable de contacter cet entreprise dans quelques mois."
+    "delai_conditionnel": "proposée à la prochaine alerte",
+    "delai_inconditionnel": "proposée dans la prochaine campagne",
+    "exclusion_definitive": "ignorée définitivement"
   }
 }

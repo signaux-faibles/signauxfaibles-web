@@ -46,6 +46,12 @@
           </span>
         </v-btn>
       </div>
+      <div class="mr-4">
+        <v-btn color="indigo" dark style="text-transform: none"
+               @click="take(etablissement.campaignID, etablissement.id)">
+          Je prends contact
+        </v-btn>
+      </div>
     </template>
   </Card>
 </template>

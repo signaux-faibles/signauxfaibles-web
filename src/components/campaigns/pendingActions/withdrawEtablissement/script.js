@@ -22,6 +22,10 @@ export default {
     }
   },
   methods: {
+    take(campaignID, id) {
+      this.$axios.get('/campaign/take/' + campaignID + '/' + id).then(() => {
+      })
+    },
     showCampaignCardEditor() {
       this.dialogs.showCampaignCardEditor(
         this.etablissement.siret,
