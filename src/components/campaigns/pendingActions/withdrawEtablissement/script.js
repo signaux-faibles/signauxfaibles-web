@@ -1,12 +1,12 @@
 import ScoreWidget from "@/components/ScoreWidget.vue";
 import Card from "@/components/card/main.vue";
-import CampaignsPendingActionsWithdrawDialog from "@/components/campaigns/pendingActions/withdrawDialog/main.vue";
 import {useDialogsStore} from "@/stores/dialogs";
 import {useWithdrawDialogStore} from "@/stores/withdrawDialog";
+import StatusLabels from "@/assets/campaignStatus.json";
 
 export default {
-  name: 'CampaignsPendingActionsEtablissement',
-  components: {CampaignsPendingActionsWithdrawDialog, Card, ScoreWidget},
+  name: 'CampaignsPendingActionsWithdrawEtablissement',
+  components: {Card, ScoreWidget},
   data() {
     return {}
   },
@@ -16,7 +16,16 @@ export default {
     const withdrawDialog = useWithdrawDialogStore()
     return {dialogs,withdrawDialog}
   },
+  computed: {
+    withdrawLabels() {
+      return StatusLabels.withdraw
+    }
+  },
   methods: {
+    take(campaignID, id) {
+      this.$axios.get('/campaign/take/' + campaignID + '/' + id).then(() => {
+      })
+    },
     showCampaignCardEditor() {
       this.dialogs.showCampaignCardEditor(
         this.etablissement.siret,
@@ -24,17 +33,6 @@ export default {
         this.etablissement.raisonSociale,
         this.etablissement.id,
         this.etablissement.description)
-    },
-    take(campaignID, id) {
-      this.$axios.get('/campaign/take/' + campaignID + '/' + id).then(() => {
-      })
-    },
-    showWithdrawDialog() {
-      this.withdrawDialog.show(
-        this.etablissement.campaignID,
-        this.etablissement.id,
-        this.etablissement.raisonSociale
-      )
     }
   },
 }

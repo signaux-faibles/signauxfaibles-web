@@ -11,7 +11,7 @@ pinia.use(piniaPluginPersistedstate)
 import App from './App.vue'
 import vuetify from './plugins/vuetify'
 import router from './router'
-import store from './store'
+import vuexStore from './store'
 import VueApexCharts from 'vue-apexcharts'
 
 // @ts-ignore
@@ -19,9 +19,9 @@ import VueMatomo from 'vue-matomo'
 import globals from '@/globals'
 
 Vue.config.productionTip = true
-Vue.prototype.$axios = store.axiosClient
-Vue.prototype.$store = store.sessionStore
-Vue.prototype.$localStore = store.localStore
+Vue.prototype.$axios = vuexStore.axiosClient
+Vue.prototype.$store = vuexStore.sessionStore
+Vue.prototype.$localStore = vuexStore.localStore
 
 function tokenInterceptor() {
     Vue.prototype.$axios.interceptors.request.use((config: any) => {

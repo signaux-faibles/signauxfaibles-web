@@ -241,10 +241,10 @@
             <v-text-field v-model="filter" @input="getPrediction" solo label="Filtre rapide par raison sociale ou SIREN" clearable />
           </v-flex>
           <v-flex xs12 md6 style="line-height: 53px">
-            <v-icon style="top: -4px" color="red">fa-exclamation-triangle</v-icon>
+            <v-icon style="top: -4px" color="red darken-2">fa-exclamation-triangle</v-icon>
             <span style=" font-size: 25px">{{ predictionAlerts }}</span>
             <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-            <v-icon style="top: -4px" color="amber">fa-exclamation-triangle</v-icon>
+            <v-icon style="top: -4px" color="amber darken-2">fa-exclamation-triangle</v-icon>
             <span style="font-size: 25px;">{{ predictionWarnings }}</span>
             <v-btn outlined color="indigo" @click="download" class="ml-4 mb-3">
               <v-icon small class="mr-2">fa-file-download</v-icon>

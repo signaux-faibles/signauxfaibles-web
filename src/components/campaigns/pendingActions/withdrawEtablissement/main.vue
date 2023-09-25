@@ -25,6 +25,11 @@
             {{ etablissement.siret }}
           </span>
       </div>
+      <div class="mr-4">
+        <v-chip dark color="red darken-3">
+          {{ withdrawLabels[etablissement.detail] }}
+        </v-chip>
+      </div>
       <div id="contact" class="ml-2">
         <v-btn
           class="mr-4"
@@ -39,12 +44,6 @@
           <span v-else>
             Je partage mes informations
           </span>
-        </v-btn>
-      </div>
-      <div class="mr-4">
-        <v-btn color="red darken-3" dark style="text-transform: none"
-               @click="showWithdrawDialog">
-          Je repousse
         </v-btn>
       </div>
       <div class="mr-4">

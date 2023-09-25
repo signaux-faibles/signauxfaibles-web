@@ -2,17 +2,22 @@ import {useCampaignsStore} from "@/stores/campaigns";
 
 export default {
   name: "CampaignsDepartementFilter",
-  props: ['etablissements'],
+  props: ['etablissements', 'extras'],
   setup() {
     const campaigns = useCampaignsStore()
     return {campaigns}
   },
   computed: {
     departements() {
-      const departements = this.etablissements.reduce((m, f) => {
+      let departements = this.etablissements.reduce((m, f) => {
         m[f.codeDepartement] = (m[f.codeDepartement] || 0) + 1
         return m
       }, {})
+      if ((this.extras || []).length > 0) {
+        this.extras.forEach((f) => {
+          departements[f.codeDepartement] = (departements[f.codeDepartement] || 0)
+        })
+      }
       const codeDepartements = Object.keys(departements).sort()
       return codeDepartements.map((d) => {
         return {

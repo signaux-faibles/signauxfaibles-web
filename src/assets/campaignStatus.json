@@ -1,16 +1,19 @@
 {
   "success": {
-    "besoin": "L'entreprise a besoin d'être accompagnée",
-    "refus": "L'entreprise ne souhaite pas poursuivre",
-    "indemne": "L'entreprise n'a pas besoin de prise en charge",
-    "injoignable": "L'entreprise est injoignable"
+    "besoin": "L'entreprise a besoin d'être accompagnée.",
+    "refus": "L'entreprise ne souhaite pas poursuivre.",
+    "indemne": "L'entreprise n'a pas besoin de prise en charge.",
+    "injoignable": "L'entreprise est injoignable."
   },
   "cancel": {
-    "erreur": "J'ai fait une erreur en sélectionnant cette entreprise",
-    "inadequat": "La prise de contact sera finalement effectuée par quelqu'un d'autre",
-    "indisponible": "J'ai changé d'avis, car j'ai de nouvelles priorités"
+    "erreur": "J'ai fait une erreur en sélectionnant cette entreprise.",
+    "inadequat": "La prise de contact sera finalement effectuée par quelqu'un d'autre.",
+    "indisponible": "J'ai changé d'avis, car j'ai de nouvelles priorités."
   },
-  "followup": {
-    "besoin": "followDialog"
+  "withdraw": {
+    "delai_3mois": "dès la prochaine campagne",
+    "delai_6mois": "dans 6 mois",
+    "delai_9mois": "dans 9 mois",
+    "definitif": "repousser jusqu'à nouvel ordre"
   }
 }

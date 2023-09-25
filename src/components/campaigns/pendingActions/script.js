@@ -7,10 +7,13 @@ import CampaignsPendingActionsEtablissement from "@/components/campaigns/pending
 import {useDialogsStore} from "@/stores/dialogs";
 import {useCampaignsStore} from "@/stores/campaigns";
 import Spinner from "@/components/Spinner.vue";
-
+import CampaignsPendingActionsWithdrawDialog from "@/components/campaigns/pendingActions/withdrawDialog/main.vue";
+import CampaignsPendingActionsWithdrawEtablissement from "@/components/campaigns/pendingActions/withdrawEtablissement/main.vue"
 export default {
   name: "CampaignsPendingActions",
-  components: {Spinner, CampaignsPendingActionsEtablissement, ScoreWidget, Etablissement, Entreprise, CampaignsDepartementFilter},
+  components: {
+    CampaignsPendingActionsWithdrawDialog, CampaignsPendingActionsWithdrawEtablissement,
+    Spinner, CampaignsPendingActionsEtablissement, ScoreWidget, Etablissement, Entreprise, CampaignsDepartementFilter},
   setup() {
     const dialogs = useDialogsStore()
     const campaigns = useCampaignsStore()
@@ -46,12 +49,20 @@ export default {
       }, {})
     },
     selectedEtablissements() {
-      return this.pending.etablissements.filter((e) => {
+      return this.etablissements.filter((e) => {
+        return (this.campaigns.selectedDepartement)?e.codeDepartement==this.campaigns.selectedDepartement:true
+      })
+    },
+    selectedWithdrawEtablissements() {
+      return this.withdrawEtablissements.filter((e) => {
         return (this.campaigns.selectedDepartement)?e.codeDepartement==this.campaigns.selectedDepartement:true
       })
     },
     etablissements() {
-      return this.pending.etablissements
+      return this.pending.etablissements.filter((e) => e.action != 'withdraw')
+    },
+    withdrawEtablissements() {
+      return this.pending.etablissements.filter((e) => e.action == 'withdraw')
     },
   },
   methods: {
