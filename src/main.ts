@@ -1,6 +1,6 @@
 // @ts-ignore
 import VueKeyCloak from '@dsb-norge/vue-keycloak-js'
-import Vue, {markRaw} from 'vue'
+import Vue from 'vue'
 
 import {createPinia, PiniaVuePlugin} from "pinia";
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
@@ -22,10 +22,6 @@ Vue.config.productionTip = true
 Vue.prototype.$axios = vuexStore.axiosClient
 Vue.prototype.$store = vuexStore.sessionStore
 Vue.prototype.$localStore = vuexStore.localStore
-
-pinia.use(({store}) => {
-    store.axios = markRaw(vuexStore.axiosClient)
-})
 
 function tokenInterceptor() {
     Vue.prototype.$axios.interceptors.request.use((config: any) => {
