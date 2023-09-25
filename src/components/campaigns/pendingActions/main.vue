@@ -6,7 +6,7 @@
       Il n'y a aucune entreprise en attente de prise de contact.
     </div>
     <CampaignsPendingActionsEtablissement v-for="etablissement in selectedEtablissements" :key="etablissement.siret" :etablissement="etablissement"/>
-    <div class="mt-12 ecart" v-if="selectedWithdrawEtablissements.length > 0">Prises de contact mises à l'écart</div>
+    <div class="mt-12 ecart" v-if="selectedWithdrawEtablissements.length > 0">Prises de contact repoussées</div>
     <CampaignsPendingActionsWithdrawEtablissement v-for="etablissement in selectedWithdrawEtablissements" :key="etablissement.siret" :etablissement="etablissement"/>
     <CampaignsPendingActionsWithdrawDialog />
 <!--    <v-btn bottom class="mr-2" color="green darken-2" dark fab fixed right-->

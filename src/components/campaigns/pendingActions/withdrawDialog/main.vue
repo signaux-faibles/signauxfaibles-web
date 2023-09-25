@@ -7,8 +7,8 @@
         </v-toolbar>
         <v-card class="pl-2 pr-2 pb-2">
           <v-card-text class="pb-0 mb-0" style="font-size: 17px">
-            Cet établissement sera automatiquement écarté pour les campagnes à venir.<br/>
-            Dans combien de temps souhaitez vous inclure cet établissement de nouveau ?
+            Cet établissement sera automatiquement écarté pour les campagnes à venir.<p/>
+            Dans combien de temps souhaitez vous ajouter de nouveau cet établissement à votre liste d'établissement à traiter  ?
           </v-card-text>
           <v-card-text class="pt-0 mt-0">
             <v-radio-group v-model="withdrawDialog.radio">
