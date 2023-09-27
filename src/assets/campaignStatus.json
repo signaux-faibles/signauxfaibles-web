@@ -11,9 +11,9 @@
     "indisponible": "J'ai changé d'avis, car j'ai de nouvelles priorités."
   },
   "withdraw": {
-    "delai_3mois": "dès la prochaine campagne",
-    "delai_6mois": "dans 6 mois",
-    "delai_9mois": "dans 9 mois",
-    "definitif": "repousser jusqu'à nouvel ordre"
+    "delai_3mois": "jusqu'à la prochaine campagne",
+    "delai_6mois": "pendant 6 mois",
+    "delai_9mois": "pendant 9 mois",
+    "definitif": "jusqu'à nouvel ordre"
   }
 }
