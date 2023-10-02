@@ -9,11 +9,19 @@ import {useCampaignsStore} from "@/stores/campaigns";
 import Spinner from "@/components/Spinner.vue";
 import CampaignsPendingActionsWithdrawDialog from "@/components/campaigns/pendingActions/withdrawDialog/main.vue";
 import CampaignsPendingActionsWithdrawEtablissement from "@/components/campaigns/pendingActions/withdrawEtablissement/main.vue"
+import CampaignsPendingActionsAddPendingDialog from "@/components/campaigns/pendingActions/addPendingDialog/main.vue";
 export default {
   name: "CampaignsPendingActions",
   components: {
-    CampaignsPendingActionsWithdrawDialog, CampaignsPendingActionsWithdrawEtablissement,
-    Spinner, CampaignsPendingActionsEtablissement, ScoreWidget, Etablissement, Entreprise, CampaignsDepartementFilter},
+    CampaignsPendingActionsAddPendingDialog,
+    CampaignsPendingActionsWithdrawDialog,
+    CampaignsPendingActionsWithdrawEtablissement,
+    Spinner,
+    CampaignsPendingActionsEtablissement,
+    ScoreWidget,
+    Etablissement,
+    Entreprise,
+    CampaignsDepartementFilter},
   setup() {
     const dialogs = useDialogsStore()
     const campaigns = useCampaignsStore()

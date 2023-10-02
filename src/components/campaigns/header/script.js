@@ -4,10 +4,12 @@ export default {
   name: 'CampaignsHeader',
   props: ['campaign'],
   computed: {
+    dateFin() {
+      return new Date(this.campaign.dateFin)
+    },
     remainingDays() {
       const today = new Date()
-      const dateFin = new Date(this.campaign.dateFin)
-      return Math.round((dateFin.getTime() - today.getTime()) / (1000 * 3600 * 24))
+      return Math.round((this.dateFin.getTime() - today.getTime()) / (1000 * 3600 * 24))
     },
     printDateFin() {
       return new Date(this.campaign.dateFin).toLocaleString('fr').slice(0, 10)
