@@ -52,10 +52,10 @@
         </v-list-item>
         <v-list-item to="/follow">
           <v-list-item-action>
-            <v-icon>fa-star</v-icon>
+            <v-icon>fa-people-pulling</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title>Suivi d'établissements</v-list-item-title>
+            <v-list-item-title>Accompagnement</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
         <v-list-item v-if="roles.includes('wekan') && kanban.visibleWekan" :href="wekan_url" target="_blank">

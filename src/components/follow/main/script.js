@@ -11,10 +11,14 @@ import FilterLabels from "@/components/follow/filters/labels.vue";
 import {useFollowStore} from "@/stores/followFilters";
 import Spinner from "@/components/Spinner.vue";
 import {useDrawersStore} from "@/stores/drawers";
+import FollowRightDrawer from "@/components/follow/rightdrawer/main.vue";
+import FollowWidget from "@/components/follow/widget/main.vue";
 
 export default {
-  name: 'Follow',
+  name: 'FollowMain',
   components: {
+    FollowWidget,
+    FollowRightDrawer,
     Spinner,
     FilterLabels,
     FilterRaisonSociale,
@@ -159,67 +163,6 @@ export default {
     },
     wekan_url() {
       return process.env.VUE_APP_WEKAN_URL
-    },
-    type: {
-      get() {
-        return this.$localStore.state.typeFollow
-      },
-      set(value) {
-        this.$localStore.commit('setTypeFollow', value)
-      },
-    },
-    boards: {
-      get() {
-        const boardsFollow = this.$localStore.state.boardsFollow
-        return (boardsFollow.includes('*')) ? ['*'] : boardsFollow
-      },
-      set(value) {
-        this.$localStore.commit('setBoardsFollow', (value.includes('*')) ? ['*'] : value)
-      },
-    },
-    lists: {
-      get() {
-        const listsFollow = this.$localStore.state.listsFollow
-        return (listsFollow.includes('*')) ? ['*'] : listsFollow
-      },
-      set(value) {
-        this.$localStore.commit(
-          'setListsFollow',
-          (value.includes('*')) ? ['*'] : value
-        )
-      },
-    },
-    zone: {
-      get() {
-        const zoneFollow = this.$localStore.state.zoneFollow
-        return (zoneFollow.includes('*')) ? ['*'] : zoneFollow
-      },
-      set(value) {
-        this.$localStore.commit(
-          'setZoneFollow',
-          (value.includes('*')) ? ['*'] : value
-        )
-      },
-    },
-    labels: {
-      get() {
-        return this.$localStore.state.labelsFollow || []
-      },
-      set(value) {
-        this.$localStore.commit('setLabelsFollow', value)
-      },
-    },
-    labelMode: {
-      get() {
-        return this.$localStore.state.labelModeFollow
-      },
-      set(value) {
-        this.$localStore.commit('setLabelModeFollow', value)
-      },
-    },
-
-    departements() {
-      return this.$store.state.departements
     },
     wekanUser() {
       return this.roles.includes('wekan')

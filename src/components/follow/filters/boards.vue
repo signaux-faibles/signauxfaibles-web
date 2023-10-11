@@ -63,7 +63,9 @@ export default {
     return {follow}
   },
   mounted() {
-    this.follow.boardIDs = this.allBoards
+    if (this.follow.boardIDs.length == 0) {
+      this.follow.boardIDs = this.allBoards
+    }
   },
   methods: {
     notifyFollowUpdate() {

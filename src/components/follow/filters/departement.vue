@@ -59,15 +59,20 @@ export default {
   },
   mounted() {
     this.$bus.$on('follow-departement-reset', this.selectAll)
-    this.selectAll()
+    if (this.follow.departements.length == 0) {
+      this.selectAll()
+    }
   },
   methods: {
+    allDepartements() {
+      return this.zoneItems.map((z) => z.value)
+    },
     unselectAll() {
       this.follow.departements = []
       this.notifyFollowUpdate()
     },
     selectAll() {
-      this.follow.departements = this.zoneItems.map((z) => z.value)
+      this.follow.departements = this.allDepartements()
       this.notifyFollowUpdate()
     },
     notifyFollowUpdate() {
