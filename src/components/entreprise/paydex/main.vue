@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-toolbar color="indigo" dark>
-      <v-toolbar-title class="localtoolbar">Attitude de paiement</v-toolbar-title>
+      <v-toolbar-title class="localtoolbar">Attitude de paiement fournisseurs</v-toolbar-title>
       <v-spacer/>
       <Gitbook :target="gitbookPath('PAYDEX')" icon/>
     </v-toolbar>

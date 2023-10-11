@@ -2,6 +2,7 @@
   <v-chip class="mr-2"
     :color="color.background"
     :text-color="color.front"
+    :small="small"
   >
     {{ label.name }}
   </v-chip>
