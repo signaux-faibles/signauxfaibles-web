@@ -137,12 +137,18 @@ export default {
       }
     },
     dernierScore() {
-      return this.historique[0] || {}
+      const lastBatch = this.$store.getters.batches[0]
+      if ((this.historique[0] || {})['idListe'] == lastBatch.value) {
+        return this.historique[0] || {}
+      } else {
+        return {}
+      }
     },
     alert() {
       return this.dernierScore.alert
     },
     alertPreRedressements() {
+
       return this.dernierScore.alertPreRedressements
     },
     permScore() {
