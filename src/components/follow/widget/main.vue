@@ -1,81 +1,66 @@
 <template>
   <div>
-    <v-card class="mt-3 mb-3" style="height: 310px;">
-      <v-card-title class="mb-1 pt-1 pl-3 pr-2" style="height: 42px; border-bottom:1px solid black;">
+    <v-card class="mt-3 mb-3 elevation-3">
+      <v-card-title
+        class="pt-1 pl-4 pr-2 header"
+        style="height: 41px"
+      >
         {{ etablissement.raison_sociale }}
         <v-spacer/>
-        <v-btn class="ml-5" color="indigo" compact outlined small>établissement</v-btn>
-        <v-btn class="ml-5" color="indigo" compact outlined small>entreprise</v-btn>
+        <v-btn class="ml-2" color="indigo" compact dark small>établissement</v-btn>
+        <v-btn class="ml-2" color="indigo" compact dark small>entreprise</v-btn>
       </v-card-title>
-      <v-card-text>
+      <v-card-text
+        v-for="card in etablissement.cards" :key="card.id"
+        class="pt-3 body"
+        style="font-family: Oswald; border-top: 2px solid darkgrey;"
+      >
+
         <v-layout wrap>
           <v-flex
-              class="pl-2" md3 xl3 xs6
+            class="" md2 xs6
           >
-            <h4 style="text-align: center">Détails</h4>
-            <span style="font-family: Oswald; font-weight: 100;">
-            Statut: En cours <br/>
-            Accompagné depuis le 01/01/2021 <br/>
-            Dernière mise à jour: 12/09/2023<br/>
-            Pris en charge par Élodie Quezel <br/>
-            Avec l'assistance de:
+              <h3>{{ kanban.board(card.boardID) }}</h3>
+              <h3>Statut: {{ kanban.list(card.boardID, card.listID) }}</h3>
+              depuis le {{ (new Date(card.startAt)).toLocaleDateString() }} <br/>
+              mis à jour le {{ (new Date(card.startAt)).toLocaleDateString() }}
+          </v-flex>
+          <v-flex class="pl-2" md3 xl3 xs3>
+            Initié par {{ kanban.fullnameFromID(card.creatorID) }}
+            <div v-if="card.assigneesID">
+              Pris en charge par
+              <span v-if="(card.assigneesID || []).length == 1">
+                {{ kanban.fullnameFromID(card.assigneesID[0]) }}
+                <br/>
+              </span>
+              <span v-else>
+                <ul>
+                  <li v-for="assigneeID in card.assigneesID" :key="assignee">
+                    {{ kanban.fullnameFromID(assigneeID) }}
+                  </li>
+                </ul>
+              </span>
+            </div>
+            Participants:
             <ul>
-              <li>
-                Raphaël Squelbut
+              <li v-for="memberID in card.memberIDs">
+                {{ kanban.fullnameFromID(memberID) }}
               </li>
-              <li>Anna Ouhayoun</li>
             </ul>
-              <v-btn class="mt-1" small outlined color="indigo">rejoindre</v-btn>
             <p/>
             Catégories:
-            <follow-label
-                v-for="(label, j) in labels"
-                :key="j"
-                :label="label"
-                small
+            <FollowLabel
+              v-for="(label, j) in kanban.labels(card.boardID, card.labelIDs)"
+              :key="j"
+              :label="label"
+              small
             />
-              <v-btn
-                  class="smallbtn"
-                  outlined
-                  fab
-                  color="green darken-2"
-              >
-                <v-icon size="10px" dark>
-                  fa-plus
-                </v-icon>
-              </v-btn>
-            </span>
           </v-flex>
-          <v-flex class="pl-2" md5 xl5 xs6>
-            <h4 style="text-align: center">Résumé</h4>
-            <div class="scrollflex">
-              <v-card class="pl-2" outlined>
-                <Viewer
-                    ref="viewer"
-                    initialEditType="wysiwyg"
-                    :initialValue="initialValue"
-                />
-              </v-card>
-              <v-card-action>
-              </v-card-action>
-            </div>
-            <div style="width: 100%; text-align: center;">
-              <v-btn small outlined @compact color="indigo">modifier</v-btn>
-            </div>
+          <v-flex xs6 md6>
+            {{ card }}
           </v-flex>
-          <v-flex class="pl-2" md4 xl4 xs6>
-            <h4 style="text-align: center">Commentaires</h4>
-            <div class="scrollflex">
-              <FollowComment v-for="(j, i) in comments" :key="i" :author="j.author" :comment="j.comment"
-                             :date="j.date"/>
-            </div>
-          </v-flex>à
-
         </v-layout>
       </v-card-text>
-      <!--      <v-card-text>-->
-      <!--        {{ etablissement }}-->
-      <!--      </v-card-text>-->
     </v-card>
   </div>
 </template>
@@ -84,57 +69,19 @@
 import {Viewer} from "@toast-ui/vue-editor";
 import FollowComment from "@/components/follow/comment/main.vue";
 import FollowLabel from "@/components/follow/label/main.vue";
+import {useKanbanStore} from "@/stores/kanban";
 
 export default {
   name: 'FollowWidget',
   components: {FollowLabel, FollowComment, Viewer},
   props: ['etablissement'],
+  setup() {
+    const kanban = useKanbanStore()
+    return {kanban}
+  },
   data() {
     return {
-      labels: [{name: 'label a', color: 'blue'}, {name: 'label o', color: 'indigo'}],
-      initialValue: "##### une synthèse\n" +
-          "et son titre\n" +
-          "avec beaucoup\n" +
-          "beaucoup\n" +
-          "beaucoup\n" +
-          "beaucoup\n" +
-          "beaucoup\n" +
-          "beaucoup\n" +
-          "beaucoup\n" +
-          "beaucoup\n" +
-          "beaucoup\n" +
-          "beaucoup\n" +
-          "beaucoup\n" +
-          "beaucoup\n" +
-          "trop de lignes",
-      comments: [
-        {
-          author: "Raphael Squelbut",
-          date: new Date(),
-          comment: "##### voilà un commentaire"
-        },
-        {
-          author: "Anna Ouhayoun",
-          date: new Date(),
-          comment: '' +
-              '| Aligné à gauche  | Centré          | Aligné à droite |\n' +
-              '| :--------------- |:---------------:| -----:|\n' +
-              '| Aligné à gauche  |   ce texte        |  Aligné à droite |\n' +
-              '| Aligné à gauche  | est             |   Aligné à droite |\n' +
-              '| Aligné à gauche  | centré          |    Aligné à droite |'
 
-        },
-        {
-          author: "Raphael Squelbut",
-          date: new Date(),
-          comment: "> On peut aussi faire des citations"
-        },
-        {
-          author: "Raphael Squelbut",
-          date: new Date(),
-          comment: "**Le markdown c'est pratique**"
-        },
-      ]
     }
   }
 }
@@ -147,9 +94,16 @@ export default {
 }
 
 .smallbtn {
-  width: 22px;
-  min-width: 22px;
-  height: 22px;
-  min-width: 22px;
+  width: 24px;
+  min-width: 24px;
+  height: 24px;
+  min-width: 24px;
+}
+
+.header {
+  background: linear-gradient(90deg, #aaba, rgba(180, 162, 240, 0.15) 0.3%, #0000 99.6%, #aaba);
+}
+.body {
+  background: linear-gradient(90deg, #aaba, rgba(140, 140, 255, 0.05) 0.3%, #0000 99.6%, #aaba);;
 }
 </style>

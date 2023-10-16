@@ -20,21 +20,45 @@ export const useKanbanStore = defineStore('kanban', {
     },
   },
   getters: {
+    fullnameFromID() {
+      return (userID: string) => {
+        if (this.config.users) {
+          return (this.config.users[userID] || {}).fullname
+        }
+      }
+    },
     fullname() {
       return (username: string) => {
         if (this.config.users) {
-          for (const id in this.config.users) {
-            if (this.config.users[id].username == username) {
-              return this.config.users[id].fullname
+          for (const userID in this.config.users) {
+            if (this.config.users[userID].username == username) {
+              return (this.config.users[userID] || {}).fullname
             }
           }
         }
         return username as string
       }
     },
+    board() {
+      return (boardID: string) => {
+        return this.config.boards[boardID].title
+      }
+    },
+    list() {
+      return (boardID: string, listID: string) => {
+        return this.config.boards[boardID].lists[listID].title
+      }
+    },
     visibleWekan(): boolean {
       const visibleWekanRegExp = new RegExp(process.env.VUE_APP_WEKAN_VISIBILITY_REGEXP)
       return  Object.values(this.config.boards || {}).findIndex((b: any) => visibleWekanRegExp.exec(b.slug)) != -1
+    },
+    labels() {
+      return (boardID: string, labelIDs: string[]) => {
+        return (labelIDs || []).map((labelID: string) => {
+          return this.config.boards[boardID].labels[labelID]
+        })
+      }
     }
   }
 })
