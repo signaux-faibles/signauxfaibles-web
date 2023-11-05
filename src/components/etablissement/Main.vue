@@ -122,9 +122,7 @@
                                    style="font-size: 14px; font-weight: 400; font-family: 'Roboto', sans-serif">
                                 Vous pouvez consulter les annonces publiées au bulletin officiel.
                                 <v-btn :href="lienBODACC" class="my-2" color="indigo" outlined rel="noopener" small
-                                       target="_blank">
-                                  <v-icon left small>open_in_new</v-icon>
-                                  Voir annonces BODACC
+                                       target="_blank">Voir annonces BODACC
                                 </v-btn>
                               </div>
                             </v-card-text>

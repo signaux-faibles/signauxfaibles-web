@@ -6,7 +6,7 @@
       :items="boardsItems"
       :menu-props="{ maxHeight: 400 }"
       chips
-      label="Tableaux"
+      label="Groupes"
       multiple
       prepend-icon="fab fa-trello"
       @change="notifyFollowUpdate()"

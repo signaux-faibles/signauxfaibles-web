@@ -41,6 +41,7 @@
             Les données sont collectées auprès des adhérents du programme
             <a href="https://www.altares.com/fr/nos-data/duntrade/">Duntrade</a> (70% des entreprises de plus de
             10 salariés)<br/>
+            Le programme Duntrade demande aux entreprises de ne pas inclure leur comptabilité intra-groupe<br/>
             Source: <a href="https://www.altares.com/fr/nos-data/attitude-de-paiement/">données Paydex et FPI
             (Altarès)</a>
           </div>

@@ -20,7 +20,7 @@
 
       >
           Détection - {{ currentBatch }}
-          <Gitbook icon :target="gitbookPath('PAYDEX')"/>
+          <Gitbook icon :target="gitbookPath('CIBLER_RECHERCHE')"/>
       </div>
       <v-spacer></v-spacer>
       <v-icon
