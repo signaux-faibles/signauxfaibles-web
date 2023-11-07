@@ -24,7 +24,10 @@
             {{ etablissement.siret }}
           </span>
       </div>
+
       <div id="contact" class="ml-2">
+
+        {{ etablissement }}
         <v-btn
           class="mr-4"
           color="indigo"

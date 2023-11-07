@@ -6,6 +6,7 @@
 
         <v-card-text height="300px">
             <h3>À quel titre souhaitez vous prendre en charge cet établissement ?</h3>
+          {{ kanbanConfig.departements }}
             <v-radio-group
                     v-model="createCardSwimlaneID"
                     mandatory

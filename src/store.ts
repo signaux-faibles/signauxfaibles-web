@@ -24,7 +24,7 @@ const localStore = new Vuex.Store({
     exclureSuivi: false,
     firstAlert: false,
     ignorezone: false,
-    currentNaf: [],
+    currentNaf: [] as string[],
     zone: [],
     caMin: null,
     minEffectif: null,
@@ -59,7 +59,7 @@ const localStore = new Vuex.Store({
     setprocol(state, val) {
       state.procol = val
     },
-    setcurrentNaf(state, val: string) {
+    setcurrentNaf(state, val: string[]) {
       state.currentNaf = val
     },
     setzone(state, val) {
