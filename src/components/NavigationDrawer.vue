@@ -36,7 +36,7 @@
         </v-list-item>
         <v-list-item v-if="campaigns.hasCampaigns" to="/campaigns">
           <v-list-item-action>
-            <v-icon>fa-briefcase</v-icon>
+            <v-icon>fa-phone</v-icon>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>Campagnes</v-list-item-title>

@@ -19,7 +19,7 @@
         style="width: 100%; text-align: center;"
       >
         <span style="display: inline-flex">
-          Suivi d'établissements
+          Accompagnement
           <Gitbook :target="gitbookPath('SUIVI')" icon/>
         </span>
       </div>
@@ -30,7 +30,7 @@
         color="#ffffff"
         @click="drawers.showRight()"
         small
-      >fa-star
+      >fa-filter
       </v-icon>
     </v-app-bar>
     <div style="width:100%">

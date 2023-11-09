@@ -26,8 +26,6 @@
       </div>
 
       <div id="contact" class="ml-2">
-
-        {{ etablissement }}
         <v-btn
           class="mr-4"
           color="indigo"
@@ -36,7 +34,7 @@
           @click="showCampaignCardEditor">
           <v-icon class="mr-2" color="indigo" small>fa-pen</v-icon>
           <span v-if="etablissement.cardID">
-            Informations partagées
+            {{ etablissement.list }}
           </span>
           <span v-else>
             Je partage mes informations
@@ -66,11 +64,11 @@
               </v-radio-group>
               <div style="text-align: right">
                 <v-btn class="mr-4" color="indigo" outlined dark @click="hideSuccess">
-                  RETOUR
+                  retour
                 </v-btn>
                 <v-btn :color="(successRadio != null)?'indigo':null" :dark="successRadio != null"
                        :disabled="!successRadio" @click="success">
-                  VALIDER
+                  valider
                 </v-btn>
               </div>
             </v-card-text>

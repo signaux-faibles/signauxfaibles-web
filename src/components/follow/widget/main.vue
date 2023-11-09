@@ -41,7 +41,7 @@
           >
             <h3>{{ kanban.board(card.boardID) }}</h3>
             <h3>{{ kanban.list(card.boardID, card.listID) }}</h3>
-            depuis le {{ (new Date(card.startAt)).toLocaleDateString() }} <br/>
+            initié le {{ (new Date(card.startAt)).toLocaleDateString() }} par {{}}<br/>
             mis à jour le {{ (new Date(card.lastActivity)).toLocaleDateString() }} <br/>
             <span v-if="card.endAt">terminé le {{ (new Date(card.endAt)).toLocaleDateString() }}</span>
             <p/>

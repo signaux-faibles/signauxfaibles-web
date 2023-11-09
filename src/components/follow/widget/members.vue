@@ -29,10 +29,7 @@
       <v-btn v-if="!isMember" color="indigo" dark>
         je participe
       </v-btn>
-      <v-btn v-if="isMember && !isLeader" color="green darken-2" dark>
-        je prends en charge
-      </v-btn>
-      <v-btn v-if="isLeader" color="amber darken-3" dark>
+      <v-btn v-if="isLeader" color="indigo" outlined>
         j'ai terminé
       </v-btn>
     </div>

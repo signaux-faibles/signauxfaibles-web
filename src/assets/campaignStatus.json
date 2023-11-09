@@ -15,5 +15,10 @@
     "delai_6mois": "pendant 6 mois",
     "delai_9mois": "pendant 9 mois",
     "definitif": "jusqu'à nouvel ordre"
+  },
+  "hooks": {
+    "success": {
+      "besoin": "FOLLOW"
+    }
   }
 }

@@ -6,7 +6,7 @@
     right
   >
     <v-toolbar class="transparent" flat height="40">
-      <v-icon :class="loading?'rotate':''" @click="drawers.hideRight()" small>fa-star</v-icon>
+      <v-icon :class="loading?'rotate':''" @click="drawers.hideRight()" small>fa-filter</v-icon>
     </v-toolbar>
     <v-divider class="mb-1"/>
     <div class="mt-2 filter">
