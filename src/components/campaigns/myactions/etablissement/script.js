@@ -50,7 +50,9 @@ export default {
         success() {
             let params = {
                 detail: this.successRadio,
-                effect: StatusLabels.hooks.success[this.successRadio],
+            }
+            if (this.currentLabel) {
+                params['effect'] = this.currentLabel.effect
             }
             this.$axios.post(
                 '/campaign/success/' + this.etablissement.campaignID + '/' + this.etablissement.id,
@@ -65,12 +67,18 @@ export default {
         }
     },
     computed: {
+        statusLabels() {
+            return StatusLabels
+        },
         cancelLabels() {
             return StatusLabels.cancel
         },
         successLabels() {
             return StatusLabels.success
         },
+        currentLabel() {
+            return this.successLabels[this.successRadio]
+        }
     },
     data() {
         return {
