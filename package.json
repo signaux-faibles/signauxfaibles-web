@@ -17,7 +17,7 @@
     "@types/jwt-decode": "^2.2.1",
     "@types/markdown-it": "^12.2.3",
     "apexcharts": "^3.37.1",
-    "axios": "^0.26.0",
+    "axios": "^1.6.0",
     "core-js": "^3.8.3",
     "filesize": "^10.0.8",
     "identicon.js": "^2.3.3",
