@@ -39,9 +39,9 @@
     <v-layout column fill-height style="font-weight: normal">
       <v-flex v-if="wekanUser" pt-3 shrink text-center>
         <v-btn-toggle v-model="follow.type" mandatory @change="getFollowedEtablissements">
-          <v-btn text value="my-cards">Mes interventions</v-btn>
-          <v-btn text value="all-cards">Toutes les interventions</v-btn>
-          <v-btn text value="no-card">Mes favoris</v-btn>
+          <v-btn text value="my-cards">Mes accompagnements</v-btn>
+          <v-btn text value="all-cards">Tous les accompagnements</v-btn>
+<!--          <v-btn text value="no-card">Mes favoris</v-btn>-->
         </v-btn-toggle>
       </v-flex>
       <v-flex grow px-2>

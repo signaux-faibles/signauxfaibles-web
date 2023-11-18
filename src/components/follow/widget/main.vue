@@ -25,7 +25,7 @@
           compact
           outlined
           small
-        @click="dialogs.showEntreprise(etablissement.siret.slice(0,9))"
+          @click="dialogs.showEntreprise(etablissement.siret.slice(0,9))"
         >
           Fiche entreprise
         </v-btn>
@@ -35,88 +35,7 @@
         class="pt-3 body"
         style="font-family: Oswald; border-top: 2px solid darkgrey;"
       >
-        <v-layout wrap>
-          <v-flex
-            class="mb-3 status" md3 xs6
-          >
-            <h3>{{ kanban.board(card.boardID) }}</h3>
-            <h3>{{ kanban.list(card.boardID, card.listID) }}</h3>
-            initié le {{ (new Date(card.startAt)).toLocaleDateString() }} par {{}}<br/>
-            mis à jour le {{ (new Date(card.lastActivity)).toLocaleDateString() }} <br/>
-            <span v-if="card.endAt">terminé le {{ (new Date(card.endAt)).toLocaleDateString() }}</span>
-            <p/>
-            <div v-if="(card.labelIDs || []).length > 0">
-              Catégories:
-              <FollowLabel
-                v-for="(label, j) in kanban.labels(card.boardID, card.labelIDs)"
-                :key="j"
-                :label="label"
-                small
-              />
-            </div>
-          </v-flex>
-          <v-flex class="pl-2 mb-3" md3 xl3 xs3>
-            <FollowWidgetMembers
-              :card="card"
-            />
-          </v-flex>
-          <v-flex md6 xs12>
-            <v-card height="300px" outlined>
-              <v-card-title style="display: block" class="pt-1 pr-2 pl-2 elevation-1 synthese">
-                <span style="float: left;">synthèse
-                </span>
-                <span v-if="isMember(card)" style="float: right">
-                  <v-btn
-                  color="indigo"
-                  dark
-                  small
-                  outlined
-                  @click="dialogs.showEtablissementCardEditor(etablissement.siret, etablissement.codeDepartement, etablissement.raisonSociale, card.id, card.description)"
-                  >
-                  modifier
-                    </v-btn>
-                </span>
-              </v-card-title>
-              <v-card-text class="mr-0 pr-0">
-                <Viewer
-                  :initialValue="card.description"
-                  class="scroll mr-0 pa-0"
-                />
-              </v-card-text>
-            </v-card>
-            <div v-if="card.comments.length > 0">
-              <v-menu
-                class="scroll"
-                max-height="300px"
-                max-width="500px"
-                offset-y
-              >
-                <template v-slot:activator="{ attrs, on }">
-                  <div>
-                    le {{ date(card.comments[0].createdAt) }},
-                    {{ kanban.fullnameFromID(card.comments[0].authorID) }} a apporté des précisions
-                  </div>
-                  <v-btn
-                    color="indigo"
-                    outlined
-                    v-bind="attrs"
-                    v-on="on">
-                    consulter
-                  </v-btn>
-                </template>
-                <v-card>
-                  <v-card-text>
-                    <followComment
-                      v-for="comment in card.comments"
-                      :key="comment.id"
-                      :comment="comment"
-                    />
-                  </v-card-text>
-                </v-card>
-              </v-menu>
-            </div>
-          </v-flex>
-        </v-layout>
+        <FollowWidgetCard :inputCard="card" :etablissement="etablissement"/>
       </v-card-text>
     </v-card>
   </div>
@@ -129,10 +48,13 @@ import FollowLabel from "@/components/follow/label/main.vue";
 import FollowWidgetMembers from "@/components/follow/widget/members.vue"
 import {useKanbanStore} from "@/stores/kanban";
 import {useDialogsStore} from "@/stores/dialogs";
+import FollowWidgetHeaders from "@/components/follow/widget/headers.vue";
+import FollowWidgetSynthese from "@/components/follow/widget/synthese.vue";
+import FollowWidgetCard from "@/components/follow/widget/card.vue"
 
 export default {
   name: 'FollowWidget',
-  components: {FollowLabel, FollowComment, Viewer, FollowWidgetMembers},
+  components: {FollowWidgetSynthese, FollowWidgetHeaders, FollowLabel, FollowComment, Viewer, FollowWidgetMembers, FollowWidgetCard},
   props: ['etablissement'],
   setup() {
     const kanban = useKanbanStore()
@@ -144,7 +66,6 @@ export default {
       return new Date(isodate).toLocaleDateString()
     },
     isMember(card) {
-      console.log(card)
       return [card.creatorID]
         .concat(card.memberIDs || [])
         .concat(card.assigneeIDs || []).includes(this.userID)
@@ -162,11 +83,6 @@ export default {
 </script>
 
 <style scoped>
-.scroll {
-  height: 266px;
-  overflow-y: scroll;
-}
-
 .smallbtn {
   width: 24px;
   min-width: 24px;

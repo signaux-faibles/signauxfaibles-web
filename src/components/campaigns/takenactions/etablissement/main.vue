@@ -27,7 +27,7 @@
       </div>
       <div class="mr-4">
         <v-chip v-if="etablissement.action=='success'" dark color="indigo">
-          {{ successLabels()[etablissement.detail] }}
+          {{ successLabels()[etablissement.detail].libelle }}
         </v-chip>
         <v-chip v-if="etablissement.action=='take'" dark color="indigo accent-2">
           en cours

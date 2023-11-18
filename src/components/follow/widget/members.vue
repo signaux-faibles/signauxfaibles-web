@@ -1,36 +1,34 @@
 <template>
   <div class="members">
     <div>
-      Initié par {{ kanban.fullnameFromID(card.creatorID) }}<br/>
-    </div>
-    <div v-if="card.assigneeIDs">
-      Pris en charge par
-      <span v-if="(card.assigneeIDs || []).length == 1">
-                {{ kanban.fullnameFromID(card.assigneeIDs[0]) }}
-                <br/>
-              </span>
-      <span v-else>
-                <ul>
-                  <li v-for="assigneeID in card.assigneeIDs" :key="assigneeID">
-                    {{ kanban.fullnameFromID(assigneeID) }}
-                  </li>
-                </ul>
-              </span>
-    </div>
-    <div v-if="(card.memberIDs || []).length > 0">
-      Participants:
+      <span v-if="members.length==0">Cette entreprise n'est pas accompagnée.<br/>
+        Souhaitez vous participer à un nouvel accompagnement ?</span>
+      <h3 v-if="members.length > 0">Accompagnants</h3>
       <ul>
-        <li v-for="memberID in card.memberIDs">
-          {{ kanban.fullnameFromID(memberID) }}
+        <li v-for="member in this.members" class="mt-2">
+          {{ member }}
         </li>
       </ul>
     </div>
-    <div class="button">
-      <v-btn v-if="!isMember" color="indigo" dark>
-        je participe
+    <div class="mt-6">
+      <v-btn
+        v-if="!isMember"
+        class="button"
+        color="indigo"
+        @click="joinCard"
+        small
+        dark>
+        J'accompagne
       </v-btn>
-      <v-btn v-if="isLeader" color="indigo" outlined>
-        j'ai terminé
+      <v-btn
+        v-if="isMember"
+        class="button"
+        color="indigo"
+        @click="partCard"
+        small
+        outlined
+      >
+        J'ai terminé
       </v-btn>
     </div>
   </div>
@@ -46,14 +44,10 @@
   flex-direction: column;
   width: 100%;
 }
-
 .button {
-  display: inline;
-  width: 100%;
-  height: 100%;
-  vertical-align: bottom;
+  text-transform: none;
+  font-size: 17px;
 }
-
 
 </style>
 <script>
@@ -66,17 +60,37 @@ export default {
     const kanban = useKanbanStore()
     return {kanban}
   },
+  methods: {
+    joinCard() {
+      this.$axios.get("/kanban/card/join/" + this.card.id).then(() => {
+        this.$parent.refreshCard()
+      })
+    },
+    partCard() {
+      this.$axios.get("/kanban/card/part/" + this.card.id).then(() => {
+        this.$parent.refreshCard()
+      })
+    }
+  },
   computed: {
+    membersIDs() {
+      return (this.card.memberIDs || []).concat(this.card.assigneeIDs || [])
+        .filter((memberID, index, array) => {
+          return array.indexOf(memberID) === index
+        })
+    },
+    members() {
+      let memberNames = this.membersIDs.map((memberID) => {
+        return this.kanban.fullnameFromID(memberID)
+      })
+      memberNames.sort((name1, name2) => {return (name1<name2)?1:-1})
+      return memberNames
+    },
     userID() {
       return this.kanban.config.userID
     },
     isMember() {
-      return [this.card.creatorID]
-        .concat(this.card.memberIDs || [])
-        .concat(this.card.assigneeIDs || []).includes(this.userID)
-    },
-    isLeader() {
-      return (this.card.assigneeIDs || []).includes(this.userID)
+      return this.membersIDs.includes(this.userID)
     },
   }
 }

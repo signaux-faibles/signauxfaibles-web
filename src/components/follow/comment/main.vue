@@ -1,13 +1,13 @@
 <template>
   <div>
-    <v-card outlined class="pa-2 mb-2">
-    <h5>{{ kanban.fullnameFromID(comment.authorID) }}, le {{ date(comment.createdAt) }}</h5>
+    <v-card class="pa-2 mb-2" outlined>
+      <h5>{{ kanban.fullnameFromID(comment.authorID) }}, le {{ date(comment.createdAt) }}</h5>
       <v-card-text>
-    <Viewer
-      ref="viewer"
-      :initialValue="comment.comment"
-      initialEditType="wysiwyg"
-    />
+        <Viewer
+          ref="viewer"
+          :initialValue="comment.comment"
+          initialEditType="wysiwyg"
+        />
       </v-card-text>
     </v-card>
   </div>

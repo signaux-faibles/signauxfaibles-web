@@ -51,8 +51,8 @@ export default {
             let params = {
                 detail: this.successRadio,
             }
-            if (this.currentLabel) {
-                params['effect'] = this.currentLabel.effect
+            if (this.currentLabel.effect) {
+                params['effect'] = {type: this.currentLabel.effect, cardID: this.etablissement.cardID}
             }
             this.$axios.post(
                 '/campaign/success/' + this.etablissement.campaignID + '/' + this.etablissement.id,
