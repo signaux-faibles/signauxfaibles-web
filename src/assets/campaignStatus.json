@@ -7,17 +7,17 @@
     },
     "refus": {
       "libelle": "L'entreprise ne souhaite pas poursuivre.",
-      "effect": "noAnalyse",
+      "effect": "nofollow",
       "alert": "Cette option met fin à l'analyse en cours. Nous vous invitons à compléter les informations au sujet de cette entreprise."
     },
     "indemne": {
       "libelle": "L'entreprise n'a pas besoin de prise en charge.",
-      "effect": "noAnalyse",
+      "effect": "nofollow",
       "alert": "Cette option met fin à l'analyse en cours. Nous vous invitons à compléter les informations au sujet de cette entreprise."
     },
     "injoignable": {
       "libelle": "J'abandonne car l'entreprise est injoignable.",
-      "effect": "noAnalyse",
+      "effect": "nofollow",
       "alert": "Cette option met fin à l'analyse en cours. Il vous est également possible de repousser la prise de contact à une campagne ultérieure si vous ne souhaitez pas abandonner cette entreprise."
     }
   },
