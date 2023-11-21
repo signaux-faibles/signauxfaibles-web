@@ -41,7 +41,7 @@ import Help from '@/components/Help.vue'
 export default {
   name: 'Urssaf',
   components: { Help },
-  props: ['debit', 'cotisation', 'chart', 'permUrssaf'],
+  props: ['debit', 'cotisation', 'delai', 'chart', 'permUrssaf'],
   computed: {
     series() {
       if ((this.cotisation || []).length > 0 || (this.debit || []).length > 0) {
@@ -75,6 +75,15 @@ export default {
               Math.round(d.part_ouvriere),
             ]
           }),
+        }, {
+          name: 'délai accordé',
+          type: 'line',
+          data: this.debit.map((d) => {
+            return [
+              new Date(d.periode),
+              Math.round(d.delai),
+            ]
+          }),
         }]
       } else {
         return []
@@ -106,12 +115,13 @@ export default {
         },
         stroke: {
           curve: 'smooth',
-          width: [5, 0, 0],
+          width: [5, 0, 0, 4],
+          dashArray: [0,0,0,8]
         },
-        colors: ['#4f8a83', '#fac699', '#e76278'],
+        colors: ['#4f8a83', '#fac699', '#e76278', '#573D1C'],
         fill: {
-          type: ['solid', 'solid', 'solid'],
-          colors: ['#4f8a83', '#fac699', '#e76278'],
+          type: ['solid', 'solid', 'solid', 'solid'],
+          colors: ['#4f8a83', '#fac699', '#e76278', '#573D1C'],
           gradient: {
             type: 'vertical',
             shadeIntensity: 0,
@@ -154,39 +164,7 @@ export default {
           verticalAlign: 'middle',
           offsetX: 0,
           offsetY: 0,
-        },
-        annotations: {
-          position: 'front',
-          xaxis: [{
-            x: new Date('17 Mar 2020').getTime(),
-            x2: new Date('11 May 2020').getTime(),
-            borderColor: '#373D3F',
-            fillColor: '#373D3F',
-            opacity: 0.1,
-            label: {
-              text: 'Confinement national n°1',
-              borderColor: '#373D3F',
-              style: {
-                color: '#fff',
-                background: '#373D3F',
-              },
-            },
-          }, {
-            x: new Date('30 Oct 2020').getTime(),
-            x2: new Date('15 Dec 2020').getTime(),
-            borderColor: '#373D3F',
-            fillColor: '#373D3F',
-            opacity: 0.1,
-            label: {
-              text: 'Confinement national n°2',
-              borderColor: '#373D3F',
-              style: {
-                color: '#fff',
-                background: '#373D3F',
-              },
-            },
-          }],
-        },
+        }
       }
     },
   },

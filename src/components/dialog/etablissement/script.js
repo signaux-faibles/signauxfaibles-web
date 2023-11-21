@@ -1,4 +1,4 @@
-import Etablissement from '@/components/etablissement/Main.vue'
+import Etablissement from '@/components/etablissement/main.vue'
 import {useDialogsStore} from "@/stores/dialogs";
 
 export default {

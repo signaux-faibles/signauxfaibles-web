@@ -123,7 +123,7 @@
 
 <script>
 import Toolbar from '@/components/Toolbar.vue'
-import PredictionWidget from '@/components/PredictionWidget.vue'
+import PredictionWidget from '@/components/prediction/predictionWidget.vue'
 
 export default {
   name: 'Browse',

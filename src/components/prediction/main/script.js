@@ -1,5 +1,5 @@
 import Spinner from '@/components/Spinner.vue'
-import PredictionWidget from '@/components/PredictionWidget.vue'
+import PredictionWidget from '@/components/prediction/predictionWidget.vue'
 import Help from '@/components/Help.vue'
 import axios from 'axios'
 import libellesProcols from '@/assets/libelles_procols.json'
@@ -152,6 +152,10 @@ export default {
       this.firstAlert = !this.firstAlert
       this.getPrediction()
     },
+    toggleHasntDelay() {
+      this.hasntDelai = !this.hasntDelai
+      this.getPrediction()
+    },
     toggleIgnoreZone() {
       this.ignorezone = !this.ignorezone
       this.getPrediction()
@@ -214,6 +218,9 @@ export default {
           params.procol.push(this.procolParams[i])
         }
       })
+      if (this.hasntDelai) {
+        params.hasntDelai = this.hasntDelai
+      }
       if (this.exclureSuivi) {
         params.exclureSuivi = this.exclureSuivi
       }
@@ -256,6 +263,14 @@ export default {
       },
       set(value) {
         this.$localStore.commit('setignorezone', value)
+      },
+    },
+    hasntDelai: {
+      get() {
+        return this.$localStore.state.hasntDelai
+      },
+      set(value) {
+        this.$localStore.commit('setHasntDelai', value)
       },
     },
     firstAlert: {

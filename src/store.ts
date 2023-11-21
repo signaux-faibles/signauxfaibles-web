@@ -23,6 +23,7 @@ const localStore = new Vuex.Store({
     inclureEtablissementsFermes: false,
     exclureSuivi: false,
     firstAlert: false,
+    hasntDelai: false,
     ignorezone: false,
     currentNaf: [] as string[],
     zone: [],
@@ -52,6 +53,9 @@ const localStore = new Vuex.Store({
     },
     setfirstAlert(state, val: boolean) {
       state.firstAlert = val
+    },
+    setHasntDelai(state, val: boolean) {
+      state.hasntDelai = val
     },
     setignorezone(state, val: boolean) {
       state.ignorezone = val

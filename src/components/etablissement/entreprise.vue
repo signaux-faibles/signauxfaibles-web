@@ -54,7 +54,7 @@
 </template>
 
 <script>
-import PredictionWidget from '@/components/PredictionWidget.vue'
+import PredictionWidget from '@/components/prediction/predictionWidget.vue'
 import Help from '@/components/Help.vue'
 
 export default {

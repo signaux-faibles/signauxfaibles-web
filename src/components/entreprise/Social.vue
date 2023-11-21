@@ -169,8 +169,8 @@
 </template>
 
 <script>
-import PredictionWidget from '@/components/PredictionWidget.vue'
-import Map from '@/components/etablissement/Map.vue'
+import PredictionWidget from '@/components/prediction/predictionWidget.vue'
+import Map from '@/components/etablissement/map.vue'
 import Help from '@/components/Help.vue'
 
 export default {

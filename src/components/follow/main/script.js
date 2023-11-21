@@ -1,4 +1,4 @@
-import PredictionWidget from '@/components/PredictionWidget.vue'
+import PredictionWidget from '@/components/prediction/predictionWidget.vue'
 import Toolbar from '@/components/Toolbar.vue'
 import Help from '@/components/Help.vue'
 import Gitbook from "@/components/Gitbook.vue";
