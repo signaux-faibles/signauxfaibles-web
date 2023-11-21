@@ -28,7 +28,7 @@
       :series="series"
     ></apexchart>
 
-    <v-alert v-if="hasCCSFNow" class="ml-12 mr-12" type="info" color="indigo">
+    <v-alert dense outlined v-if="hasCCSFNow" class="ml-12 mr-3" type="info" color="indigo">
         Selon les données disponibles fournies par l'URSSAF, cette entreprise fait actuellement l'objet d'un plan CCSF.
     </v-alert>
     <v-layout align-center justify-center text-center style="min-height: 500px" v-if="!permUrssaf">
@@ -111,16 +111,16 @@ export default {
 
             const cotisation = (series[0][dataPointIndex])? series[0][dataPointIndex] + ' €' : 'n/c'
             const delai = series[1][dataPointIndex] + ' €'
-            const partSalariale = (series[2][dataPointIndex] - series[3][dataPointIndex])?series[2][dataPointIndex] - series[3][dataPointIndex] + ' €':'n/c'
-            const partPatronale = (series[3][dataPointIndex])?series[3][dataPointIndex] + ' €':'n/c'
+            const partSalariale = series[2][dataPointIndex] - series[3][dataPointIndex] + ' €'
+            const partPatronale = series[3][dataPointIndex] + ' €'
             return '<div style="width: 300px; height: 120px; overflow-wrap: anywhere; ">' +
               '<h4 style="background-color:#eee">' + displayDate +'</h4>' +
               '<hr style="border-width: 1px; background-color: #ddd; border-color: #eee">' +
               '<table class="tooltip">' +
               '<tr><td style="padding-right: 15px">cotisation appelée</td><td>' + cotisation + '</td></tr>' +
               '<tr><td style="padding-right: 15px">délai accordé</td><td>' + delai + '</td></tr>' +
-              '<tr><td style="padding-right: 15px">dette restante (part salariale)</td><td>' + partPatronale + '</td></tr>' +
-              '<tr><td style="padding-right: 15px">dette restante (part patronale)</td><td>' + partSalariale + '</td></tr>' +
+              '<tr><td style="padding-right: 15px">dette restante (part patronale)</td><td>' + partPatronale + '</td></tr>' +
+              '<tr><td style="padding-right: 15px">dette restante (part salariale)</td><td>' + partSalariale + '</td></tr>' +
               '</div>'
           },
           x: {
