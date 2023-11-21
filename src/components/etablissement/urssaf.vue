@@ -27,6 +27,10 @@
       :options="options"
       :series="series"
     ></apexchart>
+
+    <v-alert v-if="hasCCSFNow" class="ml-12 mr-12" type="info" color="indigo">
+        Selon les données disponibles fournies par l'URSSAF, cette entreprise fait actuellement l'objet d'un plan CCSF.
+    </v-alert>
     <v-layout align-center justify-center text-center style="min-height: 500px" v-if="!permUrssaf">
       <v-flex xs5>
         <v-icon size="100">fa-lock</v-icon>
@@ -44,6 +48,13 @@ export default {
   components: { Help },
   props: ['debit', 'cotisation', 'delai', 'chart', 'permUrssaf'],
   computed: {
+    hasCCSFNow() {
+      return this.delai.filter((delai) => {
+        const now = new Date()
+        const dateEcheance = new Date(delai.dateEcheance)
+        return delai.action=='CCSF' && now < dateEcheance
+      }).length>0
+    },
     series() {
       if ((this.cotisation || []).length > 0 || (this.debit || []).length > 0) {
         return [{
