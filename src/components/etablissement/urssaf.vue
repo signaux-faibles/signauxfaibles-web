@@ -98,7 +98,7 @@ export default {
             const year =  String(date.getUTCFullYear())
             const displayDate = month + '/' + year
 
-            const cotisation = (series[0][dataPointIndex])? series[0][dataPointIndex] + '€' : 'n/c'
+            const cotisation = (series[0][dataPointIndex])? series[0][dataPointIndex] + ' €' : 'n/c'
             const delai = series[1][dataPointIndex] + ' €'
             const partSalariale = (series[2][dataPointIndex] - series[3][dataPointIndex])?series[2][dataPointIndex] - series[3][dataPointIndex] + ' €':'n/c'
             const partPatronale = (series[3][dataPointIndex])?series[3][dataPointIndex] + ' €':'n/c'
