@@ -285,7 +285,7 @@ export default {
       }
     },
     delai() {
-      return this.etablissement.delai
+      return this.etablissement.delai || []
     },
     cotisation() {
       const periodeUrssaf = (this.etablissement || {}).periodeUrssaf || {}

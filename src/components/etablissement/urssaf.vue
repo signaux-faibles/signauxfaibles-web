@@ -1,6 +1,7 @@
 <template>
   <div>
     <v-toolbar dark color="indigo">
+
       <v-toolbar-title class="localtoolbar">Cotisations et impayés Urssaf</v-toolbar-title>
       <v-spacer />
       <Help titre="Cotisations et impayés URSSAF">
@@ -48,32 +49,11 @@ export default {
         return [{
           name: 'cotisations appelées',
           type: 'line',
-          data: this.cotisation.reduce((data, c, i) => {
-            if (c !== null) {
-              data.push([
+          data: this.cotisation.map((c, i) => {
+            return [
                 new Date(this.debit[i].periode),
                 Math.round(c),
-              ])
-            }
-            return data
-          }, []),
-        }, {
-          name: 'dette restante (part patronale)',
-          type: 'area',
-          data: this.debit.map((d) => {
-            return [
-              new Date(d.periode),
-              Math.round(d.part_patronale),
-            ]
-          }),
-        }, {
-          name: 'dette restante (part salariale)',
-          type: 'area',
-          data: this.debit.map((d) => {
-            return [
-              new Date(d.periode),
-              Math.round(d.part_ouvriere),
-            ]
+              ]
           }),
         }, {
           name: 'délai accordé',
@@ -82,6 +62,24 @@ export default {
             return [
               new Date(d.periode),
               Math.round(d.delai),
+            ]
+          }),
+        }, {
+          name: 'dette restante (part salariale)',
+          type: 'area',
+          data: this.debit.map((d) => {
+            return [
+              new Date(d.periode),
+              Math.round(d.part_ouvriere+d.part_patronale),
+            ]
+          }),
+        }, {
+          name: 'dette restante (part patronale)',
+          type: 'area',
+          data: this.debit.map((d) => {
+            return [
+              new Date(d.periode),
+              Math.round(d.part_patronale),
             ]
           }),
         }]
@@ -93,6 +91,27 @@ export default {
       return {
         tooltip: {
           enabled: true,
+          shared: true,
+          custom: function({series, seriesIndex, dataPointIndex, w}) {
+            const date = new Date(w.globals.seriesX[1][dataPointIndex])
+            const month = String(date.getUTCMonth()+1).padStart(2, '0')
+            const year =  String(date.getUTCFullYear())
+            const displayDate = month + '/' + year
+
+            const cotisation = (series[0][dataPointIndex])? series[0][dataPointIndex] + '€' : 'n/c'
+            const delai = series[1][dataPointIndex] + ' €'
+            const partSalariale = (series[2][dataPointIndex] - series[3][dataPointIndex])?series[2][dataPointIndex] - series[3][dataPointIndex] + ' €':'n/c'
+            const partPatronale = (series[3][dataPointIndex])?series[3][dataPointIndex] + ' €':'n/c'
+            return '<div style="width: 300px; height: 120px; overflow-wrap: anywhere; ">' +
+              '<h4 style="background-color:#eee">' + displayDate +'</h4>' +
+              '<hr style="border-width: 1px; background-color: #ddd; border-color: #eee">' +
+              '<table class="tooltip">' +
+              '<tr><td style="padding-right: 15px">cotisation appelée</td><td>' + cotisation + '</td></tr>' +
+              '<tr><td style="padding-right: 15px">délai accordé</td><td>' + delai + '</td></tr>' +
+              '<tr><td style="padding-right: 15px">dette restante (part salariale)</td><td>' + partPatronale + '</td></tr>' +
+              '<tr><td style="padding-right: 15px">dette restante (part patronale)</td><td>' + partSalariale + '</td></tr>' +
+              '</div>'
+          },
           x: {
             format: 'MM/yyyy',
           },
@@ -114,14 +133,14 @@ export default {
           palette: 'palette6',
         },
         stroke: {
-          curve: 'smooth',
-          width: [5, 0, 0, 4],
-          dashArray: [0,0,0,8]
+          curve: ['smooth', 'stepline', 'smooth', 'smooth'],
+          width: [5, 3, 0, 0],
+          dashArray: [0,8,0,0]
         },
-        colors: ['#4f8a83', '#fac699', '#e76278', '#573D1C'],
+        colors: ['#4f8a83', '#573D1C', '#e76278', '#fac699'],
         fill: {
           type: ['solid', 'solid', 'solid', 'solid'],
-          colors: ['#4f8a83', '#fac699', '#e76278', '#573D1C'],
+          colors: ['#4f8a83', '#573D1C', '#e76278', '#fac699'],
           gradient: {
             type: 'vertical',
             shadeIntensity: 0,
@@ -134,7 +153,8 @@ export default {
           },
         },
         chart: {
-          stacked: true,
+          type: 'line',
+          stacked: false,
           toolbar: {
             show: false,
           },
