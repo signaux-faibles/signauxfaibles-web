@@ -29,7 +29,7 @@
     ></apexchart>
 
     <v-alert dense outlined v-if="hasCCSFNow" class="ml-12 mr-3" type="info" color="indigo">
-        Selon les données disponibles fournies par l'URSSAF, cette entreprise fait actuellement l'objet d'un plan CCSF.
+        Au regard des dernières informations fournies par l'URSSAF, cette établissement fait actuellement l'objet d'un plan CCSF.
     </v-alert>
     <v-layout align-center justify-center text-center style="min-height: 500px" v-if="!permUrssaf">
       <v-flex xs5>
