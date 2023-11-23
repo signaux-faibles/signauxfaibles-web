@@ -32,70 +32,50 @@
       <v-btn color="indigo" dark outlined small @click="jugementsDialog = true">Voir historique des
         jugements
       </v-btn>
-      <v-dialog v-model="jugementsDialog" max-width="500px" @input="jugementsDialog = false">
+      <v-dialog v-model="jugementsDialog" max-width="600px" @input="jugementsDialog = false">
         <div>
-          <v-card>
+          <v-card style="font-family: Oswald">
             <v-card-title class="headline">
               Jugements de procédure collective
-            </v-card-title>
-            <v-card-text style="font-size: 17px">
-              <v-expansion-panels flat>
-                <v-expansion-panel
-                  v-if="liquidationJugements.length > 0"
-                  style="font-weight: 800; font-family: 'Oswald', sans-serif;"
-                >
-                  <v-expansion-panel-header>
-                    <div>Liquidation</div>
-                  </v-expansion-panel-header>
-                  <v-expansion-panel-content>
-                    <v-card>
-                      <v-card-text>
-                        <ul style="list-style-type: disc">
-                          <li v-for="j in liquidationJugements" :key="j">{{ j }}</li>
-                        </ul>
-                      </v-card-text>
-                    </v-card>
-                  </v-expansion-panel-content>
-                </v-expansion-panel>
 
-                <v-expansion-panel v-if="redressementJugements.length > 0">
-                  <v-expansion-panel-header>
-                    <div>Redressement</div>
-                  </v-expansion-panel-header>
-                  <v-expansion-panel-content>
-                    <v-card>
-                      <v-card-text>
-                        <ul style="list-style-type: disc">
-                          <li v-for="j in redressementJugements" :key="j">{{ j }}</li>
-                        </ul>
-                      </v-card-text>
-                    </v-card>
-                  </v-expansion-panel-content>
-                </v-expansion-panel >
-                <v-expansion-panel v-if="sauvegardeJugements.length > 0">
-                  <v-expansion-panel-header>
-                    <div>Sauvegarde</div>
-                  </v-expansion-panel-header>
-                  <v-expansion-panel-content >
-                    <v-card>
-                      <v-card-text>
-                        <ul style="list-style-type: disc">
-                          <li v-for="j in sauvegardeJugements" :key="j">{{ j }}</li>
-                        </ul>
-                      </v-card-text>
-                    </v-card>
-                  </v-expansion-panel-content>
-                </v-expansion-panel>
-              </v-expansion-panels>
-              <div class="mt-4"
-                   style="font-size: 14px; font-weight: 400; font-family: 'Roboto', sans-serif">
-                Vous pouvez consulter les annonces publiées au bulletin officiel.
-                <v-btn :href="lienBODACC" class="my-2" color="indigo" outlined rel="noopener" small
+            </v-card-title>
+            <v-card-text>
+              Source: URSSAF <br/>
+
+              <div v-if="liquidationJugements.length > 0" class="mt-4">
+                <h3>Liquidation</h3>
+                <ul style="list-style-type: disc">
+                  <li v-for="j in liquidationJugements" :key="j">{{ j }}</li>
+                </ul>
+              </div>
+              <div v-if="redressementJugements.length > 0" class="mt-4">
+                <h3>Redressement</h3>
+                <ul style="list-style-type: disc">
+                  <li v-for="j in redressementJugements" :key="j">{{ j }}</li>
+                </ul>
+              </div>
+              <div v-if="sauvegardeJugements.length > 0" class="mt-4">
+                <h3>Sauvegarde</h3>
+                <ul style="list-style-type: disc">
+                  <li v-for="j in sauvegardeJugements" :key="j">{{ j }}</li>
+                </ul>
+              </div>
+              <div class="mt-5" style="display: flex; flex-direction: row">
+
+                <Gitbook :target="gitbookPath('INTERPRETATION_FINANCE')" caption="interpréter les procédures collectives"></Gitbook>
+                <v-btn dark :href="lienBODACC" class="my-2 mb-4 ml-5" color="indigo" rel="noopener"
                        target="_blank">Voir annonces BODACC
                 </v-btn>
               </div>
+              <div class="mt-4" style="font-size: 14px;">
+                En complément, vous pouvez consulter les annonces publiées au bulletin officiel.
+
+                <v-alert icon="fa-warning" class="mr-4 ml-4" >
+                  Des différences avec la source BODACC peuvent exister. Une vérification avec le Tribunal de commerce permettra de certifier l’information.
+                </v-alert>
+              </div>
             </v-card-text>
-            <v-card-actions>
+              <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="primary" text @click="jugementsDialog = false">Fermer</v-btn>
             </v-card-actions>
@@ -112,11 +92,12 @@
 <script>
 import Help from "@/components/Help.vue";
 import libellesProcols from '@/assets/libelles_procols.json'
+import Gitbook from "@/components/Gitbook.vue";
 
 export default {
   name: 'EtablissementProcols',
   props: ['etablissement', 'summary'],
-  components: {Help},
+  components: {Gitbook, Help},
   data() {
     return {
       jugementsPanel: 1,
