@@ -32,9 +32,9 @@
       <v-btn color="indigo" dark outlined small @click="jugementsDialog = true">Voir historique des
         jugements
       </v-btn>
-      <v-dialog v-model="jugementsDialog" max-width="600px" @input="jugementsDialog = false">
+      <v-dialog v-model="jugementsDialog" max-width="520px" @input="jugementsDialog = false">
         <div>
-          <v-card style="font-family: Oswald">
+          <v-card style="font-family: Oswald" class="pl-2 pr-1">
             <v-card-title class="headline">
               Jugements de procédure collective
 
@@ -60,24 +60,28 @@
                   <li v-for="j in sauvegardeJugements" :key="j">{{ j }}</li>
                 </ul>
               </div>
+
               <div class="mt-5" style="display: flex; flex-direction: row">
 
-                <Gitbook :target="gitbookPath('INTERPRETATION_FINANCE')" caption="interpréter les procédures collectives"></Gitbook>
-                <v-btn dark :href="lienBODACC" class="my-2 mb-4 ml-5" color="indigo" rel="noopener"
+                <v-btn :href="lienBODACC" class="my-2 mb-4" color="indigo" dark rel="noopener"
                        target="_blank">Voir annonces BODACC
                 </v-btn>
-              </div>
-              <div class="mt-4" style="font-size: 14px;">
-                En complément, vous pouvez consulter les annonces publiées au bulletin officiel.
+                <Gitbook :target="gitbookPath('INTERPRETATION_BODACC')" caption="procédures collectives"
+                         class="mt-2"></Gitbook>
 
-                <v-alert icon="fa-warning" class="mr-4 ml-4" >
-                  Des différences avec la source BODACC peuvent exister. Une vérification avec le Tribunal de commerce permettra de certifier l’information.
+
+              </div>
+              <div style="font-size: 14px;">
+
+                <v-alert class="mr-4" icon="fa-warning">
+                  Des différences avec les annonces BODACC peuvent exister. Une vérification avec le Tribunal de commerce
+                  permettra de certifier l’information.
                 </v-alert>
               </div>
             </v-card-text>
-              <v-card-actions>
+            <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="primary" text @click="jugementsDialog = false">Fermer</v-btn>
+              <v-btn color="primary" text @click="jugementsDialog = false">fermer</v-btn>
             </v-card-actions>
           </v-card>
         </div>
@@ -88,6 +92,10 @@
     </div>
   </div>
 </template>
+
+<style scoped>
+
+</style>
 
 <script>
 import Help from "@/components/Help.vue";
@@ -100,7 +108,6 @@ export default {
   components: {Gitbook, Help},
   data() {
     return {
-      jugementsPanel: 1,
       jugementsDialog: false,
     }
   },
@@ -124,7 +131,7 @@ export default {
         return jugement.action === 'sauvegarde' && ['ouverture', 'plan_continuation'].includes(jugement.stade)
       }).map((jugement) => {
         const date = this.date(jugement.dateEffet)
-        switch(jugement.stade) {
+        switch (jugement.stade) {
           case 'ouverture':
             return `${date} : Jugement d'ouverture d'une procédure de sauvegarde`
           case 'plan_continuation':
@@ -137,19 +144,20 @@ export default {
         return jugement.action === 'liquidation' && ['ouverture', 'cloture_insuffisance_actif'].includes(jugement.stade)
       }).map((jugement) => {
         const date = this.date(jugement.dateEffet)
-        switch(jugement.stade) {
+        switch (jugement.stade) {
           case 'ouverture':
             return `${date} : Jugement d'ouverture de liquidation judiciaire`
           case 'cloture_insuffisance_actif':
             return `${date} : Jugement de clôture pour insuffisance d'actif`
         }
-      })    },
+      })
+    },
     redressementJugements() {
       return this.jugements.filter((jugement) => {
         return jugement.action === 'redressement' && ['ouverture', 'plan_continuation'].includes(jugement.stade)
       }).map((jugement) => {
         const date = this.date(jugement.dateEffet)
-        switch(jugement.stade) {
+        switch (jugement.stade) {
           case 'ouverture':
             return `${date} : Jugement d'ouverture de liquidation judiciaire`
           case 'plan_continuation':
@@ -160,39 +168,3 @@ export default {
   }
 }
 </script>
-
-<!--processProcol(p) {-->
-<!--const date = new Date(p.dateEffet).toLocaleDateString('fr', {timeZone: 'Europe/Paris'})-->
-<!--let intitule = null-->
-<!--if (p.action === 'sauvegarde') {-->
-<!--if (p.stade === 'ouverture') {-->
-<!--intitule = 'Jugement d\'ouverture d\'une procédure de sauvegarde'-->
-<!--} else if (p.stade === 'plan_continuation') {-->
-<!--intitule = 'Jugement arrêtant le plan de sauvegarde'-->
-<!--}-->
-<!--if (intitule) {-->
-<!--const jugement = date + ' : ' + intitule-->
-<!--this.sauvegardeJugements.push(jugement)-->
-<!--}-->
-<!--} else if (p.action === 'redressement') {-->
-<!--if (p.stade === 'ouverture') {-->
-<!--intitule = 'Jugement d\'ouverture d\'une procédure de redressement judiciaire'-->
-<!--} else if (p.stade === 'plan_continuation') {-->
-<!--intitule = 'Jugement de plan de continuation après un redressement judiciaire'-->
-<!--}-->
-<!--if (intitule) {-->
-<!--const jugement = date + ' : ' + intitule-->
-<!--this.redressementJugements.push(jugement)-->
-<!--}-->
-<!--} else if (p.action === 'liquidation') {-->
-<!--if (p.stade === 'ouverture') {-->
-<!--intitule = 'Jugement d\'ouverture de liquidation judiciaire'-->
-<!--} else if (p.stade === 'cloture_insuffisance_actif') {-->
-<!--intitule = 'Jugement de clôture pour insuffisance d\'actif'-->
-<!--}-->
-<!--if (intitule) {-->
-<!--const jugement = date + ' : ' + intitule-->
-<!--this.liquidationJugements.push(jugement)-->
-<!--}-->
-<!--}-->
-<!--},-->

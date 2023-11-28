@@ -267,7 +267,7 @@
     <Spinner style="min-height: 60vh" v-if="loading" />
     <v-snackbar v-if="currentBatchDescription" v-model="snackbar" :bottom="true">
       Le modèle de détection a évolué !
-      <v-btn color="primary" text @click="showModelHelp()">En savoir plus</v-btn>
+      <v-btn style="text-transform: none" color="primary" text @click="showModelHelp()">En savoir plus</v-btn>
       <v-btn icon @click="snackbar = false"><v-icon>clear</v-icon></v-btn> 
     </v-snackbar>
   </div>

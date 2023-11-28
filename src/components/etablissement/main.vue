@@ -1,6 +1,5 @@
 <template>
   <div style="min-height: 100%;  background: #fff">
-
     <div v-if="loading" style="min-height: 100%; display: flex; justify-content: center; align-items: center;">
       <Spinner v-if="loading" style="min-height: 80vh"/>
     </div>
@@ -10,6 +9,7 @@
         <v-layout style="margin-top: 3em" wrap>
           <v-flex class="pa-3" md6 style="font-size: 18px" xs12>
             <Identite
+              :etablissement="etablissement"
               :creation="creation"
               :denomination="denomination"
               :groupe="groupe"
@@ -22,10 +22,20 @@
               :terrind="terrind"
               :visiteFCE="visiteFCE"
             />
-            <v-btn v-if="etablissement.siren" color="indigo" dark @click="dialogs.showEntreprise(etablissement.siren)">
-              Voir Fiche Entreprise
+            <v-btn
+              class="mr-4 mb-4"
+              v-if="etablissement.siren" color="indigo"
+              dark
+              style="text-transform: none"
+              @click="dialogs.showEntreprise(etablissement.siren)"
+            >
+              Voir la fiche entreprise
             </v-btn>
-            <v-btn :dark="!exportDOCXLoading" :disabled="exportDOCXLoading" :loading="exportDOCXLoading" class="ml-4"
+            <v-btn class="mb-4"
+                   :dark="!exportDOCXLoading"
+                   :disabled="exportDOCXLoading"
+                   :loading="exportDOCXLoading"
+                   style="text-transform: none"
                    color="indigo"
                    outlined @click="exportDOCX">
               <v-icon class="mr-2" small>fa-file-word</v-icon>
@@ -94,7 +104,7 @@ import Identite from '@/components/etablissement/identite.vue'
 import Map from '@/components/etablissement/map.vue'
 import EtablissementEntreprise from '@/components/etablissement/entreprise.vue'
 import Entreprise from '@/components/entreprise/main.vue'
-import Historique from '@/components/etablissement/Score/Historique.vue'
+import Historique from '@/components/etablissement/score/historique.vue'
 import axios from 'axios'
 import fr from 'apexcharts/dist/locales/fr.json'
 import EtablissementCards from '@/components/etablissement/cards/main.vue'

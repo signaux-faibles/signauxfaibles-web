@@ -58,22 +58,14 @@
         </div>
         <div v-if="etablissements.length > 0" class="py-3 px-3 text-center">
           <span v-if="wekanUser && follow.type==='my-cards'" class="intro">
-              Vous suivez {{
-              this.followPayload.stats.count | pluralizeEtablissement
-            }}
-              associés à des cartes dont vous êtes le créateur ou un des participants selon les filtres sélectionnés.
+            Les filtres sélectionnés produisent un résultat de
+            {{ this.followPayload.stats.count | pluralizeEtablissement }} que vous accompagnez<br/>
           </span>
           <span v-if="wekanUser && follow.type==='all-cards'" class="intro">
-              Le ou les tableaux régionaux auxquels vous êtes habilités référencent {{
-              this.followPayload.stats.count | pluralizeEtablissement
-            }} selon les filtres sélectionnés.
+            Les filtres sélectionnés produisent un résultat de
+            {{ this.followPayload.stats.count | pluralizeEtablissement }}
+            pour lesquels des informations d'accompagnement sont disponibles
           </span>
-          <span v-if="wekanUser && follow.type==='no-card'"
-                class="intro">Vous suivez {{ this.followPayload.stats.count | pluralizeEtablissement }} associés à aucune carte de suivi ou à une carte inaccessible.
-          </span>
-          <span v-if="!wekanUser"
-                class="intro">Vous suivez {{ this.etablissements.length | pluralizeEtablissement }}.
-          </span><br/>
           <v-btn :dark="!exportXSLXLoading" :disabled="loading || exportXSLXLoading" :loading="exportXSLXLoading"
                  class="mr-4" color="indigo"
                  outlined @click="exportXSLX">

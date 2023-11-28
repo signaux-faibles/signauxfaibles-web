@@ -3,17 +3,17 @@
     <v-card>
       <v-card-title>
         <div>
-          <div class="headline">Suivre {{ denomination }} {{ commune }} ?</div>
-          <span class="grey--text">(siret {{ siret }})</span>
+          <div class="headline">Déverrouiller l'accès aux données</div>
+          <span> {{ denomination }} ({{ commune }}) </span><br/>
+          <span class="grey--text">siret: {{ siret }}</span>
         </div>
       </v-card-title>
       <v-card-text>
-        Pour quel motif souhaitez-vous suivre cet établissement ?
+        Pour quel motif souhaitez-vous accéder aux données de cet établissement ?
         <v-radio-group v-model="followCategory" :mandatory="false">
-          <v-radio key="detection" value="detection"><template slot="label"><span class="text-pre-wrap">L'établissement fait partie d'une <strong>liste de détection</strong></span></template></v-radio>
           <v-radio key="source_externe" value="source_externe"><template slot="label"><span class="text-pre-wrap">J'ai eu connaissance de difficultés par l'<strong>ecosystème local</strong> ou <strong>la presse</strong></span></template></v-radio>
           <v-radio key="source_interne" value="source_interne"><template slot="label"><span class="text-pre-wrap">J'ai été contacté par l'<strong>entreprise</strong> ou un <strong>partenaire direct</strong>  (expert comptable, client, fournisseur, etc.)</span></template></v-radio>
-          <v-radio key="autre" value="autre"><template slot="label"><span class="text-pre-wrap">Je souhaite suivre cet établissement pour un <strong>autre motif</strong></span></template></v-radio>
+          <v-radio key="autre" value="autre"><template slot="label"><span class="text-pre-wrap">Je souhaite accéder aux données de cet établissement pour un <strong>autre motif</strong></span></template></v-radio>
         </v-radio-group>
         <v-textarea v-show="followCategory === 'autre'" v-model="followComment" solo placeholder="Résumez en une phrase vos motivations"></v-textarea>
       </v-card-text>
@@ -25,7 +25,7 @@
             color="indigo"
             :disabled="followCategory==''"
             @click="followEtablissement()">
-        <v-icon left class="mr-2" style="top:-1px" small>far fa-star</v-icon>Suivre</v-btn>
+        <v-icon left class="mr-2" style="top:-1px" small>fa-unlock</v-icon>Déverrouiller</v-btn>
       </v-card-actions>
       <v-alert :value="followAlert" type="error" transition="scale-transition">{{ followAlertError }}</v-alert>
     </v-card>

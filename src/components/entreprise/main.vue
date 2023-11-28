@@ -51,9 +51,9 @@
 </template>
 
 <script>
-import EntrepriseIdentite from '@/components/entreprise/Identite.vue'
-import EntrepriseSocial from '@/components/entreprise/Social.vue'
-import EntrepriseFinance from '@/components/entreprise/Finance.vue'
+import EntrepriseIdentite from '@/components/entreprise/identite.vue'
+import EntrepriseSocial from '@/components/entreprise/social.vue'
+import EntrepriseFinance from '@/components/entreprise/finance.vue'
 import EntreprisePaiement from '@/components/entreprise/paydex/main.vue'
 import axios from 'axios'
 import fr from 'apexcharts/dist/locales/fr.json'
