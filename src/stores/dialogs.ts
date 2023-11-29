@@ -1,7 +1,12 @@
 import {defineStore} from 'pinia'
 
 interface dialogStore {
-  createCard: boolean,
+  createCardSequence: string,
+  createCardSwimlaneID: string | null,
+  createCardDialog: boolean,
+  createCardProblems: string[],
+  createCardActions: string[],
+  createCardLabels: string[],
   etablissement: boolean,
   etablissementSiret: string | null,
   entreprise: boolean,
@@ -33,7 +38,12 @@ interface dialogStore {
 
 export const useDialogsStore = defineStore('dialogs', {
   state: ():dialogStore => ({
-    createCard: false,
+    createCardSequence: 'start',
+    createCardSwimlaneID: null,
+    createCardDialog: false,
+    createCardProblems: [],
+    createCardActions: [],
+    createCardLabels: [],
     etablissement: false,
     etablissementSiret: null,
     entreprise: false,
@@ -63,6 +73,23 @@ export const useDialogsStore = defineStore('dialogs', {
     exportStatsRangeEnd: null,
   }),
   actions: {
+    showCreateCardDialog() {
+      this.createCardActions = []
+      this.createCardSequence = 'start'
+      this.createCardLabels = []
+      this.createCardSwimlaneID = null
+      this.createCardActions = []
+      this.createCardProblems = []
+      this.createCardDialog = true
+    },
+    closeCreateCardDialog() {
+      this.createCardDialog = false
+    },
+    resetCreateCardDialog() {
+      this.createCardLabels = []
+      this.createCardProblems = []
+      this.createCardActions = []
+    },
     showEtablissement(siret: string) {
       this.hideEntreprise()
       this.etablissement = true

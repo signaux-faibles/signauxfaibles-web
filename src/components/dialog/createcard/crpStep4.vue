@@ -70,7 +70,7 @@ import newCardConfigBase from "@/assets/new_card_config.json";
 import Help from "@/components/Help.vue";
 
 export default {
-  name: 'Step4',
+  name: 'DialogCreateCardCrpStep4',
   components: {Help},
   methods: {
     resetLabels(event) {

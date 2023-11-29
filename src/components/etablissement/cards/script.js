@@ -1,6 +1,6 @@
 import EtablissementCardsEditor from "@/components/etablissement/cards/viewer/main.vue";
 import EtablissementCardsSummary from "@/components/etablissement/cards/summary/main.vue";
-import FollowCreateCard from "@/components/follow/createcard/main.vue";
+import FollowCreateCard from "@/components/dialog/createcard/main.vue";
 import EtablissementCardsViewer from "@/components/etablissement/cards/viewer/main.vue";
 import {useKanbanStore} from "@/stores/kanban";
 import {AxiosInstance} from "axios";

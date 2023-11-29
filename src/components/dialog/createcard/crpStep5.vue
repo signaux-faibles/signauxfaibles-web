@@ -76,7 +76,7 @@ import labelColors from "@/assets/labels.json";
 const md = new MarkdownIt()
 
 export default {
-  name: 'Step5',
+  name: 'DialogCreateCardCrpStep5',
   data() {
     return {
       createCardFailedError: null,

@@ -2,23 +2,21 @@
   <div>
     <v-card>
       <v-card-title>
-        Identifiez les problématiques de l'entreprise
+          Quelles actions sont menées ou envisagées ?
       </v-card-title>
       <v-card-text>
-        <h3>
 
-        </h3>
         <v-select
-          ref="problems"
-          v-model="createCardProblems"
-          :items="newCardConfig.problemItems"
-          :menu-props="{ maxHeight: 400 }"
-          multiple
-          chips
+            ref="actions"
+            v-model="createCardActions"
+            :items="newCardConfig.actionItems"
+            :menu-props="{ maxHeight: 400 }"
+            chips
+            multiple
         >
           <template v-slot:append-item>
             <div class="text-center my-2">
-              <v-btn @click="$refs.problems.isMenuActive = false" color="primary">OK</v-btn>
+              <v-btn color="primary" @click="$refs.actions.isMenuActive = false">OK</v-btn>
             </div>
           </template>
         </v-select>
@@ -29,15 +27,14 @@
           Ces informations restent modifiables à tout moment.
         </v-alert>
       </v-card-text>
-
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn color="indigo" outlined
-               @click="createCardSequence=1">
+               @click="createCardSequence=2">
           retour
         </v-btn>
         <v-btn color="indigo" dark
-               @click="createCardSequence=3">
+               @click="createCardSequence=4">
           Étape suivante
         </v-btn>
       </v-card-actions>
@@ -50,28 +47,31 @@ import newCardConfigBase from '@/assets/new_card_config.json'
 import Help from '@/components/Help.vue'
 
 export default {
-  name: 'Step2',
-  components: { Help },
+  name: 'DialogCreateCardCrpStep3',
+  components: {Help},
   computed: {
     currentBoard() {
       const currentSwimlaneID = this.createCardSwimlaneID
       for (const board of Object.values(this.kanbanConfig.boards)) {
-         if (currentSwimlaneID in board.swimlanes) {
-           return board.slug
-         }
+        if (currentSwimlaneID in board.swimlanes) {
+          return board.slug
+        }
       }
       return currentSwimlaneID
     },
     currentBoardType() {
       const typeRegexp = /^((tableau|actions)-.*)-.*/
       const match = this.currentBoard.match(typeRegexp)
-      return (match.length>1)?match[1]:null
+      return (match.length > 1) ? match[1] : null
     },
     newCardConfig() {
       return newCardConfigBase[this.currentBoardType] || []
     },
     newCardConfigBase() {
       return newCardConfigBase
+    },
+    createCardLabels() {
+      return this.$store.state.createCardLabels
     },
     kanbanConfig() {
       return this.$store.state.kanbanConfig
@@ -84,12 +84,12 @@ export default {
         this.$store.commit('setCreateCardSequence', value)
       },
     },
-    createCardProblems: {
+    createCardActions: {
       get() {
-        return this.$store.state.createCardProblems
+        return this.$store.state.createCardActions
       },
       set(value) {
-        this.$store.commit('setCreateCardProblems', value)
+        this.$store.commit('setCreateCardActions', value)
       },
     },
     createCardSwimlaneID: {

@@ -84,14 +84,19 @@
           <FollowDialog/>
           <UnfollowDialog/>
         </v-layout>
-        <v-btn v-if="followed === false" bottom class="mr-2" color="indigo" dark fab fixed right
-               @click="followDialog = true">
-          <v-icon style="top:-1px">far fa-star</v-icon>
+        <v-btn :disabled="etablissement.permDGEFP"
+               bottom class="mr-2"
+               :dark="!etablissement.permDGEFP"
+               :outlined="etablissement.permDGEFP"
+               color="indigo"
+               fab
+               fixed
+               right
+               @click="followDialog = true"
+        >
+          <v-icon style="top:-1px">fa fa-unlock</v-icon>
         </v-btn>
-        <v-btn v-if="followed === true" bottom class="mr-2" color="indigo" fab fixed outlined right
-               @click="unfollowDialog = true">
-          <v-icon small style="top:-1px">far fa-star</v-icon>
-        </v-btn>
+
       </v-container>
     </div>
   </div>
@@ -110,7 +115,7 @@ import fr from 'apexcharts/dist/locales/fr.json'
 import EtablissementCards from '@/components/etablissement/cards/main.vue'
 import FollowDialog from '@/components/etablissement/followDialog.vue'
 import UnfollowDialog from '@/components/etablissement/unfollowDialog.vue'
-import CreateCardDialog from '@/components/follow/createcard/main.vue'
+import CreateCardDialog from '@/components/dialog/createcard/main.vue'
 import Help from '@/components/Help.vue'
 import Spinner from '@/components/Spinner.vue'
 import {useDialogsStore} from "@/stores/dialogs";

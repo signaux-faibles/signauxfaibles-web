@@ -20,10 +20,11 @@
         <v-icon left small class="mr-2">fa-unlock</v-icon>Données déverrouillées
       </v-btn>
       <v-btn
+        v-if="canCreateCard"
         style="text-transform: none"
         class="ml-4"
         color="indigo"
-        @click="show"
+        @click="dialogs.showCreateCardDialog()"
         dark
       >
         <v-icon left small class="mr-2">fa-people-pulling</v-icon>Accompagner
@@ -70,11 +71,18 @@
 
 <script>
 import Help from '@/components/Help.vue'
+import {useKanbanStore} from "@/stores/kanban";
+import {useDialogsStore} from "@/stores/dialogs";
 
 export default {
   name: 'Identite',
   props: ['etablissement', 'denomination', 'siret', 'sirene', 'siege', 'groupe', 'terrind', 'creation', 'statutJuridique', 'summary'],
-  components: { Help},
+  components: { Help },
+  setup() {
+    const dialogs = useDialogsStore()
+    const kanban = useKanbanStore()
+    return {kanban, dialogs}
+  },
   methods: {
     showUnlockDialog() {
       this.$parent.followDialog = true
@@ -97,6 +105,9 @@ export default {
     },
   },
   computed: {
+    canCreateCard() {
+      return (this.sirene.codeDepartement in this.kanban.config.departements)
+    },
     naf() {
       return (this.sirene || {}).naf || {}
     },
