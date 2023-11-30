@@ -18,7 +18,7 @@
     "injoignable": {
       "libelle": "J'abandonne car l'entreprise est injoignable.",
       "effect": "nofollow",
-      "alert": "Cette option met fin à l'analyse en cours. Il vous est également possible de repousser la prise de contact à une campagne ultérieure si vous ne souhaitez pas abandonner cette entreprise."
+      "alert": "Cette option met fin à l'analyse en cours. Il vous est également possible de reporter la prise de contact à une campagne ultérieure si vous ne souhaitez pas abandonner cette entreprise."
     }
   },
   "cancel": {

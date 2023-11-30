@@ -304,7 +304,7 @@ export default {
     },
     cotisation() {
       const periodeUrssaf = (this.etablissement || {}).periodeUrssaf || {}
-      return (periodeUrssaf.cotisation || []).slice(0, 23)
+      return (periodeUrssaf.cotisation || []).slice(0, 24)
     },
     effectif() {
       const periodeUrssaf = (this.etablissement || {}).periodeUrssaf || {}

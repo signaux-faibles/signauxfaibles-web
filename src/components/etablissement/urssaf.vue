@@ -1,9 +1,9 @@
 <template>
   <div>
-    <v-toolbar dark color="indigo">
+    <v-toolbar color="indigo" dark>
 
       <v-toolbar-title class="localtoolbar">Cotisations et impayés Urssaf</v-toolbar-title>
-      <v-spacer />
+      <v-spacer/>
       <Help titre="Cotisations et impayés URSSAF">
         <template>
           <p>Ce graphique représente les données de l'URSSAF.</p>
@@ -11,8 +11,12 @@
           <p>
             <ul>
               <li>Cotisations : montant des cotisations appelées.</li>
-              <li>Dette (part patronale) : montant cumulé des dettes <strong>restant à payer</strong> sur la part patronale.</li>
-              <li>Dette (part salariale) : montant cumulé des dettes <strong>restant à payer</strong> sur la part salariale (ou ouvrière).</li>
+              <li>Dette (part patronale) : montant cumulé des dettes <strong>restant à payer</strong> sur la part
+                patronale.
+              </li>
+              <li>Dette (part salariale) : montant cumulé des dettes <strong>restant à payer</strong> sur la part
+                salariale (ou ouvrière).
+              </li>
             </ul>
           </p>
           <em>Fournisseur : ACOSS.</em>
@@ -21,28 +25,33 @@
     </v-toolbar>
     <apexchart
       v-if="permUrssaf"
-      width="100%"
-      heigth="100%"
-      type="line"
       :options="options"
       :series="series"
+      heigth="100%"
+      type="line"
+      width="100%"
     ></apexchart>
 
     <v-alert
-      dense
-      outlined
       v-if="hasCCSFNow"
       class="ml-12 mr-3"
-      type="info"
       color="indigo"
+      dense
+      outlined
+      type="info"
     >
-        Au regard des dernières informations fournies par l'URSSAF, cette établissement fait actuellement l'objet d'un plan CCSF.
+      Au regard des dernières informations fournies par l'URSSAF, cet établissement fait actuellement l'objet d'un
+      plan CCSF.
     </v-alert>
-    <v-layout align-center justify-center text-center style="min-height: 500px" v-if="!permUrssaf">
+    <v-layout v-if="!permUrssaf" align-center justify-center style="min-height: 500px" text-center>
       <v-flex xs5>
         <v-icon size="100">fa-lock</v-icon>
-        <div v-if="roles.includes('urssaf')" class="lock-urssaf mt-2">Veuillez suivre cet établissement pour consulter ses données de cotisations et d’impayés Urssaf</div>
-        <div v-else class="lock-urssaf mt-2">Vous n’êtes pas autorisé(e) à consulter les données de cotisations et d’impayés Urssaf</div>
+        <div v-if="roles.includes('urssaf')" class="lock-urssaf mt-2">Veuillez suivre cet établissement pour consulter
+          ses données de cotisations et d’impayés Urssaf
+        </div>
+        <div v-else class="lock-urssaf mt-2">Vous n’êtes pas autorisé(e) à consulter les données de cotisations et
+          d’impayés Urssaf
+        </div>
       </v-flex>
     </v-layout>
   </div>
@@ -50,39 +59,41 @@
 
 <script>
 import Help from '@/components/Help.vue'
+
 export default {
   name: 'Urssaf',
-  components: { Help },
+  components: {Help},
   props: ['debit', 'cotisation', 'delai', 'chart', 'permUrssaf'],
   computed: {
     hasCCSFNow() {
       return this.delai.filter((delai) => {
         const now = new Date()
         const dateEcheance = new Date(delai.dateEcheance)
-        return delai.action=='CCSF' && now < dateEcheance
-      }).length>0
+        return delai.action == 'CCSF' && now < dateEcheance
+      }).length > 0
     },
     series() {
       if ((this.cotisation || []).length > 0 || (this.debit || []).length > 0) {
+        console.log(this.debit)
         return [{
           name: 'cotisations appelées',
           type: 'line',
           data: this.cotisation.map((c, i) => {
             return [
-                new Date(this.debit[i].periode),
-                Math.round(c),
-              ]
+              new Date(this.debit[i].periode),
+              (Math.round(c) > 0) ? Math.round(c) : null,
+            ]
           }),
         }, {
           name: 'délai accordé',
           type: 'line',
           data: this.debit.map((delai, index, array) => {
-            const delai_prec = (index>0)?array[index-1].delai>0:false
-            const delai_foll = (array[index+1])?(array[index+1].delai || 0)>0:false
-            const display = delai.delai>0 || delai_prec || delai_foll
+            const delai_prec = (index > 0) ? array[index - 1].delai > 0 : false
+            const delai_foll = (array[index + 1]) ? (array[index + 1].delai || 0) > 0 : false
+            const display = delai.delai > 0 || delai_prec || delai_foll
             return [
               new Date(delai.periode),
-              (display)?Math.round(delai.delai):null,
+              (display) ? Math.round(delai.delai) : null,
             ]
           }),
         }, {
@@ -91,7 +102,7 @@ export default {
           data: this.debit.map((d) => {
             return [
               new Date(d.periode),
-              Math.round(d.part_ouvriere+d.part_patronale),
+              Math.round(d.part_ouvriere + d.part_patronale),
             ]
           }),
         }, {
@@ -113,30 +124,28 @@ export default {
         tooltip: {
           enabled: true,
           shared: true,
-          custom: function({series, seriesIndex, dataPointIndex, w}) {
+          custom: function ({series, seriesIndex, dataPointIndex, w}) {
             const date = new Date(w.globals.seriesX[1][dataPointIndex])
-            const month = String(date.getUTCMonth()+1).padStart(2, '0')
-            const year =  String(date.getUTCFullYear())
+            const month = String(date.getUTCMonth() + 1).padStart(2, '0')
+            const year = String(date.getUTCFullYear())
             const displayDate = month + '/' + year
 
-            const cotisation = (series[0][dataPointIndex])? series[0][dataPointIndex] + ' €' : 'n/c'
+            const cotisation = (series[0][dataPointIndex]) ? series[0][dataPointIndex] + ' €' : 'n/c'
 
-            const prec_delai = (dataPointIndex>0)?series[1][dataPointIndex-1]:null
-            const foll_delai = series[1][dataPointIndex+1]
             const delai = series[1][dataPointIndex]
             const delai_libelle = delai + ' €'
 
             const partSalariale = series[2][dataPointIndex] - series[3][dataPointIndex] + ' €'
             const partPatronale = series[3][dataPointIndex] + ' €'
-            const height = (delai != null)?'124px':'98px'
-            return '<div style="height: '+ height +'; overflow-wrap: anywhere; ">' +
-              '<h4 style="background-color:#eee">' + displayDate +'</h4>' +
+            const height = (delai != null) ? '124px' : '98px'
+            return '<div style="height: ' + height + '; overflow-wrap: anywhere; ">' +
+              '<h4 style="background-color:#eee">' + displayDate + '</h4>' +
               '<hr style="border-width: 1px; background-color: #ddd; border-color: #eee">' +
               '<table class="tooltip">' +
               '<tr><td style="padding-right: 15px">cotisation appelée</td><td style="width: 100px;text-align: right">' + cotisation + '</td></tr>' +
               '<tr><td style="padding-right: 15px">dette restante (part patronale)</td><td style="text-align: right">' + partPatronale + '</td></tr>' +
               '<tr><td class="pb-1" style="padding-right: 15px">dette restante (part salariale)</td><td class="pb-1" style="text-align: right">' + partSalariale + '</td></tr>' +
-              ((delai != null)?'<tr><td style="padding-right: 15px">délai accordé</td><td style="text-align: right">' + delai_libelle + '</td></tr>':'') +
+              ((delai != null) ? '<tr><td style="padding-right: 15px">délai accordé</td><td style="text-align: right">' + delai_libelle + '</td></tr>' : '') +
               '</div>'
           },
           x: {
@@ -162,8 +171,9 @@ export default {
         stroke: {
           curve: ['smooth', 'stepline', 'smooth', 'smooth'],
           width: [5, 3, 0, 0],
-          dashArray: [0,8,0,0]
+          dashArray: [0, 8, 0, 0]
         },
+
         colors: ['#4f8a83', '#573D1C', '#e76278', '#fac699'],
         fill: {
           type: ['solid', 'solid', 'solid', 'solid'],
@@ -180,6 +190,9 @@ export default {
           },
         },
         chart: {
+          animations: {
+            enabled: false
+          },
           type: 'line',
           stacked: false,
           toolbar: {

@@ -111,7 +111,7 @@
 </template>
 
 <script>
-import News from '@/components/News.vue'
+import News from '@/components/news.vue'
 import {useDrawersStore} from "@/stores/drawers";
 import {useCampaignsStore} from "@/stores/campaigns";
 import {useDialogsStore} from "@/stores/dialogs";

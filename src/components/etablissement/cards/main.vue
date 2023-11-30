@@ -46,7 +46,7 @@
                    style="text-transform: none; margin-left: auto; margin-right: auto"
                    @click="dialogs.showCreateCardDialog()">
               <v-icon small class="mr-2">fa-people-pulling</v-icon>
-              Accompagner<br/>
+              Ajouter un accompagnement<br/>
             </v-btn>
           </div>
           <div v-if="canCreateCard && !followed">
@@ -64,7 +64,6 @@
             :codeDepartement="codeDepartement"
             :denomination="denomination"/>
         </v-flex>
-
       </v-layout>
     </v-container>
   </div>

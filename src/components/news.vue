@@ -30,6 +30,7 @@
             v-model="activePanel"
             inset
         >
+          <News008 :activePanel="activePanel"/>
           <News007 :activePanel="activePanel"/>
           <News006 :activePanel="activePanel"/>
           <News005 :activePanel="activePanel"/>
@@ -45,18 +46,19 @@
 </template>
 
 <script>
-import News001 from '@/components/news/News001.vue'
-import News002 from '@/components/news/News002.vue'
-import News003 from '@/components/news/News003.vue'
-import News004 from '@/components/news/News004.vue'
-import News005 from '@/components/news/News005.vue'
-import News006 from '@/components/news/News006.vue'
-import News007 from '@/components/news/News007.vue'
+import News001 from '@/components/news/news001.vue'
+import News002 from '@/components/news/news002.vue'
+import News003 from '@/components/news/news003.vue'
+import News004 from '@/components/news/news004.vue'
+import News005 from '@/components/news/news005.vue'
+import News006 from '@/components/news/news006.vue'
+import News007 from '@/components/news/news007.vue'
+import News008 from '@/components/news/news008.vue'
 
 
 export default {
   name: 'News',
-  components: {News001, News002, News003, News004, News005, News006, News007},
+  components: {News001, News002, News003, News004, News005, News006, News007, News008},
   mounted() {
     if (this.newsToRead > 0 && this.dialog == null) {
       this.dialog = true;
@@ -105,6 +107,7 @@ export default {
     return {
       activePanel: 0,
       news: [
+        new Date('2023-11-30'),
         new Date('2023-09-03'),
         new Date('2023-06-01'),
         new Date('2023-03-23'),

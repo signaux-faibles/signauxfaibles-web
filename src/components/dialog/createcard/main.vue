@@ -19,8 +19,8 @@
     <DialogCreateCardCrpStep2 v-if="dialogs.createCardSequence==='crpStep2'"/>
     <DialogCreateCardCrpStep3 v-if="dialogs.createCardSequence==='crpStep3'"/>
     <DialogCreateCardCrpStep4 v-if="dialogs.createCardSequence==='crpStep4'"/>
-    <DialogCreateCardCrpStep5 v-if="dialogs.createCardSequence==='crpStep5'"/>
-    <DialogCreateCardCampaignStep2 v-if="dialogs.createCardSequence==='campaignStep2'"/>
+    <DialogCreateCardCrpStep5 :siret="siret" v-if="dialogs.createCardSequence==='crpStep5'"/>
+    <DialogCreateCardCampaignStep2 :siret="siret" v-if="dialogs.createCardSequence==='campaignStep2'"/>
 <!--    <div style="background-color: #fff">-->
 <!--      dialogs.createCard: {{ dialogs.createCard }} <br/>-->
 <!--      dialogs.createCardSequence: {{ dialogs.createCardSequence }} <br/>-->

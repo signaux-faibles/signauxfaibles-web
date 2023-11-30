@@ -41,6 +41,17 @@ export default {
   },
   components: {Editor},
   methods: {
+    createCard() {
+      this.$axios.post("/kanban/card", this.params)
+        .then(() => {
+          this.createCardFailedError = false
+          this.dialogs.resetCreateCardDialog()
+          this.dialogs.createCardDialog = false
+          this.$bus.$emit("create-card")
+        }).catch(e => {
+        this.createCardFailedError = "Un problème est survenu lors de l'enregistrement."
+      })
+    },
     editorOptions() {
       return {
         minHeight: '400px',

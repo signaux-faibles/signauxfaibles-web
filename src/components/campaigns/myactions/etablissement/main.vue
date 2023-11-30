@@ -20,9 +20,8 @@
           <span class="raison-sociale">
             {{ etablissement.raisonSociale }}
           </span><br/>
-        <span>
-            {{ etablissement.siret }}
-          </span>
+        <span>{{ etablissement.siret.slice(0,9) }}</span>
+        <span style="color: #555" class="ml-1">{{ etablissement.siret.slice(9) }}</span>
       </div>
 
       <div id="contact" class="ml-2">
