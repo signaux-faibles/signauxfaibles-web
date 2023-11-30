@@ -28,7 +28,7 @@
             </th>
             <td>
               <v-chip
-                v-for="label in createCardLabels"
+                v-for="label in dialogs.createCardLabels"
                 :key="label"
                 :color="newCardLabelItems[label].background"
                 :text-color="newCardLabelItems[label].front"
@@ -53,13 +53,13 @@
 
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="indigo" outlined
-               @click="createCardSequence=4">
-          retour
+        <v-btn style="text-transform: none" color="indigo" text
+               @click="previousStep">
+          Retour
         </v-btn>
-        <v-btn color="indigo" dark
+        <v-btn style="text-transform: none" color="indigo" dark
                @click="createCard">
-          Terminer
+          Enregistrer
         </v-btn>
       </v-card-actions>
       <v-card-actions v-if="createCardFailedError">
@@ -72,36 +72,62 @@
 <script>
 import MarkdownIt from "markdown-it";
 import labelColors from "@/assets/labels.json";
+import {useKanbanStore} from "@/stores/kanban";
+import {useDialogsStore} from "@/stores/dialogs";
 
 const md = new MarkdownIt()
 
 export default {
   name: 'DialogCreateCardCrpStep5',
+  props: ['siret'],
+  setup() {
+    const kanban = useKanbanStore()
+    const dialogs = useDialogsStore()
+    return {kanban,dialogs}
+  },
   data() {
     return {
       createCardFailedError: null,
       customDescription: null,
     }
   },
-  props: ['siret'],
   methods: {
+    previousStep() {
+      this.dialogs.createCardSequence='crpStep4'
+    },
     createCard() {
       this.$axios.post("/kanban/card", this.params)
         .then(() => {
           this.createCardFailedError = false
-          this.$store.commit('setCreateCardLabels', [])
-          this.$store.commit('setCreateCardProblems', [])
-          this.$store.commit('setCreateCardActions', [])
-          this.$store.commit('setCreateCardSequence', 1)
-          this.createCardDialog = false
-          this.createCardFailedError = null
+          this.dialogs.resetCreateCardDialog()
+          this.dialogs.createCardDialog = false
           this.$bus.$emit("create-card")
         }).catch(e => {
         this.createCardFailedError = "Un problème est survenu lors de l'enregistrement."
       })
-    }
+    },
+    options() {
+      return {
+        minHeight: '400px',
+        language: 'fr',
+        initialValue: this.dialogs.campaignCardEditorDescription,
+        useCommandShortcut: true,
+        usageStatistics: false,
+        hideModeSwitch: true,
+        toolbarItems: [
+          ['heading', 'bold', 'italic', 'strike'],
+          ['hr', 'quote'],
+          ['ul', 'ol', 'task'],
+          ['link', 'table'],
+        ]
+      }
+    },
   },
   computed: {
+    currentBoard() {
+      const currentBoardID = this.kanban.boardIDFromSwimlaneID(this.dialogs.createCardSwimlaneID)
+      return this.kanban.config.boards[currentBoardID]
+    },
     newCardLabelItems() {
       return Object.values(this.currentBoard.labels).reduce((m, label) => {
         if (label.name !== '') {
@@ -116,67 +142,30 @@ export default {
     description() {
       let lines = []
       lines.push("### Difficultés  ")
-      this.createCardProblems.forEach((problem) => {
+      this.dialogs.createCardProblems.forEach((problem) => {
         lines.push("- " + problem + "  ")
       })
       lines.push("")
       lines.push("### Actions  ")
-      this.createCardActions.forEach((action) => {
+      this.dialogs.createCardActions.forEach((action) => {
         lines.push("- " + action + "  ")
       })
       return lines.join("\n")
     },
     params() {
       return {
-        swimlaneID: this.createCardSwimlaneID,
+        swimlaneID: this.dialogs.createCardSwimlaneID,
         description: this.description,
-        labels: this.createCardLabels,
+        labels: this.dialogs.createCardLabels,
         siret: this.siret,
       }
     },
-    currentBoard() {
-      const currentSwimlaneID = this.createCardSwimlaneID
-      for (const board of Object.values(this.kanbanConfig.boards)) {
-        if (currentSwimlaneID in board.swimlanes) {
-          return board
-        }
-      }
-      return null
-    },
     currentSwimlane() {
-      return this.currentBoard.swimlanes[this.createCardSwimlaneID].title
+      return this.currentBoard.swimlanes[this.dialogs.createCardSwimlaneID].title
     },
     kanbanConfig() {
       return this.$store.state.kanbanConfig
     },
-    createCardSequence: {
-      get() {
-        return this.$store.state.createCardSequence
-      },
-      set(value) {
-        this.$store.commit('setCreateCardSequence', value)
-      },
-    },
-    createCardDialog: {
-      get() {
-        return this.$store.state.createCardDialog
-      },
-      set(value) {
-        this.$store.commit('setCreateCardDialog', value)
-      },
-    },
-    createCardProblems() {
-      return this.$store.state.createCardProblems
-    },
-    createCardActions() {
-      return this.$store.state.createCardActions
-    },
-    createCardSwimlaneID() {
-      return this.$store.state.createCardSwimlaneID
-    },
-    createCardLabels() {
-      return this.$store.state.createCardLabels
-    }
   },
 }
 </script>

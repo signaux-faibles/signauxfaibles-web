@@ -1,7 +1,7 @@
 import {defineStore} from 'pinia'
 import {AxiosInstance} from "axios";
 import {Store} from 'vuex'
-import {KanbanConfig, KanbanUser, KanbanBoard} from "@/lib/kanban";
+import {KanbanConfig, KanbanList, KanbanUser, KanbanBoard} from "@/lib/kanban";
 
 export const useKanbanStore = defineStore('kanban', {
   state: () => ({
@@ -69,6 +69,14 @@ export const useKanbanStore = defineStore('kanban', {
         return (board)?board[0]:undefined
       }
     },
+    isCampaignBoardID() {
+      const boards = this.config.boards
+      return function(boardID: string) {
+        const lists = (Object.values(boards[boardID].lists) || [] as KanbanList[])
+        const analyseLists = lists.filter((list) => {return list.title == 'Analyse en cours'})
+        return analyseLists.length > 0
+      }
+    },
     availableSwimlanes() {
       const config = this.config
       return function(codeDepartement: string) {
@@ -78,10 +86,17 @@ export const useKanbanStore = defineStore('kanban', {
             boardTitle: config.boards[swimlane.boardID].title,
             boardSlug: config.boards[swimlane.boardID].slug,
             boardID: swimlane.boardID,
-            title: config.boards[swimlane.boardID].swimlanes[swimlane.swimlaneID].title,
             id: swimlane.swimlaneID,
           }
         }).sort((s1: any, s2: any) => (s1.boardTitle < s2.boardTitle) ? -1 : 1)
+      }
+    },
+    boardType() {
+      const config = this.config
+      return function (boardID: string) {
+        const typeRegexp = /^((tableau|actions)-.*)-.*/
+        const match = config.boards[boardID].slug.match(typeRegexp) || []
+        return (match.length > 1) ? match[1] : null as unknown as string
       }
     },
   }

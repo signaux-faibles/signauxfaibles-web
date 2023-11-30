@@ -12,7 +12,7 @@ interface KanbanSwimlane {
     sort: number,
 }
 
-interface KanbanList {
+export interface KanbanList {
     title: string,
     sort: number,
 }

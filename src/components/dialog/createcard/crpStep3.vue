@@ -5,10 +5,9 @@
           Quelles actions sont menées ou envisagées ?
       </v-card-title>
       <v-card-text>
-
         <v-select
             ref="actions"
-            v-model="createCardActions"
+            v-model="dialogs.createCardActions"
             :items="newCardConfig.actionItems"
             :menu-props="{ maxHeight: 400 }"
             chips
@@ -29,12 +28,12 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="indigo" outlined
-               @click="createCardSequence=2">
-          retour
+        <v-btn color="indigo" style="text-transform: none" text
+               @click="previousStep">
+          Retour
         </v-btn>
-        <v-btn color="indigo" dark
-               @click="createCardSequence=4">
+        <v-btn color="indigo" style="text-transform: none" dark
+               @click="nextStep">
           Étape suivante
         </v-btn>
       </v-card-actions>
@@ -45,60 +44,35 @@
 <script>
 import newCardConfigBase from '@/assets/new_card_config.json'
 import Help from '@/components/Help.vue'
+import {useKanbanStore} from "@/stores/kanban";
+import {useDialogsStore} from "@/stores/dialogs";
 
 export default {
   name: 'DialogCreateCardCrpStep3',
   components: {Help},
-  computed: {
-    currentBoard() {
-      const currentSwimlaneID = this.createCardSwimlaneID
-      for (const board of Object.values(this.kanbanConfig.boards)) {
-        if (currentSwimlaneID in board.swimlanes) {
-          return board.slug
-        }
-      }
-      return currentSwimlaneID
+  setup() {
+    const kanban = useKanbanStore()
+    const dialogs = useDialogsStore()
+    return {kanban,dialogs}
+  },
+  methods: {
+    nextStep() {
+      this.dialogs.createCardSequence = 'crpStep4'
     },
+    previousStep() {
+      this.dialogs.createCardSequence = 'crpStep2'
+    },
+  },
+  computed: {
     currentBoardType() {
-      const typeRegexp = /^((tableau|actions)-.*)-.*/
-      const match = this.currentBoard.match(typeRegexp)
-      return (match.length > 1) ? match[1] : null
+      const boardID = this.kanban.boardIDFromSwimlaneID(this.dialogs.createCardSwimlaneID)
+      return this.kanban.boardType(boardID)
     },
     newCardConfig() {
       return newCardConfigBase[this.currentBoardType] || []
     },
     newCardConfigBase() {
       return newCardConfigBase
-    },
-    createCardLabels() {
-      return this.$store.state.createCardLabels
-    },
-    kanbanConfig() {
-      return this.$store.state.kanbanConfig
-    },
-    createCardSequence: {
-      get() {
-        return this.$store.state.createCardSequence
-      },
-      set(value) {
-        this.$store.commit('setCreateCardSequence', value)
-      },
-    },
-    createCardActions: {
-      get() {
-        return this.$store.state.createCardActions
-      },
-      set(value) {
-        this.$store.commit('setCreateCardActions', value)
-      },
-    },
-    createCardSwimlaneID: {
-      get() {
-        return this.$store.state.createCardSwimlaneID
-      },
-      set(value) {
-        this.$store.commit('setCreateCardSwimlaneID', value)
-      },
     },
   },
 }

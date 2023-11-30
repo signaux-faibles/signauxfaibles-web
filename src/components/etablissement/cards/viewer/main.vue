@@ -12,7 +12,7 @@
                @click="dialogs.showEtablissementCardEditor(siret, codeDepartement, denomination, card.id, card.description)"
         >
           <v-icon class="mr-2" small>fa-pen-to-square</v-icon>
-          Modifier cette fiche
+          Compléter
         </v-btn>
       </v-card-title>
       <v-card-text>

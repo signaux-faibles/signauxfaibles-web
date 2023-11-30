@@ -45,7 +45,7 @@
       <v-btn class="mb-2" color="indigo" style="text-transform: none" text @click="dialogs.closeCreateCardDialog">
         Annuler
       </v-btn>
-      <v-btn class="mb-2" color="indigo" dark style="text-transform: none;" @click="createCardSequence=2">
+      <v-btn class="mb-2" color="indigo" dark style="text-transform: none;" @click="nextSequence">
         Étape suivante
       </v-btn>
     </v-card-actions>
@@ -63,6 +63,16 @@ export default {
     let kanban = useKanbanStore();
     let dialogs = useDialogsStore();
     return {kanban, dialogs}
+  },
+  methods: {
+    nextSequence() {
+      const boardID = this.kanban.boardIDFromSwimlaneID(this.dialogs.createCardSwimlaneID)
+      if (this.kanban.isCampaignBoardID(boardID)) {
+        this.dialogs.createCardSequence = 'campaignStep2'
+      }  else {
+        this.dialogs.createCardSequence = 'crpStep2'
+      }
+    }
   },
   computed: {
     cardsForCurrentSwimlaneID() {

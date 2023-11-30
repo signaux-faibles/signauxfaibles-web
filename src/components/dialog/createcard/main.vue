@@ -21,17 +21,18 @@
     <DialogCreateCardCrpStep4 v-if="dialogs.createCardSequence==='crpStep4'"/>
     <DialogCreateCardCrpStep5 v-if="dialogs.createCardSequence==='crpStep5'"/>
     <DialogCreateCardCampaignStep2 v-if="dialogs.createCardSequence==='campaignStep2'"/>
-    <div style="background-color: #fff">
-      dialogs.createCard: {{ dialogs.createCard }} <br/>
-      dialogs.createCardSequence: {{ dialogs.createCardSequence }} <br/>
-      dialogs.createCardSwimlaneID: {{ dialogs.createCardSwimlaneID }} <br/>
-      dialogs.createCardDialog: {{ dialogs.createCardDialog }} <br/>
-      dialogs.createCardProblems:  {{ dialogs.createCardProblems }} <br/>
-      dialogs.createCardActions: {{ dialogs.createCardActions }} <br/>
-      dialogs.createCardLabels: {{ dialogs.createCardLabels }} <br/>
-      kanban.availableSwimlanes({{codeDepartement}}): {{ kanban.availableSwimlanes(codeDepartement) }}<br/>
-      <span v-if="dialogs.createCardSwimlaneID">boardID: {{ kanban.boardIDFromSwimlaneID(dialogs.createCardSwimlaneID) }}</span>
-    </div>
+<!--    <div style="background-color: #fff">-->
+<!--      dialogs.createCard: {{ dialogs.createCard }} <br/>-->
+<!--      dialogs.createCardSequence: {{ dialogs.createCardSequence }} <br/>-->
+<!--      dialogs.createCardSwimlaneID: {{ dialogs.createCardSwimlaneID }} <br/>-->
+<!--      dialogs.createCardDialog: {{ dialogs.createCardDialog }} <br/>-->
+<!--      dialogs.createCardProblems:  {{ dialogs.createCardProblems }} <br/>-->
+<!--      dialogs.createCardActions: {{ dialogs.createCardActions }} <br/>-->
+<!--      dialogs.createCardLabels: {{ dialogs.createCardLabels }} <br/>-->
+<!--      kanban.availableSwimlanes({{codeDepartement}}): {{ kanban.availableSwimlanes(codeDepartement) }}<br/>-->
+<!--      <span v-if="dialogs.createCardSwimlaneID">boardID: {{ kanban.boardIDFromSwimlaneID(dialogs.createCardSwimlaneID) }}<br/></span>-->
+<!--      <span v-if="dialogs.createCardSwimlaneID">lists: {{ kanban.isCampaignBoardID(kanban.boardIDFromSwimlaneID(dialogs.createCardSwimlaneID)) }}</span>-->
+<!--    </div>-->
   </v-dialog>
 </template>
 
