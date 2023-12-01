@@ -8,8 +8,8 @@
         <v-card-text class="text">
           La liste de décembre 2023 est désormais accessible dans l'onglet détection :
           <ul>
-            <li>le modèle a évolué pour intégrer les délais fournisseurs excessifs ou alarmants</li>
-            <li>un nouveau filtre permet d'écarter les entreprises disposant déjà d'un délai URSSAF en cours</li>
+            <li>le modèle a évolué pour intégrer les délais fournisseurs dépassant des niveaux jugés critiques</li>
+            <li>Il est désormais possible de filtrer les listes pour en exclure les entreprises ayant un délai accordé par l'URSSAF en cours.</li>
           </ul>
           <p/>
           <h2>Statistiques de la nouvelle liste</h2>
@@ -32,13 +32,13 @@
           </v-row>
 
           <h2>Délais URSSAF</h2>
-          Le graphique des cotisations et dettes urssaf intègre désormais une visualisation des délais en cours en pointillés comme sur l'exemple ci-dessous:
+          Le graphique des cotisations et impayés URSSAF intègre désormais une visualisation des délais en cours en pointillé comme sur l'exemple ci-dessous:
           <div width="100%" class="pt-4 pl-10">
           <img width="400px" src="/delai_urssaf.png"/>
           </div>
           <ul>
-            <li>les délais accordés sont représentés depuis leur création jusqu'à leur date d'échéance par le montant total de l'échéancier</li>
-            <li>la frai</li>
+            <li>la valeur «délai accordé» représente le montant total de l'échéancier sur l'ensemble de la durée du délai</li>
+            <li>les données sources ont été actualisées pour la production de cette liste, en novembre 2023</li>
           </ul>
           <p/>
           <h2>Mise à jour des données</h2>

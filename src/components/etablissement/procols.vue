@@ -60,19 +60,14 @@
                   <li v-for="j in sauvegardeJugements" :key="j">{{ j }}</li>
                 </ul>
               </div>
-
               <div class="mt-5" style="display: flex; flex-direction: row">
-
                 <v-btn :href="lienBODACC" class="my-2 mb-4" color="indigo" dark rel="noopener"
                        target="_blank">Voir annonces BODACC
                 </v-btn>
                 <Gitbook :target="gitbookPath('INTERPRETATION_BODACC')" caption="procédures collectives"
                          class="mt-2"></Gitbook>
-
-
               </div>
               <div style="font-size: 14px;">
-
                 <v-alert class="mr-4" icon="fa-warning">
                   Des différences avec les annonces BODACC peuvent exister. Une vérification avec le Tribunal de commerce
                   permettra de certifier l’information.
