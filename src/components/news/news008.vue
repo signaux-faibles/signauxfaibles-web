@@ -39,6 +39,7 @@
           <ul>
             <li>la valeur «délai accordé» représente le montant total de l'échéancier sur l'ensemble de la durée du délai</li>
             <li>les données sources ont été actualisées pour la production de cette liste, en novembre 2023</li>
+            <li>nous vous invitons à nous communiquer les incompréhensions ou problèmes constatés avec cette donnée</li>
           </ul>
           <p/>
           <h2>Mise à jour des données</h2>

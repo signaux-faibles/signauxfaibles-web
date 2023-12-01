@@ -7,6 +7,7 @@ interface dialogStore {
   createCardProblems: string[],
   createCardActions: string[],
   createCardLabels: string[],
+  createCardDescription: string | null,
   etablissement: boolean,
   etablissementSiret: string | null,
   entreprise: boolean,
@@ -44,6 +45,7 @@ export const useDialogsStore = defineStore('dialogs', {
     createCardProblems: [],
     createCardActions: [],
     createCardLabels: [],
+    createCardDescription: null,
     etablissement: false,
     etablissementSiret: null,
     entreprise: false,
@@ -89,6 +91,7 @@ export const useDialogsStore = defineStore('dialogs', {
       this.createCardLabels = []
       this.createCardProblems = []
       this.createCardActions = []
+      this.createCardDescription = null
     },
     showEtablissement(siret: string) {
       this.hideEntreprise()

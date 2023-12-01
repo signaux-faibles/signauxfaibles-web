@@ -1,8 +1,7 @@
 <template>
   <div class="members">
     <div>
-      <span v-if="members.length==0">Cette entreprise n'est pas accompagnée.<br/>
-        Souhaitez vous participer à un nouvel accompagnement ?</span>
+      <span v-if="members.length==0"><b>Cette entreprise n'est pas accompagnée actuellement.</b><br/></span>
       <h3 v-if="members.length > 0">Accompagnants</h3>
       <ul>
         <li v-for="member in this.members" class="mt-2">

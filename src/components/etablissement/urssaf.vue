@@ -17,32 +17,57 @@
               <li>Dette (part salariale) : montant cumulé des dettes <strong>restant à payer</strong> sur la part
                 salariale (ou ouvrière).
               </li>
+              <li>Délai accordé (BETA) : montant cumulé des <strong>délais accordés</strong> sur la période séparant leur création et leur échéances.</li>
             </ul>
           </p>
           <em>Fournisseur : ACOSS.</em>
         </template>
       </Help>
     </v-toolbar>
-    <apexchart
-      v-if="permUrssaf"
-      :options="options"
-      :series="series"
-      heigth="100%"
-      type="line"
-      width="100%"
-    ></apexchart>
+    <div v-if="permUrssaf">
+      <apexchart
+        :options="options"
+        :series="series"
+        heigth="100%"
+        type="line"
+        width="100%"
+      ></apexchart>
 
-    <v-alert
-      v-if="hasCCSFNow"
-      class="ml-12 mr-3"
-      color="indigo"
-      dense
-      outlined
-      type="info"
-    >
-      Au regard des dernières informations fournies par l'URSSAF, cet établissement fait actuellement l'objet d'un
+      <v-alert
+        v-if="hasCCSFNow"
+        class="ml-12 mr-3"
+        color="indigo"
+        dense
+        outlined
+        type="info"
+      >      Au regard des dernières informations fournies par l'URSSAF, cet établissement fait actuellement l'objet d'un
       plan CCSF.
-    </v-alert>
+      </v-alert>
+
+      <v-alert
+        v-if="hasMultipleDelai"
+        class="ml-12 mr-3"
+        color="indigo"
+        dense
+        outlined
+        icon="fa-circle-exclamation"
+      >      Certains montants de délais accordés représentés ci-dessus sont composés de plusieurs échéanciers.
+        Il est fortement recommandé d'échanger avec votre référent URSSAF pour en savoir plus sur la situation
+        de cette entreprise.
+      </v-alert>
+
+      <v-alert
+        v-if="hasDelai"
+        class="ml-12 mr-3"
+        color="indigo"
+        dense
+        outlined
+        icon="fa-flask-vial"
+      >      L'exploitation des données de délai URSSAF est encore expérimentale, nous vous invitons à nous faire part de vos
+        problèmes ou interrogations dans l'exploitation de ces nouvelles informations.
+      </v-alert>
+    </div>
+
     <v-layout v-if="!permUrssaf" align-center justify-center style="min-height: 500px" text-center>
       <v-flex xs5>
         <v-icon size="100">fa-lock</v-icon>
@@ -65,11 +90,21 @@ export default {
   components: {Help},
   props: ['debit', 'cotisation', 'delai', 'chart', 'permUrssaf'],
   computed: {
+    hasDelai() {
+      return this.debit.filter((delai) => {
+        return delai.delai > 0
+      }).length > 0
+    },
     hasCCSFNow() {
       return this.delai.filter((delai) => {
         const now = new Date()
         const dateEcheance = new Date(delai.dateEcheance)
         return delai.action == 'CCSF' && now < dateEcheance
+      }).length > 0
+    },
+    hasMultipleDelai() {
+      return this.debit.filter((delai) => {
+        return delai.nbdelai > 1
       }).length > 0
     },
     series() {
@@ -85,7 +120,7 @@ export default {
             ]
           }),
         }, {
-          name: 'délai accordé',
+          name: 'délai accordé (BETA)',
           type: 'line',
           data: this.debit.map((delai, index, array) => {
             const delai_prec = (index > 0) ? array[index - 1].delai > 0 : false
@@ -145,7 +180,7 @@ export default {
               '<tr><td style="padding-right: 15px">cotisation appelée</td><td style="width: 100px;text-align: right">' + cotisation + '</td></tr>' +
               '<tr><td style="padding-right: 15px">dette restante (part patronale)</td><td style="text-align: right">' + partPatronale + '</td></tr>' +
               '<tr><td class="pb-1" style="padding-right: 15px">dette restante (part salariale)</td><td class="pb-1" style="text-align: right">' + partSalariale + '</td></tr>' +
-              ((delai != null) ? '<tr><td style="padding-right: 15px">délai accordé</td><td style="text-align: right">' + delai_libelle + '</td></tr>' : '') +
+              ((delai != null) ? '<tr><td style="padding-right: 15px">délai accordé (BETA)</td><td style="text-align: right">' + delai_libelle + '</td></tr>' : '') +
               '</div>'
           },
           x: {

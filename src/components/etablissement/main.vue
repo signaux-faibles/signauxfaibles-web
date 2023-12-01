@@ -292,7 +292,8 @@ export default {
             part_ouvriere: (periodeUrssaf.partSalariale || {})[i],
             part_patronale: (periodeUrssaf.partPatronale || {})[i],
             periode: p,
-            delai: this.delais(p).reduce((m, delai) => {return m + delai.montantEcheancier}, 0)
+            delai: this.delais(p).reduce((m, delai) => {return m + delai.montantEcheancier}, 0),
+            nbdelai: this.delais(p).reduce((m, delai) => {return m + 1}, 0),
           }
         })
       } else {

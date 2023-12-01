@@ -227,15 +227,6 @@
                 <v-list-item-subtitle>Inclure les établissements fermés</v-list-item-subtitle>
               </v-list-item-content>
             </v-list-item>
-            <v-list-item>
-              <v-list-item-action>
-                <v-checkbox v-model="exclureSuivi" @change="getPrediction()"></v-checkbox>
-              </v-list-item-action>
-              <v-list-item-content @click="toggleExclureSuivi()">
-                <v-list-item-title>Établissements non suivis</v-list-item-title>
-                <v-list-item-subtitle>Exclure mes établissements suivis</v-list-item-subtitle>
-              </v-list-item-content>
-            </v-list-item>
           </v-list-group>
         </v-list>
       </v-navigation-drawer>

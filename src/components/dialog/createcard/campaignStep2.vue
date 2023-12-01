@@ -10,9 +10,11 @@
         </ul>
 
       <Editor class="mb-4"
+              ref="editor"
               :options="editorOptions()"
               initialEditType="wysiwyg"
-      />Vous serez le premier accompagnant de cet entreprise, pensez à inviter les autres membres de votre groupe à vous rejoindre.
+              :initialValue="dialogs.createCardDescription"
+      />Cet accompagnement sera créé dans l'état `Analyse en cours`.
     </span>
     </v-card-text>
     <v-card-actions class="pb-3">
@@ -35,14 +37,19 @@ import {Editor} from '@toast-ui/vue-editor';
 
 export default {
   name: 'DialogCreateCardCampaignStep2',
+  props: ['siret'],
   setup() {
     const dialogs = useDialogsStore()
     return {dialogs}
   },
   components: {Editor},
   methods: {
+    description() {
+      const description = this.$refs.editor.invoke('getMarkdown')
+      return description
+    },
     createCard() {
-      this.$axios.post("/kanban/card", this.params)
+      this.$axios.post("/kanban/card", this.params())
         .then(() => {
           this.createCardFailedError = false
           this.dialogs.resetCreateCardDialog()
@@ -51,6 +58,13 @@ export default {
         }).catch(e => {
         this.createCardFailedError = "Un problème est survenu lors de l'enregistrement."
       })
+    },
+    params() {
+      return {
+        swimlaneID: this.dialogs.createCardSwimlaneID,
+        description: this.description(),
+        siret: this.siret,
+      }
     },
     editorOptions() {
       return {
@@ -69,6 +83,7 @@ export default {
       }
     },
     previousStep() {
+      this.dialogs.createCardDescription = this.description()
       this.dialogs.createCardSequence = 'start'
     }
   }
