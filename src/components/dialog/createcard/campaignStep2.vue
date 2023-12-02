@@ -34,13 +34,15 @@
 <script>
 import {useDialogsStore} from "@/stores/dialogs";
 import {Editor} from '@toast-ui/vue-editor';
+import {useKanbanStore} from "@/stores/kanban";
 
 export default {
   name: 'DialogCreateCardCampaignStep2',
   props: ['siret'],
   setup() {
+    const kanban = useKanbanStore()
     const dialogs = useDialogsStore()
-    return {dialogs}
+    return {kanban,dialogs}
   },
   components: {Editor},
   methods: {
@@ -60,8 +62,15 @@ export default {
       })
     },
     params() {
+      const boardID = this.kanban.boardIDFromSwimlaneID(this.dialogs.createCardSwimlaneID)
+      console.log(Object.entries(this.kanban.config.boards[boardID].lists))
+      const list = Object.entries(this.kanban.config.boards[boardID].lists).find(([k,v]) => {
+        return v.title === 'Accompagnement en cours'
+      })
+      console.log(list)
       return {
         swimlaneID: this.dialogs.createCardSwimlaneID,
+        listID: list[0],
         description: this.description(),
         siret: this.siret,
       }

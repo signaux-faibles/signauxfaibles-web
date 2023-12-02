@@ -17,7 +17,7 @@
               <li>Dette (part salariale) : montant cumulé des dettes <strong>restant à payer</strong> sur la part
                 salariale (ou ouvrière).
               </li>
-              <li>Délai accordé (BETA) : montant cumulé des <strong>délais accordés</strong> sur la période séparant leur création et leur échéances.</li>
+              <li>Délai accordé (expérimental) : montant cumulé des <strong>délais accordés</strong> sur la période séparant leur création et leur échéances.</li>
             </ul>
           </p>
           <em>Fournisseur : ACOSS.</em>
@@ -120,7 +120,7 @@ export default {
             ]
           }),
         }, {
-          name: 'délai accordé (BETA)',
+          name: 'délai accordé (expérimental)',
           type: 'line',
           data: this.debit.map((delai, index, array) => {
             const delai_prec = (index > 0) ? array[index - 1].delai > 0 : false
@@ -180,7 +180,7 @@ export default {
               '<tr><td style="padding-right: 15px">cotisation appelée</td><td style="width: 100px;text-align: right">' + cotisation + '</td></tr>' +
               '<tr><td style="padding-right: 15px">dette restante (part patronale)</td><td style="text-align: right">' + partPatronale + '</td></tr>' +
               '<tr><td class="pb-1" style="padding-right: 15px">dette restante (part salariale)</td><td class="pb-1" style="text-align: right">' + partSalariale + '</td></tr>' +
-              ((delai != null) ? '<tr><td style="padding-right: 15px">délai accordé (BETA)</td><td style="text-align: right">' + delai_libelle + '</td></tr>' : '') +
+              ((delai != null) ? '<tr><td style="padding-right: 15px">délai accordé (expérimental)</td><td style="text-align: right">' + delai_libelle + '</td></tr>' : '') +
               '</div>'
           },
           x: {
