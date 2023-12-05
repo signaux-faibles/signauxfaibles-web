@@ -42,11 +42,11 @@
             <v-list-item-title>Campagnes</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item to="/follow">
+        <v-list-item v-if="this.roles.includes('wekan')" to="/follow">
           <v-list-item-action>
             <v-icon>fa-people-pulling</v-icon>
           </v-list-item-action>
-          <v-list-item-content v-if="this.roles.includes('wekan')">
+          <v-list-item-content >
             <v-list-item-title>Accompagnement</v-list-item-title>
           </v-list-item-content>
         </v-list-item>

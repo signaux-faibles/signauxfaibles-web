@@ -205,8 +205,8 @@
                 <v-checkbox v-model="hasntDelai" @change="getPrediction()"></v-checkbox>
               </v-list-item-action>
               <v-list-item-content @click="toggleHasntDelay()">
-                <v-list-item-title>Sans délai URSSAF</v-list-item-title>
-                <v-list-item-subtitle>Affiche uniquement les entreprises dont les établissement sont sans délai urssaf en cours</v-list-item-subtitle>
+                <v-list-item-title>Sans délai de paiement URSSAF</v-list-item-title>
+                <v-list-item-subtitle>Affiche uniquement les entreprises dont les établissement sont sans délai de paiement urssaf en cours</v-list-item-subtitle>
               </v-list-item-content>
             </v-list-item>
             <v-list-item>

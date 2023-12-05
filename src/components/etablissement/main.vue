@@ -227,13 +227,21 @@ export default {
         this.alertExport = true
       })
     },
+    nbdelais(periodeString) {
+      const currentDelais = this.delais(periodeString)
+      return currentDelais.length
+    },
     delais(periodeString) {
       const periode = new Date(periodeString)
-      return this.delai.filter((delai) => {
+      const currentDelais = this.delai.filter((delai) => {
         const dateEcheance = new Date(delai.dateEcheance)
         const dateCreation = new Date(delai.dateCreation)
         return periode < dateEcheance && periode > dateCreation
       })
+      currentDelais.sort((delai1, delai2) => {
+        return (delai1.dateCreation<delai2.dateCreation)?1:-1
+      })
+      return currentDelais
     }
   },
   created() {
@@ -292,8 +300,8 @@ export default {
             part_ouvriere: (periodeUrssaf.partSalariale || {})[i],
             part_patronale: (periodeUrssaf.partPatronale || {})[i],
             periode: p,
-            delai: this.delais(p).reduce((m, delai) => {return m + delai.montantEcheancier}, 0),
-            nbdelai: this.delais(p).reduce((m, delai) => {return m + 1}, 0),
+            delai: (this.delais(p)[0] || {}).montantEcheancier || null,
+            nbdelai: this.nbdelais(p),
           }
         })
       } else {
