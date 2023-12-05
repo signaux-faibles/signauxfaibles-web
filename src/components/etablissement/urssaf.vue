@@ -123,7 +123,7 @@ export default {
             ]
           }),
         }, {
-          name: 'montant accordé dans le cadre d\'un délai de paiement accordé (expérimental)',
+          name: 'montant de l\'échéancier du délai de paiement (expérimental)',
           type: 'line',
           data: this.debit.map((delai, index, array) => {
             const delai_prec = (index > 0) ? array[index - 1].delai > 0 : false
