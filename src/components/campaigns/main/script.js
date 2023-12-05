@@ -8,7 +8,7 @@ import CampaignsPendingActions from "@/components/campaigns/pendingActions/main.
 import CampaignsTakenActions from "@/components/campaigns/takenactions/main.vue"
 import {fetchEventSource} from "@microsoft/fetch-event-source";
 import Entreprise from "@/components/entreprise/main.vue";
-import Etablissement from "@/components/etablissement/Main.vue";
+import Etablissement from "@/components/etablissement/main.vue";
 import {useDrawersStore} from "@/stores/drawers";
 import {useCampaignsStore} from "@/stores/campaigns";
 

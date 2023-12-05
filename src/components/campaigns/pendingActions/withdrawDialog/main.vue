@@ -3,7 +3,7 @@
     <v-dialog persistent v-model="withdrawDialog.visible" height=50% width=40%>
       <div style="width: 100%; font-size: 17px; font-weight: 800; font-family: 'Oswald', sans;">
         <v-toolbar color="red darken-3" dark>
-          <v-toolbar-title class="localtoolbar">Je repousse la prise de contact de {{ withdrawDialog.raisonSociale }}</v-toolbar-title>
+          <v-toolbar-title class="localtoolbar">Je reporte la prise de contact de {{ withdrawDialog.raisonSociale }}</v-toolbar-title>
         </v-toolbar>
         <v-card class="pl-2 pr-2 pb-5">
           <v-card-text class="pb-0 mb-0" style="font-size: 17px">

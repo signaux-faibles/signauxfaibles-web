@@ -1,13 +1,40 @@
 <template>
   <div>
     <h1>
-      {{ denomination }}
-      <v-btn v-if="followed === false" dark color="indigo" @click="showFollowDialog"><v-icon left small class="mr-2">fa-star</v-icon>Suivre</v-btn>
-      <v-btn v-if="followed === true" outlined color="indigo" @click="showUnfollowDialog"><v-icon left small class="mr-2">far fa-star</v-icon>Ne plus suivre</v-btn>
+      {{ denomination }}<br/>
+      <v-btn
+        style="text-transform: none"
+        v-if="deverrouillable"
+        outlined
+        color="indigo"
+        @click="showUnlockDialog"
+      >
+        <v-icon left small class="mr-2">fa-unlock</v-icon>Déverrouiller
+      </v-btn>
+      <v-btn
+        style="text-transform: none"
+        v-else
+        outlined
+        disabled
+      >
+        <v-icon left small class="mr-2">fa-unlock</v-icon>Données déverrouillées
+      </v-btn>
+      <v-btn
+        v-if="canCreateCard"
+        style="text-transform: none"
+        class="ml-4"
+        color="indigo"
+        @click="dialogs.showCreateCardDialog()"
+        dark
+      >
+        <v-icon left small class="mr-2">fa-people-pulling</v-icon>Accompagner
+      </v-btn>
     </h1>
+
     <h3 class="mt-3">
-      siren {{ siret.slice(0,9) }}
-      <span style="color: #999">{{ siret.slice(9,14) }} siret</span>
+
+
+      siren <span class="mr-2">{{ siret.slice(0,9) }}</span><span style="color: #999">{{ siret.slice(9,14) }} siret</span>
       {{ siege ? ' (siège)' : '' }}
       <Help titre="Identité de l’entreprise">
         <p>Les données d’identité de l’entreprise sont principalement issues de la base Sirene des entreprises et de leurs établissements produite par l’Insee.</p>
@@ -44,13 +71,20 @@
 
 <script>
 import Help from '@/components/Help.vue'
+import {useKanbanStore} from "@/stores/kanban";
+import {useDialogsStore} from "@/stores/dialogs";
 
 export default {
   name: 'Identite',
-  props: ['denomination', 'siret', 'sirene', 'siege', 'groupe', 'terrind', 'creation', 'statutJuridique', 'summary'],
-  components: { Help},
+  props: ['etablissement', 'denomination', 'siret', 'sirene', 'siege', 'groupe', 'terrind', 'creation', 'statutJuridique', 'summary'],
+  components: { Help },
+  setup() {
+    const dialogs = useDialogsStore()
+    const kanban = useKanbanStore()
+    return {kanban, dialogs}
+  },
   methods: {
-    showFollowDialog() {
+    showUnlockDialog() {
       this.$parent.followDialog = true
     },
     showUnfollowDialog() {
@@ -71,6 +105,9 @@ export default {
     },
   },
   computed: {
+    canCreateCard() {
+      return (this.sirene.codeDepartement in this.kanban.config.departements)
+    },
     naf() {
       return (this.sirene || {}).naf || {}
     },
@@ -98,6 +135,9 @@ export default {
     },
     adresse() {
       return ((this.sirene || {}).adresse || '').split('\n').join('<br />')
+    },
+    deverrouillable() {
+      return this.etablissement.permDGEFP == false
     },
     identiteHtml() {
       return [(this.libelleSecteur ? 'Secteur d’activité : ' + this.libelleSecteur : ''),

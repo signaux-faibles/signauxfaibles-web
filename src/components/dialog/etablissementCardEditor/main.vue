@@ -7,13 +7,13 @@
       dark
       color='indigo'>
       <v-toolbar-title class="localtoolbar">
-        Fiche de synthèse – {{ dialogs.etablissementCardEditorDenomination }}
+        Note d'accompagnement – {{ dialogs.etablissementCardEditorDenomination }}
         ({{ dialogs.etablissementCardEditorSiret }})
       </v-toolbar-title>
       <v-spacer/>
       <Help titre="Fiches de synthèse">
         <template>
-          Les fiches de synthèse vous permettent de partager des informations.<br/>
+          Les notes d'accompagnement vous permettent de partager des informations.<br/>
           Leur visibilité est conditionnée par les permissions de l'application.<br/>
         </template>
       </Help>

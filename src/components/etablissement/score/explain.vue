@@ -5,41 +5,44 @@
       <span v-else-if="typeExplication === 'ras'">Cet établissement n’a pas été identifié par l’algorithme comme étant à risque de défaillance à 18 mois.</span>
       <span v-else-if="typeExplication === 'horsperimetre'">Cet établissement ne faisait pas partie du périmètre de Signaux Faibles au moment de la production de cette liste de détection.</span>
       <span v-else>
-        Cette entreprise est portée à votre attention car elle présente des signes d'alerte {{ this.alert === "Alerte seuil F2"?' modérés':' importants'}} détaillés ci-dessous.<br/>
+        Cette entreprise est portée à votre attention car elle présente des signes d'alerte {{ this.alert === "Alerte seuil F2" ? ' modérés' : ' importants' }} détaillés ci-dessous.<br/>
         <p/>
         <span>
           <Gitbook :target="gitbookPath('DETECTION')"/>
         </span>
         <ExplainConjoncturel
-            :signalAugmentationUrssaf="signalAugmentationUrssaf"
-            :signalDiminutionUrssaf="signalDiminutionUrssaf"
-            :signalActivitePartielle="signalActivitePartielle"
-            :signalFinancier="signalFinancier"
-            :signalConfidentiel="signalConfidentiel"
-            :redressements="redressements"
-            :typeExplication="typeExplication"
+          :redressements="redressements"
+          :signalActivitePartielle="signalActivitePartielle"
+          :signalAugmentationUrssaf="signalAugmentationUrssaf"
+          :signalConfidentiel="signalConfidentiel"
+          :signalDiminutionUrssaf="signalDiminutionUrssaf"
+          :signalFinancier="signalFinancier"
+          :signalPaydex="signalPaydex"
+          :typeExplication="typeExplication"
         />
 
         <ExplainStructurel
-            :summary="summary"
-            :historique="historique"
-            :typeExplication="typeExplication"
+          :historique="historique"
+          :summary="summary"
+          :typeExplication="typeExplication"
         />
       </span>
 
 
     </div>
     <div v-else>
-      <div v-if="roles.includes('score')">Veuillez suivre cet établissement pour consulter ses données de détection.</div>
+      <div v-if="roles.includes('score')">Veuillez suivre cet établissement pour consulter ses données de détection.
+      </div>
       <div v-else>Vous n’êtes pas autorisé(e) à consulter les données de détection.</div>
     </div>
+
   </div>
 </template>
 
 <script>
 import libellesVariablesScores from '@/assets/libelles_variables_scores.json'
-import ExplainConjoncturel from '@/components/etablissement/Score/ExplainConjoncturel.vue'
-import ExplainStructurel from '@/components/etablissement/Score/ExplainStructurel.vue'
+import ExplainConjoncturel from '@/components/etablissement/score/explainConjoncturel.vue'
+import ExplainStructurel from '@/components/etablissement/score/explainStructurel.vue'
 import Gitbook from '@/components/Gitbook.vue'
 
 export default {
@@ -137,12 +140,18 @@ export default {
       }
     },
     dernierScore() {
-      return this.historique[0] || {}
+      const lastBatch = this.$store.getters.batches[0]
+      if ((this.historique[0] || {})['idListe'] == lastBatch.value) {
+        return this.historique[0] || {}
+      } else {
+        return {}
+      }
     },
     alert() {
       return this.dernierScore.alert
     },
     alertPreRedressements() {
+
       return this.dernierScore.alertPreRedressements
     },
     permScore() {
@@ -170,28 +179,36 @@ export default {
         this.signalActivitePartielle,
         this.signalFinancier,
         this.signalConfidentiel,
+        this.signalPaydex,
       ]
     },
     signalAugmentationUrssaf() {
       return (this.hasRedressement("augmentation_dette_sur_cotisation_urssaf_recente") &&
-      !this.hasRedressement("dette_urssaf_macro_preponderante"))
+        !this.hasRedressement("dette_urssaf_macro_preponderante"))
     },
     signalDiminutionUrssaf() {
       return (this.hasRedressement("diminution_dette_urssaf_ancienne") &&
-      !this.hasRedressement("augmentation_dette_sur_cotisation_urssaf_recente") &&
-      this.hasRedressement("dette_urssaf_ancienne_significative"))
+        !this.hasRedressement("augmentation_dette_sur_cotisation_urssaf_recente") &&
+        this.hasRedressement("dette_urssaf_ancienne_significative"))
     },
     signalActivitePartielle() {
       return (this.hasRedressement("demande_activite_partielle_elevee"))
     },
     signalFinancier() {
-      return ((this.hasRedressement("solvabilité_faible")?1:0) +
-      (this.hasRedressement("k_propres_négatifs")?1:0) +
-      (this.hasRedressement("confidentiel")?1:0) +
-      (this.hasRedressement("tva_rar_elevé")?1:0)) > 1
+      return ((this.hasRedressement("solvabilité_faible") ? 1 : 0) +
+        (this.hasRedressement("k_propres_négatifs") ? 1 : 0) +
+        (this.hasRedressement("confidentiel") ? 1 : 0) +
+        (this.hasRedressement("tva_rar_elevé") ? 1 : 0)) > 1
     },
     signalConfidentiel() {
       return this.hasRedressement("confidentiel")
+    },
+    signalPaydex() {
+      const nbSignauxPaydex = ((this.hasRedressement("fpi30_supérieur_q95")) ? 1 : 0) +
+        ((this.hasRedressement("fpi90_supérieur_q95")) ? 1 : 0) +
+        ((this.hasRedressement("paydex_supérieur_q95")) ? 1 : 0)
+      console.log(nbSignauxPaydex)
+      return nbSignauxPaydex >= 2
     },
     typeExplication() {
       if (this.crash) {

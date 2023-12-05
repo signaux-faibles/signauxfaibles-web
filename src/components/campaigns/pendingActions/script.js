@@ -1,6 +1,6 @@
 import Card from "@/components/card/main.vue"
 import ScoreWidget from "@/components/ScoreWidget.vue"
-import Etablissement from "@/components/etablissement/Main.vue"
+import Etablissement from "@/components/etablissement/main.vue"
 import Entreprise from "@/components/entreprise/main.vue"
 import CampaignsDepartementFilter from "@/components/campaigns/departementFilter/main.vue"
 import CampaignsPendingActionsEtablissement from "@/components/campaigns/pendingActions/etablissement/main.vue";

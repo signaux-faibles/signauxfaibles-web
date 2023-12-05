@@ -1,7 +1,8 @@
 <template>
-  <v-chip class="mr-2"
+  <v-chip class="mb-1 mr-1"
     :color="color.background"
     :text-color="color.front"
+    :small="small"
   >
     {{ label.name }}
   </v-chip>

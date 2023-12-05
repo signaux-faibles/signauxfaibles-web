@@ -4,7 +4,7 @@ import Prediction from '@/components/prediction/main/main.vue'
 import Browse from '@/components/Browse.vue'
 import Follow from '@/components/follow/main/main.vue'
 import PageNotFound from '@/components/PageNotFound.vue'
-import Etablissement from '@/components/etablissement/Main.vue'
+import Etablissement from '@/components/etablissement/main.vue'
 import Campaigns from '@/components/campaigns/main/main.vue'
 
 Vue.use(Router)

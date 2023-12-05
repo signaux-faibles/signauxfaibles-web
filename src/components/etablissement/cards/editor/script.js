@@ -25,8 +25,8 @@ export default {
 
       this.$axios.post("/kanban/updateCard", params)
         .then(() => {
+          this.$bus.$emit('edit-card', this.dialogs.etablissementCardEditorCardID)
           this.dialogs.hideEtablissementCardEditor()
-          this.$bus.$emit('edit-card')
         }).catch(e => {
         this.createCardFailedError = "Un problème est survenu lors de l'enregistrement."
       })

@@ -4,7 +4,7 @@
                color='indigo'
                dark>
       <v-toolbar-title class="localtoolbar">
-        Fiches de synthèse
+        Accompagnements
       </v-toolbar-title>
     </v-toolbar>
     <FollowCreateCard v-if="codeDepartement" :cards="cards" :codeDepartement="codeDepartement" :siret="siret"/>
@@ -13,7 +13,7 @@
       <v-layout wrap>
         <v-flex md12 v-if="cards.length==0">
           <div v-if="cards.length==0" class="mt-5" style="width: 100%; text-align: center; font-size: 24px">
-            À ce jour, aucune fiche de synthèse n'a été rédigée pour cet établissement.
+            À ce jour, aucun accompagnement n'a été entrepris pour cet établissement.
           </div>
         </v-flex>
 
@@ -42,10 +42,11 @@
 
 
           <div v-if="canCreateCard && followed" style="margin-right: auto; margin-left: auto; text-align: center">
-            <v-btn v-if="followed && canCreateCard" class="pa-2 mt-5" color="indigo" outlined
+            <v-btn v-if="followed && canCreateCard" dark class="pa-2 mt-5 mb-4" color="indigo"
                    style="text-transform: none; margin-left: auto; margin-right: auto"
-                   @click="showCreateCardDialog()">
-              Rédiger une nouvelle fiche de synthèse<br/>
+                   @click="dialogs.showCreateCardDialog()">
+              <v-icon small class="mr-2">fa-people-pulling</v-icon>
+              Ajouter un accompagnement<br/>
             </v-btn>
           </div>
           <div v-if="canCreateCard && !followed">
@@ -63,7 +64,6 @@
             :codeDepartement="codeDepartement"
             :denomination="denomination"/>
         </v-flex>
-
       </v-layout>
     </v-container>
   </div>

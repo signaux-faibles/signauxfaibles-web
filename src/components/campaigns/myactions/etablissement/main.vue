@@ -20,10 +20,10 @@
           <span class="raison-sociale">
             {{ etablissement.raisonSociale }}
           </span><br/>
-        <span>
-            {{ etablissement.siret }}
-          </span>
+        <span>{{ etablissement.siret.slice(0,9) }}</span>
+        <span style="color: #555" class="ml-1">{{ etablissement.siret.slice(9) }}</span>
       </div>
+
       <div id="contact" class="ml-2">
         <v-btn
           class="mr-4"
@@ -33,7 +33,7 @@
           @click="showCampaignCardEditor">
           <v-icon class="mr-2" color="indigo" small>fa-pen</v-icon>
           <span v-if="etablissement.cardID">
-            Informations partagées
+            {{ etablissement.list }}
           </span>
           <span v-else>
             Je partage mes informations
@@ -41,33 +41,40 @@
         </v-btn>
       </div>
       <div class="mr-4">
-        <v-btn big color="indigo" style="text-transform: none" dark @click="showCancel(etablissement.id)">
+        <v-btn big color="indigo" dark style="text-transform: none" @click="showCancel(etablissement.id)">
           Je ne contacterai pas
         </v-btn>
       </div>
       <div class="mr-4">
-        <v-btn color="green darken-2" style="text-transform: none;" dark @click="showSuccess(etablissement.id)">
+        <v-btn color="green darken-2" dark style="text-transform: none;" @click="showSuccess(etablissement.id)">
           J'ai contacté
         </v-btn>
       </div>
       <v-dialog v-model="successDialog" height=50% width=50%>
         <div style="width: 100%; font-weight: 800; font-family: 'Oswald', sans;">
           <v-toolbar color="indigo" dark>
-            <v-toolbar-title class="localtoolbar">Valider la prise de contact</v-toolbar-title>
+            <v-toolbar-title class="localtoolbar">J'ai contacté l'entreprise {{ etablissement.raisonSociale }}</v-toolbar-title>
           </v-toolbar>
           <v-card>
             <v-card-text>
-              Vous avez réussi à contacter cette entreprise, quelle issue se dessine ?
-              <v-radio-group v-model="successRadio">
-                <v-radio v-for="(label, value) in successLabels" :key="value" :label="label" :value="value"/>
+              <span style="font-size: 16px">
+              Lors de cette prise de contact, j'ai constaté que:
+              </span>
+              <div class="d-flex flex-row align-center">
+              <v-radio-group style="width: 50%" v-model="successRadio">
+                <v-radio v-for="(value, key) in successLabels" :key="key" :label="value.libelle" :value="key"/>
               </v-radio-group>
+              <v-alert style="width: 50%" type="info" color="indigo" outlined v-if="successLabels[successRadio]">
+                <div v-html="successLabels[successRadio].alert"/>
+              </v-alert>
+              </div>
               <div style="text-align: right">
-                <v-btn class="mr-4" color="indigo" outlined dark @click="hideSuccess">
-                  RETOUR
+                <v-btn class="mr-4" color="indigo" dark outlined @click="hideSuccess">
+                  retour
                 </v-btn>
                 <v-btn :color="(successRadio != null)?'indigo':null" :dark="successRadio != null"
                        :disabled="!successRadio" @click="success">
-                  VALIDER
+                  valider
                 </v-btn>
               </div>
             </v-card-text>
@@ -88,7 +95,7 @@
                 <v-radio v-for="(label, value) in cancelLabels" :key="value" :label="label" :value="value"/>
               </v-radio-group>
               <div style="text-align: right">
-                <v-btn class="mr-4" outlined color="indigo" @click="hideCancel">
+                <v-btn class="mr-4" color="indigo" outlined @click="hideCancel">
                   RETOUR
                 </v-btn>
                 <v-btn :color="(cancelRadio != null)?'indigo':null" :dark="cancelRadio != null" :disabled="!cancelRadio"

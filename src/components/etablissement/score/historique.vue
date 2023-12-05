@@ -21,8 +21,17 @@
           </v-tooltip>
         </div>
         <Explain :summary="summary" :historique="historique"/>
+        <v-btn class="mt-3"
+               style="text-transform: none;"
+               v-if="permScore && !this.crash && historique.length > 1"
+               outlined
+               dark
+               color="indigo"
+               @click="historiqueDialog = true"
+        >
+          Voir l'historique des alertes
+        </v-btn>
       </v-flex>
-      <v-btn v-if="permScore && !this.crash && historique.length > 1" outlined small dark color="indigo" @click="historiqueDialog = true">Voir historique des alertes</v-btn>
       <v-dialog v-model="historiqueDialog" @input="historiqueDialog = false" max-width="500px">
         <div>
           <v-card>
@@ -47,7 +56,7 @@
 
 <script>
 import ScoreWidget from '@/components/ScoreWidget.vue'
-import Explain from '@/components/etablissement/Score/Explain.vue'
+import Explain from '@/components/etablissement/score/explain.vue'
 import Help from '@/components/Help.vue'
 
 export default {

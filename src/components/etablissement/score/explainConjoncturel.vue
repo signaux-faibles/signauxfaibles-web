@@ -39,6 +39,9 @@
         <Redressement down v-if="signalDiminutionUrssaf">
           Le respect des échéanciers de recouvrement de cette entreprise modère le niveau de risque estimé.
         </Redressement>
+        <Redressement up v-if="signalPaydex">
+          Le comportement de paiement de l'entreprise indique une difficulté dans le respect des échéances envers ses fournisseurs.
+        </Redressement>
       </v-card-text>
     </v-card>
     <v-card outlined v-else>
@@ -55,7 +58,7 @@
 
 <script>
 import Help from '@/components/Help.vue'
-import Redressement from '@/components/etablissement/Score/Redressement.vue'
+import Redressement from '@/components/etablissement/score/redressement.vue'
 
 export default {
   props: {
@@ -64,6 +67,7 @@ export default {
     signalActivitePartielle: Boolean,
     signalFinancier: Boolean,
     signalConfidentiel: Boolean,
+    signalPaydex: Boolean,
     redressements: Array,
     typeExplication: String,
   },

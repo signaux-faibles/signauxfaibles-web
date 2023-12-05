@@ -6,7 +6,7 @@
       :items="boardsItems"
       :menu-props="{ maxHeight: 400 }"
       chips
-      label="Tableaux"
+      label="Groupes"
       multiple
       prepend-icon="fab fa-trello"
       @change="notifyFollowUpdate()"
@@ -63,7 +63,9 @@ export default {
     return {follow}
   },
   mounted() {
-    this.follow.boardIDs = this.allBoards
+    if (this.follow.boardIDs.length == 0) {
+      this.follow.boardIDs = this.allBoards
+    }
   },
   methods: {
     notifyFollowUpdate() {

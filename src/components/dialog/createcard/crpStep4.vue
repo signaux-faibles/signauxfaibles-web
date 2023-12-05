@@ -7,7 +7,7 @@
       <v-card-text>
         <v-select
             ref="labelMenu"
-            v-model="createCardLabels"
+            v-model="dialogs.createCardLabels"
             :items="newCardLabelItems"
             :menu-props="{ maxHeight: 400 }"
             label="Étiquettes"
@@ -15,7 +15,7 @@
             prepend-icon="fa-tag"
             style="margin-bottom: -30px"
         >
-          <template v-if="createCardLabels.length > 0" v-slot:prepend-inner>
+          <template v-if="dialogs.createCardLabels.length > 0" v-slot:prepend-inner>
             <v-tooltip bottom>
               <template v-slot:activator="{ on, attrs }">
                 <v-icon v-bind="attrs" @click="resetLabels" v-on="on">
@@ -51,12 +51,12 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="indigo" outlined
-               @click="createCardSequence=3">
-          retour
+        <v-btn style="text-transform: none" color="indigo" text
+               @click="previousStep">
+          Retour
         </v-btn>
-        <v-btn color="indigo" dark
-               @click="createCardSequence=5">
+        <v-btn style="text-transform: none" color="indigo" dark
+               @click="nextStep">
           Étape suivante
         </v-btn>
       </v-card-actions>
@@ -68,40 +68,30 @@
 import labelColors from "@/assets/labels.json";
 import newCardConfigBase from "@/assets/new_card_config.json";
 import Help from "@/components/Help.vue";
+import {useKanbanStore} from "@/stores/kanban";
+import {useDialogsStore} from "@/stores/dialogs";
 
 export default {
-  name: 'Step4',
+  name: 'DialogCreateCardCrpStep4',
   components: {Help},
+  setup() {
+    const kanban = useKanbanStore()
+    const dialogs = useDialogsStore()
+    return {kanban,dialogs}
+  },
   methods: {
+    nextStep() {
+      this.dialogs.createCardSequence = 'crpStep5'
+    },
+    previousStep() {
+      this.dialogs.createCardSequence = 'crpStep3'
+    },
     resetLabels(event) {
       this.createCardLabels = []
       event.stopPropagation()
     },
   },
   computed: {
-    currentBoard() {
-      const currentSwimlaneID = this.createCardSwimlaneID
-      for (const board of Object.values(this.kanbanConfig.boards)) {
-        if (currentSwimlaneID in board.swimlanes) {
-          return board
-        }
-      }
-      return null
-    },
-    currentBoardSlug() {
-      const currentSwimlaneID = this.createCardSwimlaneID
-      for (const board of Object.values(this.kanbanConfig.boards)) {
-        if (currentSwimlaneID in board.swimlanes) {
-          return board.slug
-        }
-      }
-      return null
-    },
-    currentBoardType() {
-      const typeRegexp = /^(tableau-.*)-.*/
-      const match = this.currentBoardSlug.match(typeRegexp)
-      return (match.length>1)?match[1]:null
-    },
     newCardConfig() {
       return newCardConfigBase[this.currentBoardType] || []
     },
@@ -109,7 +99,9 @@ export default {
       return newCardConfigBase
     },
     newCardLabelItems() {
-      const labels = Object.values(this.currentBoard.labels).reduce((m, label) => {
+      const currentBoardID = this.kanban.boardIDFromSwimlaneID(this.dialogs.createCardSwimlaneID)
+      const currentBoard = this.kanban.config.boards[currentBoardID]
+      const labels = Object.values(currentBoard.labels).reduce((m, label) => {
           if (label.name !== '') {
             m[label.name] = labelColors[label.color]
           }
@@ -125,33 +117,6 @@ export default {
       }).sort((label1, label2) => {
         return (label1.background + label1.name < label2.background + label2.name) ? -1 : 1
       })
-    },
-    createCardLabels: {
-      get() {
-        return this.$store.state.createCardLabels
-      },
-      set(value) {
-        this.$store.commit('setCreateCardLabels', value)
-      },
-    },
-    createCardSequence: {
-      get() {
-        return this.$store.state.createCardSequence
-      },
-      set(value) {
-        this.$store.commit('setCreateCardSequence', value)
-      },
-    },
-    kanbanConfig() {
-      return this.$store.state.kanbanConfig
-    },
-    createCardSwimlaneID: {
-      get() {
-        return this.$store.state.createCardSwimlaneID
-      },
-      set(value) {
-        this.$store.commit('setCreateCardSwimlaneID', value)
-      },
     },
   },
 }

@@ -1,7 +1,6 @@
 <template>
   <div>
     <div id="empty" v-if="etablissements.length == 0 && !loading">
-      <v-icon size="70px" color="grey" class="mb-10">fa-snowman</v-icon><br/>
       Vous n'avez aucune prise de contact à réaliser.<br/>
       <div v-if="campaigns.campaign.nbPending > 0">
         Vous pouvez en ajouter en cliquant sur <span class="emph">Je prends contact</span> dans l'onglet <span class="emph">À contacter</span>.

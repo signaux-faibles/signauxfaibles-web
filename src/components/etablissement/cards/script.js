@@ -1,10 +1,11 @@
 import EtablissementCardsEditor from "@/components/etablissement/cards/viewer/main.vue";
 import EtablissementCardsSummary from "@/components/etablissement/cards/summary/main.vue";
-import FollowCreateCard from "@/components/follow/createcard/main.vue";
+import FollowCreateCard from "@/components/dialog/createcard/main.vue";
 import EtablissementCardsViewer from "@/components/etablissement/cards/viewer/main.vue";
 import {useKanbanStore} from "@/stores/kanban";
 import {AxiosInstance} from "axios";
 import Spinner from "@/components/Spinner.vue";
+import {useDialogsStore} from "@/stores/dialogs";
 
 function sortCards(c1, c2) {
   const member1 = (c1.userIsBoardMember) ? 1 : 0
@@ -16,11 +17,14 @@ function sortCards(c1, c2) {
 
 export default {
   name: 'EtablissementCards',
-  components: {Spinner, EtablissementCardsViewer, FollowCreateCard, EtablissementCardsSummary, EtablissementCardsEditor},
+  components: {
+    Spinner, EtablissementCardsViewer, FollowCreateCard, EtablissementCardsSummary, EtablissementCardsEditor
+  },
   props: ['siret', 'codeDepartement', 'denomination'],
   setup() {
+    const dialogs = useDialogsStore()
     const kanban = useKanbanStore()
-    return {kanban}
+    return {dialogs, kanban}
   },
   mounted() {
     this.$bus.$on('create-card', this.getCardPayloads)
@@ -37,9 +41,7 @@ export default {
   },
   data() {
     return {
-      cards: [],
-      currentCardID: null,
-      loading: true
+      cards: [], currentCardID: null, loading: true
     }
   },
   methods: {
@@ -47,8 +49,7 @@ export default {
       this.loading = true
       this.cards = []
       this.currentCardID = null
-    }
-    ,
+    },
     getCardPayloads() {
       this.reset()
       this.$axios.get(`/kanban/cards/${this.siret}`).then((response) => {
@@ -58,43 +59,28 @@ export default {
           this.cards = cards
           this.currentCardID = cards[0].id
         }
-      }).finally(()=>{this.loading=false})
-    }
-    ,
+      }).finally(() => {
+        this.loading = false
+      })
+    },
     followed() {
       return this.$parent.followed
-    }
-    ,
+    },
     showCreateCardDialog() {
       if (this.canCreateCard) {
         this.createCardDialog = true
       }
-    }
-    ,
+    },
     setCurrentCardID(id) {
       this.currentCardID = id
-    }
-    ,
-  }
-  ,
+    },
+  },
   computed: {
     canCreateCard() {
       return (this.codeDepartement in this.kanban.config.departements)
-    }
-    ,
-    createCardDialog: {
-      get() {
-        return this.$store.state.createCardDialog
-      }
-      ,
-      set(value) {
-        this.$store.dispatch('setCreateCardDialog', value)
-      }
-    }
-    ,
+    },
     currentCard() {
       return this.cards.find((c) => c.id == this.currentCardID)
-    }
-    ,
+    },
   }
 }

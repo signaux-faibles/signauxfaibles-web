@@ -19,7 +19,7 @@
         style="width: 100%; text-align: center;"
       >
         <span style="display: inline-flex">
-          Suivi d'établissements
+          Accompagnement
           <Gitbook :target="gitbookPath('SUIVI')" icon/>
         </span>
       </div>
@@ -30,51 +30,18 @@
         color="#ffffff"
         @click="drawers.showRight()"
         small
-      >fa-star
+      >fa-filter
       </v-icon>
     </v-app-bar>
     <div style="width:100%">
-      <v-navigation-drawer
-        v-model="drawers.right"
-        :class="((drawers.right)?'elevation-6':'') + ' rightDrawer'"
-        app
-        right
-      >
-        <v-toolbar class="transparent" flat height="40">
-          <v-icon :class="loading?'rotate':''" @click="drawers.hideRight()" small>fa-star</v-icon>
-        </v-toolbar>
-        <v-divider class="mb-1"/>
-        <div class="mt-2 filter">
-          <FilterTableaux v-if="follow.type != 'no-card'"/>
-        </div>
-        <v-divider v-if="follow.type != 'no-card'" class="mb-1"/>
-        <div class="mt-2 filter">
-          <FilterDepartement/>
-        </div>
-        <v-divider class="mb-1"/>
-        <div class="mt-2 filter">
-          <FilterStatut v-if="follow.type != 'no-card'"/>
-        </div>
-        <v-divider v-if="follow.type != 'no-card'" class="mb-1"/>
-        <div v-if="follow.type != 'no-card'" class="mt-2 filter">
-          <FilterLabels/>
-        </div>
-        <v-divider v-if="follow.type != 'no-card'" class="mb-1 filter"/>
-        <div class="filter">
-          <FilterRaisonSociale/>
-        </div>
-        <v-divider class="mb-3"/>
-        <div v-if="follow.type != 'no-card'" class="filter">
-          <FilterSince/>
-        </div>
-      </v-navigation-drawer>
+      <FollowRightDrawer :loading="loading"/>
     </div>
     <v-layout column fill-height style="font-weight: normal">
       <v-flex v-if="wekanUser" pt-3 shrink text-center>
         <v-btn-toggle v-model="follow.type" mandatory @change="getFollowedEtablissements">
-          <v-btn text value="my-cards">Mes cartes de suivi</v-btn>
-          <v-btn text value="all-cards">Toutes les cartes</v-btn>
-          <v-btn text value="no-card">Mon suivi sans carte</v-btn>
+          <v-btn text value="my-cards">Mes accompagnements</v-btn>
+          <v-btn text value="all-cards">Tous les accompagnements</v-btn>
+<!--          <v-btn text value="no-card">Mes favoris</v-btn>-->
         </v-btn-toggle>
       </v-flex>
       <v-flex grow px-2>
@@ -90,23 +57,15 @@
                target="_blank"><code>contact@signaux-faibles.beta.gouv.fr</code></a></div>
         </div>
         <div v-if="etablissements.length > 0" class="py-3 px-3 text-center">
-          <span v-if="wekanUser && type==='my-cards'" class="intro">
-              Vous suivez {{
-              this.followPayload.stats.count | pluralizeEtablissement
-            }}
-              associés à des cartes dont vous êtes le créateur ou un des participants selon les filtres sélectionnés.
+          <span v-if="wekanUser && follow.type==='my-cards'" class="intro">
+            Les filtres sélectionnés produisent un résultat de
+            {{ this.followPayload.stats.count | pluralizeEtablissement }} que vous accompagnez<br/>
           </span>
-          <span v-if="wekanUser && type==='all-cards'" class="intro">
-              Le ou les tableaux régionaux auxquels vous êtes habilités référencent {{
-              this.followPayload.stats.count | pluralizeEtablissement
-            }} selon les filtres sélectionnés.
+          <span v-if="wekanUser && follow.type==='all-cards'" class="intro">
+            Les filtres sélectionnés produisent un résultat de
+            {{ this.followPayload.stats.count | pluralizeEtablissement }}
+            pour lesquels des informations d'accompagnement sont disponibles
           </span>
-          <span v-if="wekanUser && type==='no-card'"
-                class="intro">Vous suivez {{ this.followPayload.stats.count | pluralizeEtablissement }} associés à aucune carte de suivi ou à une carte inaccessible.
-          </span>
-          <span v-if="!wekanUser"
-                class="intro">Vous suivez {{ this.etablissements.length | pluralizeEtablissement }}.
-          </span><br/>
           <v-btn :dark="!exportXSLXLoading" :disabled="loading || exportXSLXLoading" :loading="exportXSLXLoading"
                  class="mr-4" color="indigo"
                  outlined @click="exportXSLX">
@@ -127,10 +86,10 @@
           <spinner v-show="loading"/>
         </div>
         <div :class="'maindiv ' + loadingClass()" style="min-height: 50vh">
-          <PredictionWidget
+          <FollowWidget
             v-for="e in uniqEtablissements"
             :key="e.siret"
-            :prediction="e"
+            :etablissement="e"
           />
         </div>
         <div v-if="etablissements.length >= 100">

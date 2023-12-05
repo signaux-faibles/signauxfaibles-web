@@ -20,7 +20,7 @@
 
       >
           Détection - {{ currentBatch }}
-          <Gitbook icon :target="gitbookPath('PAYDEX')"/>
+          <Gitbook icon :target="gitbookPath('CIBLER_RECHERCHE')"/>
       </div>
       <v-spacer></v-spacer>
       <v-icon
@@ -202,6 +202,15 @@
             </v-list-item>
             <v-list-item>
               <v-list-item-action>
+                <v-checkbox v-model="hasntDelai" @change="getPrediction()"></v-checkbox>
+              </v-list-item-action>
+              <v-list-item-content @click="toggleHasntDelay()">
+                <v-list-item-title>Sans délai URSSAF</v-list-item-title>
+                <v-list-item-subtitle>Affiche uniquement les entreprises dont les établissement sont sans délai urssaf en cours</v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item>
+              <v-list-item-action>
                 <v-checkbox v-model="ignorezone" @change="getPrediction()"></v-checkbox>
               </v-list-item-action>
               <v-list-item-content @click="toggleIgnoreZone()">
@@ -216,15 +225,6 @@
               <v-list-item-content @click="toggleInclureEtablissementsFermes()">
                 <v-list-item-title>Établissements fermés</v-list-item-title>
                 <v-list-item-subtitle>Inclure les établissements fermés</v-list-item-subtitle>
-              </v-list-item-content>
-            </v-list-item>
-            <v-list-item>
-              <v-list-item-action>
-                <v-checkbox v-model="exclureSuivi" @change="getPrediction()"></v-checkbox>
-              </v-list-item-action>
-              <v-list-item-content @click="toggleExclureSuivi()">
-                <v-list-item-title>Établissements non suivis</v-list-item-title>
-                <v-list-item-subtitle>Exclure mes établissements suivis</v-list-item-subtitle>
               </v-list-item-content>
             </v-list-item>
           </v-list-group>
@@ -258,7 +258,7 @@
     <Spinner style="min-height: 60vh" v-if="loading" />
     <v-snackbar v-if="currentBatchDescription" v-model="snackbar" :bottom="true">
       Le modèle de détection a évolué !
-      <v-btn color="primary" text @click="showModelHelp()">En savoir plus</v-btn>
+      <v-btn style="text-transform: none" color="primary" text @click="showModelHelp()">En savoir plus</v-btn>
       <v-btn icon @click="snackbar = false"><v-icon>clear</v-icon></v-btn> 
     </v-snackbar>
   </div>

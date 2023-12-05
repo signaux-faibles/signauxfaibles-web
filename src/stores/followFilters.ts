@@ -35,5 +35,8 @@ export const useFollowStore = defineStore(STORE_NAME, {
             }
             return params
         }
-    }
+    },
+    persist: {
+        storage: localStorage, // data in sessionStorage is cleared when the page session ends.
+    },
 })

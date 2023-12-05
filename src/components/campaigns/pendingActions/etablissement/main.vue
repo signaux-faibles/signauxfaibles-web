@@ -21,9 +21,8 @@
           <span class="raison-sociale">
             {{ etablissement.raisonSociale }}
           </span><br/>
-        <span>
-            {{ etablissement.siret }}
-          </span>
+        <span>{{ etablissement.siret.slice(0,9) }}</span>
+        <span style="color: #555" class="ml-1">{{ etablissement.siret.slice(9) }}</span>
       </div>
       <div id="contact" class="ml-2">
         <v-btn
@@ -34,7 +33,7 @@
           @click="showCampaignCardEditor">
           <v-icon class="mr-2" color="indigo" small>fa-pen</v-icon>
           <span v-if="etablissement.cardID">
-            Informations partagées
+            {{ etablissement.list }}
           </span>
           <span v-else>
             Je partage mes informations
@@ -44,7 +43,7 @@
       <div class="mr-4">
         <v-btn color="red darken-3" dark style="text-transform: none"
                @click="showWithdrawDialog">
-          Je repousse
+          Je reporte
         </v-btn>
       </div>
       <div class="mr-4">

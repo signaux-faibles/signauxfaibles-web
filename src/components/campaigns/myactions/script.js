@@ -1,5 +1,5 @@
 import Card from "@/components/card/main.vue";
-import Etablissement from "@/components/etablissement/Main.vue";
+import Etablissement from "@/components/etablissement/main.vue";
 import Entreprise from "@/components/entreprise/main.vue";
 import Toolbar from "@/components/Toolbar.vue";
 import Help from "@/components/Help.vue";

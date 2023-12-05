@@ -89,27 +89,27 @@
                 alt=""
                 class="mr-2"
                 height="22"
-                src="../assets/red_apart.svg"
+                src="../../assets/red_apart.svg"
               />
               <img
                 v-if="!prediction.activite_partielle && permDGEFP"
                 alt=""
                 class="mr-2"
                 height="22"
-                src="../assets/gray_apart.svg"
+                src="../../assets/gray_apart.svg"
               />
               <img
                 v-if="!prediction.urssaf && permUrssaf"
                 alt=""
                 class="ml-2"
-                src="../assets/gray_urssaf.svg"
+                src="../../assets/gray_urssaf.svg"
                 width="70"
               />
               <img
                 v-if="prediction.urssaf && permUrssaf"
                 alt=""
                 class="ml-2"
-                src="../assets/red_urssaf.svg"
+                src="../../assets/red_urssaf.svg"
                 width="70"
               />
             </div>
@@ -140,7 +140,7 @@
 </template>
 
 <script>
-import ScoreWidget from '@/components/ScoreWidget'
+import ScoreWidget from '@/components/ScoreWidget.vue'
 import libellesProcols from '@/assets/libelles_procols.json'
 import {useDialogsStore} from "@/stores/dialogs";
 

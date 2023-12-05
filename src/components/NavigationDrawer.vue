@@ -36,10 +36,18 @@
         </v-list-item>
         <v-list-item v-if="campaigns.hasCampaigns" to="/campaigns">
           <v-list-item-action>
-            <v-icon>fa-briefcase</v-icon>
+            <v-icon>fa-phone</v-icon>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>Campagnes</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item to="/follow">
+          <v-list-item-action>
+            <v-icon>fa-people-pulling</v-icon>
+          </v-list-item-action>
+          <v-list-item-content v-if="this.roles.includes('wekan')">
+            <v-list-item-title>Accompagnement</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
         <v-list-item to="/prediction">
@@ -48,14 +56,6 @@
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>Listes de détection</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item to="/follow">
-          <v-list-item-action>
-            <v-icon>fa-star</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title>Suivi d'établissements</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
         <v-list-item v-if="roles.includes('wekan') && kanban.visibleWekan" :href="wekan_url" target="_blank">
@@ -111,7 +111,7 @@
 </template>
 
 <script>
-import News from '@/components/News.vue'
+import News from '@/components/news.vue'
 import {useDrawersStore} from "@/stores/drawers";
 import {useCampaignsStore} from "@/stores/campaigns";
 import {useDialogsStore} from "@/stores/dialogs";

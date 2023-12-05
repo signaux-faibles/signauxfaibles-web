@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-toolbar color="indigo" dark>
-      <v-toolbar-title class="localtoolbar">Attitude de paiement</v-toolbar-title>
+      <v-toolbar-title class="localtoolbar">Attitude de paiement fournisseurs</v-toolbar-title>
       <v-spacer/>
       <Gitbook :target="gitbookPath('PAYDEX')" icon/>
     </v-toolbar>
@@ -40,7 +40,8 @@
           <div class="ml-3" style="font-size: 17px;">
             Les données sont collectées auprès des adhérents du programme
             <a href="https://www.altares.com/fr/nos-data/duntrade/">Duntrade</a> (70% des entreprises de plus de
-            10 salariés)<br/>
+            10 salariés). Le programme Duntrade demande aux entreprises de ne pas inclure
+            leur comptabilité intra-groupe. <br/>
             Source: <a href="https://www.altares.com/fr/nos-data/attitude-de-paiement/">données Paydex et FPI
             (Altarès)</a>
           </div>
@@ -49,4 +50,4 @@
 </template>
 
 <script src="./script.js"/>
-<style src="./style.css"/>
+<style scoped src="./style.css"/>
