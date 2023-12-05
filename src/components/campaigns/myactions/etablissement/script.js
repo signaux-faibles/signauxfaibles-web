@@ -62,9 +62,6 @@ export default {
                 }
             )
         },
-        successHook(successRadio) {
-            console.log(StatusLabels)
-        }
     },
     computed: {
         statusLabels() {
