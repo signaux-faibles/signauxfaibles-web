@@ -63,11 +63,9 @@ export default {
     },
     params() {
       const boardID = this.kanban.boardIDFromSwimlaneID(this.dialogs.createCardSwimlaneID)
-      console.log(Object.entries(this.kanban.config.boards[boardID].lists))
       const list = Object.entries(this.kanban.config.boards[boardID].lists).find(([k,v]) => {
         return v.title === 'Accompagnement en cours'
       })
-      console.log(list)
       return {
         swimlaneID: this.dialogs.createCardSwimlaneID,
         listID: list[0],

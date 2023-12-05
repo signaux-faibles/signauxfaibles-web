@@ -207,7 +207,6 @@ export default {
       const nbSignauxPaydex = ((this.hasRedressement("fpi30_supérieur_q95")) ? 1 : 0) +
         ((this.hasRedressement("fpi90_supérieur_q95")) ? 1 : 0) +
         ((this.hasRedressement("paydex_supérieur_q95")) ? 1 : 0)
-      console.log(nbSignauxPaydex)
       return nbSignauxPaydex >= 2
     },
     typeExplication() {

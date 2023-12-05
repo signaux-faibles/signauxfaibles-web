@@ -111,7 +111,6 @@ export default {
       }).length > 0
     },
     series() {
-      console.log(this.debit)
       if ((this.cotisation || []).length > 0 || (this.debit || []).length > 0) {
         return [{
           name: 'cotisations appelées',

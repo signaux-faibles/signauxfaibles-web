@@ -36,7 +36,6 @@ export default {
   mounted() {
     this.$bus.$on('edit-card', (cardID) => {
       if (cardID == this.card.id) {
-        console.log("match")
         this.refreshCard()
       }
     })
@@ -50,7 +49,6 @@ export default {
     refreshCard() {
       this.$axios.get("/kanban/card/get/" + this.card.id).then(
         (response) => {
-          console.log("load")
           this.localCard = response.data
         }
       ).catch(
