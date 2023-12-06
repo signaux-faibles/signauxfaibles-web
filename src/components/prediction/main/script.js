@@ -291,16 +291,18 @@ export default {
     },
     currentNaf: {
       get() {
-        // TODO: NON, unselect does not work
         const naf = this.$localStore.state.currentNaf
-        if ((typeof naf) === 'string') {
-          if (naf === 'NON') {
-            return ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
-              'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U']
-          } else {
-            return [naf]
-          }
+        if (typeof(naf) == "string") {
+          return ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
+            'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U']
         }
+        if (naf.length == 0) {
+          return ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
+            'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U']
+        } else {
+          return naf
+        }
+
         return naf
       },
       set(value) {
@@ -308,8 +310,9 @@ export default {
       },
     },
     currentNafLibelle() {
+      console.log(this.currentNaf)
       return this.currentNaf.map((n) => {
-        return this.naf1.filter((n1) => (n1.value === n))[0].text
+        return (this.$store.state.naf || {})[n]
       })
     },
     zone: {
@@ -346,12 +349,14 @@ export default {
     },
     naf1() {
       // TODO: clean naf structure
-      return Object.keys(this.$store.state.naf).map((n) => {
+      const naf1 = Object.entries(this.$store.state.naf).map(([code,libelle]) => {
         return {
-          text: n + '\u00a0-\u00a0' + this.$store.state.naf[n],
-          value: n,
+          text: code + '\u00a0-\u00a0' + libelle,
+          value: code,
         }
       })
+      console.log(naf1)
+      return naf1
     },
     allNaf() {
       return this.currentNaf.length === this.naf1.length
