@@ -5,9 +5,10 @@
         :card="card"
       />
     </v-flex>
-    <v-flex class="pl-2 mb-3" md3 xl3 xs3>
+    <v-flex class="pl-2 mb-3 pr-2" md3 xl3 xs3>
       <FollowWidgetMembers
         :card="card"
+        :etablissement="etablissement"
       />
     </v-flex>
     <v-flex md6 xs12>
