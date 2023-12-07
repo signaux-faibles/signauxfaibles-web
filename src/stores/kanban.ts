@@ -27,6 +27,13 @@ export const useKanbanStore = defineStore('kanban', {
         }
       }
     },
+    usernameFromID() {
+      return (userID: string) => {
+        if (this.config.users) {
+          return (this.config.users[userID] || {}).username
+        }
+      }
+    },
     fullname() {
       return (username: string) => {
         if (this.config.users) {

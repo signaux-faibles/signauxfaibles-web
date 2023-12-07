@@ -2,41 +2,47 @@
   <div>
     <v-card class="mt-3 mb-3 elevation-3">
       <v-card-title
-        class="pt-2 pl-4 pr-6 header"
+        class="pt-0 pl-4 pr-3 header"
         style="height: 47px;"
       >
-        <span style="font-family: Abel; font-size: 24px; font-weight: 800;">
-          {{ etablissement.raison_sociale }}
-        </span>
-        <v-spacer/>
-        <v-btn
-          class="button"
-          color="white"
-          compact
-          outlined
-          small
-          @click="dialogs.showEtablissement(etablissement.siret)"
-        >
-          Fiche établissement
-        </v-btn>
-        <v-btn
-          class="ml-3 button"
-          color="white"
-          compact
-          outlined
-          small
-          @click="dialogs.showEntreprise(etablissement.siret.slice(0,9))"
-        >
-          Fiche entreprise
-        </v-btn>
+        <div style="width: 100%; height: 40px; display: flex">
+          <div class="ma-0 pa-0"
+               style="font-family: Abel; font-size: 24px; font-weight: 800;overflow:hidden;height:50px;line-height:50px;">
+            {{ etablissement.raison_sociale }}
+          </div>
+          <v-spacer/>
+          <div class="mt-2 mr-0 pr-0" style="min-width: 299px">
+            <v-btn
+              class="button"
+              color="white"
+              compact
+              outlined
+              small
+              @click="dialogs.showEtablissement(etablissement.siret)"
+            >
+              Fiche établissement
+            </v-btn>
+            <v-btn
+              class="ml-3 mr-0 button"
+              color="white"
+              compact
+              outlined
+              small
+              @click="dialogs.showEntreprise(etablissement.siret.slice(0,9))"
+            >
+              Fiche entreprise
+            </v-btn>
+          </div>
+        </div>
       </v-card-title>
       <v-card-text
         v-for="card in etablissement.cards" :key="card.id"
         class="pt-3 body"
         style="font-family: Oswald; border-top: 2px solid darkgrey;"
       >
-        <FollowWidgetCard :inputCard="card" :etablissement="etablissement"/>
+        <FollowWidgetCard :etablissement="etablissement" :inputCard="card"/>
       </v-card-text>
+
     </v-card>
   </div>
 </template>
@@ -54,7 +60,15 @@ import FollowWidgetCard from "@/components/follow/widget/card.vue"
 
 export default {
   name: 'FollowWidget',
-  components: {FollowWidgetSynthese, FollowWidgetHeaders, FollowLabel, FollowComment, Viewer, FollowWidgetMembers, FollowWidgetCard},
+  components: {
+    FollowWidgetSynthese,
+    FollowWidgetHeaders,
+    FollowLabel,
+    FollowComment,
+    Viewer,
+    FollowWidgetMembers,
+    FollowWidgetCard
+  },
   props: ['etablissement'],
   setup() {
     const kanban = useKanbanStore()
