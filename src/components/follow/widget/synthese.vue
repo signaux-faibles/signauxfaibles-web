@@ -7,10 +7,11 @@
         color="indigo"
         :dark="isMember(card)"
         small
-        @click="dialogs.showEtablissementCardEditor(etablissement.siret, etablissement.codeDepartement, etablissement.raisonSociale, card.id, card.description)"
+        @click="dialogs.showEtablissementCardEditor(etablissement.siret, etablissement.codeDepartement, etablissement.raison_sociale, card.id, card.description)"
       >
         Je complète
       </v-btn>
+      {{ etablissement }}
     </h3>
     <v-card height="300px" outlined>
       <v-card-text class="mr-0 pr-0 pt-0">
