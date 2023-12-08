@@ -145,7 +145,7 @@ export default {
           from: new Date(h.from).toLocaleDateString(),
           to: (h.to)?new Date(h.to).toLocaleDateString():undefined,
         }
-      }).filter((h) => (h.to != h.from))
+      }).filter((h) => (h.to != h.from && h.from != '01/01/1970'))
     },
     membersIDs() {
       return (this.card.memberIDs || []).concat(this.card.assigneeIDs || [])
