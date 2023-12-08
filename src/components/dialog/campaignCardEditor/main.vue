@@ -7,7 +7,7 @@
       dark
       color='indigo'>
       <v-toolbar-title class="localtoolbar">
-        Informations partagées avec les membres de la campagne – {{ dialogs.capmaignCardEditorDenomination }}
+        Note d'accompagnement – {{ dialogs.capmaignCardEditorDenomination }}
         ({{ dialogs.campaignCardEditorSiret }})
       </v-toolbar-title>
       <v-spacer/>
