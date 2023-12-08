@@ -11,7 +11,7 @@
             {{ etablissement.raison_sociale }}
           </div>
           <v-spacer/>
-          <div class="mt-2 mr-0 pr-0" style="min-width: 299px">
+          <div class="mt-2 ml-2 mr-0 pr-0" style="min-width: 301px;position: relative;top: -2px">
             <v-btn
               class="button"
               color="white"
