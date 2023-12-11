@@ -11,7 +11,6 @@
       >
         Je complète
       </v-btn>
-      {{ etablissement }}
     </h3>
     <v-card height="300px" outlined>
       <v-card-text class="mr-0 pr-0 pt-0">
