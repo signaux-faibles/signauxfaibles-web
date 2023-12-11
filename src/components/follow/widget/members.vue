@@ -43,7 +43,7 @@
           </ul>
           </div>
           <div v-else>
-            Cet établissement n'a jamais été accompagné au sein de Signaux-Faibles.
+            Aucun historique d'accompagnement n'a été trouvé
           </div>
         </v-card>
       </v-menu>
