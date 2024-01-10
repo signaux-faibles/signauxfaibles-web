@@ -12,7 +12,7 @@ const axiosClient = axios.create(
       'Content-Type': 'application/json',
     },
     baseURL: process.env.VUE_APP_DATAPI_BASE_URL,
-    timeout: 120000,
+    timeout: 900000,
   },
 )
 
