@@ -20,7 +20,6 @@
               :statutJuridique="statutJuridique"
               :summary="summary"
               :terrind="terrind"
-              :visiteFCE="visiteFCE"
             />
             <v-btn
               class="mr-4 mb-4"
@@ -155,7 +154,6 @@ export default {
       sauvegardeJugements: [],
       redressementJugements: [],
       liquidationJugements: [],
-      lienVisiteFCE: '',
       exportDOCXLoading: false,
       alertExport: false,
       joinCardDialog: false,
@@ -197,14 +195,6 @@ export default {
     hideEntreprise() {
       this.trackMatomoEvent('entreprise', 'fermer_fiche_entreprise', this.etablissement.siren)
       this.entrepriseDialog = false
-    },
-    getLienVisiteFCE() {
-      const lienVisiteFCE = `https://fce.fabrique.social.gouv.fr/establishment/${this.siret}`
-      this.$axios.get(`/fce/${this.siret}`).then((response) => {
-        this.lienVisiteFCE = response.data || lienVisiteFCE
-      }).catch(() => {
-        this.lienVisiteFCE = lienVisiteFCE
-      })
     },
     download(response) {
       const blob = new Blob([response.data])
@@ -252,7 +242,6 @@ export default {
   },
   mounted() {
     this.getEtablissement()
-    this.getLienVisiteFCE()
   },
   watch: {
     localSiret() {
@@ -355,9 +344,6 @@ export default {
     commune() {
       return (this.summary || {}).commune || ''
     },
-    visiteFCE() {
-      return this.etablissement.visiteFCE || false
-    },
     libelleActivite() {
       return this.naf.libelleActivite
     },
@@ -400,14 +386,6 @@ export default {
     },
     statutJuridique() {
       return ((this.etablissement.entreprise || {}).Sirene || {}).statutJuridiqueN2
-    },
-
-    showFCE() {
-      return process.env.VUE_APP_FCE_ENABLED && !!JSON.parse(process.env.VUE_APP_FCE_ENABLED)
-    },
-    showLienVisiteFCE() {
-      const emailDomain = this.jwt.email.split('@').pop()
-      return process.env.VUE_APP_FCE_DOMAIN_LIST.split(',').includes(emailDomain)
     },
   },
 }
