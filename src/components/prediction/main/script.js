@@ -310,7 +310,6 @@ export default {
       },
     },
     currentNafLibelle() {
-      console.log(this.currentNaf)
       return this.currentNaf.map((n) => {
         return (this.$store.state.naf || {})[n]
       })
@@ -355,7 +354,6 @@ export default {
           value: code,
         }
       })
-      console.log(naf1)
       return naf1
     },
     allNaf() {

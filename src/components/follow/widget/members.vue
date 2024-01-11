@@ -128,7 +128,6 @@ export default {
       this.$axios.get(`/kanban/card/membersHistory/${this.card.id}`).then((r) => {
         this.membersHistoryPayload = (r.data || []).reverse()
         this.membersHistoryLoading = false
-        console.log(this.membersHistoryPayload)
       })
 
     },
