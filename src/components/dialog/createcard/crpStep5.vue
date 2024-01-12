@@ -57,8 +57,10 @@
                @click="previousStep">
           Retour
         </v-btn>
-        <v-btn style="text-transform: none" color="indigo" dark
-               @click="createCard">
+        <v-btn style="text-transform: none" color="indigo"
+          dark
+          :loading="creating"
+          @click="createCard">
           Enregistrer
         </v-btn>
       </v-card-actions>
@@ -89,6 +91,7 @@ export default {
     return {
       createCardFailedError: null,
       customDescription: null,
+      creating: false,
     }
   },
   methods: {
@@ -96,6 +99,7 @@ export default {
       this.dialogs.createCardSequence='crpStep4'
     },
     createCard() {
+      this.creating = true
       this.$axios.post("/kanban/card", this.params)
         .then(() => {
           this.createCardFailedError = false
@@ -103,8 +107,10 @@ export default {
           this.dialogs.createCardDialog = false
           this.$bus.$emit("create-card")
         }).catch(e => {
-        this.createCardFailedError = "Un problème est survenu lors de l'enregistrement."
-      })
+          this.createCardFailedError = "Un problème est survenu lors de l'enregistrement."
+        }).finally(() => {
+          this.creating = false
+        })
     },
     options() {
       return {
