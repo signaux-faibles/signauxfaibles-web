@@ -1,4 +1,5 @@
 { pkgs ? import <nixpkgs> {} }:
-pkgs.mkShell {
-    nativeBuildInputs = with pkgs.buildPackages; [ git nodejs jetbrains.webstorm ]; 
+  pkgs.mkShell {
+    # nativeBuildInputs is usually what you want -- tools you need to run
+    nativeBuildInputs = with pkgs.buildPackages; [ git jetbrains.webstorm nodejs yarn ];
 }
