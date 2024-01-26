@@ -21,7 +21,7 @@
       </v-footer>
       <v-btn :disabled="!isReady()" :loading="exportZipDownloading" color="primary" width="100%"
              @click="exportZIP">
-        <v-icon class="mr-2" small>fa-file-word</v-icon>
+        <v-icon class="mr-2" small>fa-file-excel</v-icon>
         Exporter en csv compressé (ZIP)
       </v-btn>
     </v-card>
