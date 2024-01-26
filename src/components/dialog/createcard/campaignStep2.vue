@@ -14,7 +14,7 @@
               :options="editorOptions()"
               initialEditType="wysiwyg"
               :initialValue="dialogs.createCardDescription"
-      />Cet accompagnement sera créé dans l'état `Analyse en cours`.
+      />Cet accompagnement sera créé dans l'état <b>Accompagnement en cours</b>.
     </span>
     </v-card-text>
     <v-card-actions class="pb-3">
@@ -24,6 +24,7 @@
         Retour
       </v-btn>
       <v-btn color="indigo" style="text-transform: none" dark
+             :loading="creating"
              @click="createCard">
         Enregistrer
       </v-btn>
@@ -45,12 +46,18 @@ export default {
     return {kanban,dialogs}
   },
   components: {Editor},
+  data() {
+    return {
+      creating: false,
+    }
+  },
   methods: {
     description() {
       const description = this.$refs.editor.invoke('getMarkdown')
       return description
     },
     createCard() {
+      this.creating = true
       this.$axios.post("/kanban/card", this.params())
         .then(() => {
           this.createCardFailedError = false
@@ -59,6 +66,8 @@ export default {
           this.$bus.$emit("create-card")
         }).catch(e => {
         this.createCardFailedError = "Un problème est survenu lors de l'enregistrement."
+      }).finally(() => {
+        this.creating = false
       })
     },
     params() {
