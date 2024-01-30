@@ -1,1 +1,37 @@
-{"explanation": {"n_train_sample": 5000, "n_concerning_micro": 3, "topic_groups": {"sant\u00e9_financi\u00e8re": ["dette_nette_sur_caf", "dette_\u00e0_terme_sur_k_propres", "ebe_sur_ca", "va_sur_effectif", "charges_personnel_sur_va", "stocks_sur_ca", "liquidit\u00e9_absolue", "liquidit\u00e9_g\u00e9n\u00e9rale", "liquidit\u00e9_r\u00e9duite", "d\u00e9lai_paiement_sur_d\u00e9lai_encaissement", "k_propres_sur_k_social", "bfr_sur_k_propres", "taux_investissement", "rentabilit\u00e9_\u00e9conomique", "solidit\u00e9_financi\u00e8re"], "activit\u00e9_partielle": ["ap_heures_consomm\u00e9es"], "dette_urssaf": ["cotisation", "dette_sociale_ouvri\u00e8re", "dette_sociale_patronale", "dette_sur_cotisation_mean12m", "dette_par_effectif"], "retards_paiement": ["paydex", "fpi_30", "fpi_90"], "misc": ["effectif"]}}, "io": {"root_directory": "/projets/TSF", "dataset_path": "data/preprocessed/CI/full_dataset_2401_CI", "prediction_path": "predictions/CI_local", "sample_ratio": 1.0, "random_seed": 2342}, "learning": {"target": {"class_col": "failure", "n_months": 18, "judgment_date_col": "date_jugement", "target_resampling_ratio": 0.35, "resampling_method": "oversampling"}, "train_dates": ["2016-01-01", "2019-05-31"], "prediction_date": "2020-02-01", "train_size": 0.8, "model_name": "LogisticRegression", "model_params": {"LogisticRegression": {"regParam": 0.12, "maxIter": 500, "tol": 1e-05, "standardization": false}}, "features_column": "features"}, "preprocessing": {"identifiers": ["siren", "p\u00e9riode"], "siren_aggregation": {"cotisation": "sum", "dette_sociale_ouvri\u00e8re": "sum", "dette_sociale_patronale": "sum", "effectif": "sum", "ap_heures_consomm\u00e9es": "sum"}, "time_aggregation": {"diff": {"paydex": [12], "dette_par_effectif": [3]}, "mean": {"cotisation": [12]}, "lag": {"dette_sociale_ouvri\u00e8re": [1, 2, 3, 6, 12], "dette_sociale_patronale": [1, 2, 3, 6, 12]}}, "drop_missing_values": true, "fill_default_values": {"paydex": 0, "fpi_30": 0.0, "fpi_90": 0.0, "cotisation": 0.0, "dette_sociale_ouvri\u00e8re": 0.0, "dette_sociale_patronale": 0.0, "ap_heures_consomm\u00e9es": 0.0, "ap_heures_autoris\u00e9es": 0.0, "dette_par_effectif": 0.0, "effectif": 0, "dette_nette_sur_caf": 0.0, "dette_\u00e0_terme_sur_k_propres": 0.0, "ebe_sur_ca": 0.0, "va_sur_effectif": 0.0, "charges_personnel_sur_va": 0.0, "stocks_sur_ca": 0.0, "liquidit\u00e9_absolue": 0.0, "liquidit\u00e9_g\u00e9n\u00e9rale": 0.0, "liquidit\u00e9_r\u00e9duite": 0.0, "d\u00e9lai_paiement_sur_d\u00e9lai_encaissement": 0.0, "k_propres_sur_k_social": 0.0, "bfr_sur_k_propres": 0.0, "taux_investissement": 0.0, "rentabilit\u00e9_\u00e9conomique": 0.0, "solidit\u00e9_financi\u00e8re": 0.0}, "fill_imputation_strategy": {}, "features_transformers": {"dette_nette_sur_caf": ["StandardScaler"], "dette_\u00e0_terme_sur_k_propres": ["StandardScaler"], "ebe_sur_ca": ["StandardScaler"], "va_sur_effectif": ["StandardScaler"], "charges_personnel_sur_va": ["StandardScaler"], "stocks_sur_ca": ["StandardScaler"], "liquidit\u00e9_absolue": ["StandardScaler"], "liquidit\u00e9_g\u00e9n\u00e9rale": ["StandardScaler"], "liquidit\u00e9_r\u00e9duite": ["StandardScaler"], "d\u00e9lai_paiement_sur_d\u00e9lai_encaissement": ["StandardScaler"], "k_propres_sur_k_social": ["StandardScaler"], "bfr_sur_k_propres": ["StandardScaler"], "taux_investissement": ["StandardScaler"], "rentabilit\u00e9_\u00e9conomique": ["StandardScaler"], "solidit\u00e9_financi\u00e8re": ["StandardScaler"], "cotisation": ["StandardScaler"], "dette_sociale_ouvri\u00e8re": ["StandardScaler"], "dette_sociale_patronale": ["StandardScaler"], "effectif": ["StandardScaler"], "ap_heures_consomm\u00e9es": ["StandardScaler"], "dette_sur_cotisation_mean12m": ["StandardScaler"], "dette_par_effectif": ["StandardScaler"], "paydex": ["BinsOrdinalEncoder", "OneHotEncoder"], "fpi_30": ["StandardScaler"], "fpi_90": ["StandardScaler"], "cotisation_mean12m": ["StandardScaler"], "dette_sociale_ouvri\u00e8re_lag1m": ["StandardScaler"], "dette_sociale_ouvri\u00e8re_lag2m": ["StandardScaler"], "dette_sociale_ouvri\u00e8re_lag3m": ["StandardScaler"], "dette_sociale_ouvri\u00e8re_lag6m": ["StandardScaler"], "dette_sociale_ouvri\u00e8re_lag12m": ["StandardScaler"], "dette_sociale_patronale_lag1m": ["StandardScaler"], "dette_sociale_patronale_lag2m": ["StandardScaler"], "dette_sociale_patronale_lag3m": ["StandardScaler"], "dette_sociale_patronale_lag6m": ["StandardScaler"], "dette_sociale_patronale_lag12m": ["StandardScaler"]}, "ordinal_encoding_bins": {"paydex": [["-inf", "0"], ["0", "15"], ["15", "30"], ["30", "60"], ["60", "90"], ["90", "inf"]]}, "encoders_params": {"OneHotEncoder": {"dropLast": false}, "StringIndexer": {}, "BinsOrdinalEncoder": {}}, "scalers_params": {"StandardScaler": {"withMean": true, "withStd": true, "inputCol": "StandardScaler_input", "outputCol": "StandardScaler_output"}}}, "version": "2024.1.dev1"}
+{
+  "santé_financière": [
+    "dette_nette_sur_caf",
+    "dette_à_terme_sur_k_propres",
+    "ebe_sur_ca",
+    "va_sur_effectif",
+    "charges_personnel_sur_va",
+    "stocks_sur_ca",
+    "liquidité_absolue",
+    "liquidité_générale",
+    "liquidité_réduite",
+    "délai_paiement_sur_délai_encaissement",
+    "k_propres_sur_k_social",
+    "bfr_sur_k_propres",
+    "taux_investissement",
+    "rentabilité_économique",
+    "solidité_financière"
+  ],
+  "activité_partielle": [
+    "ap_heures_consommées"
+  ],
+  "dette_urssaf": [
+    "cotisation",
+    "dette_sociale_ouvrière",
+    "dette_sociale_patronale",
+    "dette_sur_cotisation_mean12m",
+    "dette_par_effectif"
+  ],
+  "retards_paiement": [
+    "paydex",
+    "fpi_30",
+    "fpi_90"
+  ],
+  "misc": [
+    "effectif"
+  ]
+}

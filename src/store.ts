@@ -169,6 +169,7 @@ const sessionStore = new Vuex.Store({
         return {
           value: b.id,
           text: b.id,
+          metadata: b.metadata,
         }
       })
     },
