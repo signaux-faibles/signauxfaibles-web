@@ -12,8 +12,8 @@
         <span>
           <Gitbook :target="gitbookPath('DETECTION')"/>
         </span>
-        <EtablissementScoreExplainWaterfall :microExpl="dernierScore.microExpl" :macroExpl="dernierScore.macroExpl"/>
->>>>>>> 8dddd03 (- premier essai (statique))
+        <EtablissementScoreExplainWaterfall :liste="lastBatch" :score="dernierScore.score"
+                                            :microExpl="dernierScore.microExpl" :macroExpl="dernierScore.macroExpl"/>
       </span>
     </div>
     <div v-else>
@@ -38,17 +38,17 @@ export default {
   },
   props: ['historique', 'summary'],
   components: {EtablissementScoreExplainWaterfall, Gitbook},
-  methods: {
-
-  },
+  methods: {},
   computed: {
     crash() {
       return this.summary.etatAdministratif === 'F'
-        || this.summary.etat_procol === 'redressement' || this.summary.etat_procol === 'liquidation'
+          || this.summary.etat_procol === 'redressement' || this.summary.etat_procol === 'liquidation'
+    },
+    lastBatch() {
+      return this.$store.getters.batches[0]
     },
     dernierScore() {
-      const lastBatch = this.$store.getters.batches[0]
-      if ((this.historique[0] || {})['idListe'] == lastBatch.value) {
+      if ((this.historique[0] || {})['idListe'] == this.lastBatch.value) {
         return this.historique[0] || {}
       } else {
         return {}
