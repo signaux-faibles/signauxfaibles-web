@@ -1,6 +1,9 @@
 <template>
     <Plotly
         @click="plotlyClick"
+        @hover="plotlyHover"
+        @unhover="plotlyUnhover"
+        ref="graph"
         :data="data"
         :layout="layout"
         :display-mode-bar="false"
@@ -22,7 +25,15 @@ export default {
       return  ((100*value).toFixed(0) + "%")
     },
     plotlyClick(event) {
-      console.log(event)
+      const index = event.points[0].pointIndex
+      const group = this.macroExplEntries[index][0]
+      console.log(this.microExpl[group])
+    },
+    plotlyHover(event) {
+      event.event.target.style.cursor = 'pointer'
+    },
+    plotlyUnhover(event) {
+      event.event.target.style.cursor = 'default'
     },
     titleize(slug) {
       var words = slug.split("_");
