@@ -44,10 +44,10 @@
     "solidité_financière": "Solidité financière"
   },
   "macro": {
-    "activite_partielle": "Activité partielle",
+    "activité_partielle": "Activité partielle",
     "dette_urssaf": "Dette sociale",
     "misc": "Emploi",
     "retards_paiement": "Retards fournisseurs",
-    "sante_financiere": "Santé financière"
+    "santé_financière": "Santé financière"
   }
 }
