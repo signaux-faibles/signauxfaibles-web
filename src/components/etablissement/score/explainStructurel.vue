@@ -7,7 +7,6 @@
       <v-card v-if="typeExplication==='mixte' || typeExplication==='structurel'" outlined>
         <v-card-text>
           <div>
-            Score pré-crise:
             <apexchart
               type="radar"
               height="200px"
