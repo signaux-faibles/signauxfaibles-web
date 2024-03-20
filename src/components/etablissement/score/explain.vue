@@ -10,16 +10,7 @@
         <span>
           <Gitbook :target="gitbookPath('DETECTION')"/>
         </span>
-        <ExplainConjoncturel
-          :redressements="redressements"
-          :signalActivitePartielle="signalActivitePartielle"
-          :signalAugmentationUrssaf="signalAugmentationUrssaf"
-          :signalConfidentiel="signalConfidentiel"
-          :signalDiminutionUrssaf="signalDiminutionUrssaf"
-          :signalFinancier="signalFinancier"
-          :signalPaydex="signalPaydex"
-          :typeExplication="typeExplication"
-        />
+
 
         <ExplainStructurel
           :historique="historique"
@@ -41,7 +32,6 @@
 
 <script>
 import libellesVariablesScores from '@/assets/libelles_variables_scores.json'
-import ExplainConjoncturel from '@/components/etablissement/score/explainConjoncturel.vue'
 import ExplainStructurel from '@/components/etablissement/score/explainStructurel.vue'
 import Gitbook from '@/components/Gitbook.vue'
 
@@ -52,7 +42,7 @@ export default {
     }
   },
   props: ['historique', 'summary'],
-  components: {ExplainConjoncturel, ExplainStructurel, Gitbook},
+  components: {ExplainStructurel, Gitbook},
   methods: {
     series(h) {
       return [{

@@ -1,40 +1,28 @@
 <template>
   <div>
     <v-toolbar dense flat class="mytoolbar" light>
-      <v-toolbar-title class="localtoolbar mytoolbar">Analyse pré-crise (prédiction statistique à mars 2020)</v-toolbar-title>
+      <v-toolbar-title class="localtoolbar mytoolbar">Analyse thématique</v-toolbar-title>
     </v-toolbar>
-  <div v-if="permScore && dernierScore && dernierScore.macroRadar && Object.keys(dernierScore.macroRadar).length > 2 && hasAlert">
-    <v-card v-if="typeExplication==='mixte' || typeExplication==='structurel'" outlined>
-      <v-card-text>
-        <div>
-          Score pré-crise:
-          <apexchart
-            type="radar"
-            height="200px"
-            :options="macroOptions(dernierScore)"
-            :series="series(dernierScore)"
-          ></apexchart>
-        </div>
-        <div v-if="selectConcerning(dernierScore)">
-          Les variables les plus significatives sont, par ordre d'importance :
-          <ul >
-            <li v-for="c in selectConcerning(dernierScore)" :key="c[1]"><em>{{ libelleMicro(c[1]) }}</em> ({{ libelleMacro(c[0]) }})</li>
-          </ul>
-        </div>
-      </v-card-text>
-    </v-card>
-  </div>
-    <v-card v-if="typeExplication==='conjoncturel'">
-      <v-card-text>
-        La détection ne se base pas sur des éléments historiques pré-crise, le radar n'est donc pas disponible.<br/>
-        <div style="text-align: center">
-          <p/>
-          <v-icon class="ma-4" size="120px" color="grey lighten-2">
-            fa-satellite-dish
-          </v-icon>
-        </div>
-      </v-card-text>
-    </v-card>
+    <div v-if="permScore && dernierScore && dernierScore.macroRadar && Object.keys(dernierScore.macroRadar).length > 2 && hasAlert">
+      <v-card v-if="typeExplication==='mixte' || typeExplication==='structurel'" outlined>
+        <v-card-text>
+          <div>
+            <apexchart
+              type="radar"
+              height="200px"
+              :options="macroOptions(dernierScore)"
+              :series="series(dernierScore)"
+            ></apexchart>
+          </div>
+          <div v-if="selectConcerning(dernierScore)">
+            Les variables les plus significatives sont, par ordre d'importance :
+            <ul >
+              <li v-for="c in selectConcerning(dernierScore)" :key="c[1]"><em>{{ libelleMicro(c[1]) }}</em> ({{ libelleMacro(c[0]) }})</li>
+            </ul>
+          </div>
+        </v-card-text>
+      </v-card>
+    </div>
   </div>
 </template>
 
