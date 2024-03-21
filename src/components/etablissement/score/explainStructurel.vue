@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-toolbar dense flat class="mytoolbar" light>
-      <v-toolbar-title class="localtoolbar mytoolbar">Analyse thématique</v-toolbar-title>
+      <v-toolbar-title class="localtoolbar mytoolbar">Éléments constitutifs du risque de défaillance</v-toolbar-title>
     </v-toolbar>
     <div v-if="permScore && dernierScore && dernierScore.macroRadar && Object.keys(dernierScore.macroRadar).length > 2 && hasAlert">
       <v-card v-if="typeExplication==='mixte' || typeExplication==='structurel'" outlined>
