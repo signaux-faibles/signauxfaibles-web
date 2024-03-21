@@ -38,7 +38,7 @@ import Gitbook from '@/components/Gitbook.vue'
 export default {
   data() {
     return {
-      variablesMacro: ['activite_partielle', 'dette_urssaf', 'retards_paiement', 'sante_financiere'],
+      variablesMacro: ['activité_partielle', 'dette_urssaf', 'retards_paiement', 'santé_financière'],
     }
   },
   props: ['historique', 'summary'],
