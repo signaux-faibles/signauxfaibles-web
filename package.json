@@ -31,7 +31,7 @@
     "sass": "~1.32.13",
     "sass-loader": "13.3.2",
     "uuid": "^3.3.3",
-    "vue": "^2.6.10",
+    "vue": "^3.4.21",
     "vue-apexcharts": "^1.5.0",
     "vue-class-component": "^7.0.2",
     "vue-mapbox": "^0.4.1",
