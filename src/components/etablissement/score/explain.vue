@@ -5,21 +5,14 @@
       <span v-else-if="typeExplication === 'ras'">Cet établissement n’a pas été identifié par l’algorithme comme étant à risque de défaillance à 18 mois.</span>
       <span v-else-if="typeExplication === 'horsperimetre'">Cet établissement ne faisait pas partie du périmètre de Signaux Faibles au moment de la production de cette liste de détection.</span>
       <span v-else>
-        Cette entreprise est portée à votre attention car elle présente des signes d'alerte {{ this.alert === "Alerte seuil F2" ? ' modérés' : ' importants' }} détaillés ci-dessous.<br/>
+        - Le risque de défaillance de l’entreprise sous 18 mois apparaît comme {{ this.alert === "Alerte seuil F2" ? ' modéré' : ' élevé' }}.<br/>
+        - Après analyse des données de l’entreprise, il apparaît que l’entreprise présente des caractéristiques similaires à des entreprises ayant fait défaut dans les 18 mois suivants.<br/>
+        - Les données de décembre à février 2024 sont mobilisées pour l’analyse.
         <p/>
         <span>
           <Gitbook :target="gitbookPath('DETECTION')"/>
         </span>
-        <ExplainConjoncturel
-          :redressements="redressements"
-          :signalActivitePartielle="signalActivitePartielle"
-          :signalAugmentationUrssaf="signalAugmentationUrssaf"
-          :signalConfidentiel="signalConfidentiel"
-          :signalDiminutionUrssaf="signalDiminutionUrssaf"
-          :signalFinancier="signalFinancier"
-          :signalPaydex="signalPaydex"
-          :typeExplication="typeExplication"
-        />
+
 
         <ExplainStructurel
           :historique="historique"
@@ -41,18 +34,17 @@
 
 <script>
 import libellesVariablesScores from '@/assets/libelles_variables_scores.json'
-import ExplainConjoncturel from '@/components/etablissement/score/explainConjoncturel.vue'
 import ExplainStructurel from '@/components/etablissement/score/explainStructurel.vue'
 import Gitbook from '@/components/Gitbook.vue'
 
 export default {
   data() {
     return {
-      variablesMacro: ['activite_partielle', 'dette_urssaf', 'retards_paiement', 'sante_financiere'],
+      variablesMacro: ['activité_partielle', 'dette_urssaf', 'retards_paiement', 'santé_financière'],
     }
   },
   props: ['historique', 'summary'],
-  components: {ExplainConjoncturel, ExplainStructurel, Gitbook},
+  components: {ExplainStructurel, Gitbook},
   methods: {
     series(h) {
       return [{
