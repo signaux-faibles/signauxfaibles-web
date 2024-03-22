@@ -7,7 +7,7 @@
       <span v-else>
         - Le risque de défaillance de l’entreprise sous 18 mois apparaît comme {{ this.alert === "Alerte seuil F2" ? ' modéré' : ' élevé' }}.<br/>
         - Après analyse des données de l’entreprise, il apparaît que l’entreprise présente des caractéristiques similaires à des entreprises ayant fait défaut dans les 18 mois suivants.<br/>
-        - Les données de décembre à février 2024 sont mobilisées pour l’analyse. En savoir plus sur la fraîcheur des données.
+        - Les données de décembre à février 2024 sont mobilisées pour l’analyse.
         <p/>
         <span>
           <Gitbook :target="gitbookPath('DETECTION')"/>
