@@ -19,16 +19,6 @@
       >
         <v-icon left small class="mr-2">fa-unlock</v-icon>Données déverrouillées
       </v-btn>
-      <v-btn
-        v-if="canCreateCard"
-        style="text-transform: none"
-        class="ml-4"
-        color="indigo"
-        @click="dialogs.showCreateCardDialog()"
-        dark
-      >
-        <v-icon left small class="mr-2">fa-people-pulling</v-icon>Accompagner
-      </v-btn>
     </h1>
 
     <h3 class="mt-3">
