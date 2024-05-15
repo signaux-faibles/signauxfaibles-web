@@ -144,29 +144,23 @@ export default {
         this.page += 1
       }
     },
-    toggleExcludeSecteursCovid() {
-      this.excludeSecteursCovid = !this.excludeSecteursCovid
-      this.getPrediction()
-    },
-    toggleFirstAlert() {
-      this.firstAlert = !this.firstAlert
-      this.getPrediction()
-    },
-    toggleHasntDelay() {
-      this.hasntDelai = !this.hasntDelai
-      this.getPrediction()
-    },
-    toggleIgnoreZone() {
-      this.ignorezone = !this.ignorezone
-      this.getPrediction()
-    },
-    toggleInclureEtablissementsFermes() {
-      this.inclureEtablissementsFermes = !this.inclureEtablissementsFermes
-      this.getPrediction()
-    },
-    toggleExclureSuivi() {
-      this.exclureSuivi = !this.exclureSuivi
-      this.getPrediction()
+    filterPrediction(propertyName) {
+      const allowedProperties = [
+        'excludeSecteursCovid',
+        'creationDateThreshold',
+        'firstAlert',
+        'hasntDelai',
+        'ignorezone',
+        'inclureEtablissementsFermes',
+        'exclureSuivi'
+      ];
+
+      if (allowedProperties.includes(propertyName)) {
+        this[propertyName] = !this[propertyName];
+        this.getPrediction();
+      } else {
+        console.error('Attempt to toggle an unauthorized property:', propertyName);
+      }
     },
     cancel() {
       this.source.cancel()
@@ -206,6 +200,14 @@ export default {
         params.caMin = parseInt(this.caMin, 10)
       }
       params.effectifMinEntreprise = parseInt(this.minEffectif, 10)
+
+      console.log('seul de date', this.creationDateThreshold)
+
+      if (this.creationDateThreshold) {
+        const date = new Date()
+        date.setFullYear(date.getFullYear() - 2)
+        params.creationDateThreshold = date.toISOString().split('T')[0]
+      }
       if (this.firstAlert) {
         params.firstAlert = true
       }
@@ -271,6 +273,14 @@ export default {
       },
       set(value) {
         this.$localStore.commit('setHasntDelai', value)
+      },
+    },
+    creationDateThreshold: {
+      get() {
+        return this.$localStore.state.creationDateThreshold
+      },
+      set(value) {
+        this.$localStore.commit('setcreationDateThreshold', value)
       },
     },
     firstAlert: {

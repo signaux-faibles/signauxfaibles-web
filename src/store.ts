@@ -22,6 +22,7 @@ const localStore = new Vuex.Store({
     excludeSecteursCovid: false,
     inclureEtablissementsFermes: false,
     exclureSuivi: false,
+    creationDateThreshold: true,
     firstAlert: false,
     hasntDelai: false,
     ignorezone: false,
@@ -50,6 +51,9 @@ const localStore = new Vuex.Store({
     },
     setexclureSuivi(state, val: boolean) {
       state.exclureSuivi = val
+    },
+    setcreationDateThreshold(state, val: boolean) {
+      state.creationDateThreshold = val
     },
     setfirstAlert(state, val: boolean) {
       state.firstAlert = val
