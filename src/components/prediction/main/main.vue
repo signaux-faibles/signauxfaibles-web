@@ -263,6 +263,17 @@
         </v-layout>
       </v-container>
     </v-card>
+    <div  class="pa-4" v-if="activeFilters.length">
+      <span class="subheading">Filtres actifs :</span>
+      <a v-if="!drawers.right" @click.prevent="drawers.showRight" style="cursor: pointer;">
+        <v-icon small class="mr-2">fa-filter</v-icon>Modifier
+      </a>
+    <v-chip-group column>
+      <v-chip v-for="(filter, index) in activeFilters" :key="index" small>
+        {{ filter }}
+      </v-chip>
+    </v-chip-group>
+    </div>
     <PredictionWidget v-for="p in prediction" :key="p.siret" :prediction="p" @hide-etablissement="onHideEtablissement" @follow-etablissement="followStateChanged = true" @unfollow-etablissement="followStateChanged = true"/>
     <Spinner style="min-height: 60vh" v-if="loading" />
     <v-snackbar v-if="currentBatchDescription" v-model="snackbar" :bottom="true">
