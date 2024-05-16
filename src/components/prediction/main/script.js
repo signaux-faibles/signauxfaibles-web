@@ -182,6 +182,46 @@ export default {
     },
   },
   computed: {
+    activeFilters() {
+      const filters = [];
+      if (this.excludeSecteursCovid) {
+        filters.push("Hors secteurs Covid-19");
+      }
+      if (this.creationDateThreshold) {
+        filters.push("Sans entreprises récentes");
+      }
+      if (this.firstAlert) {
+        filters.push("Premières alertes uniquement");
+      }
+      if (this.hasntDelai) {
+        filters.push("Sans délais de paiement URSSAF");
+      }
+      if (this.ignorezone) {
+        filters.push("Implantations dans ma zone");
+      }
+      if (this.inclureEtablissementsFermes) {
+        filters.push("Etablissements fermés");
+      }
+      if (this.caMin) {
+        filters.push(`CA min: ${this.caMin}k€`);
+      }
+      if (this.minEffectif) {
+        filters.push(`Effectif min: ${this.minEffectif}`);
+      }
+      if (this.zone.length > 0) {
+        filters.push(`Zones géographiques: ${this.zone.join(', ')}`);
+      }
+      if (this.allNaf) {
+        filters.push("Secteurs d'activité: Tous");
+      } else if (this.currentNaf.length > 0) {
+        const nafDescriptions = this.currentNafLibelle.map(libelle => libelle || 'Unknown');
+        filters.push(`Secteurs d'activité: ${nafDescriptions.join(', ')}`);
+      }
+      if (this.procol.length > 0) {
+        filters.push(`Statut procédures: ${this.procol.join(', ')}`);
+      }
+      return filters;
+    },
     predictionIsEnough() {
       return this.complete || this.loading || this.height * 2 < this.listHeight || this.errorOccured
     },
