@@ -18,6 +18,13 @@
     <Dialogs/>
     <Security v-if="!securityConsent"/>
     <v-main v-if="securityConsent">
+      <v-banner lines="two" color="blue lighten-5" :stacked="false">
+        <v-banner-text>
+          <span>
+            [Webinaire] Comprendre et traiter la nouvelle liste de signalements « Signaux Faibles », le 29 mai 2024 à 14h30 : <a href="https://9g2d7.r.bh.d.sendibt3.com/mk/cl/f/sh/1t6Af4Oj9PgrH6iHt0G9xx4ZenCkT7/ZLg1DbjBeYAI" target="_blank">S’inscrire au webinaire </a>
+          </span>
+        </v-banner-text>
+      </v-banner>      
       <NavigationDrawer v-if="login && drawers.left"/>
       <router-view/>
     </v-main>
