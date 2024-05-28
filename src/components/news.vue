@@ -30,6 +30,7 @@
             v-model="activePanel"
             inset
         >
+          <News009 :activePanel="activePanel"/>
           <News008 :activePanel="activePanel"/>
           <News007 :activePanel="activePanel"/>
           <News006 :activePanel="activePanel"/>
@@ -54,11 +55,12 @@ import News005 from '@/components/news/news005.vue'
 import News006 from '@/components/news/news006.vue'
 import News007 from '@/components/news/news007.vue'
 import News008 from '@/components/news/news008.vue'
+import News009 from '@/components/news/news009.vue'
 
 
 export default {
   name: 'News',
-  components: {News001, News002, News003, News004, News005, News006, News007, News008},
+  components: {News001, News002, News003, News004, News005, News006, News007, News008, News009},
   mounted() {
     if (this.newsToRead > 0 && this.dialog == null) {
       this.dialog = true;
@@ -107,6 +109,7 @@ export default {
     return {
       activePanel: 0,
       news: [
+        new Date('2024-06-03'),
         new Date('2023-11-30'),
         new Date('2023-09-03'),
         new Date('2023-06-01'),
