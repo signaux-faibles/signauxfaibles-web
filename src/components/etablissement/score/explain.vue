@@ -5,9 +5,9 @@
       <span v-else-if="typeExplication === 'ras'">Cet établissement n’a pas été identifié par l’algorithme comme étant à risque de défaillance à 18 mois.</span>
       <span v-else-if="typeExplication === 'horsperimetre'">Cet établissement ne faisait pas partie du périmètre de Signaux Faibles au moment de la production de cette liste de détection.</span>
       <span v-else>
+        - Sur la base des données en notre possession, il apparaît que l’entreprise présente des caractéristiques similaires à des sociétés ayant fait défaut dans les 18 mois suivants.<br />
         - Le risque de défaillance de l’entreprise sous 18 mois apparaît comme {{ this.alert === "Alerte seuil F2" ? ' modéré' : ' élevé' }}.<br/>
-        - Après analyse des données de l’entreprise, il apparaît que l’entreprise présente des caractéristiques similaires à des entreprises ayant fait défaut dans les 18 mois suivants.<br/>
-        - Les données de décembre à février 2024 sont mobilisées pour l’analyse.
+        - Les données actualisées jusqu’en avril 2024 sont mobilisées pour cette prédiction.
         <p/>
         <span>
           <Gitbook :target="gitbookPath('DETECTION')"/>
