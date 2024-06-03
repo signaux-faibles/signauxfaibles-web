@@ -33,6 +33,7 @@ export default {
       procolItems: Object.values(libellesProcols),
       procolParams: Object.keys(libellesProcols),
       source: axios.CancelToken.source(),
+      downloadingExport: false,
     }
   },
   mounted() {
@@ -81,24 +82,27 @@ export default {
       return data
     },
     download() {
-      this.trackMatomoEvent('listes', 'extraire', this.eventName)
-      this.$axios(
-        {
-          url: `/scores/xls/${this.currentBatchKey}`,
-          method: 'post',
-          responseType: 'arraybuffer',
-          data: this.params,
-        },
-      ).then((r) => {
-        const url = window.URL.createObjectURL(new Blob([r.data]))
-        const element = document.createElement('a')
-        element.setAttribute('href', url)
-        element.setAttribute('download', 'extract.xlsx')
-        element.style.display = 'none'
-        document.body.appendChild(element)
-        element.click()
-        document.body.removeChild(element)
-      })
+      this.downloadingExport = true;
+      this.trackMatomoEvent('listes', 'extraire', this.eventName);
+      this.$axios({
+        url: `/scores/xls/${this.currentBatchKey}`,
+        method: 'post',
+        responseType: 'arraybuffer',
+        data: this.params,
+      }).then((r) => {
+        const url = window.URL.createObjectURL(new Blob([r.data]));
+        const element = document.createElement('a');
+        element.setAttribute('href', url);
+        element.setAttribute('download', 'extract.xlsx');
+        element.style.display = 'none';
+        document.body.appendChild(element);
+        element.click();
+        document.body.removeChild(element);
+      }).catch(error => {
+        console.error('Download failed:', error);
+      }).finally(() => {
+        this.downloadingExport = false;
+      });
     },
     getPrediction() {
       clearTimeout(this.timer)

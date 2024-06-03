@@ -255,8 +255,9 @@
             <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
             <v-icon style="top: -4px" color="amber darken-2">fa-exclamation-triangle</v-icon>
             <span style="font-size: 25px;">{{ predictionWarnings }}</span>
-            <v-btn outlined color="indigo" @click="download" class="ml-4 mb-3">
-              <v-icon small class="mr-2">fa-file-download</v-icon>
+            <v-btn :disabled="downloadingExport" outlined color="indigo" @click="download" class="ml-4 mb-3">
+              <v-progress-circular indeterminate color="white" v-if="downloadingExport" size="24" width="3"></v-progress-circular>
+              <v-icon v-else small class="mr-2">fa-file-download</v-icon>
               Exporter
             </v-btn>
           </v-flex>
