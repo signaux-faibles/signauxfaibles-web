@@ -18,6 +18,19 @@
     <Dialogs/>
     <Security v-if="!securityConsent"/>
     <v-main v-if="securityConsent">
+      <v-banner lines="two" color="orange lighten-5 red--text" :stacked="false">
+        <v-banner-text>
+          <span>
+              Bonjour,<br /><br />
+
+              « Signaux Faibles » rencontre des difficultés techniques. Nous faisons de notre mieux pour rétablir le service numérique dans les meilleurs délais.<br /><br /> 
+              
+              Nous nous excusons pour la gêne occasionnée.<br /><br />
+              
+              L’équipe Signaux Faibles. 
+          </span>
+        </v-banner-text>
+      </v-banner>      
       <NavigationDrawer v-if="login && drawers.left"/>
       <router-view/>
     </v-main>
