@@ -156,7 +156,8 @@ export default {
         'hasntDelai',
         'ignorezone',
         'inclureEtablissementsFermes',
-        'exclureSuivi'
+        'exclureSuivi',
+        'codefiListOnly',
       ];
 
       if (allowedProperties.includes(propertyName)) {
@@ -184,6 +185,11 @@ export default {
     prediction() {
       this.listHeight = this.$el.getBoundingClientRect().bottom
     },
+    currentBatchKey(newValue) {
+      if (newValue !== this.dernierBatch.text) {
+        this.codefiListOnly = false;
+      }
+    }
   },
   computed: {
     activeFilters() {
@@ -223,6 +229,9 @@ export default {
       }
       if (this.procol.length > 0) {
         filters.push(`Statut procédures: ${this.procol.join(', ')}`);
+      }
+      if (this.codefiListOnly) {
+        filters.push("list CODEFI uniquement");
       }
       return filters;
     },
@@ -273,6 +282,9 @@ export default {
       }
       if (this.filter || '' !== '') {
         params.filter = this.filter
+      }
+      if (this.codefiListOnly) {
+        params.codefiListOnly = true
       }
       params.page = this.page
       return params
@@ -359,6 +371,14 @@ export default {
       },
       set(value) {
         this.$localStore.commit('setcurrentNaf', value)
+      },
+    },
+    codefiListOnly: {
+      get() {
+        return this.$localStore.state.codefiListOnly
+      },
+      set(value) {
+        this.$localStore.commit('setcodefiListOnly', value)
       },
     },
     currentNafLibelle() {
@@ -480,6 +500,9 @@ export default {
         eventName = eventName.concat(',' + this.filter)
       }
       return eventName
+    },
+    dernierBatch() {
+      return this.batches[0]
     },
   },
   components: {Gitbook, PredictionWidget, Spinner, Help},

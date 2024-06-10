@@ -191,6 +191,19 @@
         <v-list three-line>
           <v-list-group value="true">
             <v-subheader slot="activator">Filtres avancés</v-subheader>
+            <v-list-item :disabled="currentBatch != dernierBatch.text">
+              <v-list-item-action>
+                <v-checkbox v-model="codefiListOnly" @change="getPrediction()"></v-checkbox>
+              </v-list-item-action>           
+              <v-list-item-content @click="() => filterPrediction('codefiListOnly')">
+                <v-list-item-title>Liste du CODEFI</v-list-item-title>
+                <v-list-item-subtitle class="long-subtitle">
+                  {{ currentBatch === dernierBatch.text 
+                    ? 'Affiche uniquement les entreprises soumises au CODEFI après retraitement par la DGFiP' 
+                    : `Filtre inactif en raison de l\'absence de retraitement DGFIP correspondant à la liste de ${currentBatch}` }}
+                </v-list-item-subtitle>              
+              </v-list-item-content>
+            </v-list-item>
             <v-list-item>
               <v-list-item-action>
                 <v-checkbox v-model="firstAlert" @change="getPrediction()"></v-checkbox>

@@ -45,3 +45,7 @@
 ::v-deep .v-list__tile {
   padding-right: 8px;
 }
+
+.long-subtitle {
+  -webkit-line-clamp: 4 !important;
+}

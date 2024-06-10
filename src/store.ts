@@ -41,6 +41,7 @@ const localStore = new Vuex.Store({
     labelsFollow: [],
     labelModeFollow: "and",
     currentBoard: '',
+    codefiListOnly: false,
   },
   mutations: {
     setexcludeSecteursCovid(state, val: boolean) {
@@ -57,6 +58,9 @@ const localStore = new Vuex.Store({
     },
     setfirstAlert(state, val: boolean) {
       state.firstAlert = val
+    },
+    setcodefiListOnly(state, val: boolean) {
+      state.codefiListOnly = val
     },
     setHasntDelai(state, val: boolean) {
       state.hasntDelai = val
