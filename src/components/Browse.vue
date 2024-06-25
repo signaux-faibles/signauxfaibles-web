@@ -1,6 +1,9 @@
 <template>
   <div>
     <Toolbar drawer title="Consultation"/>
+    <a href="http://localhost:3001" target="_blank">Go to Rails</a>
+
+
     <div :class="((result.etablissement || []).length > 0 || searched) ? 'loaded' : 'empty'">
       <form v-on:submit.prevent="load">
         <div

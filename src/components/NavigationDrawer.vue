@@ -47,7 +47,17 @@
             <v-icon>fa-people-pulling</v-icon>
           </v-list-item-action>
           <v-list-item-content >
-            <v-list-item-title>Accompagnement</v-list-item-title>
+            <v-list-item-title>Accompagnement Legacy (AP)</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item v-if="this.roles.includes('wekan')">
+          <v-list-item-action>
+            <v-icon>fa-people-pulling</v-icon>
+          </v-list-item-action>
+          <v-list-item-content >
+            <a @click="redirectToRails">
+              <v-list-item-title>Accompagnement Rails</v-list-item-title>
+            </a>
           </v-list-item-content>
         </v-list-item>
         <v-list-item to="/prediction">
@@ -121,7 +131,8 @@ export default {
   components: {News},
   data() {
     return {
-      show: false
+      show: false,
+      sforUrl: process.env.VUE_APP_SFOR_URL,
     }
   },
   setup() {
@@ -135,6 +146,21 @@ export default {
     this.show = true
   },
   methods: {
+    redirectToRails() {
+      const token = this.$keycloak.token;
+
+      console.log('Token:', token)
+
+      // Passerelle avec Rails (on passe le token de keycloak à Rails pour que le back-end de rails puisse vérifier le token)
+      this.$axios.post(`${this.sforUrl}/authenticate`, { token }, { withCredentials: true })
+        .then(response => {
+          console.log('Redirection vers Rails:', response);
+          window.location.href = this.sforUrl;
+        })
+        .catch(error => {
+          console.error('Erreur lors de la redirection:', error);
+        });
+      },
     logout() {
       this.trackMatomoEvent('general', 'se_deconnecter')
       this.createNewMatomoVisit()
