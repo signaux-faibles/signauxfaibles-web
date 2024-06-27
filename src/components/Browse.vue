@@ -1,16 +1,5 @@
 <template>
-  
   <div>
-    <v-banner lines="two" color="orange lighten-5 red--text" :stacked="false">
-      <v-banner-text>
-        <v-icon style="top:-1px">fa-solid fa-triangle-exclamation</v-icon>
-        <span>
-          Donnée d’effectif de l’entreprise erronée : <br /><br />
-          Dans plusieurs cas, la donnée d’effectif de l’entreprise est erronée. Cette erreur est uniquement au niveau de l’entreprise et n’impacte pas l’information concernant l’effectif de l’établissement. <br />
-          Nous mettons tout en œuvre pour rétablir cette donnée et vous prions de nous excuser pour la gêne occasionnée.
-        </span>
-      </v-banner-text>
-    </v-banner>
     <Toolbar drawer title="Consultation"/>
     <div :class="((result.etablissement || []).length > 0 || searched) ? 'loaded' : 'empty'">
       <form v-on:submit.prevent="load">
