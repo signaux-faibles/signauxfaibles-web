@@ -196,10 +196,10 @@
                 <v-checkbox v-model="codefiListOnly" @change="getPrediction()"></v-checkbox>
               </v-list-item-action>           
               <v-list-item-content @click="() => filterPrediction('codefiListOnly')">
-                <v-list-item-title>Liste du CODEFI</v-list-item-title>
+                <v-list-item-title>Liste retraitée par la DGFIP</v-list-item-title>
                 <v-list-item-subtitle class="long-subtitle">
                   {{ currentBatch === dernierBatch.text 
-                    ? 'Affiche uniquement les entreprises soumises au CODEFI après retraitement par la DGFiP' 
+                    ? 'Affiche uniquement la liste transmise au CDED en amont de la réunion du CODEFI' 
                     : `Filtre inactif en raison de l\'absence de retraitement DGFIP correspondant à la liste de ${currentBatch}` }}
                 </v-list-item-subtitle>              
               </v-list-item-content>
