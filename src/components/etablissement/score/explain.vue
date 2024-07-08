@@ -13,7 +13,7 @@
           <Gitbook :target="gitbookPath('DETECTION')"/>
         </span>
         <EtablissementScoreExplainWaterfall :liste="lastBatch" :score="dernierScore.score"
-                                            :microExpl="dernierScore.microExpl" :macroExpl="dernierScore.macroExpl"/>
+                                            :microExpl="dernierScore.microExpl" :macroExpl="dernierScore.macroRadar"/>
       </span>
     </div>
     <div v-else>
