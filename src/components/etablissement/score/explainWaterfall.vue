@@ -1,6 +1,5 @@
 <template>
     <Plotly
-        @click="plotlyClick"
         @hover="plotlyHover"
         @unhover="plotlyUnhover"
         ref="graph"
@@ -16,18 +15,15 @@ import { Plotly } from 'vue-plotly'
 export default {
   name: "EtablissementScoreExplainWaterfall",
   components: {Plotly},
-  props: ['liste', 'score', 'microExpl', 'macroExpl'],
+  props: ['liste', 'score', 'macroExpl'],
   mounted() {
-    console.log(this.$refs.graph)
+    console.log('macroExpl', this.macroExpl)
+    console.log('refs', this.$refs.graph)
+    console.log('liste', this.liste)
   },
   methods: {
     percent(value) {
       return  ((100*value).toFixed(0) + "%")
-    },
-    plotlyClick(event) {
-      const index = event.points[0].pointIndex
-      const group = this.macroExplEntries[index][0]
-      console.log(this.microExpl[group])
     },
     plotlyHover(event) {
       event.event.target.style.cursor = 'pointer'
@@ -62,6 +58,7 @@ export default {
     },
     macroExplArrays() {
       const values = this.macroExplEntries
+
       return {
         x: values.map((v) => this.titleize(v[0])).concat(["probabilité défaillance"]),
         y: values.map((v) => v[1]).concat([this.score]),
@@ -112,7 +109,7 @@ export default {
             xref: 'x',
             x0: Object.keys(this.macroExpl).length - 0.5,
             x1: Object.keys(this.macroExpl).length + 0.5,
-            y0: this.liste.metadata.f1Score,
+            y0: process.env.VUE_APP_SEUIL_F1,
             y1: 1,
             layer: 'below',
             fillcolor: '#D32F2F',
@@ -126,8 +123,8 @@ export default {
             xref: 'x',
             x0: Object.keys(this.macroExpl).length - 0.5,
             x1: Object.keys(this.macroExpl).length + 0.5,
-            y0: this.liste.metadata.f2Score,
-            y1: this.liste.metadata.f1Score,
+            y0: process.env.VUE_APP_SEUIL_F2,
+            y1: process.env.VUE_APP_SEUIL_F1,
             layer: 'below',
             fillcolor: '#FFA000',
             opacity: 0.2,
@@ -141,7 +138,7 @@ export default {
             x0: Object.keys(this.macroExpl).length - 0.5,
             x1: Object.keys(this.macroExpl).length + 0.5,
             y0: 0,
-            y1: this.liste.metadata.f2Score,
+            y1: process.env.VUE_APP_SEUIL_F2,
             layer: 'below',
             fillcolor: '#4CAF50',
             opacity: 0.2,
