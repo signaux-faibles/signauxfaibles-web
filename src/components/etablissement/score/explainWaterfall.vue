@@ -1,12 +1,23 @@
 <template>
-    <Plotly
-        @hover="plotlyHover"
-        @unhover="plotlyUnhover"
-        ref="graph"
-        :data="data"
-        :layout="layout"
-        :display-mode-bar="false"
-    />
+  <div>
+    <p class="mt-3" style="margin-bottom: 0 !important;">
+      Le graphique ci-dessous détaille les éléments constitutifs du calcul de la probabilité de défaillance de l’entreprise. 
+      Chaque groupe de variables analysé induit soit un facteur aggravant (en rouge) soit un facteur atténuant le risque (en vert). La probabilité de défaillance est la somme des contributions de ces groupes. Ainsi le risque estimé peut se situer dans trois zones :<br /><br />
+      <ul>
+        <li>La zone rouge : l’entreprise présente un risque de défaillance élevé.</li>
+        <li>La zone jaune : l’entreprise présente un risque de défaillance modéré.</li>
+        <li>La zone verte : si le score ne dépasse pas un certain seuil de risque, l’entreprise n’est pas détectée. </li>
+      </ul>  
+    </p>
+      <Plotly
+          @hover="plotlyHover"
+          @unhover="plotlyUnhover"
+          ref="graph"
+          :data="data"
+          :layout="layout"
+          :display-mode-bar="false"
+      />
+  </div>
 </template>
 
 <script>
@@ -16,11 +27,6 @@ export default {
   name: "EtablissementScoreExplainWaterfall",
   components: {Plotly},
   props: ['liste', 'score', 'macroExpl'],
-  mounted() {
-    console.log('macroExpl', this.macroExpl)
-    console.log('refs', this.$refs.graph)
-    console.log('liste', this.liste)
-  },
   methods: {
     percent(value) {
       return  ((100*value).toFixed(0) + "%")
@@ -32,6 +38,7 @@ export default {
       event.event.target.style.cursor = 'default'
     },
     titleize(slug) {
+      if (slug === 'misc') return 'Variation de l’effectif';
       var words = slug.split("_");
       return words.map(function(word) {
         return word.charAt(0).toUpperCase() + word.substring(1).toLowerCase();
@@ -57,23 +64,22 @@ export default {
       return values
     },
     macroExplArrays() {
-      const values = this.macroExplEntries
+      const values = this.macroExplEntries;
+      const esperanceEntry = values.find(v => v[0] === 'esperance');
+      const filteredValues = values.filter(v => v[0] !== 'esperance');
 
       return {
-        x: values.map((v) => this.titleize(v[0])).concat(["probabilité défaillance"]),
-        y: values.map((v) => v[1]).concat([this.score]),
-        measure: values.map((v) => {
-          return 'relative'
-        }).concat(['total']),
-        text: values.map((v) => ((v[1]>0)?'+':'') + this.percent(v[1])).concat([this.percent(this.score)])
-      }
+        x: ['Espérance'].concat(filteredValues.map((v) => this.titleize(v[0]))).concat(["probabilité défaillance"]),
+        y: [esperanceEntry ? esperanceEntry[1] : 0].concat(filteredValues.map((v) => v[1])).concat([this.score]),
+        measure: ['absolute'].concat(filteredValues.map((v) => 'relative')).concat(['total']),
+        text: [esperanceEntry ? this.percent(esperanceEntry[1]) : '0%'].concat(filteredValues.map((v) => ((v[1] > 0) ? '+' : '') + this.percent(v[1]))).concat([this.percent(this.score)])
+      };
     },
     data() {
       return [{
         name: "weight",
         type: "waterfall",
         orientation: "v",
-        width: 0.66,
         measure: this.macroExplArrays.measure,
         x: this.macroExplArrays.x,
         textposition: "outside",
@@ -86,7 +92,7 @@ export default {
           }
         },
         decreasing: {
-          marker:{
+          marker: {
             color: "#4CAF50"
           }
         },
@@ -102,6 +108,15 @@ export default {
     },
     layout() {
       return {
+        title: {
+          text:'Eléments constitutifs de cette alerte',
+          font: {
+            family: 'Oswald, sans-serif',
+            size: 24
+          },
+          xref: 'paper',
+          x: 0.5,
+        },
         shapes: [
           // 2nd highlight during Feb 20 - Feb 23
           {
@@ -150,12 +165,13 @@ export default {
         xaxis: {
           type: "category",
           fixedrange: true,
+          automargin: true,
         },
         yaxis: {
           type: "linear",
           range: this.macroExplBoundaries,
           tickformat: ',.0%',
-          fixedrange: true,
+          fixedrange: true,          
         },
         hovermode:  'closest',
         showlegend: false,
