@@ -4,7 +4,7 @@
       Détection Signaux Faibles
     </h2>
     <v-layout wrap>
-      <v-flex xl6 lg12 mb-2> 
+      <v-flex xl12 md-6 mb-2> 
         <div class="mb-3">
           <span class="mr-2"><ScoreWidget size="25px" :prediction="summary" class="mr-1" /> {{ dernierBatch.text }}</span>
           <v-tooltip bottom v-if="summary.firstAlert === true">
