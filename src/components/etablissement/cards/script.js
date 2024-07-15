@@ -77,8 +77,7 @@ export default {
   },
   computed: {
     canCreateCard() {
-      return (this.codeDepartement in this.kanban.config.departements)
-    },
+      return this.kanban.config.departements && this.codeDepartement in this.kanban.config.departements;    },
     currentCard() {
       return this.cards.find((c) => c.id == this.currentCardID)
     },

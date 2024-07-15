@@ -106,7 +106,7 @@ export default {
   },
   computed: {
     canCreateCard() {
-      return (this.sirene.codeDepartement in this.kanban.config.departements)
+      return this.kanban.config.departements && this.sirene.codeDepartement in this.kanban.config.departements;
     },
     naf() {
       return (this.sirene || {}).naf || {}
