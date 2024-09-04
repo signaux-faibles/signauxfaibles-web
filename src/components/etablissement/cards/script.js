@@ -41,10 +41,29 @@ export default {
   },
   data() {
     return {
-      cards: [], currentCardID: null, loading: true
+      cards: [], currentCardID: null, loading: true,
+      sforUrl: process.env.VUE_APP_SFOR_URL,
     }
   },
   methods: {
+    redirectToRailsNewTracking() {
+      const token = this.$keycloak.token;
+  
+      console.log('Token:', token);
+  
+      // Authentifier avec Rails
+      this.$axios.post(`${this.sforUrl}/users/sign_in`, { token }, { withCredentials: true })
+        .then(response => {
+          console.log('Authentification réussie:', response);
+  
+          // Redirection vers l'action 'new' pour créer un nouveau suivi d'établissement en utilisant le siret
+          const newTrackingUrl = `${this.sforUrl}/establishment_trackings/new_by_siret?siret=${this.siret}&code_departement=${this.codeDepartement}`;
+          window.location.href = newTrackingUrl;
+        })
+        .catch(error => {
+          console.error('Erreur lors de la redirection:', error);
+        });
+    },
     reset() {
       this.loading = true
       this.cards = []
