@@ -44,7 +44,7 @@
           <div v-if="canCreateCard && followed" style="margin-right: auto; margin-left: auto; text-align: center">
             <v-btn v-if="followed && canCreateCard" dark class="pa-2 mt-5 mb-4" color="indigo"
                    style="text-transform: none; margin-left: auto; margin-right: auto"
-                   @click="dialogs.showCreateCardDialog()">
+                   @click="redirectToRailsNewTracking">
               <v-icon small class="mr-2">fa-people-pulling</v-icon>
               Ajouter un accompagnement<br/>
             </v-btn>

@@ -152,7 +152,7 @@ export default {
       console.log('Token:', token)
 
       // Passerelle avec Rails (on passe le token de keycloak à Rails pour que le back-end de rails puisse vérifier le token)
-      this.$axios.post(`${this.sforUrl}/authenticate`, { token }, { withCredentials: true })
+      this.$axios.post(`${this.sforUrl}/users/sign_in`, { token }, { withCredentials: true })
         .then(response => {
           console.log('Redirection vers Rails:', response);
           window.location.href = this.sforUrl;
