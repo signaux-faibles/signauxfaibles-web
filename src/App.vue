@@ -18,6 +18,13 @@
     <Dialogs/>
     <Security v-if="!securityConsent"/>
     <v-main v-if="securityConsent">
+      <v-banner lines="two" color="blue lighten-5" :stacked="false">
+        <v-banner-text>
+          <span>
+            Formations « Signaux Faibles » : Les prochaines sessions de formation se tiendront les mardi 17 septembre et mardi 1er octobre de 15h à 16h30, inscrivez-vous <a href="https://resana.numerique.gouv.fr/public/information/consulterAccessUrl?cle_url=1437772536AGoDY1BcU29dMAJkB2kDI1FvCTQHJgNqUzhRbFEwCDICOAI2AGsIaFJhVWUCMA==" target="_blank">ici</a>
+          </span>
+        </v-banner-text>
+      </v-banner>
       <NavigationDrawer v-if="login && drawers.left"/>
       <router-view/>
     </v-main>
