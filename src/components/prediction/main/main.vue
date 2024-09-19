@@ -189,67 +189,65 @@
           </v-select>
         </div>
         <v-list three-line>
-          <v-list-group value="true">
-            <v-subheader slot="activator">Filtres avancés</v-subheader>
-            <v-list-item :disabled="currentBatch != dernierBatch.text">
-              <v-list-item-action>
-                <v-checkbox v-model="codefiListOnly" @change="getPrediction()"></v-checkbox>
-              </v-list-item-action>           
-              <v-list-item-content @click="() => filterPrediction('codefiListOnly')">
-                <v-list-item-title>Liste retraitée par la DGFIP</v-list-item-title>
-                <v-list-item-subtitle class="long-subtitle">
-                  {{ currentBatch === dernierBatch.text 
-                    ? 'Affiche uniquement la liste transmise au CDED en amont de la réunion du CODEFI' 
-                    : `Filtre inactif en raison de l\'absence de retraitement DGFIP correspondant à la liste de ${currentBatch}` }}
-                </v-list-item-subtitle>              
-              </v-list-item-content>
-            </v-list-item>
-            <v-list-item>
-              <v-list-item-action>
-                <v-checkbox v-model="firstAlert" @change="getPrediction()"></v-checkbox>
-              </v-list-item-action>           
-              <v-list-item-content @click="() => filterPrediction('firstAlert')">
-                <v-list-item-title>Premières alertes</v-list-item-title>
-                <v-list-item-subtitle>Affiche uniquement les premières alertes</v-list-item-subtitle>
-              </v-list-item-content>
-            </v-list-item>
-            <v-list-item>
-              <v-list-item-action>
-                <v-checkbox v-model="hasntDelai" @change="getPrediction()"></v-checkbox>
-              </v-list-item-action>
-              <v-list-item-content @click="() => filterPrediction('hasntDelai')">
-                <v-list-item-title>Sans délai de paiement URSSAF</v-list-item-title>
-                <v-list-item-subtitle>Affiche uniquement les entreprises dont les établissement sont sans délai de paiement urssaf en cours</v-list-item-subtitle>
-              </v-list-item-content>
-            </v-list-item>
-            <v-list-item>
-              <v-list-item-action>
-                <v-checkbox v-model="creationDateThreshold" @change="getPrediction()"></v-checkbox>
-              </v-list-item-action>
-              <v-list-item-content @click="() => filterPrediction('creationDateThreshold')">
-                <v-list-item-title>Sans entreprises récentes</v-list-item-title>
-                <v-list-item-subtitle>Affiche uniquement les entreprises créées il y a plus de deux ans</v-list-item-subtitle>
-              </v-list-item-content>
-            </v-list-item>
-            <v-list-item>
-              <v-list-item-action>
-                <v-checkbox v-model="ignorezone" @change="getPrediction()"></v-checkbox>
-              </v-list-item-action>
-              <v-list-item-content @click="() => filterPrediction('ignorezone')">
-                <v-list-item-title>Implantations dans ma zone</v-list-item-title>
-                <v-list-item-subtitle>Inclure les sièges dont certains établissements sont dans ma zone</v-list-item-subtitle>
-              </v-list-item-content>
-            </v-list-item>
-            <v-list-item>
-              <v-list-item-action>
-                <v-checkbox v-model="inclureEtablissementsFermes" @change="getPrediction()"></v-checkbox>
-              </v-list-item-action>
-              <v-list-item-content @click="() => filterPrediction('inclureEtablissementsFermes')">
-                <v-list-item-title>Établissements fermés</v-list-item-title>
-                <v-list-item-subtitle>Inclure les établissements fermés</v-list-item-subtitle>
-              </v-list-item-content>
-            </v-list-item>
-          </v-list-group>
+          <v-list-item>
+            Filtres avancés
+          </v-list-item>
+          <v-list-item :disabled="true">
+            <v-list-item-action>
+              <v-checkbox v-model="codefiListOnly" @change="getPrediction()"></v-checkbox>
+            </v-list-item-action>           
+            <v-list-item-content @click="() => filterPrediction('codefiListOnly')">
+              <v-list-item-title>Liste retraitée par la DGFIP</v-list-item-title>
+              <v-list-item-subtitle class="long-subtitle">
+                Non disponible pour le moment
+              </v-list-item-subtitle>              
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item>
+            <v-list-item-action>
+              <v-checkbox v-model="firstAlert" @change="getPrediction()"></v-checkbox>
+            </v-list-item-action>           
+            <v-list-item-content @click="() => filterPrediction('firstAlert')">
+              <v-list-item-title>Premières alertes</v-list-item-title>
+              <v-list-item-subtitle>Affiche uniquement les premières alertes</v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item>
+            <v-list-item-action>
+              <v-checkbox v-model="hasntDelai" @change="getPrediction()"></v-checkbox>
+            </v-list-item-action>
+            <v-list-item-content @click="() => filterPrediction('hasntDelai')">
+              <v-list-item-title>Sans délai de paiement URSSAF</v-list-item-title>
+              <v-list-item-subtitle>Affiche uniquement les entreprises dont les établissement sont sans délai de paiement urssaf en cours</v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item>
+            <v-list-item-action>
+              <v-checkbox v-model="creationDateThreshold" @change="getPrediction()"></v-checkbox>
+            </v-list-item-action>
+            <v-list-item-content @click="() => filterPrediction('creationDateThreshold')">
+              <v-list-item-title>Sans entreprises récentes</v-list-item-title>
+              <v-list-item-subtitle>Affiche uniquement les entreprises créées il y a plus de deux ans</v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item>
+            <v-list-item-action>
+              <v-checkbox v-model="ignorezone" @change="getPrediction()"></v-checkbox>
+            </v-list-item-action>
+            <v-list-item-content @click="() => filterPrediction('ignorezone')">
+              <v-list-item-title>Implantations dans ma zone</v-list-item-title>
+              <v-list-item-subtitle>Inclure les sièges dont certains établissements sont dans ma zone</v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item>
+            <v-list-item-action>
+              <v-checkbox v-model="inclureEtablissementsFermes" @change="getPrediction()"></v-checkbox>
+            </v-list-item-action>
+            <v-list-item-content @click="() => filterPrediction('inclureEtablissementsFermes')">
+              <v-list-item-title>Établissements fermés</v-list-item-title>
+              <v-list-item-subtitle>Inclure les établissements fermés</v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
         </v-list>
       </v-navigation-drawer>
     </div>
