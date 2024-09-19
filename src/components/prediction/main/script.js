@@ -283,9 +283,10 @@ export default {
       if (this.filter || '' !== '') {
         params.filter = this.filter
       }
-      if (this.codefiListOnly) {
-        params.codefiListOnly = true
-      }
+      // TODO uncomment this when codefiListOnly is implemented
+      // if (this.codefiListOnly) {
+      //   params.codefiListOnly = true
+      // }
       params.page = this.page
       return params
     },
