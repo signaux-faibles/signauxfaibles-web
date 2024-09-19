@@ -112,7 +112,7 @@ export default {
     return {
       activePanel: 0,
       news: [
-        new Date('2024-09-23'),
+        new Date('2024-09-19'),
         new Date('2024-07-02'),
         new Date('2024-06-03'),
         new Date('2023-11-30'),

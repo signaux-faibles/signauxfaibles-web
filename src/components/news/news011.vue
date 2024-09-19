@@ -12,7 +12,7 @@
           <ul>
             <li>Les détections disponibles dans « Signaux Faibles » sont issues d’un modèle d’apprentissage statistique.</li>
             <li>Le modèle a intégré l’ensemble des données des entreprises depuis mars 2020.</li>
-            <li>Il est désormais possible de se servir du filtre “Liste DGFIP” pour accéder directement à la liste des entreprises transmise au CDED en amont de l’instance CODEFI. Cette liste applique par défaut les conditions suivantes : “Premières alertes”, “Sans délai de paiement Urssaf” et “Sans entreprises récentes”.</li>
+            <li>Le filtre "Liste retraitée par la DGFIP" n'est pas encore fonctionnel. Il sera disponible dans l'application à partir de début octobre. Pour information, pour tous les départements avec moins de 200 détections, vous pouvez vous-même recréer ce filtre en appliquant les conditions suivantes : "In Bonis", “Premières alertes”, “Sans délai de paiement Urssaf” et “Sans entreprises récentes”.</li>
           </ul>
           <p></p>
           <h2>Statistiques de la nouvelle liste</h2>
