@@ -57,7 +57,7 @@ export default {
           console.log('Authentification réussie:', response);
   
           // Redirection vers l'action 'new' pour créer un nouveau suivi d'établissement en utilisant le siret
-          const newTrackingUrl = `${this.sforUrl}/establishment_trackings/new_by_siret?siret=${this.siret}&code_departement=${this.codeDepartement}`;
+          const newTrackingUrl = `${this.sforUrl}/establishment_trackings/new_by_siret?siret=${this.siret}&code_departement=${this.codeDepartement}&denomination=${this.denomination}`;
           window.location.href = newTrackingUrl;
         })
         .catch(error => {
