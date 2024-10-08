@@ -111,7 +111,7 @@
             <v-combobox v-model="effectifMin" :items="effectifClass"></v-combobox>
           </v-flex>
         </v-layout>
-        <v-btn :disabled="loading || search.length < 3" style="width: 150px" type="submit">
+        <v-btn :disabled="loading || search.trim().length < 3" style="width: 150px" type="submit">
           <v-icon>fa-magnifying-glass</v-icon>
         </v-btn>
       </form>
