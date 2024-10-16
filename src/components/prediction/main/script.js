@@ -186,7 +186,7 @@ export default {
       this.listHeight = this.$el.getBoundingClientRect().bottom
     },
     currentBatchKey(newValue) {
-      if (newValue !== this.dernierBatch.text) {
+      if (!this.allowedBatches.includes(newValue)) {
         this.codefiListOnly = false;
       }
     }
@@ -231,7 +231,7 @@ export default {
         filters.push(`Statut procédures: ${this.procol.join(', ')}`);
       }
       if (this.codefiListOnly) {
-        filters.push("list CODEFI uniquement");
+        filters.push("liste CODEFI uniquement");
       }
       return filters;
     },
@@ -283,10 +283,10 @@ export default {
       if (this.filter || '' !== '') {
         params.filter = this.filter
       }
-      // TODO uncomment this when codefiListOnly is implemented
-      // if (this.codefiListOnly) {
-      //   params.codefiListOnly = true
-      // }
+
+      if (this.codefiListOnly) {
+        params.codefiListOnly = true
+      }
       params.page = this.page
       return params
     },
@@ -504,6 +504,9 @@ export default {
     },
     dernierBatch() {
       return this.batches[0]
+    },
+    allowedBatches() {
+      return process.env.VUE_APP_ALLOWED_BATCHES.split(',').map(batch => batch.trim());
     },
   },
   components: {Gitbook, PredictionWidget, Spinner, Help},
