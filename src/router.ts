@@ -6,6 +6,7 @@ import Follow from '@/components/follow/main/main.vue'
 import PageNotFound from '@/components/PageNotFound.vue'
 import Etablissement from '@/components/etablissement/main.vue'
 import Campaigns from '@/components/campaigns/main/main.vue'
+import Logout from '@/components/Logout.vue'
 
 Vue.use(Router)
 
@@ -48,6 +49,11 @@ const router = new Router({
       name: 'etablissement',
       component: Etablissement,
       props: true,
+    },
+    {
+      path: '/logout',
+      name: 'logout',
+      component: Logout,
     },
   ],
 })
