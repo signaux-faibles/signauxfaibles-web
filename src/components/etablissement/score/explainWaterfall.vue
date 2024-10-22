@@ -46,16 +46,6 @@ export default {
     },
   },
   computed: {
-    macroExplBoundaries() {
-      const entries = this.macroExplEntries
-      const boundaries = entries.map((entry) => entry[1]).reduce((m, value) => {
-        m.current += value
-        m.max = Math.max(m.current, m.max)
-        m.min = Math.min(m.current, m.min)
-        return m
-      }, {current:0, max: 1, min: 0})
-      return [boundaries.min, boundaries.max]
-    },
     macroExplEntries() {
       let values = Object.entries(this.macroExpl)
       values.sort((v1, v2) => {
@@ -64,15 +54,28 @@ export default {
       return values
     },
     macroExplArrays() {
-      const values = this.macroExplEntries;
-      const esperanceEntry = values.find(v => v[0] === 'esperance');
-      const filteredValues = values.filter(v => v[0] !== 'esperance');
+      let values = this.macroExplEntries;
+
+      // Remove esperance from the four main macros
+      values = values.map(entry => [entry[0], entry[1] - 0.349888471388]);      
+
+      // Calculations for "Effectif"
+      const sumOfEntries = values.reduce((sum, entry) => sum + entry[1], 0);
+      const macroEff = this.score - (0.349888471388 + sumOfEntries);
+
+      // Scaling ratio
+      const r = this.score / (this.score - 0.349888471388);
+
+      const positiveValues = values.filter(v => v[1] > 0).sort((a, b) => b[1] - a[1]);
+      const negativeValues = values.filter(v => v[1] < 0).sort((a, b) => b[1] - a[1]);
+
+      const sortedValues = positiveValues.concat(negativeValues);
 
       return {
-        x: ['Espérance'].concat(filteredValues.map((v) => this.titleize(v[0]))).concat(["probabilité défaillance"]),
-        y: [esperanceEntry ? esperanceEntry[1] : 0].concat(filteredValues.map((v) => v[1])).concat([this.score]),
-        measure: ['absolute'].concat(filteredValues.map((v) => 'relative')).concat(['total']),
-        text: [esperanceEntry ? this.percent(esperanceEntry[1]) : '0%'].concat(filteredValues.map((v) => ((v[1] > 0) ? '+' : '') + this.percent(v[1]))).concat([this.percent(this.score)])
+        x: sortedValues.map((v) => this.titleize(v[0])).concat(["Effectif", "Probabilité défaillance"]),
+        y: sortedValues.map((v) => r * v[1]).concat([r * macroEff, this.score]),
+        measure: sortedValues.map((v) => 'relative').concat(['relative', 'total']),
+        text: sortedValues.map((v) => ((v[1] > 0) ? '+' : '') + this.percent(r * v[1])).concat([this.percent(r * macroEff), this.percent(this.score)])
       };
     },
     data() {
@@ -85,7 +88,7 @@ export default {
         textposition: "outside",
         text: this.macroExplArrays.text,
         y: this.macroExplArrays.y,
-        hoverinfo: 'none',
+        hoverinfo:'y',        
         increasing: {
           marker: {
             color: "#D32F2F"
@@ -122,8 +125,8 @@ export default {
           {
             type: 'rect',
             xref: 'x',
-            x0: Object.keys(this.macroExpl).length - 0.5,
-            x1: Object.keys(this.macroExpl).length + 0.5,
+            x0: Object.keys(this.macroExpl).length + 0.5,
+            x1: Object.keys(this.macroExpl).length + 1.5,
             y0: process.env.VUE_APP_SEUIL_F1,
             y1: 1,
             layer: 'below',
@@ -136,8 +139,8 @@ export default {
           {
             type: 'rect',
             xref: 'x',
-            x0: Object.keys(this.macroExpl).length - 0.5,
-            x1: Object.keys(this.macroExpl).length + 0.5,
+            x0: Object.keys(this.macroExpl).length + 0.5,
+            x1: Object.keys(this.macroExpl).length + 1.5,
             y0: process.env.VUE_APP_SEUIL_F2,
             y1: process.env.VUE_APP_SEUIL_F1,
             layer: 'below',
@@ -150,8 +153,8 @@ export default {
           {
             type: 'rect',
             xref: 'x',
-            x0: Object.keys(this.macroExpl).length - 0.5,
-            x1: Object.keys(this.macroExpl).length + 0.5,
+            x0: Object.keys(this.macroExpl).length + 0.5,
+            x1: Object.keys(this.macroExpl).length + 1.5,
             y0: 0,
             y1: process.env.VUE_APP_SEUIL_F2,
             layer: 'below',
@@ -169,7 +172,7 @@ export default {
         },
         yaxis: {
           type: "linear",
-          range: this.macroExplBoundaries,
+          range: [0, 1],
           tickformat: ',.0%',
           fixedrange: true,          
         },
