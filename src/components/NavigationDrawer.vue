@@ -155,7 +155,7 @@ export default {
       this.$axios.post(`${this.sforUrl}/users/sign_in`, { token }, { withCredentials: true })
         .then(response => {
           console.log('Redirection vers Rails:', response);
-          window.location.href = `${this.sforUrl}/accompagnements`;
+          window.open(`${this.sforUrl}/accompagnements`, '_blank'); // Open in a new tab
         })
         .catch(error => {
           console.error('Erreur lors de la redirection:', error);
