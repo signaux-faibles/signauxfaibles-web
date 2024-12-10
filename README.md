@@ -38,5 +38,11 @@ yarn run test:e2e
 yarn run test:unit
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### Have the project run correctly on Firefox
+
+In order to have the project run correctly on Firefox locally, you need to disable the third-party cookies blocking. To do so, you need to go to the `about:config` page and set the `network.cookie.cookieBehavior` to `0`.
+
+```
+network.cookie.cookieBehavior = 0
+```
+
