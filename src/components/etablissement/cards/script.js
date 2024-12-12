@@ -51,14 +51,14 @@ export default {
   
       console.log('Token:', token);
   
-      // Authentifier avec Rails
+      // Passerelle avec Rails (on passe le token de keycloak à Rails pour que le back-end de rails puisse vérifier le token)
       this.$axios.post(`${this.sforUrl}/users/sign_in`, { token }, { withCredentials: true })
         .then(response => {
           console.log('Authentification réussie:', response);
   
           // Redirection vers l'action 'new' pour créer un nouveau suivi d'établissement en utilisant le siret
           const newTrackingUrl = `${this.sforUrl}/establishment_trackings/new_by_siret?siret=${this.siret}&code_departement=${this.codeDepartement}&denomination=${this.denomination}`;
-          window.location.href = newTrackingUrl;
+          window.open(newTrackingUrl);
         })
         .catch(error => {
           console.error('Erreur lors de la redirection:', error);
