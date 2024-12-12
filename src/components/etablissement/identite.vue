@@ -19,16 +19,6 @@
       >
         <v-icon left small class="mr-2">fa-unlock</v-icon>Données déverrouillées
       </v-btn>
-      <v-btn
-        v-if="canCreateCard"
-        style="text-transform: none"
-        class="ml-4"
-        color="indigo"
-        @click="dialogs.showCreateCardDialog()"
-        dark
-      >
-        <v-icon left small class="mr-2">fa-people-pulling</v-icon>Accompagner
-      </v-btn>
     </h1>
 
     <h3 class="mt-3">
@@ -78,12 +68,35 @@ export default {
   name: 'Identite',
   props: ['etablissement', 'denomination', 'siret', 'sirene', 'siege', 'groupe', 'terrind', 'creation', 'statutJuridique', 'summary'],
   components: { Help },
+  data() {
+    return {
+      sforUrl: process.env.VUE_APP_SFOR_URL
+    }
+  },
   setup() {
     const dialogs = useDialogsStore()
     const kanban = useKanbanStore()
     return {kanban, dialogs}
   },
   methods: {
+    redirectToRailsNewTracking() {
+      const token = this.$keycloak.token;
+  
+      console.log('Token:', token);
+  
+      // Authentifier avec Rails
+      this.$axios.post(`${this.sforUrl}/users/sign_in`, { token }, { withCredentials: true })
+        .then(response => {
+          console.log('Authentification réussie:', response);
+  
+          // Redirection vers l'action 'new' pour créer un nouveau suivi d'établissement en utilisant le siret
+          const newTrackingUrl = `${this.sforUrl}/establishment_trackings/new_by_siret?siret=${this.siret}&code_departement=${this.sirene.codeDepartement}&denomination=${this.denomination}`;
+          window.location.href = newTrackingUrl;
+        })
+        .catch(error => {
+          console.error('Erreur lors de la redirection:', error);
+        });
+    },
     showUnlockDialog() {
       this.$parent.followDialog = true
     },
