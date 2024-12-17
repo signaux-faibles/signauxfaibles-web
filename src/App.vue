@@ -18,6 +18,13 @@
     <Dialogs/>
     <Security v-if="!securityConsent"/>
     <v-main v-if="securityConsent">
+      <v-banner lines="two" color="blue lighten-5" :stacked="false">
+        <v-banner-text>
+          <span>
+            La prochaine liste « Signaux Faibles » sera publiée en janvier 2025. La date exacte vous sera communiquée dans les prochains jours par mail.
+          </span>
+        </v-banner-text>
+      </v-banner>
       <NavigationDrawer v-if="login && drawers.left"/>
       <router-view/>
     </v-main>
