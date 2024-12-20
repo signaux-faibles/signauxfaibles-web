@@ -42,22 +42,12 @@
             <v-list-item-title>Campagnes</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item v-if="this.roles.includes('wekan')" to="/follow">
+        <v-list-item v-if="this.roles.includes('wekan')" to="#">
           <v-list-item-action>
             <v-icon>fa-people-pulling</v-icon>
           </v-list-item-action>
-          <v-list-item-content >
-            <v-list-item-title>Accompagnement Legacy (AP)</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item v-if="this.roles.includes('wekan')">
-          <v-list-item-action>
-            <v-icon>fa-people-pulling</v-icon>
-          </v-list-item-action>
-          <v-list-item-content >
-            <a @click="redirectToRails">
-              <v-list-item-title>Accompagnement Rails</v-list-item-title>
-            </a>
+          <v-list-item-content @click="redirectToRails">
+            <v-list-item-title>Accompagnements</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
         <v-list-item to="/prediction">

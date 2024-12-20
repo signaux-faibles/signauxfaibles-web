@@ -91,7 +91,7 @@ export default {
   
           // Redirection vers l'action 'new' pour créer un nouveau suivi d'établissement en utilisant le siret
           const newTrackingUrl = `${this.sforUrl}/establishment_trackings/new_by_siret?siret=${this.siret}&code_departement=${this.sirene.codeDepartement}&denomination=${this.denomination}`;
-          window.location.href = newTrackingUrl;
+          window.open(newTrackingUrl);
         })
         .catch(error => {
           console.error('Erreur lors de la redirection:', error);

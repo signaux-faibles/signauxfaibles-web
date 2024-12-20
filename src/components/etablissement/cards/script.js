@@ -1,7 +1,5 @@
 import EtablissementCardsEditor from "@/components/etablissement/cards/viewer/main.vue";
 import EtablissementCardsSummary from "@/components/etablissement/cards/summary/main.vue";
-import FollowCreateCard from "@/components/dialog/createcard/main.vue";
-import EtablissementCardsViewer from "@/components/etablissement/cards/viewer/main.vue";
 import {useKanbanStore} from "@/stores/kanban";
 import {AxiosInstance} from "axios";
 import Spinner from "@/components/Spinner.vue";
@@ -18,7 +16,7 @@ function sortCards(c1, c2) {
 export default {
   name: 'EtablissementCards',
   components: {
-    Spinner, EtablissementCardsViewer, FollowCreateCard, EtablissementCardsSummary, EtablissementCardsEditor
+    Spinner, EtablissementCardsSummary, EtablissementCardsEditor
   },
   props: ['siret', 'codeDepartement', 'denomination'],
   setup() {
