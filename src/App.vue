@@ -21,7 +21,7 @@
       <v-banner lines="two" color="blue lighten-5" :stacked="false">
         <v-banner-text>
           <span>
-            La prochaine liste « Signaux Faibles » sera publiée en janvier 2025. La date exacte vous sera communiquée dans les prochains jours par mail.
+            La prochaine formation à « Signaux Faibles » se tiendra le mardi 14 janvier à 15h. Inscrivez-vous en envoyant un mail à esther.spindler@beta.gouv.fr
           </span>
         </v-banner-text>
       </v-banner>
