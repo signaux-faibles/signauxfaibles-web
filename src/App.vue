@@ -99,7 +99,7 @@ export default {
     )
     this.$store.dispatch('updateReference')
     this.campaigns.getCampaigns(this.$axios)
-    if (this.roles.includes('wekan')) {
+    if (!['crp', 'dreets_reseaucrp', 'finances', 'sf'].includes(this.segment)) {
       this.kanban.getConfig(this.$axios, this.$store)
       this.$store.dispatch('updateKanbanConfig', this.kanban.config)
     }

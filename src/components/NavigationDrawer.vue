@@ -42,7 +42,7 @@
             <v-list-item-title>Campagnes</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item v-if="this.roles.includes('wekan')" to="#">
+        <v-list-item v-if="['crp', 'dreets_reseaucrp', 'finances', 'sf'].includes(this.segment)" to="#">
           <v-list-item-action>
             <v-icon>fa-people-pulling</v-icon>
           </v-list-item-action>
@@ -139,12 +139,9 @@ export default {
     redirectToRails() {
       const token = this.$keycloak.token;
 
-      console.log('Token:', token)
-
       // Passerelle avec Rails (on passe le token de keycloak à Rails pour que le back-end de rails puisse vérifier le token)
       this.$axios.post(`${this.sforUrl}/users/sign_in`, { token }, { withCredentials: true })
         .then(response => {
-          console.log('Redirection vers Rails:', response);
           window.open(`${this.sforUrl}/accompagnements`, '_blank'); // Open in a new tab
         })
         .catch(error => {

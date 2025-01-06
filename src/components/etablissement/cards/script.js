@@ -25,21 +25,21 @@ export default {
     return {dialogs, kanban}
   },
   mounted() {
-    this.$bus.$on('create-card', this.getCardPayloads)
-    this.$bus.$on('edit-card', this.getCardPayloads)
-    this.$bus.$on('unarchive-card', this.getCardPayloads)
-    this.$bus.$on('follow-dialog-if-needed', this.showCreateCardDialog)
-    this.getCardPayloads()
+    // this.$bus.$on('create-card', this.getCardPayloads)
+    // this.$bus.$on('edit-card', this.getCardPayloads)
+    // this.$bus.$on('unarchive-card', this.getCardPayloads)
+    // this.$bus.$on('follow-dialog-if-needed', this.showCreateCardDialog)
+    // this.getCardPayloads()
   },
   beforeDestroy() {
-    this.$bus.$off('edit-card')
-    this.$bus.$off('create-card')
-    this.$bus.$off('unarchive-card')
-    this.$bus.$off('follow-dialog-if-needed')
+    // this.$bus.$off('edit-card')
+    // this.$bus.$off('create-card')
+    // this.$bus.$off('unarchive-card')
+    // this.$bus.$off('follow-dialog-if-needed')
   },
   data() {
     return {
-      cards: [], currentCardID: null, loading: true,
+      cards: [], currentCardID: null, loading: false,
       sforUrl: process.env.VUE_APP_SFOR_URL,
     }
   },
@@ -94,7 +94,8 @@ export default {
   },
   computed: {
     canCreateCard() {
-      return this.kanban.config.departements && this.codeDepartement in this.kanban.config.departements;    },
+      return this.roles.includes(this.codeDepartement);
+    },
     currentCard() {
       return this.cards.find((c) => c.id == this.currentCardID)
     },

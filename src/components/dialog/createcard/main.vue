@@ -104,7 +104,7 @@ export default {
   },
   computed: {
     wekanUser() {
-      return this.roles.includes('wekan')
+      return ['crp', 'dreets_reseaucrp', 'finances', 'sf'].includes(this.segment)
     },
     kanbanConfig() {
       return this.$store.state.kanbanConfig

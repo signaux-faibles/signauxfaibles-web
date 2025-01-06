@@ -114,6 +114,9 @@ Vue.mixin({
         },
         roles() {
             return (Vue.prototype.$keycloak.tokenParsed.resource_access.signauxfaibles || {}).roles || []
+        },
+        segment() {
+            return (Vue.prototype.$keycloak.tokenParsed || {}).segment || []
         }
     },
 })
