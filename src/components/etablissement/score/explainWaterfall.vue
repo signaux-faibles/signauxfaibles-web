@@ -21,15 +21,11 @@ export default {
   props: ['liste', 'score', 'macroExpl'],
   methods: {
     percent(value) {
-      return ((100 * value).toFixed(0) + "%");
+      return Math.round(value) + "%";
     },
     titleize(slug) {
-      if (slug === 'misc') return 'Variation de l\'effectif de l\'entreprise';
-      if (slug === 'santé_financière') return 'Données financières';
-      if (slug === 'dette_urssaf') return 'Dettes sociales';
-      if (slug === 'activité_partielle') return 'Recours à l\'activité partielle';
-      if (slug === 'retards_paiement') return 'Retards de paiement fournisseurs';
-
+      // Use this function to format the variable (slugs) names if needed
+      // if (slug === 'misc') return 'Variation de l\'effectif de l\'entreprise';
       var words = slug.split("_");
       return words.map(word => word.charAt(0).toUpperCase() + word.substring(1).toLowerCase()).join(' ');
     },
@@ -45,28 +41,19 @@ export default {
     },
     macroExplArrays() {
       let values = this.macroExplEntries;
-
-      values = values.map(entry => [entry[0], entry[1] - parseFloat(process.env.VUE_APP_EXPECTED_VALUE)]);
-
-      const sumOfEntries = values.reduce((sum, entry) => sum + entry[1], 0);
-      const macroEff = this.score - (parseFloat(process.env.VUE_APP_EXPECTED_VALUE) + sumOfEntries);
-
-      const r = this.score / (this.score - parseFloat(process.env.VUE_APP_EXPECTED_VALUE));
-
+      
       const positiveValues = values.filter(v => v[1] > 0).sort((a, b) => b[1] - a[1]);
       const negativeValues = values.filter(v => v[1] < 0).sort((a, b) => b[1] - a[1]);
 
       const sortedValues = positiveValues.concat(negativeValues);
 
       return {
-        x: sortedValues.map(v => this.titleize(v[0])).concat(['Variation de l\'effectif de l\'entreprise','Risque de défaillance (%)']),
-        y: sortedValues.map(v => r * v[1]).concat([r * macroEff, this.score]),
-        measure: sortedValues.map(v => 'relative').concat(['relative', 'total']),
-        text: sortedValues.map(v => ((v[1] > 0) ? '+' : '') + this.percent(r * v[1])).concat([((macroEff > 0) ? '+' : '') + this.percent(r * macroEff), this.percent(this.score)])
-      };
+        x: sortedValues.map(v => this.titleize(v[0])).concat(['Risque de défaillance (%)']),
+        y: sortedValues.map(v => v[1] / 100).concat([this.score]),
+        measure: sortedValues.map(v => 'relative').concat(['total']),
+        text: sortedValues.map(v => ((v[1] > 0) ? '+' : '') + this.percent(v[1])).concat([this.percent(this.score * 100)])      };
     },
     data() {
-
       // Calculate cumulative y values to determine the threshold and set text position in bars
       const macroExplArrays = this.macroExplArrays;
   
@@ -121,8 +108,8 @@ export default {
           {
             type: 'rect',
             xref: 'x',
-            x0: Object.keys(this.macroExpl).length + 0.5,
-            x1: Object.keys(this.macroExpl).length + 1.5,
+            x0: Object.keys(this.macroExpl).length - 0.5,
+            x1: Object.keys(this.macroExpl).length + 0.5,
             y0: process.env.VUE_APP_SEUIL_F1,
             y1: 1,
             layer: 'below',
@@ -133,8 +120,8 @@ export default {
           {
             type: 'rect',
             xref: 'x',
-            x0: Object.keys(this.macroExpl).length + 0.5,
-            x1: Object.keys(this.macroExpl).length + 1.5,
+            x0: Object.keys(this.macroExpl).length - 0.5,
+            x1: Object.keys(this.macroExpl).length + 0.5,
             y0: process.env.VUE_APP_SEUIL_F2,
             y1: process.env.VUE_APP_SEUIL_F1,
             layer: 'below',
@@ -145,8 +132,8 @@ export default {
           {
             type: 'rect',
             xref: 'x',
-            x0: Object.keys(this.macroExpl).length + 0.5,
-            x1: Object.keys(this.macroExpl).length + 1.5,
+            x0: Object.keys(this.macroExpl).length - 0.5,
+            x1: Object.keys(this.macroExpl).length + 0.5,
             y0: 0,
             y1: process.env.VUE_APP_SEUIL_F2,
             layer: 'below',
@@ -154,75 +141,7 @@ export default {
             opacity: 0.2,
             line: { width: 0 }
           },
-          // {
-          //   type: 'rect',
-          //   xref: 'paper',
-          //   yref: 'paper',
-          //   x0: 0.0,
-          //   x1: 0.02,
-          //   y0: -0.52,
-          //   y1: -0.5,
-          //   fillcolor: "#4CAF50",
-          //   line: { width: 0 }
-          // },
-          // {
-          //   type: 'rect',
-          //   xref: 'paper',
-          //   yref: 'paper',
-          //   x0: 0.0,
-          //   x1: 0.02,
-          //   y0: -0.62,
-          //   y1: -0.6,
-          //   fillcolor: "#D32F2F",
-          //   line: { width: 0 }
-          // },
-          // {
-          //   type: 'rect',
-          //   xref: 'paper',
-          //   yref: 'paper',
-          //   x0: 0.0,
-          //   x1: 0.02,
-          //   y0: -0.72,
-          //   y1: -0.7,
-          //   fillcolor: "#4499FF",
-          //   line: { width: 0 }
-          // }
         ],
-        // annotations: [
-        //     {
-        //     xref: 'paper',
-        //     yref: 'paper',
-        //     x: 0.03,
-        //     y: -0.50,
-        //     xanchor: 'left',
-        //     yanchor: 'middle',
-        //     text: 'Points de pourcentage diminuant le risque d’entrer en défaillance sous 18 mois',
-        //     showarrow: false,
-        //     font: { size: 12 }
-        //   },
-        //   {
-        //     xref: 'paper',
-        //     yref: 'paper',
-        //     x: 0.03,
-        //     y: -0.60,
-        //     xanchor: 'left',
-        //     yanchor: 'middle',
-        //     text: 'Points de pourcentage aggravant le risque d’entrer en défaillance sous 18 mois',
-        //     showarrow: false,
-        //     font: { size: 12 }
-        //   },
-        //   {
-        //     xref: 'paper',
-        //     yref: 'paper',
-        //     x: 0.03,
-        //     y: -0.70,
-        //     xanchor: 'left',
-        //     yanchor: 'middle',
-        //     text: 'Total',
-        //     showarrow: false,
-        //     font: { size: 12 }
-        //   }
-        // ],
         xaxis: {
           type: "category",
           fixedrange: true,
@@ -230,7 +149,7 @@ export default {
         },
         yaxis: {
           type: "linear",
-          tickformat: ',.0%',
+          tickformat: '.0%',
         },
         hovermode: 'closest',
         autosize: true,
