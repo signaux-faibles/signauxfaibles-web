@@ -30,7 +30,7 @@ export default {
       return words.map(word => word.charAt(0).toUpperCase() + word.substring(1).toLowerCase()).join(' ');
     },
     renderChart() {
-      Plotly.newPlot(this.$refs.graph, this.data, this.layout, { displayModeBar: false });
+      Plotly.newPlot(this.$refs.graph, this.data, this.layout, { displayModeBar: false, scrollZoom: false, responsive: true });
     }
   },
   computed: {
@@ -41,7 +41,7 @@ export default {
     },
     macroExplArrays() {
       let values = this.macroExplEntries;
-      
+
       const positiveValues = values.filter(v => v[1] > 0).sort((a, b) => b[1] - a[1]);
       const negativeValues = values.filter(v => v[1] < 0).sort((a, b) => b[1] - a[1]);
 
@@ -94,6 +94,8 @@ export default {
     },
     layout() {
       return {
+        dragmode: false,
+        hovercursor: 'pointer',
         title: {
           text: 'Eléments constitutifs de cette alerte',
           font: {
@@ -157,7 +159,7 @@ export default {
     }
   },
   mounted() {
-    this.renderChart();
+    this.renderChart(); 
   }
 }
 </script>
