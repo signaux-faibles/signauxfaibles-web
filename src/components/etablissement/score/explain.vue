@@ -13,7 +13,7 @@
           <Gitbook :target="gitbookPath('DETECTION')"/>
         </span>
         <EtablissementScoreExplainWaterfall :liste="lastBatch" :score="dernierScore.score"
-                                            :microExpl="dernierScore.microExpl" :macroExpl="dernierScore.macroRadar"/>
+                                            :microExpl="dernierScore.microExpl" :macroExpl="dernierScore.macroExpl"/>
       </span>
     </div>
     <div v-else>
@@ -26,7 +26,6 @@
 </template>
 
 <script>
-import ExplainStructurel from '@/components/etablissement/score/explainStructurel.vue'
 import Gitbook from '@/components/Gitbook.vue'
 import EtablissementScoreExplainWaterfall from "@/components/etablissement/score/explainWaterfall.vue";
 
