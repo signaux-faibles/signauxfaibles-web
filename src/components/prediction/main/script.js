@@ -113,6 +113,11 @@ export default {
         this.trackMatomoEvent('listes', 'charger_liste', this.eventName)
         this.cancel()
         this.getPredictionPage()
+
+        if (this.zone.length > 0) {
+          this.ignorezone = false;
+        }
+
       }, 500)
     },
     getPredictionPage() {
@@ -172,7 +177,15 @@ export default {
       this.source = axios.CancelToken.source()
     },
   },
-  watch: {
+  watch: {  
+    ignorezone(newVal) {
+      const rolesCount = this.roles.filter(role => /^\d{2}$|^\d{2}[AB]$/.test(role)).length;
+
+      // Si `ignorezone` est à true et que l'utilisateur a plusieurs départements alors on vide la zone
+      if (newVal && rolesCount > 1) {
+        this.zone = [];
+      }
+    },
     scrollTop() {
       this.listHeight = this.$el.getBoundingClientRect().bottom
     },
@@ -192,6 +205,9 @@ export default {
     }
   },
   computed: {
+    isIgnoreZoneDisabled() {
+      return this.zone.length > 0;
+    },
     activeFilters() {
       const filters = [];
       if (this.excludeSecteursCovid) {
@@ -463,30 +479,49 @@ export default {
       },
     },
     subzones() {
+      const roles = this.roles.filter(role => /^\d{2}$|^\d{2}[AB]$/.test(role)); // Filtre les départements valides
+    
+      // Si l'utilisateur n'a qu'un seul département
+      if (roles.length === 1) {
+        return [
+          {
+            text: `Ma zone (${roles[0]})`,
+            value: [],
+          },
+        ];
+      }
+    
       let all = [
         {
-          text: 'Toute zone',
+          text: 'Ma zone',
           value: [],
         },
-      ]
-      const region = Object.keys(this.$store.state.region).map((r) => {
-        return {
-          text: r,
-          value: this.$store.state.region[r],
-        }
-      }).sort((r1, r2) => r1.text > r2.text)
-      all = all.concat(region)
-      const departement = Object.keys(this.$store.state.departements).map((d) => {
-        return {
+      ];
+    
+      const region = Object.keys(this.$store.state.region)
+      .filter(r => this.roles.includes("France entière") || this.roles.includes(r)) // Garder toutes les régions si "France entière" est présent
+      .map(r => ({
+        text: r,
+        value: this.$store.state.region[r],
+      }))
+      .sort((r1, r2) => (r1.text > r2.text ? 1 : -1));
+    
+      all = all.concat(region);
+    
+      const departement = Object.keys(this.$store.state.departements)
+        .filter((d) => roles.includes(d)) // Ne garder que les départements auxquels l'utilisateur a accès
+        .map((d) => ({
           text: d + ' ' + this.$store.state.departements[d],
           value: [d],
-        }
-      }).sort((d1, d2) => {
-        return d1.value[0].replace('2A', '200').replace('2B', '201') >
-        d2.value[0].replace('2A', '200').replace('2B', '201') ? 1 : -1
-      })
-      all = all.concat(departement)
-      return all
+        }))
+        .sort((d1, d2) =>
+          d1.value[0].replace('2A', '200').replace('2B', '201') >
+          d2.value[0].replace('2A', '200').replace('2B', '201')
+            ? 1
+            : -1
+        );
+    
+      return all.concat(departement);
     },
     currentBatch() {
       return (this.batches.filter((b) => b.value === this.currentBatchKey)[0] || {text: 'chargement'}).text
