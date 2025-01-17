@@ -18,13 +18,6 @@
     <Dialogs/>
     <Security v-if="!securityConsent"/>
     <v-main v-if="securityConsent">
-      <v-banner lines="two" color="blue lighten-5" :stacked="false">
-        <v-banner-text>
-          <span>
-            La prochaine formation à « Signaux Faibles » se tiendra le mardi 14 janvier à 15h. Inscrivez-vous en envoyant un mail à esther.spindler@beta.gouv.fr
-          </span>
-        </v-banner-text>
-      </v-banner>
       <NavigationDrawer v-if="login && drawers.left"/>
       <router-view/>
     </v-main>

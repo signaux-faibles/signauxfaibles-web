@@ -49,9 +49,9 @@ export default {
 
       return {
         x: sortedValues.map(v => this.titleize(v[0])).concat(['Risque de défaillance (%)']),
-        y: sortedValues.map(v => v[1] / 100).concat([this.score]),
+        y: sortedValues.map(v => v[1] / 100).concat([this.percent(this.score)]),
         measure: sortedValues.map(v => 'relative').concat(['total']),
-        text: sortedValues.map(v => ((v[1] > 0) ? '+' : '') + this.percent(v[1])).concat([this.percent(this.score * 100)])      };
+        text: sortedValues.map(v => ((v[1] > 0) ? '+' : '') + this.percent(v[1])).concat([this.percent(this.score)])      };
     },
     data() {
       // Calculate cumulative y values to determine the threshold and set text position in bars
