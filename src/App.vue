@@ -21,7 +21,7 @@
       <v-banner lines="two" color="blue lighten-5" :stacked="false">
         <v-banner-text>
           <span>
-            La prochaine formation à « Signaux Faibles » se tiendra le mardi 14 janvier à 15h. Inscrivez-vous en envoyant un mail à esther.spindler@beta.gouv.fr
+            La prochaine liste de détection sera publiée entre le 27/01 et le 7/02. Veuillez nous excuser pour ce délai additionnel.
           </span>
         </v-banner-text>
       </v-banner>
