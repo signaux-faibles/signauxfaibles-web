@@ -15,6 +15,16 @@ const axiosClient = axios.create(
     timeout: 900000,
   },
 )
+axiosClient.interceptors.response.use(response => {
+  sessionStore.commit("setDatapiStatus", true);
+  return response
+}, error => {
+  sessionStore.commit("setDatapiStatus", false);
+  return new Promise(resolve => {
+    const _30seconds = 30 * 1000;
+    setTimeout(() => resolve(axiosClient(error.config)), _30seconds);
+  });
+});
 
 const localStore = new Vuex.Store({
   plugins: [createPersistedState({storage: window.localStorage})],
@@ -128,6 +138,7 @@ const sessionStore = new Vuex.Store({
     zone: {},
     height: 0,
     scrollTop: 0,
+    isDatapiUp: true,
     prediction: [],
     loading: false,
     newsDialog: null,
@@ -156,6 +167,9 @@ const sessionStore = new Vuex.Store({
     setScrollTop(state, scrollTop) {
       state.scrollTop = scrollTop
     },
+    setDatapiStatus(state, isDatapiUp) {
+      state.isDatapiUp = isDatapiUp
+    },
     setCurrentBatchKey(state, value) {
       state.currentBatchKey = value
     },
@@ -183,6 +197,9 @@ const sessionStore = new Vuex.Store({
     },
     setScrollTop(context, scrollTop) {
       context.commit('setScrollTop', scrollTop)
+    },
+    setDatapiStatus(context, isDatapiUp) {
+      context.commit('setDatapiStatus', isDatapiUp)
     },
     updateReference(context) {
       const getListes = axiosClient.get('/listes')

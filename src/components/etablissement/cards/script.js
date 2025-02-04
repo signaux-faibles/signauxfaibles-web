@@ -1,7 +1,6 @@
 import EtablissementCardsEditor from "@/components/etablissement/cards/viewer/main.vue";
 import EtablissementCardsSummary from "@/components/etablissement/cards/summary/main.vue";
 import {useKanbanStore} from "@/stores/kanban";
-import {AxiosInstance} from "axios";
 import Spinner from "@/components/Spinner.vue";
 import {useDialogsStore} from "@/stores/dialogs";
 

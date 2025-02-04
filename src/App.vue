@@ -18,6 +18,14 @@
     <Dialogs/>
     <Security v-if="!securityConsent"/>
     <v-main v-if="securityConsent">
+      <v-banner v-if="!isDatapiUp" class="text-center" lines="two" color="orange lighten-7" :stacked="false">
+        <v-banner-text>
+         <span>
+           🛠️ Signaux Faibles rencontre actuellement quelques difficultés et certaines fonctionnalités peuvent être endommagées.</br>
+           Nos équipes font de leur mieux pour réparer cet incident dans les plus brefs délais.
+         </span>
+        </v-banner-text>
+      </v-banner>
       <NavigationDrawer v-if="login && drawers.left"/>
       <router-view/>
     </v-main>
@@ -74,6 +82,14 @@ export default {
       },
       set(scrollTop) {
         this.$store.dispatch('setScrollTop', scrollTop)
+      },
+    },
+    isDatapiUp: {
+      get() {
+        return this.$store.state.isDatapiUp
+      },
+      set(isDatapiUp) {
+        this.$store.dispatch('setDatapiStatus', isDatapiUp)
       },
     },
     login() {
