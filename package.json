@@ -40,7 +40,6 @@
     "vue-mapbox": "^0.4.1",
     "vue-matomo": "^3.14.0-0",
     "vue-native-websocket": "^2.0.13",
-    "vue-plotly": "^1.1.0",
     "vue-property-decorator": "^8.1.0",
     "vue-router": "^3.0.3",
     "vuetify": "2.7",
