@@ -27,7 +27,7 @@
     "jwt-decode": "^2.2.0",
     "mapbox-gl": "^2.7.0",
     "markdown-it": "^12.3.2",
-    "pinia": "^2.1.4",
+    "pinia": "^2.3.1",
     "pinia-plugin-persistedstate": "^3.1.0",
     "plotly.js": "^2.35.2",
     "sass": "~1.32.13",
