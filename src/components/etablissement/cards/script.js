@@ -1,5 +1,3 @@
-import EtablissementCardsEditor from "@/components/etablissement/cards/viewer/main.vue";
-import EtablissementCardsSummary from "@/components/etablissement/cards/summary/main.vue";
 import {useKanbanStore} from "@/stores/kanban";
 import Spinner from "@/components/Spinner.vue";
 import {useDialogsStore} from "@/stores/dialogs";
@@ -15,26 +13,13 @@ function sortCards(c1, c2) {
 export default {
   name: 'EtablissementCards',
   components: {
-    Spinner, EtablissementCardsSummary, EtablissementCardsEditor
+    Spinner
   },
   props: ['siret', 'codeDepartement', 'denomination'],
   setup() {
     const dialogs = useDialogsStore()
     const kanban = useKanbanStore()
     return {dialogs, kanban}
-  },
-  mounted() {
-    // this.$bus.$on('create-card', this.getCardPayloads)
-    // this.$bus.$on('edit-card', this.getCardPayloads)
-    // this.$bus.$on('unarchive-card', this.getCardPayloads)
-    // this.$bus.$on('follow-dialog-if-needed', this.showCreateCardDialog)
-    // this.getCardPayloads()
-  },
-  beforeDestroy() {
-    // this.$bus.$off('edit-card')
-    // this.$bus.$off('create-card')
-    // this.$bus.$off('unarchive-card')
-    // this.$bus.$off('follow-dialog-if-needed')
   },
   data() {
     return {
@@ -66,29 +51,8 @@ export default {
       this.cards = []
       this.currentCardID = null
     },
-    getCardPayloads() {
-      this.reset()
-      this.$axios.get(`/kanban/cards/${this.siret}`).then((response) => {
-        const cards = response.data || []
-        if (cards.length > 0) {
-          cards.sort(sortCards)
-          this.cards = cards
-          this.currentCardID = cards[0].id
-        }
-      }).finally(() => {
-        this.loading = false
-      })
-    },
     followed() {
       return this.$parent.followed
-    },
-    showCreateCardDialog() {
-      if (this.canCreateCard) {
-        this.createCardDialog = true
-      }
-    },
-    setCurrentCardID(id) {
-      this.currentCardID = id
     },
   },
   computed: {
