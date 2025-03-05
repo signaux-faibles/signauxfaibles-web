@@ -62,7 +62,6 @@
           </v-flex>
           <v-flex md12 xs12>
             <EtablissementCards
-              v-if="wekanUser"
               :codeDepartement="sirene.codeDepartement"
               :denomination="denomination"
               :siret="siret"
@@ -268,9 +267,6 @@ export default {
       set(value) {
         this.$localStore.commit('setCurrentBoard', value)
       },
-    },
-    wekanUser() {
-      return ['crp', 'dreets_reseaucrp', 'finances', 'sf'].includes(this.segment)
     },
     denomination() {
       const entreprise = (this.etablissement || {}).entreprise || {}
