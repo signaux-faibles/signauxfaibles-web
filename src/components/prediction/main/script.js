@@ -176,6 +176,13 @@ export default {
       this.source.cancel()
       this.source = axios.CancelToken.source()
     },
+    twoYearsBeforeLastList() {
+      return new Date(process.env.VUE_APP_TWO_YEARS_BEFORE_LAST_LIST).toLocaleDateString('fr-FR', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+      });
+    }
   },
   watch: {  
     ignorezone(newVal) {
@@ -271,9 +278,7 @@ export default {
       params.effectifMinEntreprise = parseInt(this.minEffectif, 10)
 
       if (this.creationDateThreshold) {
-        const date = new Date()
-        date.setFullYear(date.getFullYear() - 2)
-        params.creationDateThreshold = date.toISOString().split('T')[0]
+        params.creationDateThreshold = process.env.VUE_APP_TWO_YEARS_BEFORE_LAST_LIST
       }
       if (this.firstAlert) {
         params.firstAlert = true

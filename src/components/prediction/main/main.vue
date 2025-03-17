@@ -317,10 +317,9 @@
               @click="() => filterPrediction('creationDateThreshold')"
             >
               <v-list-item-title>Sans entreprises récentes</v-list-item-title>
-              <v-list-item-subtitle
-                >Affiche uniquement les entreprises créées il y a plus de deux
-                ans</v-list-item-subtitle
-              >
+              <v-list-item-subtitle>
+                Affiche uniquement les entreprises créées avant le {{ twoYearsBeforeLastList() }}
+              </v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
 
