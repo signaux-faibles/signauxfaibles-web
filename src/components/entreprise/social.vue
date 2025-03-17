@@ -105,17 +105,9 @@
               </span>
               sur les 24 derniers mois.
             </v-flex>
-            <v-flex md5 shrink>
-              <v-btn outlined color="indigo" @click="toggleHistoriqueEffectif" class="ml-4">
-                {{
-                showHistoriqueEffectif ? "Masquer" : "Afficher"
-                }}
-                l'historique
-              </v-btn>
-            </v-flex>
           </v-layout>
           <transition name="fade">
-            <div v-if="showHistoriqueEffectif">
+            <div>
               <apexchart
                 width="100%"
                 heigth="100%"
@@ -137,22 +129,9 @@
               }}
               sur les 24 derniers mois.
             </v-flex>
-            <v-flex md5 shrink>
-              <v-btn
-                outlined
-                color="indigo"
-                @click="toggleHistoriqueDetteSociale"
-                class="ml-4"
-              >
-                {{
-                showHistoriqueDetteSociale ? "Masquer" : "Afficher"
-                }}
-                l'historique
-              </v-btn>
-            </v-flex>
           </v-layout>
           <transition name="fade">
-            <div v-if="showHistoriqueDetteSociale">
+            <div>
               <apexchart
                 width="100%"
                 heigth="100%"
@@ -185,8 +164,6 @@ export default {
       map: null,
       derniereActivitePartielle: {},
       derniereDetteSociale: {},
-      showHistoriqueEffectif: false,
-      showHistoriqueDetteSociale: false,
       markers: {},
       highlightedMarker: null,
       defaultMarkerColor: '#999999',
@@ -276,22 +253,6 @@ export default {
         return '1 salarié'
       } else {
         return count + ' salariés'
-      }
-    },
-    toggleHistoriqueEffectif() {
-      this.showHistoriqueEffectif = !this.showHistoriqueEffectif
-      if (this.showHistoriqueEffectif) {
-        this.trackMatomoEvent('entreprise', 'afficher_historique_effectif', this.siren)
-      } else {
-        this.trackMatomoEvent('entreprise', 'masquer_historique_effectif', this.siren)
-      }
-    },
-    toggleHistoriqueDetteSociale() {
-      this.showHistoriqueDetteSociale = !this.showHistoriqueDetteSociale
-      if (this.showHistoriqueDetteSociale) {
-        this.trackMatomoEvent('entreprise', 'afficher_historique_dette_sociale', this.siren)
-      } else {
-        this.trackMatomoEvent('entreprise', 'masquer_historique_dette_sociale', this.siren)
       }
     },
     reinitAllMarkers() {
