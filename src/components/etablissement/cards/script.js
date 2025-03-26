@@ -15,7 +15,7 @@ export default {
   components: {
     Spinner
   },
-  props: ['siret', 'codeDepartement', 'denomination'],
+  props: ['siret', 'codeDepartement', 'denomination', 'etatAdministratif'],
   setup() {
     const dialogs = useDialogsStore()
     const kanban = useKanbanStore()
