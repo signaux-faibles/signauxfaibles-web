@@ -66,6 +66,7 @@
               :codeDepartement="sirene.codeDepartement"
               :denomination="denomination"
               :siret="siret"
+              :etatAdministratif="currentEtablissementEtatAdministratif"
             />
           </v-flex>
 
@@ -396,6 +397,11 @@ export default {
     },
     showBanner() {
       return this.summary && (this.summary.alert?.includes('Alerte seuil F1') || this.summary.alert?.includes('Alerte seuil F2'))
+    },
+    currentEtablissementEtatAdministratif() {
+      const etablissementsSummary = (this.etablissement.entreprise || {}).etablissementsSummary || []
+      const currentEtablissement = etablissementsSummary.find(es => es.siret === this.siret)
+      return currentEtablissement ? currentEtablissement.etatAdministratif : null
     },
   },
 }

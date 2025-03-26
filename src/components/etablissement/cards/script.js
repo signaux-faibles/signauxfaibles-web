@@ -17,7 +17,7 @@ export default {
   components: {
     Spinner, EtablissementCardsSummary, EtablissementCardsEditor
   },
-  props: ['siret', 'codeDepartement', 'denomination'],
+  props: ['siret', 'codeDepartement', 'denomination', 'etatAdministratif'],
   setup() {
     const dialogs = useDialogsStore()
     const kanban = useKanbanStore()
