@@ -484,8 +484,7 @@ export default {
       },
     },
     subzones() {
-      const roles = this.roles.filter(role => /^\d{2}$|^\d{2}[AB]$/.test(role)); // Filtre les départements valides
-    
+      const roles = this.roles.filter(role => /^\d{2}$|^2[AB]$|^97[1-8]$/.test(role)); // Filtre les départements valides
       // Si l'utilisateur n'a qu'un seul département
       if (roles.length === 1) {
         return [
