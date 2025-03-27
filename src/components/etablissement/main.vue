@@ -1,5 +1,16 @@
 <template>
   <div style="min-height: 100%;  background: #fff">
+    <v-banner v-if="summary && (summary.alert?.includes('Alerte seuil F1') || summary.alert?.includes('Alerte seuil F2'))" 
+          style="position: fixed; top: 35px; left: 0px; width: 100%; z-index: 100;" 
+          lines="two" 
+          color="blue lighten-5" 
+          :stacked="false">
+        <v-banner-text>
+          <span>
+            Si la détection mentionne des dettes sociales, vérifiez leur présence dans les établissements fermés, car la détection peut s'expliquer par un transfert éventuel de la dette suite à la fermeture du siège.
+          </span>
+        </v-banner-text>
+      </v-banner>
     <div v-if="loading" style="min-height: 100%; display: flex; justify-content: center; align-items: center;">
       <Spinner v-if="loading" style="min-height: 80vh"/>
     </div>
@@ -41,7 +52,7 @@
               Exporter en DOCX (Word)
             </v-btn>
             <v-alert :value="alertExport" dismissible transition="scale-transition" type="error">Un problème est survenu
-              lors de l'export de l’établissement.
+              lors de l'export de l'établissement.
             </v-alert>
           </v-flex>
           <v-flex class="text-left pa-3" md6 style="font-size: 17px" xs12>
@@ -99,6 +110,7 @@
       </v-container>
     </div>
   </div>
+
 </template>
 
 <script>
@@ -247,6 +259,12 @@ export default {
     localSiret() {
       this.getEtablissement()
     },
+    showBanner: {
+      immediate: true,
+      handler(value) {
+        this.$emit('show-banner', value)
+      }
+    }
   },
   computed: {
     loadingClass() {
@@ -386,6 +404,9 @@ export default {
     },
     statutJuridique() {
       return ((this.etablissement.entreprise || {}).Sirene || {}).statutJuridiqueN2
+    },
+    showBanner() {
+      return this.summary && (this.summary.alert?.includes('Alerte seuil F1') || this.summary.alert?.includes('Alerte seuil F2'))
     },
   },
 }
