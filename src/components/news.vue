@@ -25,11 +25,11 @@
 
       </v-card-title>
       <v-card-text>
-        <p/>
         <v-expansion-panels
             v-model="activePanel"
             inset
         >
+          <News015 :activePanel="activePanel"/>
           <News014 :activePanel="activePanel"/>
           <News013 :activePanel="activePanel"/>
           <News012 :activePanel="activePanel"/>
@@ -66,10 +66,11 @@ import News011 from '@/components/news/news011.vue'
 import News012 from '@/components/news/news012.vue'
 import News013 from '@/components/news/news013.vue'
 import News014 from '@/components/news/news014.vue'
+import News015 from '@/components/news/news015.vue'
 
 export default {
   name: 'News',
-  components: {News001, News002, News003, News004, News005, News006, News007, News008, News009, News010, News011, News012, News013, News014},
+  components: {News001, News002, News003, News004, News005, News006, News007, News008, News009, News010, News011, News012, News013, News014, News015},
   mounted() {
     if (this.newsToRead > 0 && this.dialog == null) {
       this.dialog = true;
@@ -118,6 +119,7 @@ export default {
     return {
       activePanel: 0,
       news: [
+        new Date('2025-28-03'),
         new Date('2025-31-01'),
         new Date('2024-12-06'),
         new Date('2024-10-22'),
