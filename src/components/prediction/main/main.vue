@@ -365,22 +365,30 @@
             </v-list-item-content>
           </v-list-item>
 
-          <v-list-item>
-            <v-list-item-action>
-              <v-checkbox
-                v-model="inclureEtablissementsFermes"
-                @change="getPrediction()"
-              ></v-checkbox>
-            </v-list-item-action>
-            <v-list-item-content
-              @click="() => filterPrediction('inclureEtablissementsFermes')"
+          <v-tooltip left>
+            <template v-slot:activator="{ on, attrs }">
+              <v-list-item class="disabled-item" v-bind="attrs" v-on="on">
+                <v-list-item-action>
+                  <v-checkbox
+                    :disabled="true"
+                    v-model="inclureEtablissementsFermes"
+                    @change="getPrediction()"
+                  ></v-checkbox>
+                </v-list-item-action>
+                <v-list-item-content
+                  @click="() => filterPrediction('inclureEtablissementsFermes')"
+                >
+                  <v-list-item-title>Établissements fermés</v-list-item-title>
+                  <v-list-item-subtitle
+                    >Inclure les établissements fermés</v-list-item-subtitle
+                  >
+                </v-list-item-content>
+              </v-list-item>
+            </template>
+            <span
+            >Ce filtre est temporairement désactivé</span
             >
-              <v-list-item-title>Établissements fermés</v-list-item-title>
-              <v-list-item-subtitle
-                >Inclure les établissements fermés</v-list-item-subtitle
-              >
-            </v-list-item-content>
-          </v-list-item>
+          </v-tooltip>
         </v-list>
       </v-navigation-drawer>
     </div>
