@@ -321,7 +321,8 @@ export default {
     },
     inclureEtablissementsFermes: {
       get() {
-        return this.$localStore.state.inclureEtablissementsFermes
+        // return this.$localStore.state.inclureEtablissementsFermes
+        return false
       },
       set(value) {
         this.$localStore.commit('setinclureEtablissementsFermes', value)
