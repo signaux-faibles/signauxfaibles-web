@@ -20,16 +20,8 @@
             <v-col>
               <ul>
                 <li>nombre total de signalements : 69932</li>
-                <li>nombre de premières alertes : 19373</li>
+                <li>nombre d’alertes après sélection des filtres « In Bonis », « Premières alertes », « Sans délai de paiement Urssaf » et « Sans entreprises récentes » : 13226</li>
               </ul>
-            </v-col>
-            <v-col>
-              <apexchart
-                  height="300px"
-                  type="donut"
-                  :options="options"
-                  :series="series"
-              ></apexchart>
             </v-col>
           </v-row>
           <br />
@@ -58,27 +50,6 @@ import Gitbook from '@/components/Gitbook.vue'
 export default {
   components: {Gitbook},
   props: ['activePanel'],
-  data() {
-    return {
-      series: [
-        19373,
-        50559,
-      ],
-      options: {
-        labels: [
-          "premières alertes",
-          "alertes renouvelées",
-        ],
-        colors: [
-          '#1976d2',
-          '#ff5252',
-        ],
-        dataLabels: {
-          enabled: false
-        }
-      },
-    }
-  }
 }
 </script>
 
