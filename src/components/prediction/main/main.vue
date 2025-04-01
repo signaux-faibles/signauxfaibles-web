@@ -367,10 +367,9 @@
 
           <v-tooltip left>
             <template v-slot:activator="{ on, attrs }">
-              <v-list-item class="disabled-item" v-bind="attrs" v-on="on">
+              <v-list-item :disabled="true" class="disabled-item" v-bind="attrs" v-on="on">
                 <v-list-item-action>
                   <v-checkbox
-                    :disabled="true"
                     v-model="inclureEtablissementsFermes"
                     @change="getPrediction()"
                   ></v-checkbox>
