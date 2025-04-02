@@ -2,24 +2,25 @@
   <div style="font-size: 17px">
     <div v-if="permScore">
       <span v-if="typeExplication === 'crash'">Cet établissement est fermé ou est en situation de défaillance</span>
-      <span v-else-if="typeExplication === 'ras'">Cet établissement n’a pas été identifié par l’algorithme comme étant à risque de défaillance à 18 mois.</span>
+      <span v-else-if="typeExplication === 'ras'">Cet établissement n'a pas été identifié par l'algorithme comme étant à risque de défaillance à 18 mois.</span>
       <span v-else-if="typeExplication === 'horsperimetre'">Cet établissement ne faisait pas partie du périmètre de Signaux Faibles au moment de la production de cette liste de détection.</span>
       <span v-else>
-        - Sur la base des données en notre possession, il apparaît que l’entreprise présente des caractéristiques similaires à des sociétés ayant fait défaut dans les 18 mois suivants.<br />
-        - Le risque de défaillance de l’entreprise sous 18 mois apparaît comme {{ this.alert === "Alerte seuil F2" ? ' modéré' : ' élevé' }}.<br/>
-        - Les données actualisées jusqu’au 1er janvier 2025 sont mobilisées pour cette prédiction.
+        - Sur la base des données en notre possession, il apparaît que l'entreprise présente des caractéristiques similaires à des sociétés ayant fait défaut dans les 18 mois suivants.<br />
+        - Le risque de défaillance de l'entreprise sous 18 mois apparaît comme {{ this.alert === "Alerte seuil F2" ? ' modéré' : ' élevé' }}.<br/>
+        - Les données actualisées jusqu'au 1er janvier 2025 sont mobilisées pour cette prédiction.
         <p/>
         <span>
           <Gitbook :target="gitbookPath('DETECTION')"/>
         </span>
         <EtablissementScoreExplainWaterfall :liste="lastBatch" :score="dernierScore.score"
-                                            :microExpl="dernierScore.microExpl" :macroExpl="dernierScore.macroExpl"/>
+                                            :microExpl="dernierScore.microExpl" :macroExpl="dernierScore.macroExpl"
+                                            :summary="summary"/>
       </span>
     </div>
     <div v-else>
       <div v-if="roles.includes('score')">Veuillez suivre cet établissement pour consulter ses données de détection.
       </div>
-      <div v-else>Vous n’êtes pas autorisé(e) à consulter les données de détection.</div>
+      <div v-else>Vous n'êtes pas autorisé(e) à consulter les données de détection.</div>
     </div>
 
   </div>

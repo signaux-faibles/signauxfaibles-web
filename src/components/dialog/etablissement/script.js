@@ -8,18 +8,6 @@ export default {
     const dialogs = useDialogsStore()
     return { dialogs }
   },
-  data() {
-    return {
-      showBanner: false
-    }
-  },
-  watch: {
-    'dialogs.etablissementSiret': {
-      handler() {
-        this.showBanner = false
-      }
-    }
-  },
   mounted() {
     window.history.pushState(null, null, document.URL)
     const dialogs = this.dialogs

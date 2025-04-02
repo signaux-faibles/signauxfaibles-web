@@ -1,14 +1,25 @@
 <template>
   <div>
+
     <p class="mt-3" style="margin-bottom: 0 !important;">
-      Le graphique ci-dessous détaille les éléments constitutifs du calcul de la probabilité de défaillance de l’entreprise. Chaque groupe de variables analysé induit soit un facteur aggravant (en rouge) soit un facteur atténuant le risque (en vert). Le pourcentage de risque de défaillance de l’entreprise (en bleu) résulte de la somme des points de pourcentage de ces groupes de variables. 
+      Le graphique ci-dessous détaille les éléments constitutifs du calcul de la probabilité de défaillance de l'entreprise. Chaque groupe de variables analysé induit soit un facteur aggravant (en rouge) soit un facteur atténuant le risque (en vert). Le pourcentage de risque de défaillance de l'entreprise (en bleu) résulte de la somme des points de pourcentage de ces groupes de variables. 
       Le risque estimé peut se situer dans trois zones :<br /><br />
       <ul>
-        <li>La zone rouge : l’entreprise présente un risque de défaillance élevé.</li>
-        <li>La zone jaune : l’entreprise présente un risque de défaillance modéré.</li>
-        <li>La zone verte : si le score ne dépasse pas un certain seuil de risque, l’entreprise n’est pas détectée. </li>
+        <li>La zone rouge : l'entreprise présente un risque de défaillance élevé.</li>
+        <li>La zone jaune : l'entreprise présente un risque de défaillance modéré.</li>
+        <li>La zone verte : si le score ne dépasse pas un certain seuil de risque, l'entreprise n'est pas détectée. </li>
       </ul>  
     </p>
+    <v-alert
+      v-if="showBanner"
+      type="info"
+      variant="tonal"
+      class="mb-6 mt-6"
+      color="info"
+      density="comfortable"
+    >
+      Si la détection mentionne des dettes sociales, vérifiez leur présence dans les établissements fermés, car la détection peut s'expliquer par un transfert éventuel de la dette suite à la fermeture du siège.
+    </v-alert>
     <div class="mb-3" ref="graph"></div>
   </div>
 </template>
@@ -18,7 +29,7 @@ import Plotly from 'plotly.js';
 
 export default {
   name: "EtablissementScoreExplainWaterfall",
-  props: ['liste', 'score', 'macroExpl'],
+  props: ['liste', 'score', 'macroExpl', 'summary'],
   methods: {
     percent(value) {
       return Math.round(value) + "%";
@@ -34,6 +45,9 @@ export default {
     }
   },
   computed: {
+    showBanner() {
+      return this.summary?.alert?.includes('Alerte seuil F1') || this.summary?.alert?.includes('Alerte seuil F2')
+    },
     macroExplEntries() {
       let values = Object.entries(this.macroExpl);
       values.sort((v1, v2) => (Math.abs(v1[1]) > Math.abs(v2[1]) ? -1 : 1));
