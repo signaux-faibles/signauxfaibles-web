@@ -62,10 +62,10 @@
           </v-flex>
           <v-flex md12 xs12>
             <EtablissementCards
-              v-if="wekanUser"
               :codeDepartement="sirene.codeDepartement"
               :denomination="denomination"
               :siret="siret"
+              :etatAdministratif="currentEtablissementEtatAdministratif"
             />
           </v-flex>
 
@@ -269,9 +269,6 @@ export default {
         this.$localStore.commit('setCurrentBoard', value)
       },
     },
-    wekanUser() {
-      return ['crp', 'dreets_reseaucrp', 'finances', 'sf'].includes(this.segment)
-    },
     denomination() {
       const entreprise = (this.etablissement || {}).entreprise || {}
       return (entreprise.Sirene || {}).raisonSociale || ''
@@ -396,6 +393,11 @@ export default {
     },
     showBanner() {
       return this.summary && (this.summary.alert?.includes('Alerte seuil F1') || this.summary.alert?.includes('Alerte seuil F2'))
+    },
+    currentEtablissementEtatAdministratif() {
+      const etablissementsSummary = (this.etablissement.entreprise || {}).etablissementsSummary || []
+      const currentEtablissement = etablissementsSummary.find(es => es.siret === this.siret)
+      return currentEtablissement ? currentEtablissement.etatAdministratif : null
     },
   },
 }

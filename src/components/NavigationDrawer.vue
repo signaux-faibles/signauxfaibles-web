@@ -42,7 +42,7 @@
             <v-list-item-title>Campagnes</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item v-if="['crp', 'dreets_reseaucrp', 'finances', 'sf'].includes(this.segment)" to="#">
+        <v-list-item to="#">
           <v-list-item-action>
             <v-icon>fa-people-pulling</v-icon>
           </v-list-item-action>
