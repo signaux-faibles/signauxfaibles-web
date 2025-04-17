@@ -60,7 +60,7 @@ export default {
 
       this.$axios.get('/stats/from/' + rangeStart + '/to/' + rangeEnd, {
         responseType: 'blob',
-        timeout: 120000
+        timeout: 1200000
       }).then((response) => {
         this.download(response)
         this.exportZipDownloading = false
