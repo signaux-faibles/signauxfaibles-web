@@ -344,6 +344,8 @@ export default {
         return 'Pas de résultat'
       } else if (count === 1) {
         return '1 résultat'
+      } else if (count === 1000) {
+        return 'Plus de 1000 résultats'
       } else {
         return count + ' résultats'
       }
