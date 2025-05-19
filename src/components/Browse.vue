@@ -117,6 +117,7 @@
       </form>
     </div>
     <div v-if="searched && (!loading || page !=0)" class="numbers">{{ total | pluralizeResultats }}</div>
+    <Spinner v-if="loading" style="min-height: 60vh"/>
     <PredictionWidget v-for="r in result" :key="r.siret" :prediction="r"/>
   </div>
 </template>
@@ -124,10 +125,11 @@
 <script>
 import Toolbar from '@/components/Toolbar.vue'
 import PredictionWidget from '@/components/prediction/predictionWidget.vue'
+import Spinner from '@/components/Spinner.vue'
 
 export default {
   name: 'Browse',
-  components: {PredictionWidget, Toolbar},
+  components: {PredictionWidget, Toolbar, Spinner},
   data() {
     return {
       search: '',
@@ -171,7 +173,18 @@ export default {
         eventName = eventName.concat(',' + this.zone.text)
       }
       this.trackMatomoEvent('consultation', 'rechercher', eventName)
+      this.fetchTotal()
       this.lookupPage()
+    },
+    fetchTotal() {
+      this.$axios.post('/etablissement/search/total', this.params).then((response) => {
+        if (response.status === 200) {
+          this.total = response.data.total
+          this.trackMatomoEvent('consultation', 'resultats_recherche', this.search, this.total)
+        }
+      }).catch(() => {
+        this.total = 0
+      })
     },
     lookupPage() {
       this.loading = true
@@ -179,8 +192,6 @@ export default {
       this.$axios.post(this.searchURL, this.params).then((response) => {
         if (response.status === 200) {
           this.result = this.result.concat(response.data.results)
-          this.total = response.data.total
-          this.trackMatomoEvent('consultation', 'resultats_recherche', this.search, this.total)
           const p = response.data.page ? response.data.page : 0
           const pageMax = response.data.pageMax ? response.data.pageMax : 0
           if (p === pageMax) {
@@ -190,7 +201,6 @@ export default {
         } else if (response.status === 204) {
           if (this.page === 0) {
             this.result = []
-            this.total = 0
           }
           this.complete = true
         } else {
