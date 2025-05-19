@@ -116,7 +116,17 @@
         </v-btn>
       </form>
     </div>
-    <div v-if="searched && (!loading || page !=0)" class="numbers">{{ total | pluralizeResultats }}</div>
+    <div v-if="searched && (!loading || page !=0)" class="numbers">
+      <v-progress-circular
+        v-if="loadingTotal"
+        indeterminate
+        size="20"
+        width="2"
+        color="indigo"
+        class="mr-2"
+      ></v-progress-circular>
+      {{ total | pluralizeResultats }}
+    </div>
     <Spinner v-if="loading" style="min-height: 60vh"/>
     <PredictionWidget v-for="r in result" :key="r.siret" :prediction="r"/>
   </div>
@@ -143,6 +153,7 @@ export default {
       listHeight: 0,
       complete: false,
       loading: false,
+      loadingTotal: false,
       errorOccured: false,
       siegeUniquement: false,
       nafDialog: false,
@@ -177,6 +188,7 @@ export default {
       this.lookupPage()
     },
     fetchTotal() {
+      this.loadingTotal = true
       this.$axios.post('/etablissement/search/total', this.params).then((response) => {
         if (response.status === 200) {
           this.total = response.data.total
@@ -184,6 +196,8 @@ export default {
         }
       }).catch(() => {
         this.total = 0
+      }).finally(() => {
+        this.loadingTotal = false
       })
     },
     lookupPage() {
