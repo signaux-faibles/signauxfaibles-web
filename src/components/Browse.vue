@@ -127,8 +127,14 @@
       ></v-progress-circular>
       {{ total | pluralizeResultats }}
     </div>
-    <Spinner v-if="loading" style="min-height: 60vh"/>
+    <Spinner v-if="loading && page === 0" style="min-height: 60vh"/>
     <PredictionWidget v-for="r in result" :key="r.siret" :prediction="r"/>
+    <div v-if="loading && page > 0" class="text-center pa-4">
+      <v-progress-circular
+        indeterminate
+        color="indigo"
+      ></v-progress-circular>
+    </div>
   </div>
 </template>
 
@@ -206,9 +212,7 @@ export default {
       this.$axios.post(this.searchURL, this.params).then((response) => {
         if (response.status === 200) {
           this.result = this.result.concat(response.data.results)
-          const p = response.data.page ? response.data.page : 0
-          const pageMax = response.data.pageMax ? response.data.pageMax : 0
-          if (p === pageMax) {
+          if (response.data.results.length < 20) {
             this.complete = true
           }
           this.page += 1
