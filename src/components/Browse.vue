@@ -120,7 +120,7 @@
           type="warning"
           class="mt-2 mb-2"
         >
-          Votre recherche risque de ramener un grand nombre de résultats, saisissez plus de caractères ou utilisez les filtres avancés
+          Afin de réduire le délai de réponse de votre recherche, nous vous invitons à saisir plus de caractères ou à l'affiner à l'aide des filtres avancés
         </v-alert>
       </form>
     </div>
