@@ -39,12 +39,12 @@
             </ul>
             <div
               v-if="currentNaf.length > 4 && !allNaf"
-              style="margin-left: 15px; font-size: 11px; color: #444; text-align: left"
+              style="margin-left: 15px; font-size: 11px; color: #444; text-align: left"
             >+ {{ currentNaf.length - 4 }} autre{{ (currentNaf.length > 5) ? 's' : '' }}
             </div>
             <div
               v-if="allNaf"
-              style="margin-left: 15px; font-size: 11px; color: #444"
+              style="margin-left: 15px; font-size: 11px; color: #444"
             >Tout secteur confondu
             </div>
             <v-dialog v-model="nafDialog" persistent scrollable width="700">
@@ -114,6 +114,14 @@
         <v-btn :disabled="loading || search.trim().length < 3" style="width: 150px" type="submit">
           <v-icon>fa-magnifying-glass</v-icon>
         </v-btn>
+        <v-alert
+          v-if="search.length === 3 && !hasAdvancedFilters"
+          dense
+          type="warning"
+          class="mt-2 mb-2"
+        >
+          Votre recherche risque de ramener un grand nombre de résultats, saisissez plus de caractères ou utilisez les filtres avancés
+        </v-alert>
       </form>
     </div>
     <div v-if="searched && (!loading || page !=0)" class="numbers">
@@ -266,6 +274,11 @@ export default {
     },
   },
   computed: {
+    hasAdvancedFilters() {
+      return this.currentNaf.length < this.naf1.length || // Not all sectors selected
+             this.zone.text !== 'Toute zone' || // Zone filter used
+             this.effectifMin > 0 // Minimum workforce filter used
+    },
     resultIsEnough() {
       return !this.searched || this.complete || this.loading || this.height * 2 < this.listHeight || this.errorOccured
     },

@@ -61,6 +61,20 @@ export default {
     reconnect() {
       this.$keycloak.login()
     },
+    checkHealth() {
+      this.$axios.get('/ops/utils/metrics')
+        .then((response) => {
+          // Prometheus metrics response
+          const metrics = response.data;
+          const goroutinesMatch = metrics.match(/go_goroutines (\d+)/);
+          const goroutines = goroutinesMatch ? parseInt(goroutinesMatch[1]) : 0;
+          
+          this.$store.dispatch('setDatapiStatus', goroutines <= 25);
+        })
+        .catch(() => {
+          this.$store.dispatch('setDatapiStatus', false);
+        });
+    }
   },
   computed: {
     securityConsent() {
@@ -112,6 +126,9 @@ export default {
       this.kanban.getConfig(this.$axios, this.$store)
       this.$store.dispatch('updateKanbanConfig', this.kanban.config)
     }
+
+    this.checkHealth();
+    setInterval(this.checkHealth, 30000);
   },
   name: 'App',
 }

@@ -15,16 +15,6 @@ const axiosClient = axios.create(
     timeout: 900000,
   },
 )
-axiosClient.interceptors.response.use(response => {
-  sessionStore.commit("setDatapiStatus", true);
-  return response
-}, error => {
-  sessionStore.commit("setDatapiStatus", false);
-  return new Promise(resolve => {
-    const _30seconds = 30 * 1000;
-    setTimeout(() => resolve(axiosClient(error.config)), _30seconds);
-  });
-});
 
 const localStore = new Vuex.Store({
   plugins: [createPersistedState({storage: window.localStorage})],
