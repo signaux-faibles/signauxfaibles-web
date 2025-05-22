@@ -62,13 +62,9 @@ export default {
       this.$keycloak.login()
     },
     checkHealth() {
-      this.$axios.get('/ops/utils/metrics')
+      this.$axios.get('/healthcheck')
         .then((response) => {
-          // Prometheus metrics response
-          const metrics = response.data;
-          const goroutinesMatch = metrics.match(/go_goroutines (\d+)/);
-          const goroutines = goroutinesMatch ? parseInt(goroutinesMatch[1]) : 0;
-          
+          const { goroutines } = response.data;
           this.$store.dispatch('setDatapiStatus', goroutines <= 25);
         })
         .catch(() => {
