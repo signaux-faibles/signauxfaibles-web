@@ -26,6 +26,13 @@
          </span>
         </v-banner-text>
       </v-banner>
+      <v-banner lines="two" color="blue lighten-5" :stacked="false">
+        <v-banner-text>
+          <span>
+            [Fonctionnalité « Accompagnements»] Participez au webinaire de lancement le 18 juin à 14h. <a href="https://grist.numerique.gouv.fr/o/docs/forms/8nMiu8ZzkGDgHGLife1AKY/46" target="_blank">Lien d'inscription</a>
+          </span>
+        </v-banner-text>
+      </v-banner>
       <NavigationDrawer v-if="login && drawers.left"/>
       <router-view/>
     </v-main>
