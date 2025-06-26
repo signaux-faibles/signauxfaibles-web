@@ -26,6 +26,13 @@
          </span>
         </v-banner-text>
       </v-banner>
+      <v-banner lines="two" color="blue lighten-5" :stacked="false">
+        <v-banner-text>
+          <span>
+            Le service « Signaux Faibles » sera interrompu ce vendredi 27 juin de 12h à 14h dans le cadre de la sortie de la liste de détection de juin.
+          </span>
+        </v-banner-text>
+      </v-banner>
       <NavigationDrawer v-if="login && drawers.left"/>
       <router-view/>
     </v-main>
