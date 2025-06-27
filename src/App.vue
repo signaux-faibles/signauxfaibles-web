@@ -29,7 +29,7 @@
       <v-banner lines="two" color="blue lighten-5" :stacked="false">
         <v-banner-text>
           <span>
-            Le service « Signaux Faibles » sera interrompu ce vendredi 27 juin de 12h à 14h dans le cadre de la sortie de la liste de détection de juin.
+            Le service "Signaux Faibles" est interrompu ce vendredi 27 juin depuis 12h dans le cadre de la sortie de la liste de détection de juin. L'accès à la plateforme devrait être rétablie d'ici 17h. Veuillez nous excuser pour la gêne occasionnée.
           </span>
         </v-banner-text>
       </v-banner>
