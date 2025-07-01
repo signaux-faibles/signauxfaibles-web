@@ -57,7 +57,7 @@ export default {
   },
   computed: {
     canCreateCard() {
-      return this.roles.includes(this.codeDepartement);
+      return this.roles.includes(this.codeDepartement) && !['dreets'].includes(this.segment);
     },
     currentCard() {
       return this.cards.find((c) => c.id == this.currentCardID)

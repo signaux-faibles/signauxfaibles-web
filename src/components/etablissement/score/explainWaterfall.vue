@@ -56,7 +56,7 @@ export default {
     macroExplArrays() {
       let values = this.macroExplEntries;
 
-      const positiveValues = values.filter(v => v[1] > 0).sort((a, b) => b[1] - a[1]);
+      const positiveValues = values.filter(v => v[1] >= 0).sort((a, b) => b[1] - a[1]);
       const negativeValues = values.filter(v => v[1] < 0).sort((a, b) => b[1] - a[1]);
 
       const sortedValues = positiveValues.concat(negativeValues);
