@@ -65,7 +65,7 @@ export default {
       this.$axios.get('/healthcheck')
         .then((response) => {
           const { goroutines } = response.data;
-          this.$store.dispatch('setDatapiStatus', goroutines <= 25);
+          this.$store.dispatch('setDatapiStatus', goroutines <= 35);
         })
         .catch(() => {
           this.$store.dispatch('setDatapiStatus', false);
