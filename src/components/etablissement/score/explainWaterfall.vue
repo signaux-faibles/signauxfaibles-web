@@ -1,8 +1,25 @@
 <template>
   <div>
-
+    <div class="mb-3" ref="graph"></div>
+    
+    <!-- Explanation content moved from explain.vue -->
+    <div class="mt-3 mb-3" style="font-size: 17px">
+      <span v-if="typeExplication === 'crash'">Cet établissement est fermé ou est en situation de défaillance</span>
+      <span v-else-if="typeExplication === 'ras'">Cet établissement n'a pas été identifié par l'algorithme comme étant à risque de défaillance à 18 mois.</span>
+      <span v-else-if="typeExplication === 'horsperimetre'">Cet établissement ne faisait pas partie du périmètre de Signaux Faibles au moment de la production de cette liste de détection.</span>
+      <span v-else>
+        - Sur la base des données en notre possession, il apparaît que l'entreprise présente des caractéristiques similaires à des sociétés ayant fait défaut dans les 18 mois suivants.<br />
+        - Le risque de défaillance de l'entreprise sous 18 mois apparaît comme {{ this.alert === "Alerte seuil F2" ? ' modéré' : ' élevé' }}.<br/>
+        - Les données actualisées jusqu'au 1er juin 2025 sont mobilisées pour cette prédiction.
+        <p/>
+        <span>
+          <Gitbook :target="gitbookPath('DETECTION')"/>
+        </span>
+      </span>
+    </div>
+    
     <p class="mt-3" style="margin-bottom: 0 !important;">
-      Le graphique ci-dessous détaille les éléments constitutifs du calcul de la probabilité de défaillance de l'entreprise. Chaque groupe de variables analysé induit soit un facteur aggravant (en rouge) soit un facteur atténuant le risque (en vert). Le pourcentage de risque de défaillance de l'entreprise (en bleu) résulte de la somme des points de pourcentage de ces groupes de variables. 
+      Le graphique ci-dessus détaille les éléments constitutifs du calcul de la probabilité de défaillance de l'entreprise. Chaque groupe de variables analysé induit soit un facteur aggravant (en rouge) soit un facteur atténuant le risque (en vert). Le pourcentage de risque de défaillance de l'entreprise (en bleu) résulte de la somme des points de pourcentage de ces groupes de variables. 
       Le risque estimé peut se situer dans trois zones :<br /><br />
       <ul>
         <li>La zone rouge : l'entreprise présente un risque de défaillance élevé.</li>
@@ -20,16 +37,17 @@
     >
       Si la détection mentionne des dettes sociales, vérifiez leur présence dans les établissements fermés, car la détection peut s'expliquer par un transfert éventuel de la dette suite à la fermeture du siège.
     </v-alert>
-    <div class="mb-3" ref="graph"></div>
   </div>
 </template>
 
 <script>
 import Plotly from 'plotly.js';
+import Gitbook from '@/components/Gitbook.vue';
 
 export default {
   name: "EtablissementScoreExplainWaterfall",
-  props: ['liste', 'score', 'macroExpl', 'summary'],
+  props: ['liste', 'score', 'macroExpl', 'summary', 'historique'],
+  components: { Gitbook },
   methods: {
     percent(value) {
       return Math.round(value) + "%";
@@ -41,20 +59,45 @@ export default {
       return words.map(word => word.charAt(0).toUpperCase() + word.substring(1).toLowerCase()).join(' ');
     },
     renderChart() {
-      Plotly.newPlot(this.$refs.graph, this.data, this.layout, { displayModeBar: false, scrollZoom: false, responsive: true });
+      if (this.data.length && this.macroExpl) {
+        Plotly.newPlot(this.$refs.graph, this.data, this.layout, { displayModeBar: false, scrollZoom: false, responsive: true });
+      }
     }
   },
   computed: {
     showBanner() {
       return this.summary?.alert?.includes('Alerte seuil F1') || this.summary?.alert?.includes('Alerte seuil F2')
     },
+    crash() {
+      return this.summary.etatAdministratif === 'F'
+          || this.summary.etat_procol === 'redressement' || this.summary.etat_procol === 'liquidation'
+    },
+    alert() {
+      return this.summary?.alert
+    },
+    hasAlert() {
+      return (this.alert === "Alerte seuil F1" || this.alert === "Alerte seuil F2")
+    },
+    typeExplication() {
+      if (this.crash) {
+        return "crash"
+      } else if (this.alert == null) {
+        return "horsperimetre"
+      } else if (this.hasAlert) {
+        return "alert"
+      } else {
+        return "ras"
+      }
+    },
     macroExplEntries() {
+      if (!this.macroExpl) return [];
       let values = Object.entries(this.macroExpl);
       values.sort((v1, v2) => (Math.abs(v1[1]) > Math.abs(v2[1]) ? -1 : 1));
       return values;
     },
     macroExplArrays() {
       let values = this.macroExplEntries;
+      if (!values.length || this.score == null) return { x: [], y: [], measure: [], text: [] };
 
       const positiveValues = values.filter(v => v[1] >= 0).sort((a, b) => b[1] - a[1]);
       const negativeValues = values.filter(v => v[1] < 0).sort((a, b) => b[1] - a[1]);
@@ -70,6 +113,7 @@ export default {
     data() {
       // Calculate cumulative y values to determine the threshold and set text position in bars
       const macroExplArrays = this.macroExplArrays;
+      if (!macroExplArrays.y.length) return [];
   
       let cumulative = 0;
       const yWithCumulative = macroExplArrays.y.slice(0, -1).map((y) => {
@@ -107,6 +151,7 @@ export default {
       }];
     },
     layout() {
+      if (!this.macroExpl) return {};
       return {
         dragmode: false,
         hovercursor: 'pointer',
