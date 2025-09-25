@@ -38,12 +38,6 @@
               :siren="siren"
             />
           </v-flex>
-          <v-flex class="pr-1" xs12>
-            <EntreprisePaiement
-              :paydex="paydex"
-              :siren="siren"
-            />
-          </v-flex>
         </v-layout>
       </v-container>
     </div>
@@ -54,7 +48,6 @@
 import EntrepriseIdentite from '@/components/entreprise/identite.vue'
 import EntrepriseSocial from '@/components/entreprise/social.vue'
 import EntrepriseFinance from '@/components/entreprise/finance.vue'
-import EntreprisePaiement from '@/components/entreprise/paydex/main.vue'
 import axios from 'axios'
 import fr from 'apexcharts/dist/locales/fr.json'
 import Spinner from "@/components/Spinner.vue";
@@ -62,7 +55,7 @@ import Spinner from "@/components/Spinner.vue";
 export default {
   name: 'Entreprise',
   props: ['siren'],
-  components: {Spinner, EntrepriseIdentite, EntrepriseSocial, EntrepriseFinance, EntreprisePaiement},
+  components: {Spinner, EntrepriseIdentite, EntrepriseSocial, EntrepriseFinance},
   data() {
     return {
       axios: axios.create(),
