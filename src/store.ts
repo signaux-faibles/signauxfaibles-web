@@ -32,7 +32,7 @@ const localStore = new Vuex.Store({
     minEffectif: null,
     newsRead: new Date('1970-01-01'),
     securityConsent: new Date('1970-01-01'),
-    procol: ['In bonis', 'Sauvegarde', 'Plan de sauvegarde'],
+    procol: ['In bonis'],
     expiredSession: false,
     typeFollow: 'my-cards',
     boardsFollow: ['*'],
