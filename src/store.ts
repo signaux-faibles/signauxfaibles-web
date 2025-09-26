@@ -29,7 +29,7 @@ const localStore = new Vuex.Store({
     currentNaf: [] as string[],
     zone: [],
     caMin: null,
-    minEffectif: 10,
+    minEffectif: null,
     newsRead: new Date('1970-01-01'),
     securityConsent: new Date('1970-01-01'),
     procol: ['In bonis', 'Sauvegarde', 'Plan de sauvegarde'],
