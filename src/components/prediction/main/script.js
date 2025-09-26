@@ -155,7 +155,6 @@ export default {
     },
     filterPrediction(propertyName) {
       const allowedProperties = [
-        'excludeSecteursCovid',
         'creationDateThreshold',
         'firstAlert',
         'hasntDelai',
@@ -217,9 +216,6 @@ export default {
     },
     activeFilters() {
       const filters = [];
-      if (this.excludeSecteursCovid) {
-        filters.push("Hors secteurs Covid-19");
-      }
       if (this.creationDateThreshold) {
         filters.push("Sans entreprises récentes");
       }
@@ -266,9 +262,6 @@ export default {
       if (!this.currentNaf.includes('NON')) {
         params.activite = this.currentNaf
       }
-      if (this.excludeSecteursCovid) {
-        params.excludeSecteursCovid = this.secteursCovid
-      }
       if (this.zone.length > 0) {
         params.zone = this.zone
       }
@@ -310,14 +303,6 @@ export default {
       }
       params.page = this.page
       return params
-    },
-    excludeSecteursCovid: {
-      get() {
-        return this.$localStore.state.excludeSecteursCovid
-      },
-      set(value) {
-        this.$localStore.commit('setexcludeSecteursCovid', value)
-      },
     },
     inclureEtablissementsFermes: {
       get() {

@@ -58,7 +58,7 @@
           ></v-select>
         </div>
         <v-divider class="mb-3" />
-        <div style="vertical-align: middle; padding: 0 15px">
+        <div style="vertical-align: middle; padding: 0 15px 20px;">
           <v-icon style="width: 30px; margin-right: 10px">fa-industry</v-icon>
           <span style="color: rgba(0, 0, 0, 0.54); font-size: 13px"
             >Secteur d'activité</span
@@ -150,24 +150,6 @@
             </v-card>
           </v-dialog>
         </div>
-        <v-list three-line>
-          <v-list-item>
-            <v-list-item-action>
-              <v-checkbox
-                v-model="excludeSecteursCovid"
-                @change="getPrediction()"
-              ></v-checkbox>
-            </v-list-item-action>
-            <v-list-item-content
-              @click="() => filterPrediction('excludeSecteursCovid')"
-            >
-              <v-list-item-title>Hors secteurs COVID-19</v-list-item-title>
-              <v-list-item-subtitle
-                >Exclure les entreprises appartenants aux secteurs dits COVID-19
-              </v-list-item-subtitle>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list>
         <v-divider class="mb-3" />
         <div
           style="

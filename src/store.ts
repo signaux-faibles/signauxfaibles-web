@@ -19,7 +19,6 @@ const axiosClient = axios.create(
 const localStore = new Vuex.Store({
   plugins: [createPersistedState({storage: window.localStorage})],
   state: {
-    excludeSecteursCovid: false,
     inclureEtablissementsFermes: false,
     exclureSuivi: false,
     creationDateThreshold: true,
@@ -44,9 +43,6 @@ const localStore = new Vuex.Store({
     codefiListOnly: false,
   },
   mutations: {
-    setexcludeSecteursCovid(state, val: boolean) {
-      state.excludeSecteursCovid = val
-    },
     setinclureEtablissementsFermes(state, val: boolean) {
       state.inclureEtablissementsFermes = val
     },
