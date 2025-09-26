@@ -565,7 +565,7 @@ export default {
           }).map((p) => {
             return [
               new Date(p),
-              this.historiqueDetteSociale[p].partPatronale,
+              this.historiqueDetteSociale[p].partPatronale ?? 0,
             ]
           }),
         }, {
@@ -576,7 +576,7 @@ export default {
           }).map((p) => {
             return [
               new Date(p),
-              this.historiqueDetteSociale[p].partSalariale,
+              this.historiqueDetteSociale[p].partSalariale ?? 0,
             ]
           }),
         }]
