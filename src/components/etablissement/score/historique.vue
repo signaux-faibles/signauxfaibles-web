@@ -178,15 +178,6 @@ export default {
     }
   },
   mounted() {
-    console.log(this.historique)
-    console.log(this.summary)
-    console.log(this.permScore)
-    console.log(this.batches)
-    console.log(this.dernierBatch)
-    console.log(this.crash)
-    console.log(this.currentBatchKey)
-    console.log(this.currentBatchDescription)
-    
     // Check for existing rating when component mounts
     if (this.shouldShowRatingButtons) {
       this.checkExistingRating()
