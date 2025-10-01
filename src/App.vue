@@ -26,13 +26,6 @@
          </span>
         </v-banner-text>
       </v-banner>
-      <v-banner lines="two" color="blue lighten-5" :stacked="false">
-        <v-banner-text>
-          <span>
-            La nouvelle liste de détection sera disponible mardi à midi.
-          </span>
-        </v-banner-text>
-      </v-banner>
       <NavigationDrawer v-if="login && drawers.left"/>
       <router-view/>
     </v-main>
