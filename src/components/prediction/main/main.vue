@@ -246,7 +246,7 @@
               @click="() => filterPrediction('codefiListOnly')"
             >
               <v-list-item-title
-                >Liste retraitée par la DGFIP</v-list-item-title
+                >Liste retraitée</v-list-item-title
               >
               <v-list-item-subtitle class="long-subtitle">
                 {{
