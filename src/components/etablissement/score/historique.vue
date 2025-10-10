@@ -1,8 +1,19 @@
 <template>
   <div>
-    <h2>
-      Détection Signaux Faibles
-    </h2>
+    <div class="d-flex align-center mb-3">
+      <h2 class="ma-0 mr-3">
+        Détection Signaux Faibles
+      </h2>
+      <v-btn
+        outlined
+        small
+        color="primary"
+        style="text-transform: none;"
+        @click="openDocumentation"
+      >
+        comment ça marche ?
+      </v-btn>
+    </div>
     <v-layout wrap>
       <v-flex xl12 md-6 mb-2> 
         <div class="mb-3">
@@ -318,6 +329,10 @@ export default {
       this.showRatingForm = false
       this.selectedReasons = []
       this.ratingComment = ''
+    },
+    
+    openDocumentation() {
+      window.open('https://signaux-faibles.gitbook.io/guide-dutilisation-et-f.a.q.-de-signaux-faibles/les-listes-de-detection/evaluer-les-detections', '_blank')
     }
   },
   computed: {
