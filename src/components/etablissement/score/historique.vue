@@ -1,19 +1,8 @@
 <template>
   <div>
-    <div class="d-flex align-center mb-3">
-      <h2 class="ma-0 mr-3">
-        Détection Signaux Faibles
-      </h2>
-      <v-btn
-        outlined
-        small
-        color="primary"
-        style="text-transform: none;"
-        @click="openDocumentation"
-      >
-        Comment ça marche ?
-      </v-btn>
-    </div>
+    <h2>
+      Détection Signaux Faibles
+    </h2>
     <v-layout wrap>
       <v-flex xl12 md-6 mb-2> 
         <div class="mb-3">
@@ -56,7 +45,18 @@
 
           <!-- Show rating buttons when no existing rating -->
           <div v-else-if="canShowRatingUI && !showRatingForm">
-            <h3 class="mb-3">Donnez votre avis à l'équipe de Signaux Faibles</h3>
+            <div class="d-flex align-center mb-3">
+              <h3 class="ma-0 mr-3">Donnez votre avis à l'équipe de Signaux Faibles</h3>
+              <v-btn
+                outlined
+                small
+                color="primary"
+                style="text-transform: none;"
+                @click="openDocumentation"
+              >
+                Comment ça marche ?
+              </v-btn>
+            </div>
             <div class="d-flex flex-wrap gap-2">
               <v-btn
                 color="success"
