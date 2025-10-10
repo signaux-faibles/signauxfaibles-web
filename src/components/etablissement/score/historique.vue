@@ -11,7 +11,7 @@
         style="text-transform: none;"
         @click="openDocumentation"
       >
-        comment ça marche ?
+        Comment ça marche ?
       </v-btn>
     </div>
     <v-layout wrap>
