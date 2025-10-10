@@ -26,6 +26,15 @@
          </span>
         </v-banner-text>
       </v-banner>
+      <v-banner lines="three" color="blue lighten-5" :stacked="false">
+        <v-banner-text>
+          <span>
+            > Inscrivez-vous aux formations en contactant esther.spindler@beta.gouv.fr ! </br>
+            Formations générales les 15/10 et 10/11 à 15h </br>
+            Formations au module « Accompagnements » : 21/10 à 15h. 29/10, 05/11, 10/11 et 19/11 à 11h
+          </span>
+        </v-banner-text>
+      </v-banner>
       <NavigationDrawer v-if="login && drawers.left"/>
       <router-view/>
     </v-main>
