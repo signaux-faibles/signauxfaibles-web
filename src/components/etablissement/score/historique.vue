@@ -20,18 +20,18 @@
             <span>Cet établissement est fermé ou l’activité de l’entreprise a cessé</span>
           </v-tooltip>
         </div>
-                 <!-- Rating section -->
-                 <div v-if="shouldShowRatingButtons" class="mt-4">
-                   <!-- Error message -->
-                   <v-alert
-                     v-model="showError"
-                     type="error"
-                     dismissible
-                     class="mb-3"
-                     @input="clearError"
-                   >
-                     {{ errorMessage }}
-                   </v-alert>
+        <!-- Rating section -->
+        <div v-if="shouldShowRatingButtons" class="mt-4">
+          <!-- Error message -->
+          <v-alert
+            v-model="showError"
+            type="error"
+            dismissible
+            class="mb-3"
+            @input="clearError"
+          >
+            {{ errorMessage }}
+          </v-alert>
           <!-- Show existing rating status -->
           <div v-if="existingRating" class="mb-3">
             <v-chip 

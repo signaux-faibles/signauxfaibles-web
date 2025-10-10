@@ -11,22 +11,21 @@
         - Sur la base des données en notre possession, il apparaît que l'entreprise présente des caractéristiques similaires à des sociétés ayant fait défaut dans les 18 mois suivants.<br />
         - Le risque de défaillance de l'entreprise sous 18 mois apparaît comme {{ this.alert === "Alerte seuil F2" ? ' modéré' : ' élevé' }}.<br/>
         - Les données actualisées jusqu'au 1er septembre 2025 sont mobilisées pour cette prédiction.
-        <p/>
         <span>
           <Gitbook :target="gitbookPath('DETECTION')"/>
         </span>
+        <p class="mt-3" style="margin-bottom: 0 !important;">
+          Le graphique ci-dessus détaille les éléments constitutifs du calcul de la probabilité de défaillance de l'entreprise. Chaque groupe de variables analysé induit soit un facteur aggravant (en rouge) soit un facteur atténuant le risque (en vert). Le pourcentage de risque de défaillance de l'entreprise (en bleu) résulte de la somme des points de pourcentage de ces groupes de variables. 
+          Le risque estimé peut se situer dans trois zones :<br /><br />
+          <ul>
+            <li>La zone rouge : l'entreprise présente un risque de défaillance élevé.</li>
+            <li>La zone jaune : l'entreprise présente un risque de défaillance modéré.</li>
+            <li>La zone verte : si le score ne dépasse pas un certain seuil de risque, l'entreprise n'est pas détectée. </li>
+          </ul>  
+        </p>
       </span>
     </div>
-    
-    <p class="mt-3" style="margin-bottom: 0 !important;">
-      Le graphique ci-dessus détaille les éléments constitutifs du calcul de la probabilité de défaillance de l'entreprise. Chaque groupe de variables analysé induit soit un facteur aggravant (en rouge) soit un facteur atténuant le risque (en vert). Le pourcentage de risque de défaillance de l'entreprise (en bleu) résulte de la somme des points de pourcentage de ces groupes de variables. 
-      Le risque estimé peut se situer dans trois zones :<br /><br />
-      <ul>
-        <li>La zone rouge : l'entreprise présente un risque de défaillance élevé.</li>
-        <li>La zone jaune : l'entreprise présente un risque de défaillance modéré.</li>
-        <li>La zone verte : si le score ne dépasse pas un certain seuil de risque, l'entreprise n'est pas détectée. </li>
-      </ul>  
-    </p>
+  
     <v-alert
       v-if="showBanner"
       type="info"
