@@ -363,7 +363,8 @@ export default {
     shouldShowRatingButtons() {
       return this.summary.siege === true && 
              this.currentBatchKey === this.dernierBatch?.value &&
-             !this.loadingRating
+             !this.loadingRating &&
+             (this.alert === "Alerte seuil F1" || this.alert === "Alerte seuil F2")
     },
     canShowRatingUI() {
       return this.shouldShowRatingButtons && this.existingRating === null
