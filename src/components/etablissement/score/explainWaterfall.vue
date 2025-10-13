@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <div class="mb-3" ref="graph"></div>
-    
+  <div>    
     <!-- Explanation content moved from explain.vue -->
     <div class="mt-3 mb-3" style="font-size: 17px">
       <span v-if="typeExplication === 'crash'">Cet établissement est fermé ou est en situation de défaillance</span>
@@ -14,6 +12,7 @@
         <span>
           <Gitbook :target="gitbookPath('DETECTION')"/>
         </span>
+        <div class="mb-3" ref="graph"></div>
         <p class="mt-3" style="margin-bottom: 0 !important;">
           Le graphique ci-dessus détaille les éléments constitutifs du calcul de la probabilité de défaillance de l'entreprise. Chaque groupe de variables analysé induit soit un facteur aggravant (en rouge) soit un facteur atténuant le risque (en vert). Le pourcentage de risque de défaillance de l'entreprise (en bleu) résulte de la somme des points de pourcentage de ces groupes de variables. 
           Le risque estimé peut se situer dans trois zones :<br /><br />
