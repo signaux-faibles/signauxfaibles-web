@@ -21,114 +21,117 @@
           </v-tooltip>
         </div>
         <!-- Rating section -->
-        <div v-if="shouldShowRatingButtons" class="mt-4">
-          <!-- Error message -->
-          <v-alert
-            v-model="showError"
-            type="error"
-            dismissible
-            class="mb-3"
-            @input="clearError"
-          >
-            {{ errorMessage }}
-          </v-alert>
-          <!-- Show existing rating status -->
-          <div v-if="existingRating" class="mb-3">
-            <v-chip 
-              :color="existingRating.useful ? 'success' : 'warning'" 
-              text-color="white"
-              small
+        <div v-if="permScore">
+          <div v-if="shouldShowRatingButtons" class="mt-4">
+            <!-- Error message -->
+            <v-alert
+              v-model="showError"
+              type="error"
+              dismissible
+              class="mb-3"
+              @input="clearError"
             >
-              {{ ratingStatusText }}
-            </v-chip>
-          </div>
-
-          <!-- Show rating buttons when no existing rating -->
-          <div v-else-if="canShowRatingUI && !showRatingForm">
-            <div class="d-flex align-center mb-3">
-              <h3 class="ma-0 mr-3">Donnez votre avis à l'équipe de Signaux Faibles</h3>
-              <v-btn
-                outlined
+              {{ errorMessage }}
+            </v-alert>
+            <!-- Show existing rating status -->
+            <div v-if="existingRating" class="mb-3">
+              <v-chip 
+                :color="existingRating.useful ? 'success' : 'warning'" 
+                text-color="white"
                 small
-                color="primary"
-                style="text-transform: none;"
-                @click="openDocumentation"
               >
-                Comment ça marche ?
-              </v-btn>
+                {{ ratingStatusText }}
+              </v-chip>
             </div>
-            <div class="d-flex flex-wrap gap-2">
-              <v-btn
-                color="success"
-                :loading="submittingRating"
-                @click="submitUsefulRating"
-                style="text-transform: none;"
-              >
-                Détection utile
-              </v-btn>
-              <v-btn
-                color="warning"
-                @click="showInutileForm"
-                style="text-transform: none;"
-              >
-                Détection inutile
-              </v-btn>
+
+            <!-- Show rating buttons when no existing rating -->
+            <div v-else-if="canShowRatingUI && !showRatingForm">
+              <div class="d-flex align-center mb-3">
+                <h3 class="ma-0 mr-3">Donnez votre avis à l'équipe de Signaux Faibles</h3>
+                <v-btn
+                  outlined
+                  small
+                  color="primary"
+                  style="text-transform: none;"
+                  @click="openDocumentation"
+                >
+                  Comment ça marche ?
+                </v-btn>
+              </div>
+              <div class="d-flex flex-wrap gap-2">
+                <v-btn
+                  color="success"
+                  :loading="submittingRating"
+                  @click="submitUsefulRating"
+                  style="text-transform: none;"
+                >
+                  Détection utile
+                </v-btn>
+                <v-btn
+                  color="warning"
+                  @click="showInutileForm"
+                  style="text-transform: none;"
+                >
+                  Détection inutile
+                </v-btn>
+              </div>
             </div>
-          </div>
 
-          <!-- Show inutile rating form -->
-          <div v-else-if="showRatingForm">
-            <h3 class="mb-3">La détection est inutile :</h3>
-            
-            <!-- Reasons selection -->
-            <v-select
-              v-model="selectedReasons"
-              :items="ratingReasons"
-              item-text="libelle"
-              item-value="code"
-              label="Sélectionnez les motifs"
-              multiple
-              chips
-              deletable-chips
-              outlined
-              class="mb-3"
-            ></v-select>
-
-            <!-- Comment textarea -->
-            <v-textarea
-              v-model="ratingComment"
-              label="(Facultatif) Précisez les raisons de votre choix"
-              outlined
-              rows="3"
-              class="mb-3"
-            ></v-textarea>
-
-            <!-- Form buttons -->
-            <div class="d-flex gap-2">
-              <v-btn
-                color="warning"
-                :loading="submittingRating"
-                :disabled="selectedReasons.length === 0"
-                @click="submitInutileRating"
-                style="text-transform: none;"
-              >
-                Valider votre avis
-              </v-btn>
-              <v-btn
+            <!-- Show inutile rating form -->
+            <div v-else-if="showRatingForm">
+              <h3 class="mb-3">La détection est inutile :</h3>
+              
+              <!-- Reasons selection -->
+              <v-select
+                v-model="selectedReasons"
+                :items="ratingReasons"
+                item-text="libelle"
+                item-value="code"
+                label="Sélectionnez les motifs"
+                multiple
+                chips
+                deletable-chips
                 outlined
-                @click="resetRatingForm"
-                style="text-transform: none;"
-              >
-                Annuler
-              </v-btn>
-            </div>
-          </div>
+                class="mb-3"
+              ></v-select>
 
-          <!-- Loading state -->
-          <div v-else-if="loadingRating" class="text-center">
-            <v-progress-circular indeterminate></v-progress-circular>
+              <!-- Comment textarea -->
+              <v-textarea
+                v-model="ratingComment"
+                label="(Facultatif) Précisez les raisons de votre choix"
+                outlined
+                rows="3"
+                class="mb-3"
+              ></v-textarea>
+
+              <!-- Form buttons -->
+              <div class="d-flex gap-2">
+                <v-btn
+                  color="warning"
+                  :loading="submittingRating"
+                  :disabled="selectedReasons.length === 0"
+                  @click="submitInutileRating"
+                  style="text-transform: none;"
+                >
+                  Valider votre avis
+                </v-btn>
+                <v-btn
+                  outlined
+                  @click="resetRatingForm"
+                  style="text-transform: none;"
+                >
+                  Annuler
+                </v-btn>
+              </div>
+            </div>
+
+            <!-- Loading state -->
+            <div v-else-if="loadingRating" class="text-center">
+              <v-progress-circular indeterminate></v-progress-circular>
+            </div>
           </div>
         </div>
+
         <Explain :summary="summary" :historique="historique"/>
         <v-btn class="mt-3"
                style="text-transform: none;"
