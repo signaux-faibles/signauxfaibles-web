@@ -3,7 +3,7 @@
     <div v-if="permScore">
       <EtablissementScoreExplainWaterfall :liste="lastBatch" :score="dernierScore.score"
                                             :microExpl="dernierScore.microExpl" :macroExpl="dernierScore.macroExpl"
-                                            :summary="summary" :historique="historique"/>
+                                            :summary="summary" :historique="historique" :typeExplication="typeExplication"/>
     </div>
     <div v-else>
       <div v-if="roles.includes('score')">Veuillez suivre cet établissement pour consulter ses données de détection.
@@ -18,7 +18,7 @@
 import EtablissementScoreExplainWaterfall from "@/components/etablissement/score/explainWaterfall.vue";
 
 export default {
-  props: ['historique', 'summary'],
+  props: ['historique', 'summary', 'typeExplication'],
   components: {EtablissementScoreExplainWaterfall},
   computed: {
     permScore() {

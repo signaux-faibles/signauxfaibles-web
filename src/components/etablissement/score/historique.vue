@@ -132,7 +132,7 @@
           </div>
         </div>
 
-        <Explain :summary="summary" :historique="historique"/>
+        <Explain :summary="summary" :historique="historique" :typeExplication="typeExplication"/>
         <v-btn class="mt-3"
                style="text-transform: none;"
                v-if="permScore && !this.crash && historique.length > 1"
@@ -360,11 +360,29 @@ export default {
       return this.summary.etatAdministratif === 'F'
         || this.summary.etat_procol === 'redressement' || this.summary.etat_procol === 'liquidation'
     },
+    alert() {
+      return this.summary?.alert
+    },
+    hasAlert() {
+      return (this.alert === "Alerte seuil F1" || this.alert === "Alerte seuil F2")
+    },
+    typeExplication() {
+      if (this.crash) {
+        return "crash"
+      } else if (this.alert == null) {
+        return "horsperimetre"
+      } else if (this.hasAlert) {
+        return "alert"
+      } else {
+        return "ras"
+      }
+    },
     shouldShowRatingButtons() {
       return this.summary.siege === true && 
              this.currentBatchKey === this.dernierBatch?.value &&
              !this.loadingRating &&
-             this.summary?.alert
+             this.summary?.alert &&
+             this.typeExplication === 'alert'
     },
     canShowRatingUI() {
       return this.shouldShowRatingButtons && this.existingRating === null

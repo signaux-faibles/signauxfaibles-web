@@ -44,7 +44,7 @@ import Gitbook from '@/components/Gitbook.vue';
 
 export default {
   name: "EtablissementScoreExplainWaterfall",
-  props: ['liste', 'score', 'macroExpl', 'summary', 'historique'],
+  props: ['liste', 'score', 'macroExpl', 'summary', 'historique', 'typeExplication'],
   components: { Gitbook },
   methods: {
     percent(value) {
@@ -75,17 +75,6 @@ export default {
     },
     hasAlert() {
       return (this.alert === "Alerte seuil F1" || this.alert === "Alerte seuil F2")
-    },
-    typeExplication() {
-      if (this.crash) {
-        return "crash"
-      } else if (this.alert == null) {
-        return "horsperimetre"
-      } else if (this.hasAlert) {
-        return "alert"
-      } else {
-        return "ras"
-      }
     },
     macroExplEntries() {
       if (!this.macroExpl) return [];
