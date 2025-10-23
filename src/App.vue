@@ -19,11 +19,18 @@
     <Security v-if="!securityConsent"/>
     <v-main v-if="securityConsent">
       <v-banner v-if="!isDatapiUp" class="text-center" lines="two" color="orange lighten-7" :stacked="false">
-        <v-banner-text>
+        <v-banner-text name="maintenance">
          <span>
            🛠️ Signaux Faibles rencontre actuellement quelques difficultés et certaines fonctionnalités peuvent être endommagées.</br>
            Nos équipes font de leur mieux pour réparer cet incident dans les plus brefs délais.
          </span>
+        </v-banner-text>
+      </v-banner>
+      <v-banner lines="two" color="blue lighten-5" :stacked="false">
+        <v-banner-text name="new-version">
+          <span>
+            Une nouvelle version de l'application va être déployée le jeudi 30 octobre à 17h, il est possible que Signaux Faibles ne soit pas accessible le vendredi 31 octobre toute la journée.
+          </span>
         </v-banner-text>
       </v-banner>
       <v-banner lines="three" color="blue lighten-5" :stacked="false">
