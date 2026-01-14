@@ -26,14 +26,6 @@
          </span>
         </v-banner-text>
       </v-banner>
-      <v-banner lines="three" color="blue lighten-5" :stacked="false">
-        <v-banner-text>
-          <span>
-            > Inscrivez-vous aux formations en contactant esther.spindler@beta.gouv.fr ! <br />
-            Formations les 9/12 et 13/01/26 à 15h
-          </span>
-        </v-banner-text>
-      </v-banner>
       <NavigationDrawer v-if="login && drawers.left"/>
       <router-view/>
     </v-main>
