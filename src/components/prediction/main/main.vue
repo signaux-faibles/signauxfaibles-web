@@ -176,23 +176,6 @@
             padding: 0 15px;
           "
         >
-          <v-icon style="width: 30px; margin-right: 10px">fa-coins</v-icon>
-          <v-text-field
-            v-model="caMin"
-            label="Chiffre d'affaires min"
-            suffix="k€"
-            @change="getPrediction()"
-          ></v-text-field>
-        </div>
-        <v-divider class="mb-3" />
-        <div
-          style="
-            display: flex;
-            flex-direction: row;
-            vertical-align: middle;
-            padding: 0 15px;
-          "
-        >
           <v-icon style="width: 30px; margin-right: 10px">fa-users</v-icon>
           <v-combobox
             v-model="minEffectif"
