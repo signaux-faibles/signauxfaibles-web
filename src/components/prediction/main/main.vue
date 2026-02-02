@@ -235,28 +235,6 @@
         </div>
         <v-list three-line>
           <v-list-item> Filtres avancés </v-list-item>
-          <v-list-item :disabled="!allowedBatches.includes(currentBatch)">
-            <v-list-item-action>
-              <v-checkbox
-                v-model="codefiListOnly"
-                @change="getPrediction()"
-              ></v-checkbox>
-            </v-list-item-action>
-            <v-list-item-content
-              @click="() => filterPrediction('codefiListOnly')"
-            >
-              <v-list-item-title
-                >Liste retraitée</v-list-item-title
-              >
-              <v-list-item-subtitle class="long-subtitle">
-                {{
-                  allowedBatches.includes(currentBatch)
-                    ? "Affiche uniquement la liste transmise au CDED en amont de la réunion du CODEFI"
-                    : `Filtre inactif en raison de l\'absence de retraitement DGFIP correspondant à la liste de ${currentBatch}`
-                }}
-              </v-list-item-subtitle>
-            </v-list-item-content>
-          </v-list-item>
           <v-list-item>
             <v-list-item-action>
               <v-checkbox
