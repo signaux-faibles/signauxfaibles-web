@@ -26,13 +26,6 @@
          </span>
         </v-banner-text>
       </v-banner>
-      <v-banner lines="two" color="blue lighten-5" :stacked="false">
-        <v-banner-text>
-          <span>
-            La liste de détection de janvier sera disponible lundi 2 février. La mise en ligne de cette liste pourra entrainer des coupures le vendredi 30 janvier.
-          </span>
-        </v-banner-text>
-      </v-banner>
       <NavigationDrawer v-if="login && drawers.left"/>
       <router-view/>
     </v-main>
