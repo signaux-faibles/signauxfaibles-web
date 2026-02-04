@@ -383,7 +383,7 @@ export default {
     },
     codefiListOnly: {
       get() {
-        return this.$localStore.state.codefiListOnly
+        return false; // TODO: remove this
       },
       set(value) {
         this.$localStore.commit('setcodefiListOnly', value)
