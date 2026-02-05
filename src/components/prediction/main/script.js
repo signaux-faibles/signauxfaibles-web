@@ -404,7 +404,7 @@ export default {
     },
     caMin: {
       get() {
-        return this.$localStore.state.caMin
+        return null
       },
       set(value) {
         this.$localStore.commit('setcaMin', value)
