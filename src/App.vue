@@ -27,9 +27,9 @@
         </v-banner-text>
       </v-banner>
       <v-banner lines="two" color="blue lighten-5" :stacked="false">
-        <v-banner-text name="empty-cache">
+        <v-banner-text name="maintenance">
           <span>
-            Si aucune entreprise ne s'affiche dans la liste de janvier 2026, nous vous invitons à vider à votre cache  (Tutoriel <a href="https://support.microsoft.com/fr-fr/microsoft-edge/afficher-et-supprimer-l-historique-du-navigateur-dans-microsoft-edge-00cf7943-a9e1-975a-a33d-ac10ce454ca4#:~:text=S%C3%A9lectionnez%20Param%C3%A8tres%20et%20plus%20%3E%20Param%C3%A8tres,plage%20horaire%20dans%20la%20liste." target="_blank">Edge</a> ou <a href="https://support.mozilla.org/fr/kb/comment-vider-cache-firefox" target="_blank">Firefox</a>) ou bien à nous contacter à l'adresse : esther.spindler@beta.gouv.fr
+            L'accès à "Signaux Faibles" sera interrompu entre ce jeudi 26/02 à 18h à ce vendredi 27/02 à minuit.
           </span>
         </v-banner-text>
       </v-banner>
